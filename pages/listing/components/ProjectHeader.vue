@@ -19,8 +19,16 @@
 <script>
 export default {
   name: 'ProjectHeader',
+
   props: {
     project: { type: Object, require: true, default: null }
+  },
+
+  computed: {
+    projectAddress () {
+      const address = this.project.address;
+      return `${address.street}, ${address.district}, ${address.city}`;
+    }
   }
 };
 </script>

@@ -1,16 +1,19 @@
 <template>
   <div class="px-5 w-full max-w-screen-xl">
     <ProjectHeader v-if="project != null" :project="project" />
+    <Divider class="my-7" />
   </div>
 </template>
 
 <script>
 import { gql } from 'graphql-tag';
+import Divider from '../components/Divider.vue';
+
 import ProjectHeader from './components/ProjectHeader.vue';
 
 export default {
   name: 'ListingPage',
-  components: { ProjectHeader },
+  components: { ProjectHeader, Divider },
   apollo: {
     projectId: {
       query () {
@@ -60,14 +63,8 @@ export default {
         };
       }
     }
-  },
-
-  computed: {
-    projectAddress () {
-      const address = this.project.address;
-      return `${address.street}, ${address.district}, ${address.city}`;
-    }
   }
+
 };
 </script>
 

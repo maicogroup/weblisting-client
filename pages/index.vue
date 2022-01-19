@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
+import { gql } from 'graphql-tag';
 
 export default {
   name: 'IndexPage',
@@ -21,5 +21,5 @@ export default {
         } 
     }`
   }
-}
+};
 </script>

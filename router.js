@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import HomePage from '~/pages/index';
 import ListingPage from '~/pages/listing/index';
 
+
 Vue.use(Router);
 
 export function createRouter () {

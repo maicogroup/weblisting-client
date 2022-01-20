@@ -1,10 +1,13 @@
 <template>
-  <div class="w-full border-b-2 border-gray-300" />
+  <div :class="`${vertical ? 'border-l' : 'w-full border-b'} border-gray-300`" />
 </template>
 
 <script>
 export default {
-  name: 'SectionDivider'
+  name: 'SectionDivider',
+  props: {
+    vertical: { type: Boolean, default: false }
+  }
 };
 </script>
 

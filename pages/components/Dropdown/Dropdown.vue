@@ -1,17 +1,29 @@
 //Modified from: https://tailwindcomponents.com/component/simple-dropdown
 
 <template>
-  <div class="inline relative">
-    <button class="relative z-10 rounded-md bg-white text-gray-800 p-2" @click="open = !open">
-      Mặc định
+  <div
+    class="inline relative"
+  >
+    <button
+      class="relative inline-flex justify-between items-end rounded-md bg-white text-gray-800 p-2"
+      :style="customStyle"
+      @click="open = !open"
+      @blur="closeIfOutsideOfDropdown"
+    >
+      <span class="mr-1">{{ title }}</span>
       <svg class="inline h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
       </svg>
     </button>
-
-    <div v-if="open" class="fixed inset-0 h-full w-full z-10" @click="open = false" />
-
-    <div v-if="open" class="absolute right-0 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+    <div
+      v-if="open"
+      ref="test"
+      :style="itemCustomStyle"
+      class="absolute right-0 py-2 bg-white rounded-md shadow-xl z-20"
+      @click="open = false"
+      @mouseenter="entered = true"
+      @mouseleave="entered = false"
+    >
       <slot />
     </div>
   </div>
@@ -20,10 +32,40 @@
 <script>
 export default {
   name: 'DropdownComponent',
+
+  props: {
+    title: { type: String, default: 'Mặc định' },
+
+    /** width của dropdown (tính cả tiêu đề và mũi tên) */
+    width: { type: String, default: 'auto' },
+
+    /** width của các item trong dropdown */
+    itemWidth: { type: String, default: 'auto' }
+  },
+
   data () {
     return {
-      open: false
+      open: false,
+      blurred: false,
+      entered: false
     };
+  },
+
+  computed: {
+    customStyle () {
+      return `width: ${this.width}`;
+    },
+
+    itemCustomStyle () {
+      return `width: ${this.itemWidth}`;
+    }
+  },
+
+  methods: {
+    closeIfOutsideOfDropdown () {
+      this.open = this.entered;
+      this.entered = false;
+    }
   }
 };
 </script>

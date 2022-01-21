@@ -32,7 +32,6 @@
 <script>
 export default {
   name: 'DropdownComponent',
-  components: true,
 
   props: {
     title: { type: String, default: 'Mặc định' },

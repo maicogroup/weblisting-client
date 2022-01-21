@@ -3,7 +3,7 @@
     <div>
       <img class="w-full h-60 object-cover lg:h-80" :src="project.images[0]">
       <h4 class="uppercase mt-4 text-xl font-bold lg:mt-2">
-        Căn hộ chung cư {{ project.projectName }}
+        Căn hộ chung cưaaaa {{ project.projectName }}
       </h4>
       <p class="text-gray-500">
         {{ projectAddress }}

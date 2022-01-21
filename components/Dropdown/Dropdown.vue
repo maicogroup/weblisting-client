@@ -19,7 +19,7 @@
       v-if="open"
       ref="test"
       :style="itemCustomStyle"
-      class="absolute right-0 py-2 bg-white rounded-md shadow-xl z-20"
+      class="absolute right-0 py-2 bg-white rounded-md shadow-xl"
       @click="open = false"
       @mouseenter="entered = true"
       @mouseleave="entered = false"

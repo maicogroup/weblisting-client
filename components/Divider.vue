@@ -5,6 +5,7 @@
 <script>
 export default {
   name: 'SectionDivider',
+  components: true,
   props: {
     vertical: { type: Boolean, default: false }
   }

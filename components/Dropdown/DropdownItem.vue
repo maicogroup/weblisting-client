@@ -6,7 +6,8 @@
 
 <script>
 export default {
-  name: 'DropdownItem'
+  name: 'DropdownItem',
+  components: true
 };
 </script>
 

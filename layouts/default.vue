@@ -1,7 +1,7 @@
 <template>
   <div>
     <MainHeader />
-    <div class="relative z-0 mt-32 flex justify-center max-w-full" style="height:2000px">
+    <div class="relative z-0 mt-32 flex justify-center max-w-full">
       <Nuxt />
     </div>
     <!-- <TheFooter /> -->

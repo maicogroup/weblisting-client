@@ -62,10 +62,8 @@
 </template>
 
 <script>
-import MenuItem from '~/components/Menu/MenuItem.vue';
 export default {
-  name: 'MainHeaderSidebar',
-  components: { MenuItem }
+  name: 'MainHeaderSidebar'
 };
 </script>
 

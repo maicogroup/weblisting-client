@@ -29,15 +29,16 @@
             </button>
           </div>
         </div>
-        <p class="font-semibold">
-        <!-- Tên:
-          <span v-if="!isStringNullOrWhitespace(post.pageInfor.title)" class="font-thin mt-2">
-            {{ post.pageInfor.title }}
+        <p class="truncate">
+          <pan class="font-semibold">
+            Tags:
+          </pan>
+          <span v-if="post.tags && post.tags.length != 0" class="text-blue-600 mt-2">
+            {{ post.tags.join(', ') }}
           </span>
-          <span v-else class="mt-2 text-red-600">
+          <span v-else class="mt-2 text-red-600 font-semibold">
             trống
           </span>
-        </p> -->
         </p>
         <div>
           <p class="mt-1 font-semibold">
@@ -52,6 +53,7 @@
         </div>
 
         <Divider class="my-2" />
+
         <div class="text-purple-800">
           <p class="font-semibold ">
             Thông tin SEO:
@@ -66,6 +68,7 @@
               trống
             </span>
           </p>
+
           <p class="ml-2 mt-1 font-semibold">
             Title:
             <span v-if="!isStringNullOrWhitespace(post.pageInfor.title)" class="font-thin mt-2">
@@ -75,6 +78,7 @@
               trống
             </span>
           </p>
+
           <p class="ml-2 mt-1 font-semibold">
             Meta description:
             <span v-if="!isStringNullOrWhitespace(post.pageInfor.metaDescription)" class="font-thin mt-2">
@@ -109,6 +113,7 @@ export default {
                 metaDescription
               }
               description
+              tags
             }
             totalCount
         }

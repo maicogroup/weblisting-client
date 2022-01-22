@@ -1,7 +1,7 @@
 <template>
   <div>
     <MainHeader />
-    <div class="relative z-0 mt-32 flex justify-center max-w-full">
+    <div class="relative z-0 mt-32 flex justify-center max-w-full mb-10">
       <Nuxt />
     </div>
     <!-- <TheFooter /> -->
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import MainHeader from './components/MainHeader/MainHeader.vue';
+import MainHeader from './components/mainHeader/MainHeader.vue';
 export default {
   name: 'DefaultLayout',
   components: { MainHeader }

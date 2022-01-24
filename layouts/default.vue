@@ -1,7 +1,7 @@
 <template>
   <div>
-    <!-- <TheHeader /> -->
-    <div class="flex justify-center max-w-full">
+    <MainHeader />
+    <div class="relative z-0 mt-32 flex justify-center max-w-full">
       <Nuxt />
     </div>
     <!-- <TheFooter /> -->
@@ -9,8 +9,22 @@
 </template>
 
 <script>
+import MainHeader from './components/mainHeader/MainHeader.vue';
+import { gql} from 'graphql-tag';
+
+const getProjectsQuery = gql`
+  
+`;
 export default {
-  name: 'DefaultLayout'
+  name: 'DefaultLayout',
+  components: { MainHeader },
+  apollo:{
+    projects:{
+      query(){
+        return getProjectsQuery;
+      }
+    }
+  }
 };
 </script>
 

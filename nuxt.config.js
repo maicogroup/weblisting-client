@@ -25,18 +25,23 @@ export default {
   plugins: [
   ],
 
-  // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
+    //'@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
     '@nuxtjs/apollo'
   ],
-
+  // Auto import components: https://go.nuxtjs.dev/config-components
+  components: [
+      {
+        path: '~/components', // will get any components nested in let's say /components/test too
+        pathPrefix: false
+      }
+    ]
+  ,
   apollo: {
     clientConfigs: {
       default: {
@@ -52,5 +57,10 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    extend(config, ctx) {
+      if (ctx.isDev) {
+        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+      }
+    }
   }
 };

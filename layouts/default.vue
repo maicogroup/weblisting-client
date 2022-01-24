@@ -12,19 +12,17 @@
 import MainHeader from './components/mainHeader/MainHeader.vue';
 import { gql} from 'graphql-tag';
 
-const getProjectsQuery = gql`
-  
-`;
+
 export default {
   name: 'DefaultLayout',
   components: { MainHeader },
-  apollo:{
-    projects:{
-      query(){
-        return getProjectsQuery;
-      }
-    }
-  }
+  // apollo:{
+  //   projects:{
+  //     query(){
+  //       return getProjectsQuery;
+  //     }
+  //   }
+  // }
 };
 </script>
 

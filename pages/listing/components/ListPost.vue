@@ -8,14 +8,14 @@
                   <p class="inline text-sm truncate mar-address">
                       Sắp xếp theo:
                   </p>
-                  <Dropdown class="text-sm md:mr-9"> 
-                      <DropdownItem>
+                  <Dropdown itemWidth="150px" class="text-sm md:mr-9"> 
+                      <DropdownItem v-on:click="order(0)">
                           Giá cao nhất
                       </DropdownItem>
-                      <DropdownItem>
+                      <DropdownItem v-on:click="order(1)">
                           Giá thấp nhất
                       </DropdownItem>
-                      <DropdownItem>
+                      <DropdownItem v-on:click="order(2)">
                           Mới nhất
                       </DropdownItem>
                   </Dropdown>
@@ -177,12 +177,28 @@ export default {
                 skipItems: 10 * (index - 1)
             });
             this.pageIndex = index;
-            const yOffset = -10; 
-            const element = document.getElementById('post-subinfor');
-            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            // const yOffset = -10; 
+            // const element = document.getElementById('post-subinfor');
+            // const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
-            window.scrollTo({top: y, behavior: 'smooth'});
-            //document.getElementById("post-subinfor").scrollIntoView(true);
+            // window.scrollTo({top: y, behavior: 'smooth'});
+            document.getElementById("post-subinfor").scrollIntoView(true);
+        },
+        order:function(orderConditionIndex){
+            const orderCondition = {};
+            if(orderConditionIndex == 0) orderCondition['price'] = 'DESC';
+            else if(orderConditionIndex == 1) orderCondition['price'] = 'ASC';
+            else orderCondition['lastUpdatedAt'] = 'DESC';
+            this.$apollo.queries.postsData.refetch ({
+                condition: {
+                    projectId:{
+                        eq : this.projectId
+                    }
+                },
+                take: 10,
+                order: orderCondition
+            });
+            this.pageIndex = 1;
         }
     },
     computed:{

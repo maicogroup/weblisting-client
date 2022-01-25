@@ -1,5 +1,5 @@
 <template>
-  <div class="px-5 w-full max-w-screen-xl">
+  <div class=" w-full max-w-screen-xl">
     <ProjectHeader v-if="project != null" :project="project" />
     <Divider class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
@@ -34,6 +34,11 @@ export default {
                 googleMapLocation
               }
               images
+              pageInfors{
+                title
+                slug
+                metaDescription
+              }
             }
         }`;
       },
@@ -45,6 +50,16 @@ export default {
           slug: this.$route.params.slug
         };
       }
+    }
+  },
+  head(){
+    return {
+      title: this.project.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title,
+      meta:[{
+        hid: 'description', 
+        name: 'description',
+        content: this.project.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
+      }]
     }
   }
 

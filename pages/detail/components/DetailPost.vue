@@ -134,66 +134,13 @@
 </template>
 
 <script>
-import {gql} from 'graphql-tag';
 
-const getPostQuery = gql `
-  query GetPost($condition: PostCollectionFilterInput) {
-        post( where: $condition ) {
-          id
-          gallery
-          acreage
-          price
-          roomStructure
-          direction
-          description
-          ownerId
-          furnitures
-          apartmentNumber
-          floor
-          demand
-          status
-          tags
-          pageInfor {
-            title
-            slug
-          }
-          project{
-            address{
-              street
-              district
-              city
-              googleMapLocation
-            }
-            juridical
-            investor
-            projectName
-            utilities
-          }
-        }
-      }
-`;
+
+
 export default ({
   name: 'DetailPost',
-  props:['slug'],
-  apollo:{
-    post:{
-      query(){
-        return getPostQuery
-      },
-      update: data => data.post,
-      variables(){
-        return{
-          condition:{
-            pageInfor: {
-              slug: {
-                eq: this.slug
-              }
-            }
-          }
-        }
-      }
-    }
-  },
+  props:['post'],
+  
   computed:{
     gallery(){
       this.post.gallery = this.post.gallery.map(i => 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + i);

@@ -25,15 +25,15 @@
         <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
             <li class="pb-6 md:pt-0 pt-6  md:border-none border-b border-black" v-for="post in posts" :key="post.id">
                 <div class="">
-                    <p class="md:hidden truncate ... font-bold text-lg leading-6 ov-flow-hidden mb-3">
-                            {{post.title}}
-                    </p>
+                    <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="md:hidden truncate ... font-bold text-lg leading-6 ov-flow-hidden mb-3">
+                            {{post.pageInfor.title}}
+                    </NuxtLink>
                 <div class="flex item-flex-start space-x-4 md:rounded-md md:border">
                         <img class="w-28 h-28 md:w-60 md:h-40 rounded-md border" :src="post.srcimage" alt="Bonnie image">
                    <div class="flex-1 min-w-0">
-                        <p class="hidden md:block font-bold text-lg leading-6 mar-title h-12 ov-flow-hidden">
-                            {{post.title}}
-                        </p>
+                        <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="hidden md:block font-bold text-lg leading-6 mar-title h-12 ov-flow-hidden">
+                            {{post.pageInfor.title}}
+                        </NuxtLink>
                         <p class="font-price md:mt-0 md:mb-4 mt-2 mb-5">
                             {{post.price}}
                         </p>
@@ -192,7 +192,7 @@ export default {
                 return this.postsData.items.map(function(item){
                     return {
                         srcimage: 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + (item.gallery.find(c => !c.includes('.mp4'))|| 'apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg'),
-                        title: item.pageInfor.title,
+                        pageInfor: item.pageInfor,
                         price: item.price + ' ' + item.acreage + ' ' + item.roomStructure,
                         address: item.project.address.street + ' ' + item.project.address.district + ' ' + item.project.address.city,
                         date: 'Cập nhật lần cuối: ' + item.lastUpdatedAt,

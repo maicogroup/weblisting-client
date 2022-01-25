@@ -3,7 +3,7 @@
     <ProjectHeader v-if="project != null" :project="project" />
     <Divider class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
-    <ListPost class="left-0" v-if="posts != null" :projectId="projectId"/>
+    <ListPost class="left-0" :projectId="project.id"/>
     <ContactInfor class="lg:ml-9 hidden lg:flex lg:flex-col mt-14" />
     </div>
   </div>
@@ -17,74 +17,15 @@ import ListPost from './components/ListPost.vue';
 import ContactInfor from './components/ContactInfor.vue';
 
 export default {
-  name: 'ListingPage',
+  name: 'PostList',
   components: { ProjectHeader, ListPost, ContactInfor },
   apollo: {
-    projectId: {
-      query () {
-        return gql`
-          query GetListPost($slug: String!) {
-            listPosts(where:{pageInfors: {some: {slug: {eq: $slug}}}}) {
-              projectId,
-          }
-        }`;
-      },
-
-      update: data => data.listPosts[0].projectId,
-
-      variables () {
-        return {
-          slug: this.$route.params.slug
-        };
-      }
-    },
-    posts:{
-      query(){
-        return gql`
-          query GetPostWithPagination($condition: PostCollectionFilterInput, $skip: Int, $take: Int, $order : [PostCollectionSortInput!]) {
-            postsWithPagination(skip: $skip, take: $take, where: $condition, order : $order) {
-              items{
-                id
-                pageInfor{
-                  title
-                  slug
-                  metaDescription
-                }
-                gallery
-                price
-                description
-                demand
-                status,
-                acreage,
-                roomStructure,
-                apartmentState,
-                tags
-              }
-              totalCount
-            }
-          }
-        `
-      },
-      update: data => data.postsWithPagination,
-      skip(){
-        return this.projectId == null;
-      },
-      variables(){
-        return{
-          condition: {
-            projectId:{
-              eq : this.projectId
-            }
-          },
-          take: 10
-        }
-      }
-    },
     project: {
       query () {
         return gql`
-          query GetProjects($projectId: String!) {
-            projects(where: { id: { eq: $projectId } }) {
+          query GetProjects($slug: String!) {
+            projects(where: { pageInfors: { some: { slug: { eq: $slug }}} }) {
+              id
               projectName
               address {
                 street
@@ -99,13 +40,9 @@ export default {
 
       update: data => data.projects[0],
 
-      skip () {
-        return this.projectId == null;
-      },
-
       variables () {
         return {
-          projectId: this.projectId
+          slug: this.$route.params.slug
         };
       }
     }

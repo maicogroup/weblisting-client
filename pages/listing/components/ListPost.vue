@@ -28,9 +28,12 @@
                     <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="md:hidden truncate ... font-bold text-lg leading-6 ov-flow-hidden mb-3">
                             {{post.pageInfor.title}}
                     </NuxtLink>
-                <div class="flex item-flex-start space-x-4 md:rounded-md md:border">
-                        <img class="w-28 h-28 md:w-60 md:h-40 rounded-md border" :src="post.srcimage" alt="Bonnie image">
+                <div class="flex item-flex-start h-52 space-x-4 md:rounded-md md:border">
+                        <img class="w-28 h-28 md:w-60 md:h-full object-cover bg-black rounded-md border" :src="post.srcimage" alt="Bonnie image">
                    <div class="flex-1 min-w-0">
+                        <div v-for="item in post.tags" :key="item" class="text-xs mt-2 inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-red-200 text-red-700 rounded-full">
+                            {{ item }}
+                        </div>
                         <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="hidden md:block font-bold text-lg leading-6 mar-title h-12 ov-flow-hidden">
                             {{post.pageInfor.title}}
                         </NuxtLink>
@@ -212,6 +215,7 @@ export default {
                         price: item.price + ' ' + item.acreage + ' ' + item.roomStructure,
                         address: item.project.address.street + ' ' + item.project.address.district + ' ' + item.project.address.city,
                         date: 'Cập nhật lần cuối: ' + item.lastUpdatedAt,
+                        tags: item.tags,
                         id: item.id
                     }
                 });

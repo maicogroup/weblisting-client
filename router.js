@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import PostList from '~/pages/listing/index';
 import DetailPost from '~/pages/detail/index'
+import EditProject from "~/pages/edit-project/index";
 
 
 Vue.use(Router);
@@ -22,6 +23,10 @@ export function createRouter () {
       {
         path: '/chi-tiet-can-ho/:slug',
         component: DetailPost
+      },
+      {
+        path: '/chinh-sua-du-an',
+        component: EditProject
       }
     ]
   });

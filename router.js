@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import HomePage from '~/pages/index';
-import ListingPage from '~/pages/listing/index';
+import EditPost from '~/pages/postQueue/edit-post/index';
 import PostQueuePage from '~/pages/postQueue/index';
 
 Vue.use(Router);
@@ -16,8 +16,8 @@ export function createRouter () {
         component: HomePage
       },
       {
-        path: '/danh-sach-can-ho/:slug',
-        component: ListingPage
+        path: '/chinh-sua-tin-dang/:slug',
+        component: EditPost
       },
       {
         path: '/danh-sach-cho',

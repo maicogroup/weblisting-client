@@ -4,7 +4,7 @@
       Hiện có {{ postsWithPagination.totalCount }} bài viết
     </p>
     <div v-if="postsWithPagination != null" class="flex-col space-y-6 ">
-      <div v-for="post in postsWithPagination.items" :key="post.id" class="bg-white rounded-md max-w-4xl mx-auto p-4 shadow-lg">
+      <div v-for="post in postsWithPagination.items" :key="post.id" class="bg-white rounded-md max-w-4xl mx-auto p-4 hover:shadow-lg border-gray-400 border border-solid">
         <div class="flex justify-between">
           <div>
             <p class="mb-2 font-semibold">

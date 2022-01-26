@@ -142,8 +142,7 @@ export default {
     name: 'ListPost', 
     data(){
         return{
-            pageIndex: 1,
-            pageOfItems: []
+            pageIndex: 1
         }
     },
     apollo:{
@@ -160,7 +159,8 @@ export default {
                     condition: {
                         projectId:{
                             eq : this.projectId
-                        }
+                        },
+                        status: {eq: "Publish"}
                     },
                     take: 10,
                 }
@@ -174,17 +174,13 @@ export default {
                 condition: {
                     projectId:{
                         eq : this.projectId
-                    }
+                    },
+                    status: {eq: "Publish"}
                 },
                 take: 10,
                 skipItems: 10 * (index - 1)
             });
             this.pageIndex = index;
-            // const yOffset = -10; 
-            // const element = document.getElementById('post-subinfor');
-            // const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-            // window.scrollTo({top: y, behavior: 'smooth'});
             document.getElementById("post-subinfor").scrollIntoView(true);
         },
         order:function(orderConditionIndex){
@@ -196,7 +192,8 @@ export default {
                 condition: {
                     projectId:{
                         eq : this.projectId
-                    }
+                    },
+                    status: {eq: "Publish"}
                 },
                 take: 10,
                 order: orderCondition

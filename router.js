@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import HomePage from '~/pages/index';
 import EditPost from '~/pages/postQueue/edit-post/index';
 import PostQueuePage from '~/pages/postQueue/index';
 import PostList from '~/pages/listing/index';

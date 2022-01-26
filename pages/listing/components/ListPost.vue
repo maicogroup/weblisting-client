@@ -1,55 +1,60 @@
 <template>
-  <div class="max-w-full">
-    <div class="flex justify-between items-center mt-2 mb-2">
-      <p class="md:text-sm text-xs truncate mar-address">
-        Hiện có: 19,384 bất động sản
-      </p>
-      <div>
-        <p class="inline text-sm truncate mar-address">
-          Sắp xếp theo:
-        </p>
-        <Dropdown class="text-sm md:mr-9">
-          <DropdownItem>
-            Giá cao nhất
-          </DropdownItem>
-          <DropdownItem>
-            Giá thấp nhất
-          </DropdownItem>
-          <DropdownItem>
-            Mới nhất
-          </DropdownItem>
-        </Dropdown>
-      </div>
-    </div>
-    <div class="flow-root">
-      <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-        <li v-for="post in posts" :key="post" class="pb-6 md:pt-0 pt-6  md:border-none border-b border-black">
-          <div class="">
-            <p class="md:hidden truncate ... font-bold text-lg leading-6 ov-flow-hidden mb-3">
-              {{ post.title }}
-            </p>
-            <div class="flex item-flex-start space-x-4 md:rounded-md md:border">
-              <img class="w-28 h-28 md:w-60 md:h-40 rounded-md border" :src="post.srcimage" alt="Bonnie image">
-              <div class="flex-1 min-w-0">
-                <p class="hidden md:block font-bold text-lg leading-6 mar-title h-12 ov-flow-hidden">
-                  {{ post.title }}
-                </p>
-                <p class="font-price md:mt-0 md:mb-4 mt-2 mb-5">
-                  {{ post.price }}
-                </p>
-                <p class="text-sm color-858585 md:mb-3 mb-6">
-                  {{ post.address }}
-                </p>
-                <p class="text-sm color-a7a7a7">
-                  {{ post.date }}
-                </p>
+    <div class="max-w-full" id="post-subinfor">
+            <div class="flex justify-between items-center mt-2 mb-2" style="height: 2.5rem;">
+              <p class="md:text-sm text-xs truncate mar-address">
+                    Hiện có: {{totalItem}} bất động sản
+              </p>
+              <div>
+                  <p class="inline text-sm truncate mar-address">
+                      Sắp xếp theo:
+                  </p>
+                  <Dropdown itemWidth="150px" class="text-sm md:mr-9"> 
+                      <DropdownItem v-on:click="order(0)">
+                          Giá cao nhất
+                      </DropdownItem>
+                      <DropdownItem v-on:click="order(1)">
+                          Giá thấp nhất
+                      </DropdownItem>
+                      <DropdownItem v-on:click="order(2)">
+                          Mới nhất
+                      </DropdownItem>
+                  </Dropdown>
               </div>
             </div>
-          </div>
-        </li>
-      </ul>
+   <div class="flow-root">
+        <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+            <li class="pb-6 md:pt-0 pt-6  md:border-none border-b border-black" v-for="post in posts" :key="post.id">
+                <div class="">
+                    <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="md:hidden truncate ... font-bold text-lg leading-6 ov-flow-hidden mb-3">
+                            {{post.pageInfor.title}}
+                    </NuxtLink>
+                <div class="flex item-flex-start h-52 space-x-4 md:rounded-md md:border">
+                        <img class="w-28 h-28 md:w-60 md:h-full object-cover bg-black rounded-md border" :src="post.srcimage" alt="Bonnie image">
+                   <div class="flex-1 min-w-0">
+                        <div v-for="item in post.tags" :key="item" class="text-xs mt-2 inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-red-200 text-red-700 rounded-full">
+                            {{ item }}
+                        </div>
+                        <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="hidden md:block font-bold text-lg leading-6 mar-title h-12 ov-flow-hidden">
+                            {{post.pageInfor.title}}
+                        </NuxtLink>
+                        <p class="font-price md:mt-0 md:mb-4 mt-2 mb-5">
+                            {{post.price}}
+                        </p>
+                        <p class="text-sm color-858585 md:mb-3 mb-6">
+                            {{post.address}}
+                        </p>
+                        <p class="text-sm color-a7a7a7">
+                            {{post.date}}
+                        </p>
+                    </div>
+                </div>
+                </div>
+            </li>
+        </ul>
+   </div>
+    <pagination :total="totalItem" :perPage="10" :currentPage="pageIndex" @pagechanged="pageNavigationTo"></pagination>
     </div>
-  </div>
+  
 </template>
 
 <style scoped>
@@ -90,40 +95,136 @@
 }
 </style>
 <script>
-export default {
-  name: 'ListPost',
-  data () {
-    return {
-      posts: [{
-        srcimage: 'https://flowbite.com/docs/images/people/profile-picture-3.jpg',
-        title: 'CĂN HỘ HUHIHAHA TẦNG 6 BAN CÔNG RỘNG RÃI THOÁNG MÁT VÃI ĐẠN AHIHI FIRST THING FIRST PRERESENT TO CD TOWN',
-        price: '6,3 Tỷ - 52 m² - 2PN3WC',
-        address: '8 Miles, Novara, CĐ City',
-        date: 'Hôm nay'
-      },
-      {
-        srcimage: 'https://flowbite.com/docs/images/people/profile-picture-3.jpg',
-        title: 'CĂN HỘ HUHIHAHA TẦNG 6 BAN CÔNG RỘNG RÃI THOÁNG MÁT VÃI ĐẠN AHIHI FIRST THING FIRST PRERESENT TO CD TOWN',
-        price: '6,3 Tỷ - 52 m² - 2PN3WC',
-        address: '8 Miles, Novara, CĐ City',
-        date: 'Hôm nay'
-      },
-      {
-        srcimage: 'https://flowbite.com/docs/images/people/profile-picture-3.jpg',
-        title: 'CĂN HỘ HUHIHAHA TẦNG 6 BAN CÔNG RỘNG RÃI THOÁNG MÁT VÃI ĐẠN AHIHI FIRST THING FIRST PRERESENT TO CD TOWN',
-        price: '6,3 Tỷ - 52 m² - 2PN3WC',
-        address: '8 Miles, Novara, CĐ City',
-        date: 'Hôm nay'
-      },
-      {
-        srcimage: 'https://flowbite.com/docs/images/people/profile-picture-3.jpg',
-        title: 'CĂN HỘ HUHIHAHA TẦNG 6 BAN CÔNG RỘNG RÃI THOÁNG MÁT VÃI ĐẠN AHIHI FIRST THING FIRST PRERESENT TO CD TOWN',
-        price: '6,3 Tỷ - 52 m² - 2PN3WC',
-        address: '8 Miles, Novara, CĐ City',
-        date: 'Hôm nay'
-      }
-      ]
-    };
-  }
+import { computed } from '@vue/composition-api';
+import {gql} from 'graphql-tag';
+// import pagination from '~/pages/components/pagination.vue';
+// import Dropdown from '~/pages/components/Dropdown/Dropdown.vue';
+// import DropdownItem from '~/pages/components/Dropdown/DropdownItem.vue';
+
+const getPostsQuery = gql`
+          query GetPostWithPagination($condition: PostCollectionFilterInput, $skipItems: Int, $take: Int, $order : [PostCollectionSortInput!]) {
+            postsWithPagination(take: $take, skip: $skipItems, where: $condition, order : $order) {
+              items{
+                id
+                pageInfor{
+                  title
+                  slug
+                  metaDescription
+                }
+                gallery
+                price
+                description
+                demand
+                status,
+                acreage,
+                roomStructure,
+                apartmentState,
+                tags
+                project{
+                    address{
+                        street
+                        city
+                        district
+                        googleMapLocation
+                    }
+                }
+                lastUpdatedAt
+              }
+              totalCount
+            }
+          }
+        `;
+
+export default { 
+    props:[
+        "projectId"
+    ],
+    name: 'ListPost', 
+    data(){
+        return{
+            pageIndex: 1,
+            pageOfItems: []
+        }
+    },
+    apollo:{
+        postsData:{
+            query(){
+                return getPostsQuery
+            },
+            update: data => data.postsWithPagination,
+            skip(){
+                return this.projectId == null;
+            },
+            variables(){
+                return{
+                    condition: {
+                        projectId:{
+                            eq : this.projectId
+                        }
+                    },
+                    take: 10,
+                }
+            }
+        },
+    },
+    methods:{
+        pageNavigationTo: function(index){
+            
+            this.$apollo.queries.postsData.refetch ({
+                condition: {
+                    projectId:{
+                        eq : this.projectId
+                    }
+                },
+                take: 10,
+                skipItems: 10 * (index - 1)
+            });
+            this.pageIndex = index;
+            // const yOffset = -10; 
+            // const element = document.getElementById('post-subinfor');
+            // const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+            // window.scrollTo({top: y, behavior: 'smooth'});
+            document.getElementById("post-subinfor").scrollIntoView(true);
+        },
+        order:function(orderConditionIndex){
+            const orderCondition = {};
+            if(orderConditionIndex == 0) orderCondition['price'] = 'DESC';
+            else if(orderConditionIndex == 1) orderCondition['price'] = 'ASC';
+            else orderCondition['lastUpdatedAt'] = 'DESC';
+            this.$apollo.queries.postsData.refetch ({
+                condition: {
+                    projectId:{
+                        eq : this.projectId
+                    }
+                },
+                take: 10,
+                order: orderCondition
+            });
+            this.pageIndex = 1;
+        }
+    },
+    computed:{
+        posts(){
+            if(this.postsData == null) return []
+            else
+                return this.postsData.items.map(function(item){
+                    return {
+                        srcimage: 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + (item.gallery.find(c => !c.includes('.mp4'))|| 'apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg'),
+                        pageInfor: item.pageInfor,
+                        price: item.price + ' ' + item.acreage + ' ' + item.roomStructure,
+                        address: item.project.address.street + ' ' + item.project.address.district + ' ' + item.project.address.city,
+                        date: 'Cập nhật lần cuối: ' + item.lastUpdatedAt,
+                        tags: item.tags,
+                        id: item.id
+                    }
+                });
+        },
+        totalItem(){
+            if(this.postsData == null) return 0
+            else
+                return this.postsData.totalCount;
+        }
+    }
 };
 </script>

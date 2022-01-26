@@ -185,10 +185,7 @@ export default {
 
           postsWithPagination.items = postsWithPagination.items.filter(c => c.id != post.id),
           postsWithPagination.totalCount--
-          // var postData = {
-          //   items: postsWithPagination.items.filter(c => c.id != post.id),
-          //   totalCount: postsWithPagination.totalCount - 1
-          // }
+
           console.log(postData)
           store.writeQuery({ ...query, data: {postsWithPagination : postsWithPagination}})
         }

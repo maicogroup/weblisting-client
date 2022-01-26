@@ -1,54 +1,123 @@
 <template>
     <div class="vue-expand-panel p-2 h-auto">
-        <h1 class="text-center">CHỈNH SỬA DỰ ÁN</h1>
+        <h1 class="text-center font-bold text-lg">CHỈNH SỬA DỰ ÁN</h1>
         <br>
-        <div class="w-auto h-auto p-2 border-2 m-5" v-for="(project, index) in projects" :key="index">
-            <h1>{{project.projectName}}</h1>
+        <div class="w-auto h-auto p-2 border-4 rounded m-5" v-for="(project, index) in projects" :key="index">
+            <h1 class="font-semidbold text-lg">{{project.projectName}}</h1>
             <div class="p-2 h-auto" style="width:1000px;">
-                <expand-panel :title="thongtin">
-                    <strong>Tên dự án:</strong> {{project.projectName}}
-                    <br>
-                    <strong>Chủ đầu tư:</strong> {{project.investor}}
-                    <br>
-                    <strong>Pháp lý:</strong> {{project.juridical}}
-                    <br>
-                    <strong>Mô tả:</strong> {{project.description}}
+                <expand-panel title="Thông tin">
+                    <p class="mb-2">
+                        <label class="font-semibold">Tên dự án:</label>
+                        <input type="text" class="w-1/2" :value="project.projectName">
+                    </p>
+                    <p class="mb-2">
+                        <label class="font-semibold">Chủ đầu tư:</label>
+                        <input type="text" class="w-1/2" :value="project.investor">
+                    </p>
+                    <p class="mb-2">
+                        <label class="font-semibold">Pháp lý:</label>
+                        <input type="text" class="w-1/2" :value="project.juridical">
+                    </p>
+                    <p>
+                        <label class="font-semibold">Mô tả:</label>
+                        <textarea type="text" class="w-1/2" rows="4" :value="project.description"></textarea>
+                    </p>
+                    <div class="flex justify-end my-2">
+                        <button class="text-white px-3 py-1 bg-green-400 rounded">Cập nhật</button>
+                    </div>
                 </expand-panel>
-                <expand-panel :title="diachi">
-                    <strong>Tên đường:</strong> {{project.address.street}}
-                    <br>
-                    <strong>Quận:</strong> {{project.address.district}}
-                    <br>
-                    <strong>Thành phố:</strong> {{project.address.city}}
-                    <br>
-                    <strong>Google Map:</strong> 
-                    <iframe :src="project.address.googleMapLocation" width="100%" height="100%" loading="lazy" />
+                <expand-panel title="Địa chỉ">
+                    <p class="mb-2">
+                        <label class="font-semibold">Tên đường:</label>
+                        <input type="text" class="w-1/2" :value="project.address.street">
+                    </p>
+                    <p class="mb-2">
+                        <label class="font-semibold">Quận:</label>
+                        <input type="text" class="w-1/2" :value="project.address.district">
+                    </p>
+                    <p class="mb-2">
+                        <label class="font-semibold">Thành phố: 
+                        </label>
+                        <input type="text" class="w-1/2" :value="project.address.city">
+                    </p>
+                    <p>
+                        <label class="font-semibold flex items-center">
+                            Google Map: &nbsp;&nbsp;
+                            <button @click="showGoogleMapEditModal(project.address.googleMapLocation)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
+                            </button>
+                        </label>
+                        <iframe :src="project.address.googleMapLocation" width="100%" height="100%" loading="lazy" />
+                    </p>
                 </expand-panel>
-                <expand-panel :title="tienich">
+                <expand-panel title="Tiện ích">
                     <ol>
                         <li v-for="(item, index) in project.utilities" :key="index">
                             {{item}}
                         </li>
                     </ol>
                 </expand-panel>
-                <expand-panel :title="hinhanh">
-                    <div class="container flex">
-                        <img class="w-32 h-32 mr-5 ml-5 mt-2 mb-2" v-for="(item, index) in project.images" :key="index" :src="item" alt="alternative text"/>
+                <expand-panel title="Hình ảnh">
+                    <div class="container flex w-50">
+                        <div class="w-100 mx-2" v-for="(item, index) in project.images" :key="index">
+                            <img class="w-40 h-32 mr-3 ml-2 my-2" :src="item" alt="alternative text"/>
+                            <div class="flex justify-center space-between">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                            </div>
+                        </div>
                     </div>
                 </expand-panel>
-                <expand-panel :title="thongTinSEO">
-                    <div class="container border-2 mb-7" v-for="(item, index) in project.pageInfors" :key="index">
-                        <strong>Tiêu đề:</strong> {{item.title}}
-                        <br>
-                        <strong>Slug: </strong> {{item.slug}} 
-                        <br>
-                        <strong>Meta Description:</strong> {{item.metaDescription}}   
+                <expand-panel title="Thông tin SEO">
+                    <div class="container mb-5" v-for="(item, index) in project.pageInfors" :key="index">
+                        <p class="font-medium flex justify-between items-center">
+                            {{item.title}}
+                            <button @click="showPageInforModal(item)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
+                            </button>
+                        </p>
+                        
                     </div> 
                 </expand-panel>
             </div>
         </div>
+        <modal name="page-information-detail">
+            <h2 class="mt-2 text-lg font-semibold text-center">Chỉnh sửa thông tin SEO</h2>
+            <div class="p-2 m-2">
+                <p class="mb-3">
+                    <label for="title" class="font-semibold">Tiêu đề:</label>
+                    <input type="text" class="w-1/2" :value="currentPageInfor.title">
+                </p>
+                
+                <p class="mb-3">
+                    <label for="slug" class="font-semibold">Slug:</label>
+                    <input type="text" class="w-1/2" :value="currentPageInfor.slug">
+                </p>
+                
+                <p>
+                    <label for="meta" class="font-semibold">Meta:</label>
+                    <textarea type="text" class="w-1/2" rows="4" :value="currentPageInfor.metaDescription"></textarea>
+                </p>
+                <div class="flex justify-end space-x-3 my-2">
+                    <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('page-information-detail')">Quay lại</button>
+                    <button class="px-3 py-1 bg-green-400 rounded">Đồng ý</button>
+                </div>
+            </div>
+        </modal>
+        <modal name="google-map-edit-modal">
+            <div class="pt-12">
+                <h2 class="mt-2 text-lg font-semibold text-center">Chỉnh sửa Google Map</h2>
+                <p class="m-10">
+                    <label for="map" class="font-semibold">Google map:</label>
+                    <input type="text" class="w1/2" :value="currentGoogleMap">
+                </p>
+                <div class="flex justify-end space-x-3 m-2 my-2">
+                        <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('page-information-detail')">Quay lại</button>
+                        <button class="text-white px-3 py-1 bg-green-400 rounded">Đồng ý</button>
+                </div>
+            </div>
+        </modal>
     </div>
-
 </template>
 
 <script>
@@ -95,15 +164,43 @@ export default {
                 {title: "Learning"},
                 {title: "Reading"}
             ],
-            thongtin: "Thông tin",
-            diachi: "Địa chỉ",
-            tienich: "Tiện ích",
-            hinhanh: "Hình ảnh",
-            thongTinSEO: "Thông tin SEO"
+            currentPageInfor: {},
+            currentGoogleMap: {},
+            currentImage: {}
+        }
+    },
+    methods: {
+        showPageInforModal(item) {
+            this.currentPageInfor = item;
+            this.$modal.show("page-information-detail");
+        },
+        showGoogleMapEditModal(item) {
+            this.currentGoogleMap = item;
+            this.$modal.show("google-map-edit-modal");
         }
     }
 }
 </script>
 
 <style scoped>
-    </style>
+    textarea {
+        width: 100%;
+        height: 90px;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        font-size: 16px;
+        resize: none;
+    }
+    input {
+        width: 75%;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        font-size: 14px;
+        resize: none;
+    }
+</style>

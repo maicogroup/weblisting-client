@@ -16,7 +16,7 @@ export function createRouter () {
         component: HomePage
       },
       {
-        path: '/chi-tiet-chinh-sua/slug',
+        path: '/chinh-sua-tin-dang/:slug',
         component: EditPost
       },
       {

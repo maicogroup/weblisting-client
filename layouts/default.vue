@@ -5,14 +5,26 @@
       <Nuxt />
     </div>
     <!-- <TheFooter /> -->
+    <MainFooter/>
   </div>
 </template>
 
 <script>
 import MainHeader from './components/mainHeader/MainHeader.vue';
+import MainFooter from './components/mainFooter.vue';
+import { gql} from 'graphql-tag';
+
+
 export default {
   name: 'DefaultLayout',
-  components: { MainHeader }
+  components: { MainHeader, MainFooter },
+  // apollo:{
+  //   projects:{
+  //     query(){
+  //       return getProjectsQuery;
+  //     }
+  //   }
+  // }
 };
 </script>
 

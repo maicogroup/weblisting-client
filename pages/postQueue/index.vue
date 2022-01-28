@@ -1,10 +1,10 @@
 <template>
-  <div class="mx-2">
+  <div class="mx-2" id="post-queue">
     <p class="mb-4 text-gray-600">
-      Hiện có {{ postsWithPagination.totalCount }} bài viết
+      Hiện có {{ totalCount }} bài viết chờ duyệt
     </p>
-    <div v-if="postsWithPagination != null" class="flex-col space-y-6 ">
-      <div v-for="post in postsWithPagination.items" :key="post.id" class="bg-white rounded-md max-w-4xl mx-auto p-4 shadow-lg">
+    <div v-if="postsWithPagination != null" class="flex-col space-y-6 mb-4">
+      <div v-for="post in postsWithPagination.items" :key="post.id" class="bg-white rounded-md max-w-4xl mx-auto p-4 hover:shadow-lg border-gray-400 border border-solid">
         <div class="flex justify-between">
           <div>
             <p class="mb-2 font-semibold">
@@ -21,7 +21,7 @@
               </svg>
               Chỉnh sửa
             </a>
-            <button :href="`chinh-sua-tin-dang/${post.pageInfor.slug}`" class="bg-green-500 hover:bg-green-700 text-white font-bold h-10 py-2 px-4 rounded flex items-center">
+            <button v-on:click="postPush(post)" :href="`chinh-sua-tin-dang/${post.pageInfor.slug}`" class="bg-green-500 hover:bg-green-700 text-white font-bold h-10 py-2 px-4 rounded flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" class="mr-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
@@ -30,9 +30,9 @@
           </div>
         </div>
         <p class="truncate">
-          <pan class="font-semibold">
+          <span class="font-semibold">
             Tags:
-          </pan>
+          </span>
           <span v-if="post.tags && post.tags.length != 0" class="text-blue-600 mt-2">
             {{ post.tags.join(', ') }}
           </span>
@@ -91,18 +91,16 @@
         </div>
       </div>
     </div>
+    <pagination :total="totalCount" :perPage="10" :currentPage="pageIndex" @pagechanged="pageNavigationTo"></pagination>
   </div>
 </template>
 
 <script>
 import { gql } from 'graphql-tag';
 
-export default {
-  name: 'ListpostsPage',
-  apollo: {
-    postsWithPagination: gql`
-        query GetWaitingPosts { 
-          postsWithPagination (where: {or: [{status: {eq: "Draft"}}, {status: {eq: "Updated"}}]}, take:5) {
+const getPostQuery = gql`
+        query GetWaitingPosts($skip: Int, $take: Int) { 
+          postsWithPagination (where: {or: [{status: {eq: "Draft"}}, {status: {eq: "Updated"}}]}, take: $take, skip: $skip) {
             items {
               id
               createdAt
@@ -117,7 +115,26 @@ export default {
             }
             totalCount
         }
-      }`
+      }`;
+export default {
+  name: 'ListpostsPage',
+  data () {
+    return{
+      pageIndex: 1
+    }
+  },
+  apollo: {
+    postsWithPagination: { 
+      query () {
+        return getPostQuery;
+      },
+      update: data => data.postsWithPagination,
+      variables () {
+        return{
+            take: 5,
+        }
+      }
+    }
   },
   methods: {
     isStringNullOrWhitespace (str) {
@@ -136,6 +153,52 @@ export default {
       }
 
       return content.length <= 280 ? content : content.slice(0, 277) + '...';
+    },
+    pageNavigationTo: function(index){
+      this.$apollo.queries.postsWithPagination.refetch ({
+          take: 5,
+          skip: 10 * (index - 1)
+      });
+      this.pageIndex = index;
+      document.getElementById("post-queue").scrollIntoView(true);
+    },
+    postPush: function(post){
+      const postTemp = post
+      this.$apollo.mutate({
+        mutation: gql `mutation UpdatePostStatus($input: UpdatePostStatusInput!) {
+            updatePostStatus(input: $input) {
+                string
+            }
+        }`,
+        variables:{
+          input: {
+            id: post.id
+          }
+        },
+        update:(store, {data:{ postPush }}) =>{
+          
+          const query = {
+            query: getPostQuery,
+            variables: {take: 5, skip: 10 * (this.pageIndex - 1)}
+          }
+          const { postsWithPagination } = store.readQuery( query )
+
+          postsWithPagination.items = postsWithPagination.items.filter(c => c.id != post.id),
+          postsWithPagination.totalCount--
+          // var postData = {
+          //   items: postsWithPagination.items.filter(c => c.id != post.id),
+          //   totalCount: postsWithPagination.totalCount - 1
+          // }
+          console.log(postData)
+          store.writeQuery({ ...query, data: {postsWithPagination : postsWithPagination}})
+        }
+      })
+    }
+  },
+  computed:{
+    totalCount(){
+      if(this.postsWithPagination == null) return 0
+      else return this.postsWithPagination.totalCount;
     }
   }
 };

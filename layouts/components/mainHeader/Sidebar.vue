@@ -63,7 +63,7 @@
 
 <script>
 export default {
-  name: 'MainHeaderSidebar'
+  name: 'Sidebar'
 };
 </script>
 

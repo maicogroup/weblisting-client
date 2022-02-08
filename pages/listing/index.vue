@@ -3,8 +3,8 @@
     <ProjectHeader v-if="project != null" :project="project" />
     <Divider class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
-    <ListPost class="left-0" :projectId="project.id"/>
-    <ContactInfor class="lg:ml-9 hidden lg:flex lg:flex-col mt-14" />
+      <ListPost v-if="project != null" class="left-0" :project-id="project.id" />
+      <ContactInfor class="lg:ml-9 hidden lg:flex lg:flex-col mt-14" />
     </div>
   </div>
 </template>

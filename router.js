@@ -2,8 +2,9 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import PostList from '~/pages/listing/index';
-import DetailPost from '~/pages/detail/index'
-
+import DetailPost from '~/pages/detail/index';
+import ProductReview from '~/pages/product-preview/index';
+import SpecificProjectReview from '~/pages/product-preview/specific-project/index';
 
 Vue.use(Router);
 
@@ -22,6 +23,14 @@ export function createRouter () {
       {
         path: '/chi-tiet-can-ho/:slug',
         component: DetailPost
+      },
+      {
+        path: '/review-san-pham',
+        component: ProductReview
+      },
+      {
+        path: '/review-san-pham/:slug',
+        component: SpecificProjectReview
       }
     ]
   });

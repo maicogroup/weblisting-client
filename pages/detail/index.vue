@@ -1,16 +1,16 @@
 <template>
   <div class="flex justify-between lg:px-5 w-full max-w-screen-xl">
-    <DetailPost :post="this.post" class="lg:w-9/12 lg:mr-9 w-full" />
+    <DetailPost :post="post" class="lg:w-9/12 lg:mr-9 w-full" />
     <ContactInfor class="lg:block hidden" />
   </div>
 </template>
 
 <script>
+import { gql } from 'graphql-tag';
 import DetailPost from './components/DetailPost.vue';
 import ContactInfor from './components/ContactInfor.vue';
-import {gql} from 'graphql-tag';
 
-const getPostQuery = gql `
+const getPostQuery = gql`
   query GetPost($condition: PostCollectionFilterInput) {
         post( where: $condition ) {
           id
@@ -51,34 +51,34 @@ const getPostQuery = gql `
 export default {
   name: 'DetailApartmentPage',
   components: { ContactInfor, DetailPost },
-  apollo:{
-    post:{
-      query(){
-        return getPostQuery
+  apollo: {
+    post: {
+      query () {
+        return getPostQuery;
       },
       update: data => data.post,
-      variables(){
-        return{
-          condition:{
+      variables () {
+        return {
+          condition: {
             pageInfor: {
               slug: {
                 eq: this.$route.params.slug
               }
             }
           }
-        }
+        };
       }
     }
   },
-  head(){
+  head () {
     return {
       title: this.post.pageInfor.title,
-      meta:[{
-        hid: 'description', 
+      meta: [{
+        hid: 'description',
         name: 'description',
         content: this.post.pageInfor.metaDescription
       }]
-    }
+    };
   }
 };
 </script>

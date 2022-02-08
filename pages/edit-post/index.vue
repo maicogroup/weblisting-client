@@ -1,7 +1,7 @@
 <template>
   <div class="px-5 w-full max-w-screen-xl mx-5">
     <h1 class="text-3xl font-medium mb-7">
-      Chỉnh sửa tin đăng {{post.pageInfor.title}}
+      Chỉnh sửa tin đăng {post.pageInfor.title}
     </h1>
     <h1 class="font-bold mb-2">
       Thông tin trang
@@ -79,7 +79,7 @@
         </li>
       </ul>
     </div>
-    <button @click="updatePost()" class="float-right bg-green-500 hover:bg-green-700 text-white font-bold h-10 py-2 px-4 rounded flex items-center mt-10">
+    <button class="float-right bg-green-500 hover:bg-green-700 text-white font-bold h-10 py-2 px-4 rounded flex items-center mt-10" @click="updatePost()">
       <svg xmlns="http://www.w3.org/2000/svg" class="mr-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
       </svg>
@@ -161,6 +161,9 @@ export default {
       this.post.tags.splice(this.post.tags.indexOf(tag), 1);
     },
     addTag () {
+      if (this.post.tags == null) {
+        this.post.tags = [];
+      }
       if (!this.post.tags.includes(this.tempTag)) {
         this.post.tags.push(this.tempTag);
         this.tempTag = '';
@@ -168,7 +171,7 @@ export default {
     },
     updatePost () {
       this.$apollo.mutate({
-        mutation: gql`mutation updatePost($input: UpdatePostInput) {
+        mutation: gql`mutation UpdatePost($input: UpdatePostInput!) {
   updatePost(input: $input){
     string
   }
@@ -176,11 +179,16 @@ export default {
         variables: {
           input: {
             id: this.post.id,
-            demand: 'hahahahaha'
+            description: this.post.description,
+            tags: this.post.tags,
+            pageInfor: {
+              slug: this.post.pageInfor.slug,
+              title: this.post.pageInfor.title,
+              metaDescription: this.post.pageInfor.metaDescription
+            }
           }
         }
       });
-      this.post.description = this.post.id;
     }
   }
 };

@@ -52,15 +52,15 @@ export default {
       }
     }
   },
-  head(){
+  head () {
     return {
-      title: this.project.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title,
-      meta:[{
-        hid: 'description', 
+      title: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title,
+      meta: [{
+        hid: 'description',
         name: 'description',
-        content: this.project.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
+        content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
       }]
-    }
+    };
   }
 
 };

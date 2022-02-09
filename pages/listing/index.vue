@@ -1,5 +1,5 @@
 <template>
-  <div class=" w-full max-w-screen-xl">
+  <div class=" w-full max-w-screen-xl px-4">
     <ProjectHeader v-if="project != null" :project="project" />
     <Divider class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">

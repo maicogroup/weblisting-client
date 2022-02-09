@@ -57,7 +57,7 @@
 
         <a href="#" class="ml-6"> Đăng ký </a>
 
-        <button class="ml-10 border rounded-md py-2 px-8">
+        <button class="ml-10 border rounded-md py-2 px-8 hover:text-white hover:bg-gray-700">
           Ký gửi
         </button>
       </div>

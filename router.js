@@ -1,12 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import EditPost from '~/pages/postQueue/edit-post/index';
 import EditPost from '~/pages/edit-post/index';
 import PostQueuePage from '~/pages/postQueue/index';
 import PostList from '~/pages/listing/index';
-import DetailPost from '~/pages/detail/index'
-
+import DetailPost from '~/pages/detail/index';
+import Home from '~/pages/home/index';
 
 Vue.use(Router);
 
@@ -16,7 +15,7 @@ export function createRouter () {
     routes: [
       {
         path: '/',
-        redirect: '/danh-sach-can-ho/ban-thue-can-ho-chung-cu-the-sun-avenue'
+        component: Home
       },
       {
         path: '/chinh-sua-tin-dang/:slug',

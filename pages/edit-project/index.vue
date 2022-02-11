@@ -112,8 +112,8 @@
                     <input type="text" class="w1/2" :value="currentGoogleMap">
                 </p>
                 <div class="flex justify-end space-x-3 m-2 my-2">
-                        <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('page-information-detail')">Quay lại</button>
-                        <button class="text-white px-3 py-1 bg-green-400 rounded">Đồng ý</button>
+                    <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('google-map-edit-modal')">Quay lại</button>
+                    <button class="text-white px-3 py-1 bg-green-400 rounded">Đồng ý</button>
                 </div>
             </div>
         </modal>
@@ -126,11 +126,7 @@ import { expandPanel } from 'vue-expand-panel'
 // import styles
 import '~/assets/css/vue-expander.css';
 
-export default {
-    name: "EditProject",
-    apollo: {
-        projects: { 
-            query: gql`query GetProject($condition: ProjectCollectionFilterInput)
+const getProject = gql`query GetProject($condition: ProjectCollectionFilterInput)
             {
                 projects(where: $condition) {
                     id,
@@ -152,7 +148,13 @@ export default {
                         metaDescription
                     }
                 }
-            }`
+            }`;
+
+export default {
+    name: "EditProject",
+    apollo: {
+        projects: { 
+            query: getProject
         }
     },
     components: {
@@ -177,6 +179,17 @@ export default {
         showGoogleMapEditModal(item) {
             this.currentGoogleMap = item;
             this.$modal.show("google-map-edit-modal");
+        },
+        updateGGMap() {
+            this.$apollo.mutate({
+                mutation: gql`mutation UpdateProjectGGMap($input: UpdateProjectInput!)
+                {
+                    updateProject(input: $input)
+                    {
+                        string
+                    }
+                }`
+            })
         }
     }
 }
@@ -186,7 +199,7 @@ export default {
     textarea {
         width: 100%;
         height: 90px;
-        padding: 12px 20px;
+        padding: 12px 10px;
         box-sizing: border-box;
         border: 2px solid #ccc;
         border-radius: 4px;
@@ -196,6 +209,7 @@ export default {
     }
     input {
         width: 75%;
+        padding-inline: 10px;
         box-sizing: border-box;
         border: 2px solid #ccc;
         border-radius: 4px;

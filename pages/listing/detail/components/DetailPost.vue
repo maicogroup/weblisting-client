@@ -3,7 +3,7 @@
     <div class="h-96 w-full">
       <gallery :items="gallery"/>
     </div>
-    <h1 class="mt-6 lg:mx-0 mx-5 font-bold text-2xl leading-5 ov-flow-hidden truncate ... ">
+    <h1 class="mt-6 lg:mx-0 mx-5 font-bold text-2xl leading-5 ov-flow-hidden ">
       {{ post.pageInfor.title }}
     </h1>
     <h4 class="lg:mx-0 mx-5 mt-3 font-normal color-3f3f3f text-sm leading-4">

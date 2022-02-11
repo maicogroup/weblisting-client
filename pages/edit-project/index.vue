@@ -8,46 +8,49 @@
                 <expand-panel title="Thông tin">
                     <p class="mb-2">
                         <label class="font-semibold">Tên dự án:</label>
-                        <input type="text" class="w-1/2" :value="project.projectName">
+                        <input type="text" class="w-1/2" v-model="project.projectName">
                     </p>
                     <p class="mb-2">
                         <label class="font-semibold">Chủ đầu tư:</label>
-                        <input type="text" class="w-1/2" :value="project.investor">
+                        <input type="text" class="w-1/2" v-model="project.investor">
                     </p>
                     <p class="mb-2">
                         <label class="font-semibold">Pháp lý:</label>
-                        <input type="text" class="w-1/2" :value="project.juridical">
+                        <input type="text" class="w-1/2" v-model="project.juridical">
                     </p>
                     <p>
                         <label class="font-semibold">Mô tả:</label>
-                        <textarea type="text" class="w-1/2" rows="4" :value="project.description"></textarea>
+                        <textarea type="text" class="w-1/2" rows="4" v-model="project.description"></textarea>
                     </p>
                     <div class="flex justify-end my-2">
-                        <button class="text-white px-3 py-1 bg-green-400 rounded">Cập nhật</button>
+                        <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectInformation(project.id, project.projectName, project.investor, project.juridical, project.description)">Cập nhật</button>
                     </div>
                 </expand-panel>
                 <expand-panel title="Địa chỉ">
                     <p class="mb-2">
                         <label class="font-semibold">Tên đường:</label>
-                        <input type="text" class="w-1/2" :value="project.address.street">
+                        <input type="text" class="w-1/2" v-model="project.address.street">
                     </p>
                     <p class="mb-2">
                         <label class="font-semibold">Quận:</label>
-                        <input type="text" class="w-1/2" :value="project.address.district">
+                        <input type="text" class="w-1/2" v-model="project.address.district">
                     </p>
                     <p class="mb-2">
                         <label class="font-semibold">Thành phố: 
                         </label>
-                        <input type="text" class="w-1/2" :value="project.address.city">
+                        <input type="text" class="w-1/2" v-model="project.address.city">
                     </p>
+                    <div class="flex justify-end my-2">
+                        <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectAddress(project.id, project.address.street, project.address.district, project.address.city, project.address.googleMapLocation)">Cập nhật</button>
+                    </div>
                     <p>
                         <label class="font-semibold flex items-center">
                             Google Map: &nbsp;&nbsp;
-                            <button @click="showGoogleMapEditModal(project.address.googleMapLocation)">
+                            <button @click="showGoogleMapEditModal(project.id, project.address)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
                             </button>
                         </label>
-                        <iframe :src="project.address.googleMapLocation" width="100%" height="100%" loading="lazy" />
+                        <iframe v-if="project.address.googleMapLocation.includes('https')" :src="project.address.googleMapLocation" width="100%" height="100%" loading="lazy" />
                     </p>
                 </expand-panel>
                 <expand-panel title="Tiện ích">
@@ -108,12 +111,12 @@
             <div class="pt-12">
                 <h2 class="mt-2 text-lg font-semibold text-center">Chỉnh sửa Google Map</h2>
                 <p class="m-10">
-                    <label for="map" class="font-semibold">Google map:</label>
-                    <input type="text" class="w1/2" :value="currentGoogleMap">
+                    <label for="map" class="font-semibold">Google map:</label> 
+                    <input type="text" class="w1/2" v-model="currentProjectAddress.googleMapLocation">
                 </p>
                 <div class="flex justify-end space-x-3 m-2 my-2">
                     <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('google-map-edit-modal')">Quay lại</button>
-                    <button class="text-white px-3 py-1 bg-green-400 rounded">Đồng ý</button>
+                    <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectAddress(currentProjectAddress.id, currentProjectAddress.street, currentProjectAddress.district, currentProjectAddress.city, currentProjectAddress.googleMapLocation)">Đồng ý</button>
                 </div>
             </div>
         </modal>
@@ -167,7 +170,7 @@ export default {
                 {title: "Reading"}
             ],
             currentPageInfor: {},
-            currentGoogleMap: {},
+            currentProjectAddress: {},
             currentImage: {}
         }
     },
@@ -176,20 +179,61 @@ export default {
             this.currentPageInfor = item;
             this.$modal.show("page-information-detail");
         },
-        showGoogleMapEditModal(item) {
-            this.currentGoogleMap = item;
+        showGoogleMapEditModal(id, address) {
+            this.currentProjectAddress = {
+                id,
+                street: address.street, 
+                district: address.district,
+                city: address.city,
+                googleMapLocation: address.googleMapLocation
+            };
             this.$modal.show("google-map-edit-modal");
         },
-        updateGGMap() {
+        updateProjectInformation(id, projectName, investor, juridical, description) {
             this.$apollo.mutate({
-                mutation: gql`mutation UpdateProjectGGMap($input: UpdateProjectInput!)
-                {
-                    updateProject(input: $input)
-                    {
+
+                mutation: gql`mutation UpdateProjectInformation($input: UpdateProjectInput!) {
+                    updateProject(input: $input) {
                         string
                     }
-                }`
+                }`,
+                variables: {
+                    input: { 
+                        id: id,
+                        projectName: projectName,
+                        investor: investor,
+                        juridical: juridical,
+                        description: description
+                    }
+                },
+                
+            }),
+            alert("Thay đổi thành công!!")
+        },
+        updateProjectAddress(id, street, district, city, googleMapLocation) {
+            console.log(street);
+            console.log(district);
+            console.log(city);
+            console.log(googleMapLocation);
+            this.$apollo.mutate({
+                mutation: gql`mutation UpdateProjectAddress($input: UpdateProjectInput!) {
+                    updateProject(input: $input) {
+                        string
+                    }
+                }`,
+                variables: {
+                    input: {
+                        id: id,
+                        address: {
+                            street: street,
+                            district: district,
+                            city: city,
+                            googleMapLocation: googleMapLocation
+                        }
+                    }
+                }
             })
+            this.$modal.hide('google-map-edit-modal')
         }
     }
 }

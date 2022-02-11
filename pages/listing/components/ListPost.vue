@@ -103,7 +103,7 @@ const getPostsQuery = gql`
 export default {
   name: 'ListPost',
   props: [
-    'projectId'
+    'projectId', 'filter'
   ],
   data () {
     return {
@@ -152,10 +152,69 @@ export default {
       if (this.postsData == null) { return 0; } else { return this.postsData.totalCount; }
     }
   },
+  watch: {
+    filter (filter) {
+      const conditions = { };
+
+      if (filter.projectId) {
+        conditions.projectId = { eq: filter.projectId };
+      }
+
+      if (filter.priceRange) {
+        const priceRange = filter.priceRange;
+        conditions.price = {};
+
+        if (priceRange.from !== 0) {
+          conditions.price.gte = priceRange.from * 1000000;
+        }
+
+        if (filter.priceRange.to !== Infinity) {
+          conditions.price.lte = priceRange.to * 1000000;
+        }
+      }
+
+      if (filter.acreageRange) {
+        const acreageRange = filter.acreageRange;
+        conditions.acreage = {};
+
+        if (acreageRange.from !== 0) {
+          conditions.acreage.gte = acreageRange.from;
+        }
+
+        if (filter.acreageRange.to !== Infinity) {
+          conditions.acreage.lte = acreageRange.to;
+        }
+      }
+
+      if (filter.directions && filter.directions.length !== 0) {
+        conditions.direction = {
+          in: filter.directions
+        };
+      }
+
+      if (filter.type) {
+        conditions.roomStructure = {};
+
+        if (filter.type === 'Căn hộ chung cư') {
+          conditions.roomStructure.endsWith = 'WC';
+        } else {
+          conditions.roomStructure.eq = filter.type;
+        }
+      }
+
+      const noFilter = (Object.keys(conditions).length === 0);
+
+      this.$apollo.queries.postsData.refetch(
+        {
+          condition: noFilter ? undefined : conditions,
+          skipItems: 0
+        });
+      this.pageIndex = 1;
+    }
+  },
   methods: {
     pageNavigationTo (index) {
       this.$apollo.queries.postsData.refetch({
-        take: 10,
         skipItems: 10 * (index - 1)
       });
       this.pageIndex = index;

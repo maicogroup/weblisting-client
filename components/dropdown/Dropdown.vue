@@ -19,7 +19,7 @@
       v-if="open"
       ref="test"
       :style="itemCustomStyle"
-      class="absolute right-0 py-2 bg-white rounded-md shadow-xl"
+      :class="`absolute right-0 py-2 bg-white ${bodyClass}`"
       @click="open = false"
       @mouseenter="entered = true"
       @mouseleave="entered = false"
@@ -40,7 +40,10 @@ export default {
     width: { type: String, default: 'auto' },
 
     /** width của các item trong dropdown */
-    itemWidth: { type: String, default: 'auto' }
+    itemWidth: { type: String, default: 'auto' },
+
+    /** thêm class cho nội dung dropdown. Lưu ý: dùng thuộc tính này sẽ làm mất đi một số class mặc định của nội dung dropdown */
+    bodyClass: { type: String, default: 'rounded-md shadow-xl' }
   },
 
   data () {

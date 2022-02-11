@@ -111,9 +111,9 @@
           <div class="mt-4 mb-6 px-6">
             <div class="flex items-start">
               <img :src="user.avatarSource" class="w-10 h-10 rounded-full">
-              <div class="w-full relative">
-                <textarea placeholder="Thảo luận" class="resize-none no-scrollbar ml-2 w-full px-2 py-1 text-gray-800 border rounded-md focus:outline-none" />
-                <div class="absolute bottom-3 right-1">
+              <div class="w-full ml-2 relative">
+                <textarea placeholder="Thảo luận" class="resize-none no-scrollbar w-full px-2 py-1 text-gray-800 border rounded-md focus:outline-none" />
+                <div class="absolute bottom-2 right-2">
                   <button class="font-semibold text-blue-500 hover:text-blue-700">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -123,9 +123,9 @@
               </div>
             </div>
 
-            <div v-for="comment in review.comments" :key="comment" class="flex mt-4">
+            <div v-for="comment in review.comments" :key="comment" class="flex  mt-4">
               <img :src="comment.authorAvatarSource" class="mt-1 w-10 h-10 rounded-full cursor-pointer">
-              <div class="ml-2">
+              <div class="ml-2 w-full border rounded-md pl-2 pr-3 pt-1 pb-2">
                 <a href="#" class="font-bold">
                   {{ comment.authorName }}
                 </a>

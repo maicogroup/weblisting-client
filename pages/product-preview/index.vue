@@ -110,9 +110,9 @@
               </div>
             </div>
 
-            <div v-for="comment in review.comments" :key="comment" class="flex mt-4">
+            <div v-for="comment in review.comments" :key="comment" class="flex  mt-4">
               <img :src="comment.authorAvatarSource" class="mt-1 w-10 h-10 rounded-full cursor-pointer">
-              <div class="ml-2">
+              <div class="ml-2 w-full border rounded-md pl-2 pr-3 pt-1 pb-2">
                 <a href="#" class="font-bold">
                   {{ comment.authorName }}
                 </a>

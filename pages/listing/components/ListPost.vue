@@ -155,11 +155,6 @@ export default {
   methods: {
     pageNavigationTo (index) {
       this.$apollo.queries.postsData.refetch({
-        condition: {
-          projectId: {
-            eq: this.projectId
-          }
-        },
         take: 10,
         skipItems: 10 * (index - 1)
       });
@@ -173,15 +168,10 @@ export default {
     },
     order (orderConditionIndex) {
       const orderCondition = {};
-      if (orderConditionIndex == 0) { orderCondition.price = 'DESC'; } else if (orderConditionIndex == 1) { orderCondition.price = 'ASC'; } else { orderCondition.lastUpdatedAt = 'DESC'; }
+      if (orderConditionIndex === 0) { orderCondition.price = 'DESC'; } else if (orderConditionIndex === 1) { orderCondition.price = 'ASC'; } else { orderCondition.lastUpdatedAt = 'DESC'; }
       this.$apollo.queries.postsData.refetch({
-        condition: {
-          projectId: {
-            eq: this.projectId
-          }
-        },
-        take: 10,
-        order: orderCondition
+        order: orderCondition,
+        skipItems: 0
       });
       this.pageIndex = 1;
     }

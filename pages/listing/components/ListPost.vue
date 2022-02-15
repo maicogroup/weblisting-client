@@ -1,5 +1,5 @@
 <template>
-  <div id="post-subinfor" class="max-w-full">
+  <div id="post-subinfor" class="max-w-full grow">
     <div class="flex justify-between items-center mt-2 mb-2" style="height: 2.5rem;">
       <p class="md:text-sm text-xs truncate mar-address">
         Hiện có: {{ totalItem }} bất động sản
@@ -214,5 +214,9 @@ export default {
 
 .border-none {
   border: none;
+}
+
+.grow {
+  flex-grow: 1;
 }
 </style>

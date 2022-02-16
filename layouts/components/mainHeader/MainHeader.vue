@@ -27,18 +27,15 @@
         <DropdownItem> ShopHouse </DropdownItem>
       </Dropdown>
 
-      <Dropdown class="hidden lg:inline" item-width="200px" title="Dự án">
-        <DropdownItem> Tất cả dự án </DropdownItem>
-        <DropdownItem> Lavita Charm </DropdownItem>
-        <DropdownItem> River Panorama </DropdownItem>
-        <DropdownItem> Emerald Percinct Celadon City </DropdownItem>
-        <DropdownItem> Topaz Elite </DropdownItem>
-        <DropdownItem> Đạt Gia Residence </DropdownItem>
-        <DropdownItem> Sunview Town </DropdownItem>
-        <DropdownItem> 4S Linh Đông </DropdownItem>
-        <DropdownItem> 9 View </DropdownItem>
-        <DropdownItem> Botanica Premier </DropdownItem>
-        <DropdownItem> Centum Wealth </DropdownItem>
+      <Dropdown class="hidden lg:inline" item-width="220px" title="Dự án">
+        <div class=" max-h-96 overflow-y-auto overflow-x-hidden">
+          <DropdownItem> Tất cả dự án </DropdownItem>
+          <dropdown-item v-for="project in projects" :key="project.id">
+            <nuxt-link :to="`/danh-sach-can-ho/${project.pageInfors[0].slug}`">
+              {{ project.projectName }}
+            </nuxt-link>
+          </dropdown-item>
+        </div>
       </Dropdown>
 
       <Dropdown
@@ -90,11 +87,27 @@
 </template>
 
 <script>
+import { gql } from 'graphql-tag';
 import Sidebar from './Sidebar.vue';
+import DropdownItem from '~/components/dropdown/DropdownItem.vue';
 
 export default {
   name: 'MainHeader',
-  components: { Sidebar },
+  components: { Sidebar, DropdownItem },
+
+  apollo: {
+    projects: gql`
+        query GetProjects {
+          projects {
+            projectName
+            pageInfors {
+              slug
+            }
+          }
+        }
+    `
+  },
+
   data () {
     return { showSidebar: false };
   }

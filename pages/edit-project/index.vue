@@ -36,8 +36,7 @@
                         <input type="text" class="w-1/2" v-model="project.address.district">
                     </p>
                     <p class="mb-2">
-                        <label class="font-semibold">Thành phố: 
-                        </label>
+                        <label class="font-semibold">Thành phố: </label>
                         <input type="text" class="w-1/2" v-model="project.address.city">
                     </p>
                     <div class="flex justify-end my-2">
@@ -54,11 +53,28 @@
                     </p>
                 </expand-panel>
                 <expand-panel title="Tiện ích">
-                    <ol>
-                        <li v-for="(item, index) in project.utilities" :key="index">
-                            {{item}}
-                        </li>
-                    </ol>
+                    <div v-if="!isEdittingUtility">
+                        <ul>
+                            <li v-for="(item, index) in project.utilities" :key="index">{{item}}</li>
+                        </ul>
+                    </div>
+                    <div v-else>
+                        <div class="flex justify-start items-center">
+                            <input type="text" class="w-1/5 my-2" v-model="newUtility" placeholder="Thêm tiện ích mới">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                        </div>
+                        <ul>
+                            <li v-for="(item, index) in project.utilities" :key="index">
+                                <input type="text" class="w-1/5 my-2" v-model="project.utilities[index]">
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="flex justify-end my-2" v-if="!isEdittingUtility">
+                        <button class="text-white px-3 py-1 bg-gray-400 rounded" @click="isEdittingUtility = !isEdittingUtility">Chỉnh sửa</button>
+                    </div>
+                    <div class="flex justify-end my-2" v-else>
+                        <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectUtilities(project.id, project.utilities)">Cập nhật</button>
+                    </div>
                 </expand-panel>
                 <expand-panel title="Hình ảnh">
                     <div class="container flex w-50">
@@ -112,7 +128,7 @@
                 <h2 class="mt-2 text-lg font-semibold text-center">Chỉnh sửa Google Map</h2>
                 <p class="m-10">
                     <label for="map" class="font-semibold">Google map:</label> 
-                    <input type="text" class="w1/2" v-model="currentProjectAddress.googleMapLocation">
+                    <input type="text" class="w-1/4" style="width:75% !important" v-model="currentProjectAddress.googleMapLocation">
                 </p>
                 <div class="flex justify-end space-x-3 m-2 my-2">
                     <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('google-map-edit-modal')">Quay lại</button>
@@ -171,7 +187,9 @@ export default {
             ],
             currentPageInfor: {},
             currentProjectAddress: {},
-            currentImage: {}
+            currentImage: {},
+            isEdittingUtility: false,
+            newUtility: ""
         }
     },
     methods: {
@@ -234,6 +252,23 @@ export default {
                 }
             })
             this.$modal.hide('google-map-edit-modal')
+        },
+        updateProjectUtilities(id, utilities) {
+            console.log(utilities);
+            this.$apollo.mutate({
+                mutation: gql`mutation UpdateProjectUtilities($input: UpdateProjectInput!) {
+                    updateProject(input: $input) {
+                        string
+                    }
+                }`,
+                variables: {
+                    input: { 
+                        id: id,
+                        utilities: utilities
+                    }
+                }
+            })
+            this.isEdittingUtility = false;
         }
     }
 }
@@ -252,7 +287,7 @@ export default {
         resize: none;
     }
     input {
-        width: 75%;
+        width: 25%;
         padding-inline: 10px;
         box-sizing: border-box;
         border: 2px solid #ccc;
@@ -260,5 +295,8 @@ export default {
         background-color: #f8f8f8;
         font-size: 14px;
         resize: none;
+    }
+    ul .uti {
+        list-style-type: disc;
     }
 </style>

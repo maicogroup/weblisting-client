@@ -16,6 +16,7 @@
     "@nuxt/components": "^2.2.1",
     "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/router": "^1.7.0",
+    "@nuxtjs/toast": "^3.3.1",
     "@vue/composition-api": "^1.4.4",
     "core-js": "^3.19.3",
     "graphql-tag": "^2.12.6",

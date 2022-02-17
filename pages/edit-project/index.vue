@@ -1,6 +1,7 @@
 <template>
     <div class="vue-expand-panel p-2 h-auto">
         <h1 class="text-center font-bold text-lg">CHỈNH SỬA DỰ ÁN</h1>
+        <button class="text-white bg-gray-400" @click="testToast">Click here!!!</button>
         <br>
         <div class="w-auto h-auto p-2 border-4 rounded m-5" v-for="(project, index) in projects" :key="index">
             <h1 class="font-semidbold text-lg">{{project.projectName}}</h1>
@@ -61,7 +62,9 @@
                     <div v-else>
                         <div class="flex justify-start items-center">
                             <input type="text" class="w-1/5 my-2" v-model="newUtility" placeholder="Thêm tiện ích mới">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                            <button @click="addNewProjectUtility(project.id, project.utilities)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                            </button>
                         </div>
                         <ul>
                             <li v-for="(item, index) in project.utilities" :key="index">
@@ -269,6 +272,40 @@ export default {
                 }
             })
             this.isEdittingUtility = false;
+        },
+        addNewProjectUtility(id, utilities) 
+        {
+            if (this.newUtility == "") 
+            {
+                this.$toast.show("Chưa có dữ liệu, vui lòng thử lại!!", {
+                    theme: "toasted-success",
+                    position: "top-right",
+                    duration: 2000
+                })
+                return 
+            }
+            utilities.push(this.newUtility);
+            this.$apollo.mutate({
+                mutation: gql`mutation AddNewProjectUtility($input: UpdateProjectInput!) {
+                    updateProject(input: $input) {
+                        string
+                    }    
+                }`,
+                variables: {
+                    input: {
+                        id: id,
+                        utilities: utilities
+                    }
+                }
+            }),
+            this.newUtility = ""
+        },
+        testToast() {
+            this.$toasted.show("Toasted !!", { 
+	            theme: "outline", 
+	            position: "top-right", 
+	            duration : 2000
+            });
         }
     }
 }

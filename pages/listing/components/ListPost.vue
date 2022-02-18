@@ -136,10 +136,12 @@ export default {
     posts () {
       if (this.postsData == null) { return []; } else {
         return this.postsData.items.map(function (item) {
+          const roomStructure = (item.type !== 'Căn hộ') ? item.type : item.totalBedRoom + 'PN' + item.totalWC + 'WC';
+
           return {
             srcimage: 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + (item.gallery.find(c => !c.includes('.mp4')) || 'apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg'),
             pageInfor: item.pageInfor,
-            price: item.price + ' vnđ - ' + item.acreage + ' m² - ' + item.roomStructure,
+            price: item.price + ' vnđ - ' + item.acreage + ' m² - ' + roomStructure,
             address: item.project.address.street + ' ' + item.project.address.district + ' ' + item.project.address.city,
             date: 'Cập nhật lần cuối: ' + item.lastUpdatedAt,
             tags: item.tags,

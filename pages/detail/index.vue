@@ -17,7 +17,9 @@ const getPostQuery = gql`
           gallery
           acreage
           price
-          roomStructure
+          type
+          totalBedRoom
+          totalWC
           direction
           description
           ownerId

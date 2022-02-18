@@ -11,6 +11,14 @@ Vue.use(Router);
 export function createRouter () {
   return new Router({
     mode: 'history',
+    scrollBehavior(to, from, savedPosition) {
+      // always scroll to top
+      if (savedPosition) {
+        return savedPosition
+      } else {
+        return { x: 0, y: 0 }
+      }
+    },
     routes: [
       {
         path: '/',

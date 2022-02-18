@@ -31,8 +31,11 @@
           <h4 class="font-normal color-8c8c8c">
             Cơ cấu phòng
           </h4>
-          <p class="font-bold">
-            {{ post.roomStructure }}
+          <p v-if="post.totalWC != 0" class="font-bold">
+            {{ `${post.totalBedRoom}PN${post.totalWC}WC` }}
+          </p>
+          <p v-else class="font-bold">
+            {{ post.type }}
           </p>
         </div>
         <div>

@@ -160,6 +160,10 @@ export default {
     filter (filter) {
       const conditions = { };
 
+      if (filter.demand) {
+        conditions.demand = { eq: filter.demand };
+      }
+
       if (filter.projectId) {
         conditions.projectId = { eq: filter.projectId };
       }

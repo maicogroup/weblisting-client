@@ -1,11 +1,11 @@
 <template>
   <div class="w-full max-w-screen-xl px-4">
-    <div class="z-10 w-full fixed left-0 top-after-header hidden 2xl:flex space-x-4 bg-white shadow-sm px-4">
+    <div class="z-10 w-full fixed left-0 top-after-header flex space-x-4 bg-white shadow-sm px-4">
       <div class="double-button my-4 flex">
-        <button :class="`text-base py-2 px-4 border rounded-l-md hover:text-white hover:bg-gray-700 ${sellButtonClasses}`" @click="setSellButtonActiveState(true)">
+        <button :class="`text-base py-2 px-4 border rounded-l-md ${sellButtonClasses}`" @click="setSellButtonActiveState(true)">
           Bán
         </button>
-        <button :class="`text-base py-2 px-4 border rounded-r-md hover:text-white hover:bg-gray-700 ${rentButtonClasses}`" @click="setSellButtonActiveState(false)">
+        <button :class="`text-base whitespace-nowrap py-2 px-4 border rounded-r-md ${rentButtonClasses}`" @click="setSellButtonActiveState(false)">
           Cho thuê
         </button>
       </div>
@@ -39,7 +39,7 @@
         <bedroom-filter-dropdown @optionchanged="handleBedroomFilterChanged" />
       </div>
 
-      <button class="ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
+      <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
         Tìm kiếm
       </button>
     </div>
@@ -125,11 +125,11 @@ export default {
 
   computed: {
     sellButtonClasses () {
-      return this.sellButtonIsActive ? 'hover:bg-gray-300' : '';
+      return this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
     },
 
     rentButtonClasses () {
-      return !this.sellButtonIsActive ? 'hover:bg-gray-300' : '';
+      return !this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
     }
   },
 

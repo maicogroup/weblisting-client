@@ -103,7 +103,7 @@ export default {
     },
 
     applyOptions () {
-      this.displaySelected = this.selectedOptions.length > 0 ? this.selectedOptions.join('PN, ') : 'Tất cả';
+      this.displaySelected = this.selectedOptions.length > 0 ? this.selectedOptions.join(', ') : 'Tất cả';
       this.prevSelectedOptions = [...this.selectedOptions];
       this.$emit('optionchanged', [...this.selectedOptions]);
     }

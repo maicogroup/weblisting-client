@@ -82,7 +82,9 @@ const getPostsQuery = gql`
                 demand
                 status,
                 acreage,
-                roomStructure,
+                type,
+                totalBedRoom,
+                totalWC,
                 apartmentState,
                 tags
                 project{
@@ -201,6 +203,18 @@ export default {
           conditions.roomStructure.endsWith = 'WC';
         } else {
           conditions.roomStructure.eq = filter.type;
+        }
+      }
+
+      if (filter.bedroomOptions) {
+        conditions.or = [];
+        if (filter.bedroomOptions.includes('5+')) {
+          conditions.or.push({ totalBedRoom: { gte: 5 } });
+        }
+
+        const fixedBedroomOptions = filter.bedroomOptions.filter(o => o !== '5+').map(o => parseInt(o));
+        if (fixedBedroomOptions.length !== 0) {
+          conditions.or.push({ totalBedRoom: { in: fixedBedroomOptions } });
         }
       }
 

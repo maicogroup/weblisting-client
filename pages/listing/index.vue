@@ -36,7 +36,7 @@
         <price-filter-dropdown @optionchanged="handlePriceFilterChanged" />
         <acreage-filter-dropdown @optionchanged="handleAcreageFilterChanged" />
         <direction-filter-dropdown @optionchanged="handleDirectionFilterChanged" />
-        <bedroom-filter-dropdown />
+        <bedroom-filter-dropdown @optionchanged="handleBedroomFilterChanged" />
       </div>
 
       <button class="ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
@@ -157,6 +157,10 @@ export default {
 
     handleDirectionFilterChanged (directions) {
       this.inputFilter.directions = directions;
+    },
+
+    handleBedroomFilterChanged (bedroomOptions) {
+      this.inputFilter.bedroomOptions = bedroomOptions;
     },
 
     handleTypeFilterChanged (type) {

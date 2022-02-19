@@ -43,6 +43,7 @@
         Tìm kiếm
       </button>
     </div>
+    <div class="filter-bar-blank-space" />
     <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" />
     <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
@@ -217,6 +218,10 @@ export default {
 <style scoped>
 .grow {
   flex-grow: 1;
+}
+
+.filter-bar-blank-space {
+  height: 42px;
 }
 
 .top-after-header {

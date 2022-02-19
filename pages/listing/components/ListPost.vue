@@ -164,6 +164,18 @@ export default {
         conditions.demand = { eq: filter.demand };
       }
 
+      if (filter.location) {
+        conditions.project = { address: { and: [] } };
+        const andQuery = conditions.project.address.and;
+        if (filter.location.city) {
+          andQuery.push({ city: { eq: filter.location.city } });
+        }
+
+        if (filter.location.district) {
+          andQuery.push({ district: { eq: filter.location.district } });
+        }
+      }
+
       if (filter.projectId) {
         conditions.projectId = { eq: filter.projectId };
       }
@@ -201,12 +213,12 @@ export default {
       }
 
       if (filter.type) {
-        conditions.roomStructure = {};
+        conditions.type = {};
 
         if (filter.type === 'Căn hộ chung cư') {
-          conditions.roomStructure.endsWith = 'WC';
+          conditions.type.eq = 'Căn hộ';
         } else {
-          conditions.roomStructure.eq = filter.type;
+          conditions.type.eq = filter.type;
         }
       }
 

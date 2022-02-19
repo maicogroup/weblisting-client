@@ -31,7 +31,7 @@
 
       <div class="flex justify-between grow">
         <type-filter-dropdown @optionchanged="handleTypeFilterChanged" />
-        <location-ftiler-dropdown />
+        <location-ftiler-dropdown @optionchanged="handleLocationFilterChanged" />
         <project-filter-dropdown @optionchanged="handleProjectFilterChanged" />
         <price-filter-dropdown @optionchanged="handlePriceFilterChanged" />
         <acreage-filter-dropdown @optionchanged="handleAcreageFilterChanged" />
@@ -43,7 +43,7 @@
         Tìm kiếm
       </button>
     </div>
-    <ProjectHeader v-if="project != null || (filter && filter.projectId === null)" :project="project" />
+    <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" />
     <Divider class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
       <ListPost v-if="project != null" class="left-0" :project-id="project.id" :filter="filter" />
@@ -73,57 +73,96 @@ export default {
   data () {
     return {
       // filter dùng để lọc
-      filter: null,
+      filter: {},
       sellButtonIsActive: false,
       // filter đang được người dùng chỉnh sửa, chuẩn bị dùng để lọc
-      inputFilter: {}
+      inputFilter: {},
+      searchButtonPressed: false
     };
   },
   apollo: {
     project: {
       query () {
-        return gql`
-          query GetProjects($slug: String!) {
-            projects(where: { pageInfors: { some: { slug: { eq: $slug }}} }) {
-              id
-              projectName
-              address {
-                street
-                district
-                city
-                googleMapLocation
+        if (!this.filter.projectId) {
+          return gql`
+            query GetProjects($slug: String!) {
+              projects(where: { pageInfors: { some: { slug: { eq: $slug }}} }) {
+                id
+                projectName
+                address {
+                  street
+                  district
+                  city
+                  googleMapLocation
+                }
+                images
+                pageInfors{
+                  title
+                  slug
+                  metaDescription
+                }
               }
-              images
-              pageInfors{
-                title
-                slug
-                metaDescription
+          }`;
+        } else {
+          return gql`
+            query GetProjects($projectId: String!) {
+              projects(where: {id: {eq: $projectId}}) {
+                id
+                projectName
+                address {
+                  street
+                  district
+                  city
+                  googleMapLocation
+                }
+                images
+                pageInfors{
+                  title
+                  slug
+                  metaDescription
+                }
               }
-            }
-        }`;
+          }`;
+        }
       },
 
       update: data => data.projects[0],
 
       variables () {
         return {
-          slug: this.$route.params.slug
+          slug: this.$route.params.slug,
+          projectId: this.filter.projectId
         };
       }
     }
   },
   head () {
-    return {
-      title: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title,
-      meta: [{
-        hid: 'description',
-        name: 'description',
-        content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
-      }]
-    };
+    if (!this.searchButtonPressed) {
+      return {
+        title: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title,
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
+        }]
+      };
+    } else {
+      return {
+        title: this.project?.pageInfors[0].title,
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: this.project?.pageInfors[0].metaDescription
+        }]
+      };
+    }
   },
 
   computed: {
+    showIfPostsOfOneProject () {
+      return (!this.searchButtonPressed && this.project != null) || (this.searchButtonPressed && this.filter.projectId);
+    },
+
     sellButtonClasses () {
       return this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
     },
@@ -139,8 +178,12 @@ export default {
       this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
     },
 
-    handlePriceFilterChanged (priceRange) {
-      this.inputFilter.priceRange = priceRange;
+    handleTypeFilterChanged (type) {
+      this.inputFilter.type = type;
+    },
+
+    handleLocationFilterChanged (location) {
+      this.inputFilter.location = location;
     },
 
     handleProjectFilterChanged (project) {
@@ -149,6 +192,10 @@ export default {
       } else {
         this.inputFilter.projectId = null;
       }
+    },
+
+    handlePriceFilterChanged (priceRange) {
+      this.inputFilter.priceRange = priceRange;
     },
 
     handleAcreageFilterChanged (acreageRange) {
@@ -163,11 +210,8 @@ export default {
       this.inputFilter.bedroomOptions = bedroomOptions;
     },
 
-    handleTypeFilterChanged (type) {
-      this.inputFilter.type = type;
-    },
-
     handleFilterButtonPressed () {
+      this.searchButtonPressed = true;
       this.filter = { ...this.inputFilter };
     }
   }

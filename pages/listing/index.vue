@@ -44,7 +44,7 @@
       </button>
     </div>
     <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" />
-    <Divider class="mt-7 mb-1.5" />
+    <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
       <ListPost v-if="project != null" class="left-0" :project-id="project.id" :filter="filter" />
       <ContactInfor class="lg:ml-9 hidden lg:flex lg:flex-col mt-14" />
@@ -83,7 +83,7 @@ export default {
   apollo: {
     project: {
       query () {
-        if (!this.filter.projectId) {
+        if (!this.filter.project) {
           return gql`
             query GetProjects($slug: String!) {
               projects(where: { pageInfors: { some: { slug: { eq: $slug }}} }) {
@@ -131,7 +131,7 @@ export default {
       variables () {
         return {
           slug: this.$route.params.slug,
-          projectId: this.filter.projectId
+          projectId: this.filter.project?.id
         };
       }
     }
@@ -160,7 +160,7 @@ export default {
 
   computed: {
     showIfPostsOfOneProject () {
-      return (!this.searchButtonPressed && this.project != null) || (this.searchButtonPressed && this.filter.projectId);
+      return (!this.searchButtonPressed && this.project != null) || (this.searchButtonPressed && this.filter.project);
     },
 
     sellButtonClasses () {
@@ -187,11 +187,7 @@ export default {
     },
 
     handleProjectFilterChanged (project) {
-      if (project) {
-        this.inputFilter.projectId = project.id;
-      } else {
-        this.inputFilter.projectId = null;
-      }
+      this.inputFilter.project = project;
     },
 
     handlePriceFilterChanged (priceRange) {

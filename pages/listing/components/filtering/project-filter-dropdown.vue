@@ -89,6 +89,9 @@ export default {
           projects {
             projectName
             id
+            pageInfors {
+              slug
+            }
           }
         }
     `
@@ -134,7 +137,8 @@ export default {
       this.open = false;
       this.$emit('optionchanged', {
         projectName: project.projectName,
-        id: project.id
+        id: project.id,
+        pageInfor: project.pageInfors[0]
       });
     },
 

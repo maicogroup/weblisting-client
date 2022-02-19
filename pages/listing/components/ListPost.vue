@@ -176,8 +176,8 @@ export default {
         }
       }
 
-      if (filter.projectId) {
-        conditions.projectId = { eq: filter.projectId };
+      if (filter.project) {
+        conditions.projectId = { eq: filter.project.id };
       }
 
       if (filter.priceRange) {

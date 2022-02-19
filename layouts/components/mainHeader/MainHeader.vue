@@ -30,11 +30,14 @@
       <Dropdown class="hidden lg:inline" item-width="220px" title="Dự án">
         <div class=" max-h-96 overflow-y-auto overflow-x-hidden">
           <DropdownItem> Tất cả dự án </DropdownItem>
-          <dropdown-item v-for="project in projects" :key="project.id">
-            <nuxt-link :to="`/danh-sach-can-ho/${project.pageInfors[0].slug}`">
-              {{ project.projectName }}
-            </nuxt-link>
-          </dropdown-item>
+          <nuxt-link
+            v-for="project in projects"
+            :key="project.id"
+            class="block px-4 py-2 capitalize text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer"
+            :to="`/danh-sach-can-ho/${project.pageInfors[0].slug}`"
+          >
+            {{ project.projectName }}
+          </nuxt-link>
         </div>
       </Dropdown>
 

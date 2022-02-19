@@ -31,7 +31,7 @@
 
       <div class="flex justify-between grow">
         <type-filter-dropdown @optionchanged="handleTypeFilterChanged" />
-        <location-ftiler-dropdown />
+        <location-ftiler-dropdown @optionchanged="handleLocationFilterChanged" />
         <project-filter-dropdown @optionchanged="handleProjectFilterChanged" />
         <price-filter-dropdown @optionchanged="handlePriceFilterChanged" />
         <acreage-filter-dropdown @optionchanged="handleAcreageFilterChanged" />
@@ -139,8 +139,12 @@ export default {
       this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
     },
 
-    handlePriceFilterChanged (priceRange) {
-      this.inputFilter.priceRange = priceRange;
+    handleTypeFilterChanged (type) {
+      this.inputFilter.type = type;
+    },
+
+    handleLocationFilterChanged (location) {
+      this.inputFilter.location = location;
     },
 
     handleProjectFilterChanged (project) {
@@ -149,6 +153,10 @@ export default {
       } else {
         this.inputFilter.projectId = null;
       }
+    },
+
+    handlePriceFilterChanged (priceRange) {
+      this.inputFilter.priceRange = priceRange;
     },
 
     handleAcreageFilterChanged (acreageRange) {

@@ -25,9 +25,23 @@
       @mouseenter="entered = true"
       @mouseleave="entered = false"
     >
-      <p class="font-semibold pb-2 px-4">
-        Chọn khu vực
-      </p>
+      <div class="flex justify-between pb-2 px-4">
+        <p class="font-semibold mb-1">
+          Chọn khu vực
+        </p>
+        <button v-if="firstOption !== null" class="hover:bg-gray-100 rounded-full p-1" @click="handleGoBack">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+          </svg>
+        </button>
+      </div>
+
       <divider />
 
       <div class="relative m-4">
@@ -47,20 +61,44 @@
           </button>
         </span>
         <input
+          v-model="searchInput"
           type="search"
           class="border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none"
           placeholder="Tìm kiếm..."
         >
       </div>
+      <template v-if="firstOption === null">
+        <filter-dropdown-item
+          v-if="searchInput.trim() === ''"
+          @click="handleSelectAllLocation"
+        >
+          Tất cả khu vực
+        </filter-dropdown-item>
+        <filter-dropdown-item v-for="city in filteredCities" :key="city" @click="handleSelectFirstOption(city)">
+          <div class="flex justify-between items-center">
+            <p>{{ city }}</p>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </filter-dropdown-item>
+      </template>
+      <template v-else>
+        <p class="px-4 py-2 bg-green-100">
+          {{ firstOption }}
+        </p>
 
-      <filter-dropdown-item>
-        <div class="flex justify-between items-center">
-          <p>TP HCM</p>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-      </filter-dropdown-item>
+        <filter-dropdown-item v-for="district in filteredDistricts" :key="district" @click="handleSelectSecondOption(district)">
+          <div class="ml-2 flex justify-between items-center">
+            <p>
+              {{ district }}
+            </p>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </filter-dropdown-item>
+      </template>
     </div>
   </div>
 </template>
@@ -76,8 +114,25 @@ export default {
     return {
       open: false,
       entered: false,
-      displaySelected: 'Tất cả'
+      displaySelected: 'Tất cả',
+      firstOption: null,
+      secondOption: null,
+      searchInput: '',
+      cities: ['Hồ Chí Minh'],
+      districts: ['Q9', 'Q2']
     };
+  },
+
+  computed: {
+    filteredCities () {
+      const query = this.searchInput.trim().toLowerCase();
+      return this.cities.filter(c => c.toLowerCase().includes(query));
+    },
+
+    filteredDistricts () {
+      const query = this.searchInput.trim().toLowerCase();
+      return this.districts.filter(d => d.toLowerCase().includes(query));
+    }
   },
 
   watch: {
@@ -89,6 +144,9 @@ export default {
         // setTimeout để tránh listen các click event hiện tại
         setTimeout(() => document.addEventListener('click', this.closeIfOutsideOfDropdown), 0);
       } else {
+        this.searchInput = '';
+        this.firstOption = null;
+        this.secondOption = null;
         document.removeEventListener('click', this.closeIfOutsideOfDropdown);
       }
     }
@@ -97,6 +155,32 @@ export default {
   methods: {
     closeIfOutsideOfDropdown () {
       this.open = this.entered;
+    },
+
+    handleSelectFirstOption (option) {
+      this.displaySelected = option;
+      this.firstOption = option;
+      this.searchInput = '';
+      this.$emit('optionchanged', { city: this.firstOption });
+    },
+
+    handleSelectAllLocation () {
+      this.displaySelected = 'Tất cả';
+      this.$emit('optionchanged', null);
+      this.open = false;
+    },
+
+    handleSelectSecondOption (option) {
+      this.secondOption = option;
+      this.displaySelected = `${this.firstOption}, ${this.secondOption}`;
+      this.$emit('optionchanged', { city: this.firstOption, district: this.secondOption });
+      this.open = false;
+    },
+
+    handleGoBack () {
+      this.firstOption = null;
+      this.displaySelected = 'Tất cả';
+      this.$emit('optionchanged', null);
     }
   }
 

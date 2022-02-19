@@ -201,12 +201,12 @@ export default {
       }
 
       if (filter.type) {
-        conditions.roomStructure = {};
+        conditions.type = {};
 
         if (filter.type === 'Căn hộ chung cư') {
-          conditions.roomStructure.endsWith = 'WC';
+          conditions.type.eq = 'Căn hộ';
         } else {
-          conditions.roomStructure.eq = filter.type;
+          conditions.type.eq = filter.type;
         }
       }
 

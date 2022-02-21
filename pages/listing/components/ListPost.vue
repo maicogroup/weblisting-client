@@ -105,7 +105,7 @@ const getPostsQuery = gql`
 export default {
   name: 'ListPost',
   props: [
-    'projectId', 'filter'
+    'filter'
   ],
   data () {
     return {
@@ -119,16 +119,12 @@ export default {
         return getPostsQuery;
       },
       update: data => data.postsWithPagination,
-      skip () {
-        return this.projectId == null;
-      },
       variables () {
+        const condition = this.createConditionParamter(this.filter);
+        const noFilter = (Object.keys(condition).length === 0);
+
         return {
-          condition: {
-            projectId: {
-              eq: this.projectId
-            }
-          },
+          condition: noFilter ? undefined : condition,
           take: 10
         };
       }
@@ -158,6 +154,19 @@ export default {
   },
   watch: {
     filter (filter) {
+      const condition = this.createConditionParamter(filter);
+      const noFilter = (Object.keys(condition).length === 0);
+
+      this.$apollo.queries.postsData.refetch(
+        {
+          condition: noFilter ? undefined : condition,
+          skipItems: 0
+        });
+      this.pageIndex = 1;
+    }
+  },
+  methods: {
+    createConditionParamter (filter) {
       const conditions = { };
 
       if (filter.demand) {
@@ -234,17 +243,9 @@ export default {
         }
       }
 
-      const noFilter = (Object.keys(conditions).length === 0);
+      return conditions;
+    },
 
-      this.$apollo.queries.postsData.refetch(
-        {
-          condition: noFilter ? undefined : conditions,
-          skipItems: 0
-        });
-      this.pageIndex = 1;
-    }
-  },
-  methods: {
     pageNavigationTo (index) {
       this.$apollo.queries.postsData.refetch({
         skipItems: 10 * (index - 1)

@@ -97,6 +97,10 @@ export default {
     `
   },
 
+  props: {
+    selectedOption: { type: Object, default: null }
+  },
+
   data () {
     return {
       open: false,
@@ -124,6 +128,16 @@ export default {
       } else {
         document.removeEventListener('click', this.closeIfOutsideOfDropdown);
       }
+    },
+
+    selectedOption (value) {
+      this.displaySelected = value;
+    }
+  },
+
+  created () {
+    if (this.selectedOption) {
+      this.displaySelected = this.selectedOption.projectName;
     }
   },
 

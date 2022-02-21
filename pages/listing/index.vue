@@ -32,7 +32,10 @@
       <div class="flex justify-between grow">
         <type-filter-dropdown @optionchanged="handleTypeFilterChanged" />
         <location-ftiler-dropdown @optionchanged="handleLocationFilterChanged" />
-        <project-filter-dropdown @optionchanged="handleProjectFilterChanged" />
+
+        <project-filter-dropdown v-if="filter.project" :selected-option="filter.project.projectName" @optionchanged="handleProjectFilterChanged" />
+        <project-filter-dropdown v-else @optionchanged="handleProjectFilterChanged" />
+
         <price-filter-dropdown @optionchanged="handlePriceFilterChanged" />
         <acreage-filter-dropdown @optionchanged="handleAcreageFilterChanged" />
         <direction-filter-dropdown @optionchanged="handleDirectionFilterChanged" />
@@ -47,7 +50,7 @@
     <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" />
     <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
-      <ListPost v-if="project != null" class="left-0" :project-id="project.id" :filter="filter" />
+      <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
       <ContactInfor class="lg:ml-9 hidden lg:flex lg:flex-col mt-14" />
     </div>
   </div>
@@ -74,18 +77,63 @@ export default {
   data () {
     return {
       // filter dùng để lọc
-      filter: {},
+      filter: null,
       sellButtonIsActive: false,
       // filter đang được người dùng chỉnh sửa, chuẩn bị dùng để lọc
       inputFilter: {},
       searchButtonPressed: false
     };
   },
+  head () {
+    return {
+      title: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title,
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
+      }]
+    };
+  },
+
+  computed: {
+    waitTillProjectIsDetermined () {
+      if (this.$route.params.slug) {
+        return this.filter?.project?.id !== null;
+      }
+
+      return this.filter !== null;
+    },
+
+    showIfPostsOfOneProject () {
+      return this.$route.params.slug === null && this.project !== null;
+    },
+
+    sellButtonClasses () {
+      return this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
+    },
+
+    rentButtonClasses () {
+      return !this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
+    }
+  },
+
+  created () {
+    this.$watch(
+      () => this.$route.params,
+      (param, prevParam) => {
+        if (param.slug !== prevParam.slug) {
+          this.$apollo.queries.project.refetch({ slug: param.slug });
+        }
+      }
+    );
+
+    this.filter = this.createFilterFromUrl();
+  },
+
   apollo: {
     project: {
       query () {
-        if (!this.filter.project) {
-          return gql`
+        return gql`
             query GetProjects($slug: String!) {
               projects(where: { pageInfors: { some: { slug: { eq: $slug }}} }) {
                 id
@@ -104,76 +152,48 @@ export default {
                 }
               }
           }`;
-        } else {
-          return gql`
-            query GetProjects($projectId: String!) {
-              projects(where: {id: {eq: $projectId}}) {
-                id
-                projectName
-                address {
-                  street
-                  district
-                  city
-                  googleMapLocation
-                }
-                images
-                pageInfors{
-                  title
-                  slug
-                  metaDescription
-                }
-              }
-          }`;
-        }
       },
 
-      update: data => data.projects[0],
+      update (data) {
+        const project = data.projects[0];
+
+        this.filter = { ...this.filter, project: { slug: this.$route.params.slug, id: project.id, projectName: project.projectName } };
+        return project;
+      },
+
+      skip () {
+        return this.filter === null;
+      },
 
       variables () {
         return {
-          slug: this.$route.params.slug,
-          projectId: this.filter.project?.id
+          slug: this.$route.params.slug
         };
       }
     }
   },
-  head () {
-    if (!this.searchButtonPressed) {
-      return {
-        title: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title,
-        meta: [{
-          hid: 'description',
-          name: 'description',
-          content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
-        }]
-      };
-    } else {
-      return {
-        title: this.project?.pageInfors[0].title,
-        meta: [{
-          hid: 'description',
-          name: 'description',
-          content: this.project?.pageInfors[0].metaDescription
-        }]
-      };
-    }
-  },
-
-  computed: {
-    showIfPostsOfOneProject () {
-      return (!this.searchButtonPressed && this.project != null) || (this.searchButtonPressed && this.filter.project);
-    },
-
-    sellButtonClasses () {
-      return this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
-    },
-
-    rentButtonClasses () {
-      return !this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
-    }
-  },
 
   methods: {
+    createFilterFromUrl () {
+      const filter = {};
+
+      const query = this.$route.query;
+
+      if (query.dtnn || query.dtln) {
+        filter.acreageRange = { };
+
+        if (query.dtnn) {
+          filter.acreageRange.from = parseInt(query.dtnn);
+        }
+
+        if (query.dtln) {
+          filter.acreageRange.to = parseInt(query.dtln);
+        }
+      }
+
+      return filter;
+    },
+
     setSellButtonActiveState (state) {
       this.sellButtonIsActive = state;
       this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
@@ -210,6 +230,27 @@ export default {
     handleFilterButtonPressed () {
       this.searchButtonPressed = true;
       this.filter = { ...this.inputFilter };
+
+      let path = '/danh-sach-can-ho';
+      if (this.filter.project) {
+        path = path + '/' + this.filter.project.pageInfor.slug;
+      }
+
+      const query = {};
+
+      if (this.filter.acreageRange) {
+        const { from, to } = this.filter.acreageRange;
+
+        if (from) {
+          query.dtnn = from;
+        }
+
+        if (to) {
+          query.dtln = to;
+        }
+      }
+
+      this.$router.push({ path, query });
     }
   }
 };

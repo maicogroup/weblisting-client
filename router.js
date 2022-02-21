@@ -29,6 +29,10 @@ export function createRouter () {
         component: PostList
       },
       {
+        path: '/danh-sach-can-ho',
+        component: PostList
+      },
+      {
         path: '/chi-tiet-can-ho/:slug',
         component: DetailPost
       },

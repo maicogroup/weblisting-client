@@ -4,11 +4,11 @@
       <p class="md:text-sm text-xs truncate mar-address">
         Hiện có: {{ totalItem }} bất động sản
       </p>
-      <div>
+      <div class="flex items-center">
         <p class="inline text-sm truncate mar-address">
           Sắp xếp theo:
         </p>
-        <Dropdown item-width="150px" class="text-sm md:mr-9">
+        <Dropdown item-width="150px" class="text-sm w-36" v-bind:title="arrangeOption">
           <DropdownItem @click="order(0)">
             Giá cao nhất
           </DropdownItem>
@@ -110,7 +110,8 @@ export default {
   data () {
     return {
       pageIndex: 1,
-      pageOfItems: []
+      pageOfItems: [],
+      arrangeOption: 'Mặc định'
     };
   },
   apollo: {
@@ -260,7 +261,7 @@ export default {
     },
     order (orderConditionIndex) {
       const orderCondition = {};
-      if (orderConditionIndex === 0) { orderCondition.price = 'DESC'; } else if (orderConditionIndex === 1) { orderCondition.price = 'ASC'; } else { orderCondition.lastUpdatedAt = 'DESC'; }
+      if (orderConditionIndex === 0) { orderCondition.price = 'DESC'; this.arrangeOption = 'Giá Cao Nhất'; } else if (orderConditionIndex === 1) { orderCondition.price = 'ASC'; this.arrangeOption = 'Giá Thấp Nhất'; } else { orderCondition.lastUpdatedAt = 'DESC'; this.arrangeOption = 'Mới Nhất'; }
       this.$apollo.queries.postsData.refetch({
         order: orderCondition,
         skipItems: 0

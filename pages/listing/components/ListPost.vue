@@ -25,30 +25,30 @@
       <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
         <li v-for="post in posts" :key="post.id" class="pb-6 md:pt-0 pt-6  md:border-none border-b">
           <div class="">
-            <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="md:hidden truncate ... font-bold text-lg leading-6 ov-flow-hidden">
+            <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="md:hidden font-bold text-lg leading-6 ov-flow-hidden">
               {{ post.pageInfor.title }}
             </NuxtLink>
-            <div class="flex item-flex-start h-40 md:h-52 space-x-4 md:rounded-md md:border mt-2">
+            <div class="flex item-flex-start h-40 space-x-4 md:rounded-md md:border mt-2">
               <NuxtLink class="w-40 md:w-60 h-full" :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`">
                 <img class="w-full h-full object-cover rounded-md" :src="post.srcimage" alt="Bonnie image">
               </NuxtLink>
               <div class="flex-1 min-w-0">
-                <div class="mt-2 inline-flex space-x-1 items-center">
+                <div v-if="post.tags != null" class="mt-2 inline-flex space-x-1 items-center">
                   <p v-for="item in post.tags" :key="item" class="text-xs font-bold leading-sm uppercase px-3 py-1 bg-red-200 text-red-700 rounded-full">
                     {{ item }}
                   </p>
                 </div>
-                <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="hidden md:block font-bold text-lg leading-6 mar-title h-12 ov-flow-hidden">
+                <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="hidden md:block font-bold text-xl leading-6 mar-title ov-flow-hidden">
                   {{ post.pageInfor.title }}
                 </NuxtLink>
-                <p class="font-price md:mt-0 md:mb-4 mt-2 mb-5">
-                  {{ post.price }}
+                <p class="font-price md:mt-0 md:mb-4 mt-2 md:mb-5 mb-2">
+                  {{ post.price.toLocaleString('it-IT', {style: 'currency', currency: 'VND'}) }}
                 </p>
-                <p class="text-sm color-858585 md:mb-3 mb-6">
+                <p class="text-sm color-858585 md:mb-3 md:mb-6 mb-2">
                   {{ post.address }}
                 </p>
                 <p class="text-sm color-a7a7a7">
-                  {{ post.date }}
+                  {{ post.date }}, {{post.hour}}
                 </p>
               </div>
             </div>
@@ -141,7 +141,8 @@ export default {
             pageInfor: item.pageInfor,
             price: item.price + ' vnđ - ' + item.acreage + ' m² - ' + roomStructure,
             address: item.project?.address.street + ' ' + item.project?.address.district + ' ' + item.project?.address.city,
-            date: 'Cập nhật lần cuối: ' + item.lastUpdatedAt,
+            date: 'Cập nhật lần cuối: ' + item.lastUpdatedAt.substring(0, 10),
+            hour: item.lastUpdatedAt.substring(11, 16),
             tags: item.tags,
             id: item.id
           };

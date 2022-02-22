@@ -4,14 +4,14 @@
       <gallery :items="gallery" />
     </div>
     <div class="mx-5">
-      <h1 class="mt-6 lg:mx-0  font-bold text-2xl ov-flow-hidden truncate ... ">
+      <h1 class="mt-6 lg:mx-0 font-bold text-xl lg:text-2xl ov-flow-hidden">
         {{ post.pageInfor.title }}
       </h1>
-      <h4 class="lg:mx-0  mt-3 font-normal color-3f3f3f text-sm leading-4">
+      <h4 class="lg:mx-0 mt-3 font-normal color-3f3f3f text-sm leading-4">
         {{ `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}` }}
       </h4>
-      <div class="lg:mx-0  w-5/6 bd-color-858585 flex justify-start mt-3 text-sm leading-4 border-t border-b border-zinc-800 pb-7 pt-6 border-solid">
-        <div class="mr-11">
+      <div class="lg:mx-0 w-full md:w-5/6 bd-color-858585 flex justify-start mt-3 text-sm leading-4 border-t border-b border-zinc-800 pb-7 pt-6 border-solid">
+        <div class="mr-4 md:mr-11">
           <h4 class="font-normal color-8c8c8c">
             Mức giá
           </h4>
@@ -19,7 +19,7 @@
             {{ post.price }}
           </p>
         </div>
-        <div class="mr-14">
+        <div class="mr-4 md:mr-14">
           <h4 class="font-normal color-8c8c8c">
             Diện tích
           </h4>
@@ -27,7 +27,7 @@
             {{ post.acreage }} m²
           </p>
         </div>
-        <div class="mr-11">
+        <div class="mr-4 md:mr-11">
           <h4 class="font-normal color-8c8c8c">
             Cơ cấu phòng
           </h4>

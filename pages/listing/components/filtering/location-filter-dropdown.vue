@@ -76,7 +76,7 @@
         </filter-dropdown-item>
         <filter-dropdown-item v-for="city in filteredCities" :key="city" @click="handleSelectFirstOption(city)">
           <div class="flex justify-between items-center">
-            <p>{{ city }}</p>
+            <p>{{ city.name }}</p>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -105,9 +105,14 @@
 
 <script>
 import FilterDropdownItem from './filter-dropdown-item.vue';
+
 export default {
   name: 'LocationFilterDropdown',
   components: { FilterDropdownItem },
+
+  props: {
+    selectedOption: { type: Object, default: null }
+  },
 
   // TODO: Lấy dữ liệu về vị trí
   data () {
@@ -115,23 +120,28 @@ export default {
       open: false,
       entered: false,
       displaySelected: 'Tất cả',
+      selectedCity: null,
       firstOption: null,
       secondOption: null,
       searchInput: '',
-      cities: ['Hồ Chí Minh'],
-      districts: ['Q9', 'Q2']
+      cities: [
+        {
+          name: 'Hồ Chí Minh',
+          districts: ['Q9', 'Q2']
+        }
+      ]
     };
   },
 
   computed: {
     filteredCities () {
       const query = this.searchInput.trim().toLowerCase();
-      return this.cities.filter(c => c.toLowerCase().includes(query));
+      return this.cities.filter(c => c.name.toLowerCase().includes(query));
     },
 
     filteredDistricts () {
       const query = this.searchInput.trim().toLowerCase();
-      return this.districts.filter(d => d.toLowerCase().includes(query));
+      return this.selectedCity.districts.filter(d => d.toLowerCase().includes(query));
     }
   },
 
@@ -149,6 +159,21 @@ export default {
         this.secondOption = null;
         document.removeEventListener('click', this.closeIfOutsideOfDropdown);
       }
+    },
+
+    selectedOption: {
+      handler (option) {
+        if (option) {
+          this.displaySelected = option.city;
+
+          if (option.district) {
+            this.displaySelected += ', ' + option.district;
+          }
+        } else {
+          this.displaySelected = 'Tất cả';
+        }
+      },
+      immediate: true
     }
   },
 
@@ -157,29 +182,27 @@ export default {
       this.open = this.entered;
     },
 
-    handleSelectFirstOption (option) {
-      this.displaySelected = option;
-      this.firstOption = option;
+    handleSelectFirstOption (city) {
+      this.selectedCity = city;
+      this.firstOption = city.name;
       this.searchInput = '';
       this.$emit('optionchanged', { city: this.firstOption });
     },
 
     handleSelectAllLocation () {
-      this.displaySelected = 'Tất cả';
       this.$emit('optionchanged', null);
       this.open = false;
     },
 
     handleSelectSecondOption (option) {
       this.secondOption = option;
-      this.displaySelected = `${this.firstOption}, ${this.secondOption}`;
       this.$emit('optionchanged', { city: this.firstOption, district: this.secondOption });
       this.open = false;
     },
 
     handleGoBack () {
+      this.selectedCity = null;
       this.firstOption = null;
-      this.displaySelected = 'Tất cả';
       this.$emit('optionchanged', null);
     }
   }

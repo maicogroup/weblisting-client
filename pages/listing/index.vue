@@ -30,16 +30,13 @@
       </div>
 
       <div class="flex justify-between grow">
-        <type-filter-dropdown @optionchanged="handleTypeFilterChanged" />
-        <location-ftiler-dropdown @optionchanged="handleLocationFilterChanged" />
-
-        <project-filter-dropdown v-if="filter.project" :selected-option="filter.project" @optionchanged="handleProjectFilterChanged" />
-        <project-filter-dropdown v-else @optionchanged="handleProjectFilterChanged" />
-
-        <price-filter-dropdown @optionchanged="handlePriceFilterChanged" />
-        <acreage-filter-dropdown @optionchanged="handleAcreageFilterChanged" />
-        <direction-filter-dropdown @optionchanged="handleDirectionFilterChanged" />
-        <bedroom-filter-dropdown @optionchanged="handleBedroomFilterChanged" />
+        <type-filter-dropdown :selected-option="inputFilter.type" @optionchanged="handleTypeFilterChanged" />
+        <location-ftiler-dropdown :selected-option="inputFilter.location" @optionchanged="handleLocationFilterChanged" />
+        <project-filter-dropdown :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged" />
+        <price-filter-dropdown :selected-option="inputFilter.priceRange" @optionchanged="handlePriceFilterChanged" />
+        <acreage-filter-dropdown :selected-option="inputFilter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
+        <direction-filter-dropdown :selected-option="inputFilter.directions" @optionchanged="handleDirectionFilterChanged" />
+        <bedroom-filter-dropdown :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
       </div>
 
       <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
@@ -119,6 +116,7 @@ export default {
 
   created () {
     this.filter = this.createFilterFromUrl();
+    this.inputFilter = { ...this.filter };
 
     this.$watch(
       () => this.$route.params,
@@ -126,7 +124,15 @@ export default {
         if (param.slug !== prevParam.slug && param.slug !== null) {
           this.$apollo.queries.project.refetch({ slug: param.slug });
         }
-        this.filter = this.createFilterFromUrl();
+
+        const newFilter = this.createFilterFromUrl();
+        if (param.slug === prevParam.slug && param.slug !== null) {
+          // do thông tin project sẽ không bị load lại nên lấy thông tin project cũ
+          newFilter.project = this.filter.project;
+        }
+
+        this.filter = newFilter;
+        this.inputFilter = { ...newFilter };
       }
     );
   },
@@ -158,7 +164,9 @@ export default {
       update (data) {
         const project = data.projects[0];
 
-        this.filter = { ...this.filter, project: { slug: this.$route.params.slug, id: project.id, projectName: project.projectName } };
+        this.filter = { ...this.filter, project: { pageInfor: { slug: this.$route.params.slug }, id: project.id, projectName: project.projectName } };
+        this.inputFilter = { ...this.filter };
+
         return project;
       },
 
@@ -198,9 +206,10 @@ export default {
       }
 
       if (query.city || query.district) {
-        filter.location = {};
-        filter.location.city = query.city;
-        filter.location.district = query.district;
+        filter.location = {
+          city: query.city,
+          district: query.district
+        };
       }
 
       if (query.gtnn || query.gtln) {
@@ -228,42 +237,42 @@ export default {
       }
 
       if (query.directions) {
-        filter.directions = query.directions;
+        filter.directions = Array.isArray(query.directions) ? query.directions : [query.directions];
       }
 
-      if (query.roomStructure) {
-        filter.roomStructure = query.roomStructure;
+      if (query.bedroomOptions) {
+        filter.bedroomOptions = Array.isArray(query.bedroomOptions) ? query.bedroomOptions : [query.bedroomOptions];
       }
 
       return filter;
     },
 
     handleTypeFilterChanged (type) {
-      this.inputFilter.type = type;
+      this.inputFilter = { ...this.inputFilter, type };
     },
 
     handleLocationFilterChanged (location) {
-      this.inputFilter.location = location;
+      this.inputFilter = { ...this.inputFilter, location };
     },
 
     handleProjectFilterChanged (project) {
-      this.inputFilter.project = project;
+      this.inputFilter = { ...this.inputFilter, project };
     },
 
     handlePriceFilterChanged (priceRange) {
-      this.inputFilter.priceRange = priceRange;
+      this.inputFilter = { ...this.inputFilter, priceRange };
     },
 
     handleAcreageFilterChanged (acreageRange) {
-      this.inputFilter.acreageRange = acreageRange;
+      this.inputFilter = { ...this.inputFilter, acreageRange };
     },
 
     handleDirectionFilterChanged (directions) {
-      this.inputFilter.directions = directions;
+      this.inputFilter = { ...this.inputFilter, directions };
     },
 
     handleBedroomFilterChanged (bedroomOptions) {
-      this.inputFilter.bedroomOptions = bedroomOptions;
+      this.inputFilter = { ...this.inputFilter, bedroomOptions };
     },
 
     handleFilterButtonPressed () {
@@ -271,6 +280,7 @@ export default {
       this.filter = { ...this.inputFilter };
 
       let path = '/danh-sach-can-ho';
+
       if (this.filter.project) {
         path = path + '/' + this.filter.project.pageInfor.slug;
       }

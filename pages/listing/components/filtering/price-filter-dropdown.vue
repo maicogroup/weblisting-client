@@ -51,7 +51,7 @@
         <template v-if="range.from === 0">
           Dưới {{ range.to }} triệu
         </template>
-        <template v-else-if="range.to === Infinity">
+        <template v-else-if="range.to === null">
           Trên {{ range.from }} triệu
         </template>
         <template v-else>
@@ -86,6 +86,10 @@ export default {
   name: 'PriceFilterDropdown',
   components: { FilterDropdownItem },
 
+  props: {
+    selectedOption: { type: Object, default: null }
+  },
+
   data () {
     return {
       open: false,
@@ -93,7 +97,7 @@ export default {
       displaySelected: 'Tất cả',
       customRange: { from: 0, to: 0 },
       prevCustomRange: { from: 0, to: 0 },
-      priceRanges: [{ from: 0, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 10 }, { from: 10, to: 20 }, { from: 20, to: 30 }, { from: 30, to: 50 }, { from: 50, to: 100 }, { from: 100, to: Infinity }],
+      priceRanges: [{ from: 0, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 10 }, { from: 10, to: 20 }, { from: 20, to: 30 }, { from: 30, to: 50 }, { from: 50, to: 100 }, { from: 100, to: null }],
       MAX_VALUE: 999999
     };
   },
@@ -127,6 +131,17 @@ export default {
         this.customRange = { ...this.prevCustomRange };
         document.removeEventListener('click', this.closeIfOutsideOfDropdown);
       }
+    },
+
+    selectedOption: {
+      handler (option) {
+        if (option) {
+          this.displaySelected = this.formatRange(option);
+        } else {
+          this.displaySelected = 'Tất cả';
+        }
+      },
+      immediate: true
     }
   },
 
@@ -140,7 +155,6 @@ export default {
     },
 
     applyCustomRange () {
-      this.displaySelected = this.formatRange(this.customRange);
       this.prevCustomRange = { ...this.customRange };
 
       if (this.customRange.from === 0 && this.customRange.to === 0) {
@@ -180,9 +194,9 @@ export default {
     },
 
     formatRange (range) {
-      if (range.from === 0) {
+      if (!range.from || range.from === 0) {
         return range.to === 0 ? 'Tất cả' : `Dưới ${range.to} triệu`;
-      } else if (range.to === Infinity) {
+      } else if (!range.to) {
         return `Trên ${range.from} triệu`;
       } else {
         return `${range.from} - ${range.to} triệu`;
@@ -190,9 +204,8 @@ export default {
     },
 
     handleSelectPriceRange (range) {
-      this.displaySelected = this.formatRange(range);
       this.open = false;
-      if (range.to !== Infinity) {
+      if (range.to) {
         this.prevCustomRange = { ...range };
         this.customRange = { ...range };
       } else {
@@ -203,7 +216,6 @@ export default {
     },
 
     handleSelectAllPrices () {
-      this.displaySelected = 'Tất cả';
       this.open = false;
       this.prevCustomRange = { from: 0, to: 0 };
       this.customRange = { from: 0, to: 0 };

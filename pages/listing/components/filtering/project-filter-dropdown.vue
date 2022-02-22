@@ -130,14 +130,15 @@ export default {
       }
     },
 
-    selectedOption (option) {
-      this.displaySelected = option.projectName;
-    }
-  },
-
-  created () {
-    if (this.selectedOption) {
-      this.displaySelected = this.selectedOption.projectName;
+    selectedOption: {
+      handler (option) {
+        if (option) {
+          this.displaySelected = option.projectName;
+        } else {
+          this.displaySelected = 'Tất cả';
+        }
+      },
+      immediate: true
     }
   },
 
@@ -147,7 +148,6 @@ export default {
     },
 
     handleSelectProject (project) {
-      this.displaySelected = project.projectName;
       this.open = false;
       this.$emit('optionchanged', {
         projectName: project.projectName,
@@ -157,7 +157,6 @@ export default {
     },
 
     handleSelectAllProjectOption () {
-      this.displaySelected = 'Tất cả';
       this.open = false;
       this.$emit('optionchanged', null);
     }

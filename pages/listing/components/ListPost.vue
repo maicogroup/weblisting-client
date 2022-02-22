@@ -193,11 +193,11 @@ export default {
         const priceRange = filter.priceRange;
         conditions.price = {};
 
-        if (priceRange.from !== 0) {
+        if (priceRange.from) {
           conditions.price.gte = priceRange.from * 1000000;
         }
 
-        if (filter.priceRange.to !== Infinity) {
+        if (filter.priceRange.to) {
           conditions.price.lte = priceRange.to * 1000000;
         }
       }
@@ -206,11 +206,11 @@ export default {
         const acreageRange = filter.acreageRange;
         conditions.acreage = {};
 
-        if (acreageRange.from !== 0) {
+        if (acreageRange.from) {
           conditions.acreage.gte = acreageRange.from;
         }
 
-        if (filter.acreageRange.to !== Infinity) {
+        if (filter.acreageRange.to) {
           conditions.acreage.lte = acreageRange.to;
         }
       }

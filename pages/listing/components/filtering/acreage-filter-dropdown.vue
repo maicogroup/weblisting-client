@@ -52,7 +52,7 @@
         <template v-if="range.from === 0">
           Dưới {{ range.to }} m²
         </template>
-        <template v-else-if="range.to === Infinity">
+        <template v-else-if="range.to === null">
           Trên {{ range.from }} m²
         </template>
         <template v-else>
@@ -87,12 +87,16 @@ export default {
   name: 'AcreageFilterDropdown',
   components: { FilterDropdownItem },
 
+  props: {
+    selectedOption: { type: Object, default: null }
+  },
+
   data () {
     return {
       open: false,
       entered: false,
       displaySelected: 'Tất cả',
-      acreageRanges: [{ from: 0, to: 30 }, { from: 30, to: 50 }, { from: 50, to: 80 }, { from: 80, to: 100 }, { from: 100, to: 300 }, { from: 300, to: 500 }, { from: 500, to: Infinity }],
+      acreageRanges: [{ from: 0, to: 30 }, { from: 30, to: 50 }, { from: 50, to: 80 }, { from: 80, to: 100 }, { from: 100, to: 300 }, { from: 300, to: 500 }, { from: 500, to: null }],
       customRange: { from: 0, to: 0 },
       prevCustomRange: { from: 0, to: 0 },
       MAX_VALUE: 999999
@@ -129,6 +133,17 @@ export default {
         this.customRange = { ...this.prevCustomRange };
         document.removeEventListener('click', this.closeIfOutsideOfDropdown);
       }
+    },
+
+    selectedOption: {
+      handler (option) {
+        if (option) {
+          this.displaySelected = this.formatRange(option);
+        } else {
+          this.displaySelected = 'Tất cả';
+        }
+      },
+      immediate: true
     }
   },
 
@@ -182,9 +197,9 @@ export default {
     },
 
     formatRange (range) {
-      if (range.from === 0) {
+      if (!range.from || range.from === 0) {
         return range.to === 0 ? 'Tất cả' : `Dưới ${range.to} m²`;
-      } else if (range.to === Infinity) {
+      } else if (!range.to) {
         return `Trên ${range.from} m²`;
       } else {
         return `${range.from} - ${range.to} m²`;
@@ -194,7 +209,7 @@ export default {
     handleSelectAcreageRange (range) {
       this.displaySelected = this.formatRange(range);
       this.open = false;
-      if (range.to !== Infinity) {
+      if (range.to !== null) {
         this.prevCustomRange = { ...range };
         this.customRange = { ...range };
       } else {

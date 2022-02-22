@@ -34,13 +34,13 @@
       <div class="flex space-x-4 px-4 my-2">
         <div class="flex-col space-y-1">
           <label v-for="option in bedroomOptions.filter((_, index) => index % 2 === 0)" :key="option" class="flex items-center">
-            <input v-model="selectedOptions" :value="option" type="checkbox" class="form-checkbox h-4 w-4 text-gray-600">
+            <input v-model="selectedChoices" :value="option" type="checkbox" class="form-checkbox h-4 w-4 text-gray-600">
             <span class="whitespace-nowrap ml-2 text-gray-700">{{ option }} Phòng</span>
           </label>
         </div>
         <div class="flex-col space-y-1">
           <label v-for="option in bedroomOptions.filter((_, index) => index % 2 !== 0)" :key="option" class="flex items-center">
-            <input v-model="selectedOptions" :value="option" type="checkbox" class="form-checkbox h-4 w-4 text-gray-600">
+            <input v-model="selectedChoices" :value="option" type="checkbox" class="form-checkbox h-4 w-4 text-gray-600">
             <span class="whitespace-nowrap ml-2 text-gray-700">{{ option }} Phòng</span>
           </label>
         </div>
@@ -49,13 +49,13 @@
       <divider />
 
       <div class="flex space-x-2 justify-center mt-3 mb-1">
-        <button class="px-2 py-1 hover:text-red-700" @click="clearSelectedOptions">
+        <button class="px-2 py-1 hover:text-red-700" @click="clearSelectedChoices">
           Đặt lại
         </button>
         <button class="border rounded-md px-2 py-1 hover:text-white hover:bg-gray-700" @click="open = false">
           Hủy
         </button>
-        <button :class="`border font-semibold rounded-md px-2 py-1 hover:text-white hover:bg-gray-700`" @click="applyOptions">
+        <button :class="`border font-semibold rounded-md px-2 py-1 hover:text-white hover:bg-gray-700`" @click="applyOption">
           Áp dụng
         </button>
       </div>
@@ -66,6 +66,9 @@
 <script>
 export default {
   name: 'BedroomFilterDropdown',
+  props: {
+    selectedOption: { type: Array, default: null }
+  },
 
   data () {
     return {
@@ -73,8 +76,8 @@ export default {
       entered: false,
       displaySelected: 'Tất cả',
       bedroomOptions: ['1', '2', '3', '4', '5', '5+'],
-      prevSelectedOptions: [],
-      selectedOptions: []
+      prevSelectedChoices: [],
+      selectedChoices: []
     };
   },
 
@@ -87,9 +90,22 @@ export default {
         // setTimeout để tránh listen các click event hiện tại
         setTimeout(() => document.addEventListener('click', this.closeIfOutsideOfDropdown), 0);
       } else {
-        this.selectedOptions = [...this.prevSelectedOptions];
+        this.selectedChoices = [...this.prevSelectedChoices];
         document.removeEventListener('click', this.closeIfOutsideOfDropdown);
       }
+    },
+
+    selectedOption: {
+      handler (option) {
+        if (option) {
+          this.displaySelected = option.length > 0 ? option.join(', ') : 'Tất cả';
+          this.prevSelectedChoices = [...option];
+          this.selectedChoices = [...option];
+        } else {
+          this.displaySelected = 'Tất cả';
+        }
+      },
+      immediate: true
     }
   },
 
@@ -98,14 +114,13 @@ export default {
       this.open = this.entered;
     },
 
-    clearSelectedOptions () {
-      this.selectedOptions = [];
+    clearSelectedChoices () {
+      this.selectedChoices = [];
     },
 
-    applyOptions () {
-      this.displaySelected = this.selectedOptions.length > 0 ? this.selectedOptions.join(', ') : 'Tất cả';
-      this.prevSelectedOptions = [...this.selectedOptions];
-      this.$emit('optionchanged', [...this.selectedOptions]);
+    applyOption () {
+      this.prevSelectedChoices = [...this.selectedChoices];
+      this.$emit('optionchanged', [...this.selectedChoices]);
     }
   }
 };

@@ -7,7 +7,7 @@
       <h1 class="mt-6 lg:mx-0  font-bold text-2xl">
         {{ post.pageInfor.title }}
       </h1>
-      <h4 class="lg:mx-0  mt-3 font-normal color-3f3f3f text-sm leading-4">
+      <h4 class="lg:mx-0 mt-3 font-normal color-3f3f3f text-sm leading-4">
         {{ `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}` }}
       </h4>
       <div class="lg:mx-0 w-full lg:w-5/6 bd-color-858585 flex justify-between mt-3 text-sm leading-4 border-t border-b border-zinc-800 pb-7 pt-6 border-solid">

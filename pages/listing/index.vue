@@ -33,8 +33,8 @@
         <type-filter-dropdown @optionchanged="handleTypeFilterChanged" />
         <location-ftiler-dropdown @optionchanged="handleLocationFilterChanged" />
 
-        <project-filter-dropdown v-if="filter.project" :selected-option="filter.project.projectName" @optionchanged="handleProjectFilterChanged" />
-        <project-filter-dropdown v-else @optionchanged="handleProjectFilterChanged" />
+        <!-- <project-filter-dropdown v-if="filter.project" :selected-option="filter.project.projectName" @optionchanged="handleProjectFilterChanged" />
+        <project-filter-dropdown v-else @optionchanged="handleProjectFilterChanged" /> -->
 
         <price-filter-dropdown @optionchanged="handlePriceFilterChanged" />
         <acreage-filter-dropdown @optionchanged="handleAcreageFilterChanged" />
@@ -174,10 +174,46 @@ export default {
   },
 
   methods: {
+
+    setSellButtonActiveState (state) {
+      this.sellButtonIsActive = state;
+      this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
+    },
+
     createFilterFromUrl () {
       const filter = {};
 
       const query = this.$route.query;
+
+      if (query.demand === 'Bán') {
+        filter.demand = query.demand;
+        this.setSellButtonActiveState(true);
+      } else {
+        filter.demand = query.demand;
+        this.setSellButtonActiveState(false);
+      }
+
+      if (query.type) {
+        filter.type = query.type;
+      }
+
+      if (query.city || query.district) {
+        filter.location = {};
+        filter.location.city = query.city;
+        filter.location.district = query.district;
+      }
+
+      if (query.gtnn || query.gtln) {
+        filter.priceRange = {};
+
+        if (query.gtnn) {
+          filter.priceRange.from = parseInt(query.gtnn);
+        }
+
+        if (query.gtln) {
+          filter.priceRange.to = parseInt(query.gtln);
+        }
+      }
 
       if (query.dtnn || query.dtln) {
         filter.acreageRange = { };
@@ -191,12 +227,15 @@ export default {
         }
       }
 
-      return filter;
-    },
+      if (query.directions) {
+        filter.directions = query.directions;
+      }
 
-    setSellButtonActiveState (state) {
-      this.sellButtonIsActive = state;
-      this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
+      if (query.roomStructure) {
+        filter.roomStructure = query.roomStructure;
+      }
+
+      return filter;
     },
 
     handleTypeFilterChanged (type) {
@@ -238,6 +277,43 @@ export default {
 
       const query = {};
 
+      if (this.filter.demand) {
+        const tempDemand = this.filter.demand;
+
+        if (tempDemand) {
+          query.demand = tempDemand;
+        }
+      }
+
+      if (this.filter.type) {
+        const tempType = this.filter.type;
+
+        if (tempType) {
+          query.type = tempType;
+        }
+      }
+
+      if (this.filter.location) {
+        const tempLocation = this.filter.location;
+
+        if (tempLocation) {
+          query.city = tempLocation.city;
+          query.district = tempLocation.district;
+        }
+      }
+
+      if (this.filter.priceRange) {
+        const { from, to } = this.filter.priceRange;
+
+        if (from) {
+          query.gtnn = from;
+        }
+
+        if (to) {
+          query.gtln = to;
+        }
+      }
+
       if (this.filter.acreageRange) {
         const { from, to } = this.filter.acreageRange;
 
@@ -247,6 +323,22 @@ export default {
 
         if (to) {
           query.dtln = to;
+        }
+      }
+
+      if (this.filter.directions) {
+        const tempDirections = this.filter.directions;
+
+        if (tempDirections) {
+          query.directions = tempDirections;
+        }
+      }
+
+      if (this.filter.bedroomOptions) {
+        const tempBedroomOptions = this.filter.bedroomOptions;
+
+        if (tempBedroomOptions) {
+          query.bedroomOptions = tempBedroomOptions;
         }
       }
 

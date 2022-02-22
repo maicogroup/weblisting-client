@@ -10,12 +10,24 @@
       </p>
 
       <Dropdown item-width="200px" title="Thuê">
-        <DropdownItem> Tất cả nhà đất </DropdownItem>
-        <DropdownItem> Căn hộ </DropdownItem>
-        <DropdownItem> Duplex </DropdownItem>
-        <DropdownItem> Officetel </DropdownItem>
-        <DropdownItem> Penthouse </DropdownItem>
-        <DropdownItem> ShopHouse </DropdownItem>
+        <DropdownItem @click="handleSelectAllTypes">
+          Tất cả nhà đất
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Căn hộ')">
+          Căn hộ
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Duplex')">
+          Duplex
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Officetel')">
+          Officetel
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Penthouse')">
+          Penthouse
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('ShopHouse')">
+          ShopHouse
+        </DropdownItem>
       </Dropdown>
 
       <Dropdown item-width="200px" title="Mua">
@@ -109,6 +121,32 @@ export default {
           }
         }
     `
+  },
+  method: {
+    handleSelecType (type) {
+      let path = '/danh-sach-can-ho';
+      path = path + '/';
+
+      const query = {};
+
+      if (type) {
+        query.type = type;
+      }
+      query.demand = 'Cho thuê';
+
+      this.$router.push({ path, query });
+    },
+
+    handleSelectAllTypes () {
+      let path = '/danh-sach-can-ho';
+      path = path + '/';
+
+      const query = {};
+
+      query.demand = 'Cho thuê';
+
+      this.$router.push({ path, query });
+    }
   },
 
   data () {

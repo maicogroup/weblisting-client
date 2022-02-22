@@ -13,30 +13,42 @@
         <DropdownItem @click="handleSelectAllTypes">
           Tất cả nhà đất
         </DropdownItem>
-        <DropdownItem @click="handleSelecType('Căn hộ')">
+        <DropdownItem @click="handleSelecType('Căn hộ', 'Cho Thuê')">
           Căn hộ
         </DropdownItem>
-        <DropdownItem @click="handleSelecType('Duplex')">
+        <DropdownItem @click="handleSelecType('Duplex', 'Cho Thuê')">
           Duplex
         </DropdownItem>
-        <DropdownItem @click="handleSelecType('Officetel')">
+        <DropdownItem @click="handleSelecType('Officetel', 'Cho Thuê')">
           Officetel
         </DropdownItem>
-        <DropdownItem @click="handleSelecType('Penthouse')">
+        <DropdownItem @click="handleSelecType('Penthouse', 'Cho Thuê')">
           Penthouse
         </DropdownItem>
-        <DropdownItem @click="handleSelecType('ShopHouse')">
+        <DropdownItem @click="handleSelecType('ShopHouse', 'Cho Thuê')">
           ShopHouse
         </DropdownItem>
       </Dropdown>
 
       <Dropdown item-width="200px" title="Mua">
-        <DropdownItem> Tất cả nhà đất </DropdownItem>
-        <DropdownItem> Căn hộ </DropdownItem>
-        <DropdownItem> Duplex </DropdownItem>
-        <DropdownItem> Officetel </DropdownItem>
-        <DropdownItem> Penthouse </DropdownItem>
-        <DropdownItem> ShopHouse </DropdownItem>
+        <DropdownItem @click="handleSelecType('Căn hộ', 'Bán')">
+          Tất cả nhà đất
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Căn hộ', 'Bán')">
+          Căn hộ
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Duplex', 'Bán')">
+          Duplex
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Officetel', 'Bán')">
+          Officetel
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Penthouse', 'Bán')">
+          Penthouse
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('ShopHouse', 'Bán')">
+          ShopHouse
+        </DropdownItem>
       </Dropdown>
 
       <Dropdown class="hidden lg:inline" item-width="220px" title="Dự án">
@@ -128,19 +140,19 @@ export default {
   },
 
   methods: {
-    handleSelecType (type) {
+    handleSelecType (type, demand) {
       const path = '/danh-sach-can-ho';
       const query = {
         type,
-        demand: 'Cho Thuê'
+        demand
       };
 
       this.$router.push({ path, query });
     },
 
-    handleSelectAllTypes () {
+    handleSelectAllTypes (demand) {
       const path = '/danh-sach-can-ho';
-      const query = { demand: 'Cho Thuê' };
+      const query = { demand };
 
       this.$router.push({ path, query });
     }

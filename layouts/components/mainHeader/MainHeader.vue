@@ -122,35 +122,28 @@ export default {
         }
     `
   },
-  method: {
+
+  data () {
+    return { showSidebar: false };
+  },
+
+  methods: {
     handleSelecType (type) {
-      let path = '/danh-sach-can-ho';
-      path = path + '/';
-
-      const query = {};
-
-      if (type) {
-        query.type = type;
-      }
-      query.demand = 'Cho thuê';
+      const path = '/danh-sach-can-ho';
+      const query = {
+        type,
+        demand: 'Cho Thuê'
+      };
 
       this.$router.push({ path, query });
     },
 
     handleSelectAllTypes () {
-      let path = '/danh-sach-can-ho';
-      path = path + '/';
-
-      const query = {};
-
-      query.demand = 'Cho thuê';
+      const path = '/danh-sach-can-ho';
+      const query = { demand: 'Cho Thuê' };
 
       this.$router.push({ path, query });
     }
-  },
-
-  data () {
-    return { showSidebar: false };
   }
 };
 </script>

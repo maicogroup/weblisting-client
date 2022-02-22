@@ -130,8 +130,8 @@ export default {
       }
     },
 
-    selectedOption (value) {
-      this.displaySelected = value;
+    selectedOption (option) {
+      this.displaySelected = option.projectName;
     }
   },
 

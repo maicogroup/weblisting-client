@@ -33,8 +33,8 @@
         <type-filter-dropdown @optionchanged="handleTypeFilterChanged" />
         <location-ftiler-dropdown @optionchanged="handleLocationFilterChanged" />
 
-        <!-- <project-filter-dropdown v-if="filter.project" :selected-option="filter.project.projectName" @optionchanged="handleProjectFilterChanged" />
-        <project-filter-dropdown v-else @optionchanged="handleProjectFilterChanged" /> -->
+        <project-filter-dropdown v-if="filter.project" :selected-option="filter.project" @optionchanged="handleProjectFilterChanged" />
+        <project-filter-dropdown v-else @optionchanged="handleProjectFilterChanged" />
 
         <price-filter-dropdown @optionchanged="handlePriceFilterChanged" />
         <acreage-filter-dropdown @optionchanged="handleAcreageFilterChanged" />
@@ -105,7 +105,7 @@ export default {
     },
 
     showIfPostsOfOneProject () {
-      return this.$route.params.slug === null && this.project !== null;
+      return this.$route.params.slug !== null && this.project !== null;
     },
 
     sellButtonClasses () {
@@ -118,16 +118,17 @@ export default {
   },
 
   created () {
+    this.filter = this.createFilterFromUrl();
+
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
-        if (param.slug !== prevParam.slug) {
+        if (param.slug !== prevParam.slug && param.slug !== null) {
           this.$apollo.queries.project.refetch({ slug: param.slug });
         }
+        this.filter = this.createFilterFromUrl();
       }
     );
-
-    this.filter = this.createFilterFromUrl();
   },
 
   apollo: {
@@ -162,7 +163,7 @@ export default {
       },
 
       skip () {
-        return this.filter === null;
+        return this.filter === null || this.$route.params.slug === null;
       },
 
       variables () {
@@ -182,7 +183,6 @@ export default {
 
     createFilterFromUrl () {
       const filter = {};
-
       const query = this.$route.query;
 
       if (query.demand === 'Bán') {

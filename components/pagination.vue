@@ -98,7 +98,7 @@ export default {
   },
   computed: {
     totalPages(){
-        return (this.total - this.total%this.perPage) / this.perPage;
+      return Math.ceil(this.total / this.perPage);
     },
     startPage() {
       if (this.currentPage === 1) {
@@ -106,10 +106,10 @@ export default {
       }
 
       if (this.currentPage === this.totalPages) {
-        return this.totalPages - this.maxVisibleButtons + 1;
+        return Math.max(1, this.totalPages - this.maxVisibleButtons + 1);
       }
 
-      return this.currentPage - 1;
+      return Math.max(1, this.currentPage - 1);
     },
     endPage() {
       return Math.min(
@@ -141,13 +141,17 @@ export default {
       this.$emit("pagechanged", 1);
     },
     onClickPreviousPage() {
-      this.$emit("pagechanged", this.currentPage - 1);
+      if (this.currentPage > 1) {
+        this.$emit("pagechanged", this.currentPage - 1);
+      }
     },
     onClickPage(page) {
       this.$emit("pagechanged", page);
     },
     onClickNextPage() {
+      if (this.currentPage < this.totalPages) {
       this.$emit("pagechanged", this.currentPage + 1);
+      }
     },
     onClickLastPage() {
       this.$emit("pagechanged", this.totalPages);

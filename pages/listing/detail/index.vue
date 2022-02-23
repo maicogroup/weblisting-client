@@ -17,7 +17,9 @@ const getPostQuery = gql`
           gallery
           acreage
           price
-          roomStructure
+          type
+          totalBedRoom
+          totalWC
           direction
           description
           ownerId
@@ -70,16 +72,15 @@ export default {
       }
     }
   },
-  head () {
-    if(this.post != null)
-      return {
-        title: this.post.pageInfor.title,
-        meta: [{
-          hid: 'description',
-          name: 'description',
-          content: this.post.pageInfor.metaDescription
-        }]
-      };
+  head() {
+    return {
+      title: this.post?.pageInfor.title,
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: this.post?.pageInfor.metaDescription
+      }]
+    };
   }
 };
 </script>

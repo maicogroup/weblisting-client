@@ -1,3 +1,5 @@
+const isDev = process.env.NODE_ENV === 'development'
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -66,9 +68,13 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extend(config, ctx) {
-      if (ctx.isDev) {
-        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+    babel: {
+      compact: !isDev ,
+      sourceRoot : __dirname
+    },
+    extend(config, {isClient}) {
+      if (isDev) {
+        config.devtool = isClient ? 'source-map' : 'inline-source-map'
       }
     }
   }

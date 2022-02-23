@@ -8,11 +8,11 @@
       <p class="text-gray-500">
         {{ projectAddress }}
       </p>
-      <NuxtLink to="/">
+      <nuxt-link to="/" class="hover:text-green-500">
         Xem chi tiết về chung cư {{ project.projectName }} >>
-      </NuxtLink>
+      </nuxt-link>
     </div>
-    <iframe :src="project.address.googleMapLocation" width="100%" class="h-60 mt-4 lg:mt-0 lg:h-full" loading="lazy" />
+    <iframe :src="project.address.googleMapLocation" class="w-full h-60 md:h-full" loading="lazy" />
   </div>
 </template>
 

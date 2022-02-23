@@ -39,7 +39,6 @@ import glide from '@glidejs/glide';
 export default {
     name: 'Gallery',
     props:["items"],
-
     data: () => ({
         imgUrl: "https://maico-hub-record.ss-hn-1.bizflycloud.vn/apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg",
         index: null,
@@ -113,13 +112,10 @@ export default {
 <style lang="scss" scoped>
 @import "node_modules/@glidejs/glide/src/assets/sass/glide.core";
 @import "node_modules/@glidejs/glide/src/assets/sass/variables";
-
 .#{$glide-class} {
   $this: &;
-
   $se: $glide-element-separator;
   $sm: $glide-modifier-separator;
-
   &#{$se}arrow {
     position: absolute;
     display: block;
@@ -140,23 +136,18 @@ export default {
     line-height: 1;
     height: 100%;
     width: 100px;
-
     &:focus { outline: none; }
     &:hover { border-color: white; box-shadow: 0 0.25em 0.5em 0 rgba(0, 0, 0, 0.1);}
-
     &#{$sm}left {
       left: 0;
     }
-
     &#{$sm}right {
       right: 0;
     }
-
     &#{$sm}disabled {
       opacity: 0.33;
     }
   }
-
   &#{$se}bullets {
     position: absolute;
     z-index: 2;
@@ -166,7 +157,6 @@ export default {
     list-style: none;
     transform: translateX(-50%);
   }
-
   &#{$se}bullet {
     background-color: rgba(255, 255, 255, 0.5);
     width: 9px;
@@ -179,33 +169,27 @@ export default {
     line-height: 0;
     box-shadow: 0 0.25em 0.5em 0 rgba(0, 0, 0, 0.1);
     margin: 0 0.25em;
-
     &:focus {
       outline: none;
     }
-
     &:hover,
     &:focus {
       border: 2px solid white;
       background-color: rgba(255, 255, 255, 0.5);
     }
-
     &#{$sm}active {
       background-color: white;
     }
   }
-
   &#{$sm}swipeable {
     cursor: grab;
     cursor: -moz-grab;
     cursor: -webkit-grab;
   }
-
   &#{$sm}dragging {
     cursor: grabbing;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
   }
 }
-
-</style>
+</style> 

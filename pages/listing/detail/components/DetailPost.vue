@@ -183,11 +183,9 @@
 </template>
 
 <script>
-
 export default ({
   name: 'DetailPost',
   props: ['post'],
-
   computed: {
     gallery () {
       const items = this.post.gallery.map(i => 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + i);
@@ -203,19 +201,15 @@ export default ({
   .color-3f3f3f{
     color: #3F3F3F;
   }
-
   .color-8c8c8c{
     color: #8C8C8C;
   }
-
   .bcolor-e5e5e5{
     background-color: #E5E5E5;
   }
-
   .color-5a5a5a{
     color: #5A5A5A;
   }
-
   .bd-color-858585
   {
     border-color: #858585;

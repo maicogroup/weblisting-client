@@ -66,8 +66,7 @@ import { gql } from 'graphql-tag';
 // import Dropdown from '~/pages/components/Dropdown/Dropdown.vue';
 // import DropdownItem from '~/pages/components/Dropdown/DropdownItem.vue';
 
-const getPostsQuery = gql`
-          query GetPostWithPagination($condition: PostCollectionFilterInput, $skipItems: Int, $take: Int, $order : [PostCollectionSortInput!]) {
+const getPostsQuery = gql`query GetPostWithPagination($condition: PostCollectionFilterInput, $skipItems: Int, $take: Int, $order : [PostCollectionSortInput!]) {
             postsWithPagination(take: $take, skip: $skipItems, where: $condition, order : $order) {
               items{
                 id
@@ -99,8 +98,7 @@ const getPostsQuery = gql`
               }
               totalCount
             }
-          }
-        `;
+          }`;
 
 export default {
   name: 'ListPost',

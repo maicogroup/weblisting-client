@@ -4,7 +4,7 @@ import Router from 'vue-router';
 import EditPost from '~/pages/postQueue/edit-post/index';
 import PostQueuePage from '~/pages/postQueue/index';
 import PostList from '~/pages/listing/index';
-import DetailPost from '~/pages/detail/index';
+import DetailPost from '~/pages/listing/detail/index';
 import ProductReview from '~/pages/product-preview/index';
 import SpecificProjectReview from '~/pages/product-preview/specific-project/index';
 

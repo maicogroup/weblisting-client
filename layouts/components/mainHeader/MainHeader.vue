@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed z-10 top-0 left-0 right-0 bg-white flex justify-between items-center px-5 py-3 border-b"
+    class="fixed z-20 top-0 left-0 right-0 bg-white flex justify-between items-center px-5 py-3 border-b"
   >
     <img class="h-12" src="~/assets/maico.png">
 
@@ -10,35 +10,59 @@
       </p>
 
       <Dropdown item-width="200px" title="Thuê">
-        <DropdownItem> Tất cả nhà đất </DropdownItem>
-        <DropdownItem> Căn hộ </DropdownItem>
-        <DropdownItem> Duplex </DropdownItem>
-        <DropdownItem> Officetel </DropdownItem>
-        <DropdownItem> Penthouse </DropdownItem>
-        <DropdownItem> ShopHouse </DropdownItem>
+        <DropdownItem @click="handleSelectAllTypes">
+          Tất cả nhà đất
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Căn hộ', 'Cho Thuê')">
+          Căn hộ
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Duplex', 'Cho Thuê')">
+          Duplex
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Officetel', 'Cho Thuê')">
+          Officetel
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Penthouse', 'Cho Thuê')">
+          Penthouse
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('ShopHouse', 'Cho Thuê')">
+          ShopHouse
+        </DropdownItem>
       </Dropdown>
 
       <Dropdown item-width="200px" title="Mua">
-        <DropdownItem> Tất cả nhà đất </DropdownItem>
-        <DropdownItem> Căn hộ </DropdownItem>
-        <DropdownItem> Duplex </DropdownItem>
-        <DropdownItem> Officetel </DropdownItem>
-        <DropdownItem> Penthouse </DropdownItem>
-        <DropdownItem> ShopHouse </DropdownItem>
+        <DropdownItem @click="handleSelecType('Căn hộ', 'Bán')">
+          Tất cả nhà đất
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Căn hộ', 'Bán')">
+          Căn hộ
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Duplex', 'Bán')">
+          Duplex
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Officetel', 'Bán')">
+          Officetel
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('Penthouse', 'Bán')">
+          Penthouse
+        </DropdownItem>
+        <DropdownItem @click="handleSelecType('ShopHouse', 'Bán')">
+          ShopHouse
+        </DropdownItem>
       </Dropdown>
 
-      <Dropdown class="hidden lg:inline" item-width="200px" title="Dự án">
-        <DropdownItem> Tất cả dự án </DropdownItem>
-        <DropdownItem> Lavita Charm </DropdownItem>
-        <DropdownItem> River Panorama </DropdownItem>
-        <DropdownItem> Emerald Percinct Celadon City </DropdownItem>
-        <DropdownItem> Topaz Elite </DropdownItem>
-        <DropdownItem> Đạt Gia Residence </DropdownItem>
-        <DropdownItem> Sunview Town </DropdownItem>
-        <DropdownItem> 4S Linh Đông </DropdownItem>
-        <DropdownItem> 9 View </DropdownItem>
-        <DropdownItem> Botanica Premier </DropdownItem>
-        <DropdownItem> Centum Wealth </DropdownItem>
+      <Dropdown class="hidden lg:inline" item-width="220px" title="Dự án">
+        <div class=" max-h-96 overflow-y-auto overflow-x-hidden">
+          <DropdownItem> Tất cả dự án </DropdownItem>
+          <nuxt-link
+            v-for="project in projects"
+            :key="project.id"
+            class="block px-4 py-2 capitalize text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer"
+            :to="`/danh-sach-can-ho/${project.pageInfors[0].slug}`"
+          >
+            {{ project.projectName }}
+          </nuxt-link>
+        </div>
       </Dropdown>
 
       <Dropdown
@@ -57,7 +81,7 @@
 
         <a href="#" class="ml-6"> Đăng ký </a>
 
-        <button class="ml-10 border rounded-md py-2 px-8">
+        <button class="ml-10 border rounded-md py-2 px-8 hover:text-white hover:bg-gray-700">
           Ký gửi
         </button>
       </div>
@@ -90,13 +114,48 @@
 </template>
 
 <script>
+import { gql } from 'graphql-tag';
 import Sidebar from './Sidebar.vue';
+import DropdownItem from '~/components/dropdown/DropdownItem.vue';
 
 export default {
   name: 'MainHeader',
-  components: { Sidebar },
+  components: { Sidebar, DropdownItem },
+
+  apollo: {
+    projects: gql`
+        query GetProjects {
+          projects {
+            projectName
+            pageInfors {
+              slug
+            }
+          }
+        }
+    `
+  },
+
   data () {
     return { showSidebar: false };
+  },
+
+  methods: {
+    handleSelecType (type, demand) {
+      const path = '/danh-sach-can-ho';
+      const query = {
+        type,
+        demand
+      };
+
+      this.$router.push({ path, query });
+    },
+
+    handleSelectAllTypes (demand) {
+      const path = '/danh-sach-can-ho';
+      const query = { demand };
+
+      this.$router.push({ path, query });
+    }
   }
 };
 </script>

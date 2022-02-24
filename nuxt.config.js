@@ -1,3 +1,5 @@
+const isDev = process.env.NODE_ENV === 'development'
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -19,12 +21,20 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    // ...
+    'quill/dist/quill.core.css',
+    // for snow theme
+    'quill/dist/quill.snow.css',
+    // for bubble theme
+    'quill/dist/quill.bubble.css'
+    // ...
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/lightGallery.client.js',
-    '~/plugins/vue-js-modal.js'
+    '~/plugins/vue-js-modal.js',
+    '~/plugins/editor.client.js',
   ],
 
 
@@ -71,9 +81,13 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extend(config, ctx) {
-      if (ctx.isDev) {
-        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+    babel: {
+      compact: !isDev ,
+      sourceRoot : __dirname
+    },
+    extend(config, {isClient}) {
+      if (isDev) {
+        config.devtool = isClient ? 'source-map' : 'inline-source-map'
       }
     }
   }

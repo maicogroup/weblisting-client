@@ -1,7 +1,7 @@
 <template>
   <div class="px-5 w-full max-w-screen-xl mx-5">
     <h1 class="text-3xl font-medium mb-7">
-      Chỉnh sửa tin đăng 'Can-ho-sai-gon-gate-way-345KJJHR3RE'
+      Chỉnh sửa tin đăng {{post.pageInfor.title}}
     </h1>
     <h1 class="font-bold mb-2">
       Thông tin trang
@@ -95,8 +95,49 @@
 </style>
 
 <script>
+import gql from "graphql-tag";
+
+const getPost = gql`query GetPost($condition: PostCollectionFilterInput)
+              {
+                post(where: $condition) {
+                  acreage,
+                  apartmentNumber,
+                  block,
+                  description,
+                  floor,
+                  gallery,
+                  pageInfor {
+                    title,
+                    slug,
+                    metaDescription
+                  },
+                  tags
+                }
+              }`;
+
 export default {
   name: 'EditPost',
+
+  apollo: {
+    post: { 
+      query() {
+        return getPost
+      },
+      update: data => data.post,
+      variables() {
+        return {
+          condition: {
+            pageInfor: { 
+              slug: { 
+                eq: this.$route.params.slug
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
   data () {
     return {
       tempTag: '',

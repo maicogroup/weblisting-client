@@ -48,7 +48,44 @@
     <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
       <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
-      <ContactInfor class="lg:ml-9 hidden lg:flex lg:flex-col mt-14" />
+      <div class="ml-9 mt-14 hidden lg:block">
+        <ContactInfor />
+        <div class="border mt-4 p-4">
+          <p class="font-bold mb-2">
+            Xem theo giá
+          </p>
+          <quick-filter-button>Dưới 3 triệu</quick-filter-button>
+          <quick-filter-button>Từ 3 - 5 triệu</quick-filter-button>
+          <quick-filter-button>Từ 5 - 7 triệu</quick-filter-button>
+          <quick-filter-button>Từ 7 - 10 triệu</quick-filter-button>
+          <quick-filter-button>Từ 10 - 15 triệu</quick-filter-button>
+          <quick-filter-button>Từ 15 - 20 triệu</quick-filter-button>
+          <quick-filter-button>Từ 20 - 30 triệu</quick-filter-button>
+          <quick-filter-button>Trên 30 triệu</quick-filter-button>
+        </div>
+
+        <div class="border mt-4 p-4">
+          <p class="font-bold mb-2">
+            Xem theo diện tích
+          </p>
+          <quick-filter-button>Dưới 30 m²</quick-filter-button>
+          <quick-filter-button>Từ 30 - 50 m²</quick-filter-button>
+          <quick-filter-button>Từ 50 - 70 m²</quick-filter-button>
+          <quick-filter-button>Từ 70 - 100 m²</quick-filter-button>
+          <quick-filter-button>Trên 100 m²</quick-filter-button>
+        </div>
+
+        <div class="border mt-4 p-4">
+          <p class="font-bold mb-2">
+            Xem theo phòng ngủ
+          </p>
+          <quick-filter-button>1 phòng ngủ</quick-filter-button>
+          <quick-filter-button>2 phòng ngủ</quick-filter-button>
+          <quick-filter-button>3 phòng ngủ</quick-filter-button>
+          <quick-filter-button>4 phòng ngủ</quick-filter-button>
+          <quick-filter-button>5+ phòng ngủ</quick-filter-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -66,11 +103,12 @@ import TypeFilterDropdown from './components/filtering/type-filter-dropdown.vue'
 import PriceFilterDropdown from './components/filtering/price-filter-dropdown.vue';
 import AcreageFilterDropdown from './components/filtering/acreage-filter-dropdown.vue';
 import BedroomFilterDropdown from './components/filtering/bedroom-filter-dropdown.vue';
+import QuickFilterButton from './components/quick-filter-button.vue';
 import Divider from '~/components/Divider.vue';
 
 export default {
   name: 'PostList',
-  components: { ProjectHeader, ListPost, ContactInfor, Divider, LocationFtilerDropdown, ProjectFilterDropdown, DirectionFilterDropdown, TypeFilterDropdown, PriceFilterDropdown, AcreageFilterDropdown, BedroomFilterDropdown },
+  components: { ProjectHeader, ListPost, ContactInfor, Divider, LocationFtilerDropdown, ProjectFilterDropdown, DirectionFilterDropdown, TypeFilterDropdown, PriceFilterDropdown, AcreageFilterDropdown, BedroomFilterDropdown, QuickFilterButton },
   data () {
     return {
       // filter dùng để lọc
@@ -183,7 +221,6 @@ export default {
   },
 
   methods: {
-
     setSellButtonActiveState (state) {
       this.sellButtonIsActive = state;
       this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';

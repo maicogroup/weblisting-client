@@ -98,7 +98,6 @@ export default {
 
     selectedOption: {
       handler (option) {
-        console.log(option);
         if (option) {
           this.displaySelected = option.length > 0 ? option.join(', ') : 'Tất cả';
           this.prevSelectedChoices = [...option];

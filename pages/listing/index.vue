@@ -280,7 +280,6 @@ export default {
       this.filter = { ...this.inputFilter };
 
       let path = '/danh-sach-can-ho';
-
       if (this.filter.project) {
         path = path + '/' + this.filter.project.pageInfor.slug;
       }

@@ -105,7 +105,6 @@
 
 <script>
 import FilterDropdownItem from './filter-dropdown-item.vue';
-
 export default {
   name: 'LocationFilterDropdown',
   components: { FilterDropdownItem },

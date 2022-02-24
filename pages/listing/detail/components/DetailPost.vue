@@ -4,22 +4,22 @@
       <gallery :items="gallery" />
     </div>
     <div class="mx-5">
-      <h1 class="mt-6 lg:mx-0 font-bold text-xl lg:text-2xl ov-flow-hidden">
+      <h1 class="mt-6 lg:mx-0  font-bold text-2xl">
         {{ post.pageInfor.title }}
       </h1>
       <h4 class="lg:mx-0 mt-3 font-normal color-3f3f3f text-sm leading-4">
         {{ `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}` }}
       </h4>
-      <div class="lg:mx-0 w-full md:w-5/6 bd-color-858585 flex justify-start mt-3 text-sm leading-4 border-t border-b border-zinc-800 pb-7 pt-6 border-solid">
-        <div class="mr-4 md:mr-11">
+      <div class="lg:mx-0 w-full lg:w-5/6 bd-color-858585 flex justify-between mt-3 text-sm leading-4 border-t border-b border-zinc-800 pb-7 pt-6 border-solid">
+        <div class="">
           <h4 class="font-normal color-8c8c8c">
             Mức giá
           </h4>
           <p class="font-bold">
-            {{ post.price }}
+            {{ post.price }} vnđ
           </p>
         </div>
-        <div class="mr-4 md:mr-14">
+        <div class="">
           <h4 class="font-normal color-8c8c8c">
             Diện tích
           </h4>
@@ -27,7 +27,7 @@
             {{ post.acreage }} m²
           </p>
         </div>
-        <div class="mr-4 md:mr-11">
+        <div class="">
           <h4 class="font-normal color-8c8c8c">
             Cơ cấu phòng
           </h4>
@@ -138,6 +138,27 @@
         Đặc điểm bất động sản
       </h3>
       <iframe :src="`${post.project.address.googleMapLocation}`" class="w-full h-64 mt-4" loading="lazy" />
+      <div class="lg:hidden mx-0 mt-5 mb-3">
+        <h3 class="font-bold text-lg leading-5 mb-4">
+          Liên hệ
+        </h3>
+        <div>
+          <div class="items-center flex flex-row mb-4">
+            <img
+              class="h-14 w-14 mr-3.5 rounded-full ring-2 ring-white"
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              alt=""
+            >
+            <h3 class="text-sm color-707070 leading-4 font-bold">
+              Team IT vô đối
+            </h3>
+          </div>
+          <button class="bd-color-858585 color-707070 rounded w-full h-10 border text-sm font-bold mb-7">
+            Yêu cầu liên hệ lại
+          </button>
+          <div class="w-full border-b bd-color-858585" />
+        </div>
+      </div>
       <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-5 mb-3">
         Tìm kiếm theo từ khóa
       </h3>
@@ -162,11 +183,9 @@
 </template>
 
 <script>
-
 export default ({
   name: 'DetailPost',
   props: ['post'],
-
   computed: {
     gallery () {
       const items = this.post.gallery.map(i => 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + i);
@@ -182,19 +201,15 @@ export default ({
   .color-3f3f3f{
     color: #3F3F3F;
   }
-
   .color-8c8c8c{
     color: #8C8C8C;
   }
-
   .bcolor-e5e5e5{
     background-color: #E5E5E5;
   }
-
   .color-5a5a5a{
     color: #5A5A5A;
   }
-
   .bd-color-858585
   {
     border-color: #858585;

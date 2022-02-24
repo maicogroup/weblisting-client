@@ -69,6 +69,11 @@ export default {
         }
     `
   },
+
+  props: {
+    selectedOption: { type: String, default: null }
+  },
+
   data () {
     return {
       open: false,
@@ -96,6 +101,17 @@ export default {
       } else {
         document.removeEventListener('click', this.closeIfOutsideOfDropdown);
       }
+    },
+
+    selectedOption: {
+      handler (option) {
+        if (option) {
+          this.displaySelected = option;
+        } else {
+          this.displaySelected = 'Tất cả';
+        }
+      },
+      immediate: true
     }
   },
 
@@ -105,13 +121,11 @@ export default {
     },
 
     handleSelecType (option) {
-      this.displaySelected = option;
       this.open = false;
       this.$emit('optionchanged', option);
     },
 
     handleSelectAllTypes () {
-      this.displaySelected = 'Tất cả';
       this.open = false;
       this.$emit('optionchanged', null);
     }

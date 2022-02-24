@@ -8,7 +8,7 @@
         <p class="inline text-sm truncate mar-address">
           Sắp xếp theo:
         </p>
-        <Dropdown item-width="150px" class="text-sm w-36" v-bind:title="arrangeOption">
+        <Dropdown item-width="150px" class="text-sm w-36" :title="arrangeOption">
           <DropdownItem @click="order(0)">
             Giá cao nhất
           </DropdownItem>
@@ -48,7 +48,7 @@
                   {{ post.address }}
                 </p>
                 <p class="text-sm color-a7a7a7">
-                  {{ post.date }}, {{post.hour}}
+                  {{ post.date }}, {{ post.hour }}
                 </p>
               </div>
             </div>
@@ -193,11 +193,11 @@ export default {
         const priceRange = filter.priceRange;
         conditions.price = {};
 
-        if (priceRange.from !== 0) {
+        if (priceRange.from) {
           conditions.price.gte = priceRange.from * 1000000;
         }
 
-        if (filter.priceRange.to !== Infinity) {
+        if (filter.priceRange.to) {
           conditions.price.lte = priceRange.to * 1000000;
         }
       }
@@ -206,11 +206,11 @@ export default {
         const acreageRange = filter.acreageRange;
         conditions.acreage = {};
 
-        if (acreageRange.from !== 0) {
+        if (acreageRange.from) {
           conditions.acreage.gte = acreageRange.from;
         }
 
-        if (filter.acreageRange.to !== Infinity) {
+        if (filter.acreageRange.to) {
           conditions.acreage.lte = acreageRange.to;
         }
       }

@@ -72,7 +72,7 @@ export default {
       }
     }
   },
-  head() {
+  head () {
     return {
       title: this.post?.pageInfor.title,
       meta: [{

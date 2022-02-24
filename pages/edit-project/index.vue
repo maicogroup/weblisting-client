@@ -9,19 +9,19 @@
                     <div v-if="isEditting">
                         <p class="mb-2">
                             <label class="font-semibold">Tên dự án:</label>
-                            <input type="text" class="w-1/2" v-model="currentProjectInfor.projectName">
+                            <input type="text" class="w-1/2" v-model="project.projectName">
                         </p>
                         <p class="mb-2">
                             <label class="font-semibold">Chủ đầu tư:</label>
-                            <input type="text" class="w-1/2" v-model="currentProjectInfor.investor">
+                            <input type="text" class="w-1/2" v-model="project.investor">
                         </p>
                         <p class="mb-2">
                             <label class="font-semibold">Pháp lý:</label>
-                            <input type="text" class="w-1/2" v-model="currentProjectInfor.juridical">
+                            <input type="text" class="w-1/2" v-model="project.juridical">
                         </p>
                         <p>
                             <label class="font-semibold">Mô tả:</label>
-                            <textarea type="text" class="w-1/2" rows="4" v-model="currentProjectInfor.description"></textarea>
+                            <textarea type="text" class="w-1/2" rows="4" v-model="project.description"></textarea>
                         </p>
                     </div>
                     <div v-else>
@@ -43,25 +43,25 @@
                         </p>
                     </div>
                     <div class="flex justify-end my-2" v-if="isEditting">
-                        <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectInformation(project.id, currentProjectInfor.projectName, currentProjectInfor.investor, currentProjectInfor.juridical, currentProjectInfor.description)">Cập nhật</button>
+                        <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectInformation(project.id)">Cập nhật</button>
                     </div>
                     <div class="flex justify-end my-2" v-else>
-                        <button class="text-white px-3 py-1 bg-gray-400 rounded" @click="handleUpdateProjectInformation(project.id, project.projectName, project.investor, project.juridical, project.description)">Chỉnh sửa</button>
+                        <button class="text-white px-3 py-1 bg-gray-400 rounded" @click="handleUpdateProjectInformation">Chỉnh sửa</button>
                     </div>
                 </expand-panel>
                 <expand-panel title="Địa chỉ">
                     <div v-if="isEditting">
                         <p class="mb-2">
                             <label class="font-semibold">Tên đường:</label>
-                            <input type="text" class="w-1/2" v-model="currentProjectAddress.street">
+                            <input type="text" class="w-1/2" v-model="project.address.street">
                         </p>
                         <p class="mb-2">
                             <label class="font-semibold">Quận:</label>
-                            <input type="text" class="w-1/2" v-model="currentProjectAddress.district">
+                            <input type="text" class="w-1/2" v-model="project.address.district">
                         </p>
                         <p class="mb-2">
                             <label class="font-semibold">Thành phố: </label>
-                            <input type="text" class="w-1/2" v-model="currentProjectAddress.city">
+                            <input type="text" class="w-1/2" v-model="project.address.city">
                         </p>
                     </div>
                     <div v-else>
@@ -361,36 +361,11 @@ export default {
         }
     },
     methods: {
-        handleUpdateProjectInformation(id, projectName, investor, juridical, description) {
+        handleUpdateProjectInformation() {
             this.isEditting = true;
-            this.currentProjectInfor = {
-                id: id,
-                projectName: projectName,
-                investor: investor,
-                juridical: juridical,
-                description: description,
-                // obj to compare with
-                staticInfor: {
-                    projectName: projectName,
-                    investor: investor,
-                    juridical: juridical,
-                    description: description,   
-                }
-            };
         },
-        updateProjectInformation(id, projectName, investor, juridical, description) {
-            if (this.currentProjectInfor.staticInfor.projectName == projectName && this.currentProjectInfor.staticInfor.investor == investor
-                && this.currentProjectInfor.staticInfor.juridical == juridical && this.currentProjectInfor.staticInfor.description == description) {
-                
-                this.$toast.show("Dữ liệu chưa có thay đổi gì!", {
-                    type: "error",
-                    theme: "bubble",
-                    duration: 2000,
-                    position: "top-right"
-                });
-                this.isEditting = false;
-                return;
-            }
+        updateProjectInformation(id) {
+            const project = this.projects.filter(x => x.id == id);
             this.$apollo.mutate({
 
                 mutation: gql`mutation UpdateProjectInformation($input: UpdateProjectInput!) {
@@ -401,25 +376,11 @@ export default {
                 variables: {
                     input: { 
                         id: id,
-                        projectName: projectName,
-                        investor: investor,
-                        juridical: juridical,
-                        description: description
+                        projectName: project[0].projectName,
+                        investor: project[0].investor,
+                        juridical: project[0].juridical,
+                        description: project[0].description
                     }
-                },
-                update: (store, {data: {updateProjectInformation}}) => {
-                    const query = {
-                        query: getProject
-                    };
-                    const { projects } = store.readQuery(query);
-                    const project = projects.filter(x => x.id == id);
-                    project[0].projectName = projectName;
-                    project[0].investor = investor;
-                    project[0].juridical = juridical;
-                    project[0].description = description;
-
-                    store.writeQuery({...query, data: {projects: projects}});
-
                 }
                 
             }),
@@ -429,38 +390,14 @@ export default {
                 theme: "bubble",
                 position: "top-right"
             });
+            this.currentProjectInfor = {};
             this.isEditting = false;
         },
-        handleUpdateProjectAddress(id, street, district, city, googleMapLocation) {
+        handleUpdateProjectAddress() {
             this.isEditting = true;
-            this.currentProjectAddress = {
-                id: id,
-                street: street,
-                district: district,
-                city: city,
-                googleMapLocation: googleMapLocation,
-                // obj to compare with the current
-                staticAddress: {
-                    street: street,
-                    district: district,
-                    city: city,
-                    googleMapLocation: googleMapLocation
-                }
-            }
         },
-        updateProjectAddress(id, street, district, city, googleMapLocation) {
-            if ((street == this.currentProjectAddress.staticAddress.street)
-                    && (district == this.currentProjectAddress.staticAddress.district)
-                        && (city == this.currentProjectAddress.staticAddress.city))
-            {
-                this.$toast.show("Dữ liệu chưa có thay đổi!", {
-                    type: "error",
-                    theme: "bubble",
-                    duration: 2000,
-                    position: "top-right"
-                });
-                return;
-            }
+        updateProjectAddress(id) {
+            const project = this.projects.filter(x => x.id == id);
             this.$apollo.mutate({
                 mutation: gql`mutation UpdateProjectAddress($input: UpdateProjectInput!) {
                     updateProject(input: $input) {
@@ -471,23 +408,12 @@ export default {
                     input: {
                         id: id,
                         address: {
-                            street: street,
-                            district: district,
-                            city: city,
-                            googleMapLocation: googleMapLocation
+                            street: project[0].address.street,
+                            district: project[0].address.district,
+                            city: project[0].address.city,
+                            googleMapLocation: project[0].address.googleMapLocation
                         }
                     }
-                },
-                update: (store, {data: {updateProjectAddress}}) => {
-                    const query = {
-                        query: getProject
-                    };
-                    const { projects } = store.readQuery(query);
-                    const project = projects.filter(x => x.id == id);
-                    project[0].address.street = street;
-                    project[0].address.district = district;
-                    project[0].address.city = city;
-                    store.writeQuery({...query, data: {projects: projects}});
                 }
             });
             this.$toast.show("Thay đổi thành công!", {
@@ -519,6 +445,8 @@ export default {
                     duration: 2000,
                     position: "top-right"
                 });
+                this.currentProjectAddress = {};
+                this.isEditting = false;
                 return;
             }
             if (item == "") {
@@ -528,6 +456,8 @@ export default {
                     duration: 2000,
                     position: "top-right"
                 });
+                this.currentProjectAddress = {};
+                this.isEditting = false;
                 return;
             }
             this.$apollo.mutate({
@@ -571,43 +501,9 @@ export default {
         },
         handleUpdateProjectUtilities(utilities) {
             this.isEditting = true;
-            this.currentUtilities = {
-                utilities: []
-            };
-            for (var i = 0; i < utilities.length; i++) {
-                this.currentUtilities.utilities.push(utilities[i]);
-            }
         },
         updateProjectUtilities(id) {
             var project = this.projects.filter(x => x.id == id);
-            
-            
-            if (this.currentUtilities.utilities.length == project[0].utilities.length) {
-                console.log()
-                for (var i = 0; i < project[0].utilities.length; i++) 
-                {
-                    
-                    if (this.currentUtilities.utilities[i] != project[0].utilities[i])
-                    {
-                        
-                        break;
-                    }
-                    if (this.currentUtilities.utilities[i] == project[0].utilities[i] && i != project[0].utilities.length - 1) {
-                        
-                        continue;
-                    }
-                    else {
-                        this.$toast.show("Chưa có gì thay đổi!", {
-                            type: "error",
-                            theme: "bubble",
-                            duration: 2000,
-                            position: "top-right"
-                        });
-                        this.isEditting = false;
-                        return;
-                    }
-                }
-            }
             
             this.$apollo.mutate({
                 mutation: gql`mutation UpdateProjectUtilities($input: UpdateProjectInput!) {

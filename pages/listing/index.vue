@@ -1,5 +1,7 @@
 <template>
   <div class="w-full max-w-screen-xl px-4">
+    
+    
     <div class="z-10 w-full fixed left-0 top-after-header flex space-x-4 bg-white shadow-sm px-4">
       <div class="double-button my-4 flex">
         <button :class="`text-base py-2 px-4 border rounded-l-md ${sellButtonClasses}`" @click="setSellButtonActiveState(true)">
@@ -44,6 +46,7 @@
       </button>
     </div>
     <div class="filter-bar-blank-space" />
+    <p>Cookies: {{ browserId }}</p>
     <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" />
     <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
@@ -78,7 +81,8 @@ export default {
       sellButtonIsActive: false,
       // filter đang được người dùng chỉnh sửa, chuẩn bị dùng để lọc
       inputFilter: {},
-      searchButtonPressed: false
+      searchButtonPressed: false,
+      browserId: 'Nothing'
     };
   },
   head () {
@@ -113,8 +117,10 @@ export default {
       return !this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
     }
   },
-
   created () {
+    this.browserId = this.$cookies.get('behavior-tracking');
+    
+  
     this.filter = this.createFilterFromUrl();
     this.inputFilter = { ...this.filter };
 

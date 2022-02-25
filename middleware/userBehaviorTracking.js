@@ -1,20 +1,24 @@
 import http from 'http'
 
-export default function ({ route, app }) {
-    const trackingData = app.$cookies.get('behavior-tracking');
-    const userId = app.$cookies.get('browserId');
-    if(trackingData != null) {
-        let msDiff = new Date() - new Date(trackingData.timeIn);
-        let trackingDataReq = {
-            site: trackingData.site,
-            timeOnSite: (msDiff - msDiff % 1000) / 1000,
-            userId: userId
+export default function ({ route, from, app }) {
+    if(process.client) {
+        const trackingData = app.$cookies.get(from.fullPath);
+        const userId = app.$cookies.get('browserId');
+        if(trackingData != null) {
+            let msDiff = new Date() - new Date(trackingData.timeArrival);
+            let trackingDataReq = {
+                site: trackingData.site,
+                timeOnSite: (msDiff - msDiff % 1000) / 1000,
+                userId: userId,
+                timeArrival: trackingData.timeArrival
+            }
+            sendTrackingData(trackingDataReq);
         }
-        sendTrackingData(trackingDataReq);
     }
-    app.$cookies.set('behavior-tracking', {
+    
+    app.$cookies.set(route.fullPath, {
         site: route.fullPath,
-        timeIn: new Date(),
+        timeArrival: new Date(),
     })
 }
 

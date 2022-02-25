@@ -185,7 +185,7 @@ export default {
         }
       }
 
-      if (filter.project) {
+      if (filter.project?.id) {
         conditions.projectId = { eq: filter.project.id };
       }
 

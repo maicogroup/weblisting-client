@@ -143,7 +143,7 @@ export default {
     handleSelecType (type, demand) {
       const path = '/danh-sach-can-ho';
       const query = {
-        type,
+        loai: type,
         demand
       };
 

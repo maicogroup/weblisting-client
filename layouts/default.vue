@@ -1,6 +1,7 @@
 <template>
   <div>
     <MainHeader />
+    {{ this.$cookies.get(this.$route.fullPath) }}
     <div class="relative z-10 mt-32 flex justify-center max-w-full">
       <Nuxt />
     </div>
@@ -23,18 +24,18 @@ export default {
   methods: {
     setCookies(e){
       e.preventDefault();
-      const trackingData = app.$cookies.get('behavior-tracking');
-      const userId = app.$cookies.get('browserId');
+      const trackingData = this.$cookies.get(this.$route.fullPath);
+      const userId = this.$cookies.get('browserId');
       if(trackingData != null) {
-          let msDiff = new Date() - new Date(trackingData.timeIn);
+          let msDiff = new Date() - new Date(trackingData.timeArrival);
           let trackingDataReq = {
               site: trackingData.site,
               timeOnSite: (msDiff - msDiff % 1000) / 1000,
-              userId: userId
+              userId: userId,
+              timeArrival: trackingData.timeArrival
           }
-          sendTrackingData(trackingDataReq);
-      }
-        this.$cookies.remove('behavior-tracking');
+          this.sendTrackingData(trackingDataReq)
+        }
     },
     sendTrackingData(data){
       var myHeaders = new Headers();
@@ -55,6 +56,7 @@ export default {
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
+      debugger;
     }
   }
 };

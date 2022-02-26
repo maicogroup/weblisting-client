@@ -44,7 +44,7 @@
             Mức giá
           </h4>
           <p class="font-bold">
-            {{ post.price }} vnđ
+            {{ formatPrice(post.price, post.demand) }}
           </p>
         </div>
         <div class="">
@@ -245,9 +245,15 @@ export default ({
       return 'http://listing.maicogroup.net' + this.$route.fullPath;
     }
   },
-  mounted () {
-    // eslint-disable-next-line no-new, no-undef
-    new ClipboardJS('.copy-link');
+
+  methods: {
+    formatPrice (price, demand) {
+      if (demand === 'Cho Thuê') {
+        return `${price / 1e6} triệu/tháng`;
+      } else {
+        return `${(price / 1e9).toFixed(2)} tỷ`;
+      }
+    }
   }
 
 });

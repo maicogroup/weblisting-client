@@ -436,6 +436,10 @@ export default {
   flex-grow: 1;
 }
 
+.shrink-0 {
+  flex-shrink: 0;
+}
+
 .filter-bar-blank-space {
   height: 42px;
 }

@@ -118,6 +118,12 @@ export default {
     this.filter = this.createFilterFromUrl();
     this.inputFilter = { ...this.filter };
 
+    if (this.$route.query.demand === 'Bán') {
+      this.setSellButtonActiveState(true);
+    } else {
+      this.setSellButtonActiveState(false);
+    }
+
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
@@ -193,13 +199,7 @@ export default {
       const filter = {};
       const query = this.$route.query;
 
-      if (query.demand === 'Bán') {
-        filter.demand = query.demand;
-        this.setSellButtonActiveState(true);
-      } else {
-        filter.demand = query.demand;
-        this.setSellButtonActiveState(false);
-      }
+      filter.demand = query.demand ?? 'Cho Thuê';
 
       if (query.type) {
         filter.type = query.type;

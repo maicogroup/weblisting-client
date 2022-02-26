@@ -26,17 +26,12 @@
         <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-mobile color-orange font-bold text-base leading-6 ov-flow-hidden ">
           {{ post.pageInfor.title }}
         </NuxtLink>
-        <div class="flex item-flex-start space-x-4 md:rounded-md md:border mt-2 pr-3 ">
-          <NuxtLink class="w-32 h-32 md:w-60 md:h-52 shrink-0" :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`">
-            <img class="w-full h-full object-cover rounded-md" :src="post.srcimage" alt="Bonnie image">
+        <div class="flex item-flex-start space-x-4 md:border mt-2 pr-3 ">
+          <NuxtLink class="w-32 h-32 md:w-64 md:h-44 shrink-0" :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`">
+            <img class="w-full h-full object-cover" :src="post.srcimage" alt="Bonnie image">
           </NuxtLink>
-          <div class="flex flex-col justify-between h-32 md:h-52">
-            <div>
-              <div v-if="post.tags != null" class="mt-2 inline-flex space-x-1 items-center">
-                <p v-for="item in post.tags" :key="item" class="text-xs font-bold leading-sm uppercase px-3 py-1 bg-red-200 text-red-700 rounded-full">
-                  {{ item }}
-                </p>
-              </div>
+          <div class="flex flex-col justify-between h-32 md:h-44">
+            <div class="flex flex-col justify-between h-full">
               <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-desktop mt-2 color-orange font-bold leading-6 ov-flow-hidden">
                 {{ post.pageInfor.title }}
               </NuxtLink>
@@ -54,9 +49,17 @@
                 {{ post.description }}
               </p>
             </div>
-            <p class="text-sm color-a7a7a7 my-2">
-              {{ post.date }}
-            </p>
+            <div class="mb-2 mt-4 flex justify-between items-end">
+              <div v-if="post.tags != null" class="inline-flex space-x-1 items-center">
+                <p v-for="item in post.tags" :key="item" class="text-xs font-bold leading-sm uppercase px-3 py-1 bg-red-400 text-white rounded-full">
+                  {{ item }}
+                </p>
+              </div>
+              <div v-else />
+              <p class="text-sm color-a7a7a7">
+                {{ post.date }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -352,7 +355,7 @@ export default {
   .title-desktop {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     overflow: hidden;
   }
 

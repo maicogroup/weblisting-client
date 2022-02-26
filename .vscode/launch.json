@@ -4,9 +4,13 @@
       {
         "type": "chrome",
         "request": "launch",
-        "name": "client: chrome",
+        "name": "vuejs: chrome",
         "url": "http://localhost:3000",
-        "webRoot": "${workspaceFolder}"
+        "webRoot": "${workspaceFolder}/src",
+        "breakOnLoad": true,
+        "sourceMapPathOverrides": {
+          "webpack:///src/*": "${webRoot}/*"
+        }
       },
       {
         "type": "node",
@@ -27,7 +31,7 @@
     "compounds": [
       {
         "name": "fullstack: nuxt",
-        "configurations": ["server: nuxt", "client: chrome"]
+        "configurations": ["server: nuxt", "vuejs: chrome"]
       }
     ]
   }

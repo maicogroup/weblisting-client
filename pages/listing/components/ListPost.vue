@@ -1,14 +1,14 @@
 <template>
   <div id="post-subinfor" class="max-w-full grow">
     <div class="flex justify-between items-center mt-2 mb-2" style="height: 2.5rem;">
-      <p class="md:text-sm text-xs truncate mar-address">
+      <p class="md:text-sm text-xs truncate">
         Hiện có: {{ totalItem }} bất động sản
       </p>
       <div class="flex items-center">
-        <p class="inline text-sm truncate mar-address">
+        <p class="inline text-sm truncate">
           Sắp xếp theo:
         </p>
-        <Dropdown item-width="150px" class="text-sm w-36" :title="arrangeOption">
+        <Dropdown item-width="150px" class="text-sm" :title="arrangeOption">
           <DropdownItem @click="order(0)">
             Giá cao nhất
           </DropdownItem>
@@ -21,26 +21,25 @@
         </Dropdown>
       </div>
     </div>
-    <div class="flow-root">
-      <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-        <li v-for="post in posts" :key="post.id" class="pb-6 md:pt-0 pt-6  md:border-none border-b">
-          <div class="">
-            <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="md:hidden font-bold text-lg leading-6 ov-flow-hidden">
-              {{ post.pageInfor.title }}
-            </NuxtLink>
-            <div class="flex item-flex-start h-40 space-x-4 md:rounded-md md:border mt-2">
-              <NuxtLink class="w-40 md:w-60 h-full" :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`">
-                <img class="w-full h-full object-cover rounded-md" :src="post.srcimage" alt="Bonnie image">
+    <div class="flex flex-col space-y-4">
+      <div v-for="post in posts" :key="post.id" class="pb-6 md:pt-0 md:border-none border-b">
+        <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-mobile color-orange font-bold text-base leading-6 ov-flow-hidden ">
+          {{ post.pageInfor.title }}
+        </NuxtLink>
+        <div class="flex item-flex-start space-x-4 md:rounded-md md:border mt-2 pr-3 ">
+          <NuxtLink class="w-32 h-32 md:w-60 md:h-52 shrink-0" :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`">
+            <img class="w-full h-full object-cover rounded-md" :src="post.srcimage" alt="Bonnie image">
+          </NuxtLink>
+          <div class="flex flex-col justify-between h-32 md:h-52">
+            <div>
+              <div v-if="post.tags != null" class="mt-2 inline-flex space-x-1 items-center">
+                <p v-for="item in post.tags" :key="item" class="text-xs font-bold leading-sm uppercase px-3 py-1 bg-red-200 text-red-700 rounded-full">
+                  {{ item }}
+                </p>
+              </div>
+              <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-desktop mt-2 color-orange font-bold leading-6 ov-flow-hidden">
+                {{ post.pageInfor.title }}
               </NuxtLink>
-              <div class="flex-1 min-w-0">
-                <div v-if="post.tags != null" class="mt-2 inline-flex space-x-1 items-center">
-                  <p v-for="item in post.tags" :key="item" class="text-xs font-bold leading-sm uppercase px-3 py-1 bg-red-200 text-red-700 rounded-full">
-                    {{ item }}
-                  </p>
-                </div>
-                <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="hidden md:block font-bold text-xl leading-6 mar-title ov-flow-hidden">
-                  {{ post.pageInfor.title }}
-                </NuxtLink>
               <p class="text-sm sm:text-base mt-2">
                 <span class="md:mr-2">{{ post.price }}</span> -
                 <span class="md:mx-2">{{ post.acreage }}</span> -
@@ -48,22 +47,21 @@
                 <span class="md:mr-2 hidden md:inline">-</span>
                 <span class="hidden md:inline text-gray-700">{{ post.address }}</span>
               </p>
-                <p class="text-sm color-858585 md:mb-3 md:mb-6 mb-2">
-                  {{ post.address }}
-                </p>
-                <p class="text-sm color-a7a7a7">
-                  {{ post.date }}, {{ post.hour }}
-                </p>
-              </div>
+              <p class="md:hidden text-sm text-gray-700 mt-3 md:mt-2">
+                {{ post.address }}
+              </p>
+              <p class="description text-justify mt-2">
+                {{ post.description }}
+              </p>
+            </div>
             <p class="text-sm color-a7a7a7 my-2">
               {{ post.date }}
             </p>
-            </div>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
+      <pagination :total="totalItem" :per-page="10" :current-page="pageIndex" @pagechanged="pageNavigationTo" />
     </div>
-    <pagination :total="totalItem" :per-page="10" :current-page="pageIndex" @pagechanged="pageNavigationTo" />
   </div>
 </template>
 
@@ -147,6 +145,7 @@ export default {
             acreage: item.acreage + 'm²',
             roomStructure: (item.type !== 'Căn hộ') ? item.type : item.totalBedRoom + 'PN' + item.totalWC + 'WC',
             address: item.project?.address.district + ', ' + item.project?.address.city,
+            description: this.formatDescription(item.description),
             date: this.formatDate(item.lastUpdatedAt),
             tags: item.tags,
             id: item.id
@@ -201,6 +200,20 @@ export default {
       const diffInYears = Math.floor(diffInDays / 365);
       return `${diffInYears} năm trước`;
     },
+
+    formatDescription (description) {
+      // document không tồn tại ở bên server
+      let content;
+      if (process.server) {
+        content = description;
+      } else {
+        const span = document.createElement('span');
+        span.innerHTML = description;
+        content = span.textContent;
+      }
+      return content;
+    },
+
     formatPrice (price) {
       if (this.filter.demand === 'Cho Thuê') {
         return `${price / 1e6} triệu/tháng`;
@@ -315,32 +328,69 @@ export default {
 </script>
 
 <style scoped>
+
+.title-desktop {
+  display: none;
+}
+
+.description {
+  display: none;
+}
+
+.color-orange {
+  color: #DB4F21;
+}
+
+.title-mobile {
+   display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .title-desktop {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    color: #505050;
+  }
+
+  .title-mobile {
+    display: none;
+  }
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
 .w-h-100 {
   width: 100px;
   height: 100px;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
 }
 
 .item-flex-start {
   align-items: flex-start;
 }
 
-.font-price {
-  line-height: 16.43px;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 700;
-}
-
-.mar-title {
-  margin: 10px 24px 14px 0;
-}
-
 .ov-flow-hidden {
   overflow: hidden;
-}
-
-.color-858585{
-    color: #858585;
 }
 
 .color-a7a7a7{

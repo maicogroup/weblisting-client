@@ -48,7 +48,7 @@
     <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
       <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
-      <ContactInfor class="lg:ml-9 hidden lg:flex lg:flex-col mt-14" />
+      <ContactInfor class="ml-9 mt-14 hidden lg:block shrink-0" />
     </div>
   </div>
 </template>
@@ -360,6 +360,10 @@ export default {
 <style scoped>
 .grow {
   flex-grow: 1;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
 }
 
 .filter-bar-blank-space {

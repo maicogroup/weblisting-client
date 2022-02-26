@@ -41,9 +41,13 @@
                 <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="hidden md:block font-bold text-xl leading-6 mar-title ov-flow-hidden">
                   {{ post.pageInfor.title }}
                 </NuxtLink>
-                <p class="font-price md:mt-0 md:mb-4 mt-2 md:mb-5 mb-2">
-                  {{ post.price.toLocaleString('it-IT', {style: 'currency', currency: 'VND'}) }}
-                </p>
+              <p class="text-sm sm:text-base mt-2">
+                <span class="md:mr-2">{{ post.price }}</span> -
+                <span class="md:mx-2">{{ post.acreage }}</span> -
+                <span class="md:mx-2">{{ post.roomStructure }}</span>
+                <span class="md:mr-2 hidden md:inline">-</span>
+                <span class="hidden md:inline text-gray-700">{{ post.address }}</span>
+              </p>
                 <p class="text-sm color-858585 md:mb-3 md:mb-6 mb-2">
                   {{ post.address }}
                 </p>
@@ -51,6 +55,9 @@
                   {{ post.date }}, {{ post.hour }}
                 </p>
               </div>
+            <p class="text-sm color-a7a7a7 my-2">
+              {{ post.date }}
+            </p>
             </div>
           </div>
         </li>
@@ -132,16 +139,15 @@ export default {
   computed: {
     posts () {
       if (this.postsData == null) { return []; } else {
-        return this.postsData.items.map(function (item) {
-          const roomStructure = (item.type !== 'Căn hộ') ? item.type : item.totalBedRoom + 'PN' + item.totalWC + 'WC';
-
+        return this.postsData.items.map((item) => {
           return {
             srcimage: 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + (item.gallery.find(c => !c.includes('.mp4')) || 'apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg'),
             pageInfor: item.pageInfor,
-            price: item.price + ' vnđ - ' + item.acreage + ' m² - ' + roomStructure,
-            address: item.project?.address.street + ' ' + item.project?.address.district + ' ' + item.project?.address.city,
-            date: 'Cập nhật lần cuối: ' + item.lastUpdatedAt.substring(0, 10),
-            hour: item.lastUpdatedAt.substring(11, 16),
+            price: this.formatPrice(item.price),
+            acreage: item.acreage + 'm²',
+            roomStructure: (item.type !== 'Căn hộ') ? item.type : item.totalBedRoom + 'PN' + item.totalWC + 'WC',
+            address: item.project?.address.district + ', ' + item.project?.address.city,
+            date: this.formatDate(item.lastUpdatedAt),
             tags: item.tags,
             id: item.id
           };
@@ -166,6 +172,43 @@ export default {
     }
   },
   methods: {
+    formatDate (dateStr) {
+      const date = new Date(dateStr);
+      const diffInDays = Math.floor((Date.now() - date.getTime()) / 86400000);
+
+      if (diffInDays === 0) {
+        return 'Hôm nay';
+      }
+
+      if (diffInDays === 1) {
+        return 'Hôm qua';
+      }
+
+      if (diffInDays < 7) {
+        return `${diffInDays} ngày trước`;
+      }
+
+      if (diffInDays < 30) {
+        const diffInWeeks = Math.floor(diffInDays / 7);
+        return `${diffInWeeks} tuần trước`;
+      }
+
+      if (diffInDays < 365) {
+        const diffInMonths = Math.min(11, Math.floor(diffInDays / 30));
+        return `${diffInMonths} tháng trước`;
+      }
+
+      const diffInYears = Math.floor(diffInDays / 365);
+      return `${diffInYears} năm trước`;
+    },
+    formatPrice (price) {
+      if (this.filter.demand === 'Cho Thuê') {
+        return `${price / 1e6} triệu/tháng`;
+      } else {
+        return `${(price / 1e9).toFixed(2)} tỷ`;
+      }
+    },
+
     createConditionParamter (filter) {
       const conditions = { };
 

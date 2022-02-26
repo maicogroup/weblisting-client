@@ -205,6 +205,12 @@ export default {
       this.setSellButtonActiveState(false);
     }
 
+    if (this.$route.query.demand === 'Bán') {
+      this.setSellButtonActiveState(true);
+    } else {
+      this.setSellButtonActiveState(false);
+    }
+
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
@@ -285,8 +291,11 @@ export default {
       const filter = {};
       const query = this.$route.query;
 
-      filter.demand = query.demand;
-      filter.type = query.loai;
+      filter.demand = query.demand ?? 'Cho Thuê';
+
+      if (query.type) {
+        filter.type = query.type;
+      }
 
       if (query.tp || query.quan) {
         filter.location = {

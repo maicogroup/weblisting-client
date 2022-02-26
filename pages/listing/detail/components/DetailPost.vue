@@ -16,7 +16,7 @@
             Mức giá
           </h4>
           <p class="font-bold">
-            {{ post.price }} vnđ
+            {{ formatPrice(post.price, post.demand) }}
           </p>
         </div>
         <div class="">
@@ -186,12 +186,23 @@
 export default ({
   name: 'DetailPost',
   props: ['post'],
+
   computed: {
     gallery () {
       const items = this.post.gallery.map(i => 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + i);
       return items.sort(function (x, y) {
         return x.includes('mp4') ? 1 : y.includes('mp4') ? -1 : 0;
       });
+    }
+  },
+
+  methods: {
+    formatPrice (price, demand) {
+      if (demand === 'Cho Thuê') {
+        return `${price / 1e6} triệu/tháng`;
+      } else {
+        return `${(price / 1e9).toFixed(2)} tỷ`;
+      }
     }
   }
 });

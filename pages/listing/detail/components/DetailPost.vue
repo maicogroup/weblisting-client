@@ -7,10 +7,39 @@
       <h1 class="mt-6 lg:mx-0  font-bold text-2xl">
         {{ post.pageInfor.title }}
       </h1>
-      <h4 class="lg:mx-0 mt-3 font-normal color-3f3f3f text-sm leading-4">
-        {{ `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}` }}
-      </h4>
-      <div class="lg:mx-0 w-full lg:w-5/6 bd-color-858585 flex justify-between mt-3 text-sm leading-4 border-t border-b border-zinc-800 pb-7 pt-6 border-solid">
+      <div class="mt-3 flex flex-col md:flex-row md:justify-between">
+        <h4 class="lg:mx-0 font-normal color-3f3f3f text-sm leading-4">
+          {{ `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}` }}
+        </h4>
+        <div class="mt-2 md:mt-0 flex space-x-2">
+          <p class="leading-none color-3f3f3f text-sm font-bold">
+            Chia sẻ qua:
+          </p>
+          <div
+            class="zalo-share-button"
+            :data-href="shareUrl"
+            data-oaid="579745863508352884"
+            data-layout="1"
+            data-color="blue"
+            data-customize="false"
+          />
+          <div class="fb-share-button" style="line-height:0" :data-href="shareUrl" data-layout="button" data-size="small">
+            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore" />
+          </div>
+          <button class="copy-link hover:text-gray-600" :data-clipboard-text="shareUrl">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="lg:mx-0 w-full flex space-x-12  bd-color-858585 mt-3 text-sm leading-4 border-t border-b border-zinc-800 pb-7 pt-6 border-solid">
         <div class="">
           <h4 class="font-normal color-8c8c8c">
             Mức giá
@@ -179,6 +208,11 @@
         </ul>
       </div>
     </div>
+
+    <div id="fb-root" />
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v13.0" nonce="zxFAuj1a" />
+    <script src="https://sp.zalo.me/plugins/sdk.js" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js" />
   </div>
 </template>
 
@@ -192,7 +226,14 @@ export default ({
       return items.sort(function (x, y) {
         return x.includes('mp4') ? 1 : y.includes('mp4') ? -1 : 0;
       });
+    },
+    shareUrl () {
+      return 'http://listing.maicogroup.net' + this.$route.fullPath;
     }
+  },
+  mounted () {
+    // eslint-disable-next-line no-new, no-undef
+    new ClipboardJS('.copy-link');
   }
 });
 </script>

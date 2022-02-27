@@ -99,10 +99,10 @@ export default {
   computed: {
     waitTillProjectIsDetermined () {
       if (this.$route.params.slug) {
-        return this.filter?.project?.id !== null;
+        return this.filter && this.filter.project?.id;
       }
 
-      return this.filter !== null;
+      return this.filter;
     },
 
     showIfPostsOfOneProject () {
@@ -118,11 +118,16 @@ export default {
     }
   },
   created () {
-    this.browserId = this.$cookies.get('behavior-tracking');
-    
-  
-    this.filter = this.createFilterFromUrl();
-    this.inputFilter = { ...this.filter };
+
+    if (process.server) {
+      // không rõ tại sao nhưng server created sẽ đc gọi trước apollo
+      this.filter = this.createFilterFromUrl();
+      this.inputFilter = { ...this.filter };
+    } else {
+      // còn bên client thì ngược lại: apollo đc gọi trước created
+      this.filter = { ...this.createFilterFromUrl(), ...this.filter };
+      this.inputFilter = { ...this.filter };
+    }
 
     this.$watch(
       () => this.$route.params,
@@ -177,7 +182,7 @@ export default {
       },
 
       skip () {
-        return this.filter === null || this.$route.params.slug === null;
+        return this.$route.params.slug === undefined;
       },
 
       variables () {
@@ -249,7 +254,6 @@ export default {
       if (query.bedroomOptions) {
         filter.bedroomOptions = Array.isArray(query.bedroomOptions) ? query.bedroomOptions : [query.bedroomOptions];
       }
-
       return filter;
     },
 

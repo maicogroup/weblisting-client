@@ -50,12 +50,19 @@
       <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
       <ContactInfor class="lg:ml-9 hidden lg:flex lg:flex-col mt-14" />
     </div>
+    <div v-if="project && showIfPostsOfOneProject">
+      <div
+        class="rounded-lg border w-4/5 mr-auto ml-auto mt-9 mb-5"
+        v-html="project.sEOContent"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { gql } from 'graphql-tag';
 
+import { marked } from 'marked';
 import ProjectHeader from './components/ProjectHeader.vue';
 import ListPost from './components/ListPost.vue';
 import ContactInfor from './components/ContactInfor.vue';
@@ -78,7 +85,8 @@ export default {
       sellButtonIsActive: false,
       // filter đang được người dùng chỉnh sửa, chuẩn bị dùng để lọc
       inputFilter: {},
-      searchButtonPressed: false
+      searchButtonPressed: false,
+      tempSEOContent: '**Hello World**'
     };
   },
   head () {
@@ -100,7 +108,10 @@ export default {
 
       return this.filter !== null;
     },
-
+    // eslint-disable-next-line vue/return-in-computed-property
+    markdownToHtml () {
+      return marked(this.tempSEOContent);
+    },
     showIfPostsOfOneProject () {
       return this.$route.params.slug !== null && this.project !== null;
     },
@@ -141,24 +152,25 @@ export default {
     project: {
       query () {
         return gql`
-            query GetProjects($slug: String!) {
-              projects(where: { pageInfors: { some: { slug: { eq: $slug }}} }) {
-                id
-                projectName
-                address {
-                  street
-                  district
-                  city
-                  googleMapLocation
+              query GetProjects($slug: String!) {
+                projects(where: { pageInfors: { some: { slug: { eq: $slug }}} }) {
+                  id
+                  projectName
+                  address {
+                    street
+                    district
+                    city
+                    googleMapLocation
+                  }
+                  images
+                  sEOContent
+                  pageInfors{
+                    title
+                    slug
+                    metaDescription
+                  }
                 }
-                images
-                pageInfors{
-                  title
-                  slug
-                  metaDescription
-                }
-              }
-          }`;
+            }`;
       },
 
       update (data) {

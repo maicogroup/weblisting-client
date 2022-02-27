@@ -1,4 +1,4 @@
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = process.env.NODE_ENV === 'development';
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -32,32 +32,29 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/lightGallery.client.js',
-    '~/plugins/vue-js-modal.js',
     '~/plugins/editor.client.js',
+    '~/plugins/lightGallery.client.js'
   ],
-
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
-    //'@nuxtjs/eslint-module',
+    // '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
     '@nuxtjs/apollo'
   ],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: [
-      {
-        path: '~/components', // will get any components nested in let's say /components/test too
-        pathPrefix: false
-      }
-    ]
-  ,
+    {
+      path: '~/components', // will get any components nested in let's say /components/test too
+      pathPrefix: false
+    }
+  ],
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://maicogroup.net:3001/graphql/'
+        httpEndpoint: 'http://localhost:54261/graphql/'
       }
     }
   },
@@ -82,12 +79,12 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     babel: {
-      compact: !isDev ,
-      sourceRoot : __dirname
+      compact: !isDev,
+      sourceRoot: __dirname
     },
-    extend(config, {isClient}) {
+    extend (config, { isClient }) {
       if (isDev) {
-        config.devtool = isClient ? 'source-map' : 'inline-source-map'
+        config.devtool = isClient ? 'source-map' : 'inline-source-map';
       }
     }
   }

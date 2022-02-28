@@ -1,6 +1,6 @@
 <template>
   <div id="post-subinfor" class="max-w-full grow">
-    <div class="flex justify-between items-center mt-2 mb-2" style="height: 2.5rem;">
+    <div class="flex justify-between items-center mb-2" style="height: 2.5rem;">
       <p class="md:text-sm text-xs truncate mar-address">
         Hiện có: {{ totalItem }} bất động sản
       </p>
@@ -185,7 +185,7 @@ export default {
         }
       }
 
-      if (filter.project) {
+      if (filter.project?.id) {
         conditions.projectId = { eq: filter.project.id };
       }
 

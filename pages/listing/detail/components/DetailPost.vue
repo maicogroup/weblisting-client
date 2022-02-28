@@ -23,9 +23,8 @@
             data-color="blue"
             data-customize="false"
           />
-          <div class="fb-share-button" style="line-height:0" :data-href="shareUrl" data-layout="button" data-size="small">
-            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore" />
-          </div>
+
+          <facebook-share-button style="line-height:0" :share-url="shareUrl" />
           <button class="copy-link hover:text-gray-600" :data-clipboard-text="shareUrl">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -209,17 +208,32 @@
       </div>
     </div>
 
-    <div id="fb-root" />
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v13.0" nonce="zxFAuj1a" />
-    <script src="https://sp.zalo.me/plugins/sdk.js" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js" />
+    <script src="" />
   </div>
 </template>
 
 <script>
+import FacebookShareButton from './facebook-share-button.vue';
+
 export default ({
   name: 'DetailPost',
+  components: { FacebookShareButton },
   props: ['post'],
+  head: {
+    script: [{
+      hid: 'clipboardJS',
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js',
+      body: true,
+      // eslint-disable-next-line no-new, no-undef
+      callback: () => new ClipboardJS('.copy-link')
+    },
+    {
+      hid: 'zaloShareButton',
+      src: 'https://sp.zalo.me/plugins/sdk.js',
+      body: true
+    }]
+  },
+
   computed: {
     gallery () {
       const items = this.post.gallery.map(i => 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + i);
@@ -235,6 +249,7 @@ export default ({
     // eslint-disable-next-line no-new, no-undef
     new ClipboardJS('.copy-link');
   }
+
 });
 </script>
 

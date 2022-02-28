@@ -132,6 +132,7 @@ export default {
       variables () {
         return{
             take: 5,
+            skip: 0
         }
       }
     }
@@ -182,7 +183,7 @@ export default {
             variables: {take: 5, skip: 10 * (this.pageIndex - 1)}
           }
           const { postsWithPagination } = store.readQuery( query )
-
+          debugger;
           postsWithPagination.items = postsWithPagination.items.filter(c => c.id != post.id),
           postsWithPagination.totalCount--
 

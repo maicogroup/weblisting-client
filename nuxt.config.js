@@ -15,8 +15,10 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-
-    ]
+    ],
+    // script: [
+    //   { src: '/js/onBeforeUnload.js', body: true, isSSR: false }
+    // ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -65,8 +67,12 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/router',
+    'cookie-universal-nuxt',
     '@nuxtjs/toast'
   ],
+  router: {
+    middleware: ['cookies', 'userBehaviorTracking']
+  },
 
   toast: {
     position: 'top-right',

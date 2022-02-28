@@ -106,6 +106,11 @@
         </li>
       </ul>
     </div>
+    <div class="list row">
+      <drag-sortable v-for="(item, index) in listData" v-model="dragData3" :key="item" :index="index" @sortend="sortend($event, listData)" replace-direction="horizontal">
+        Item {{ item }}
+      </drag-sortable>
+    </div>
     <div class="flex justify-end mt-5 space-x-2">
       <button @click="updatePost" class="bg-blue-400 hover:bg-blue-600 text-white font-bold h-10 py-2 px-4 rounded flex item-center">
         Cập nhật
@@ -137,10 +142,36 @@
   background-color: cornflowerblue;
   color: white;
 }
+.pannel > h1 {
+  font-size: 16px;
+}
+.pannel {
+  display: inline-block;
+  vertical-align: top;
+  width: 160px;
+}
+.list {
+  position: relative;
+  height: 400px;
+  overflow: auto;
+}
+.list > * {
+  width: 100px;
+  height: 100px;
+  background: white;
+  border: 1px solid #f0f0f0;
+}
+.list > .dragging {
+  box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
+}
+.list.row > * {
+  display: inline-block;
+}
 </style>
 
 <script>
 import gql from "graphql-tag";
+import dragSortable from '~/components/drag-sortable.vue';
 
 const getPost = gql`query GetPost($condition: PostCollectionFilterInput)
               {
@@ -180,8 +211,11 @@ const getAllSlugs = gql`query getPostsSlugs
     }
   }`
 export default {
+  components: { dragSortable },
   name: 'EditPost',
-
+  comonents: {
+    dragSortable
+  },
   apollo: {
     post: { 
       query() {
@@ -238,6 +272,8 @@ export default {
   data () {
     return {
       modalIsShowing: false,
+      dragData3: {},
+       listData: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
       currentPost: {},
       newTag: '',
       editorOption: {
@@ -260,6 +296,20 @@ export default {
     };
   },
   methods: {
+    sortend (e, list) {
+      const { oldIndex, newIndex } = e;
+      this.rearrange(list, oldIndex, newIndex);
+    },
+    rearrange (array, oldIndex, newIndex) {
+      if (oldIndex > newIndex) {
+        array.splice(newIndex, 0, array[oldIndex]);
+        array.splice(oldIndex + 1, 1);
+      }
+      else {
+        array.splice(newIndex + 1, 0, array[oldIndex]);
+        array.splice(oldIndex, 1);
+      }
+    },
     onEditorBlur (editor) {
       console.log('editor blur!');
     },

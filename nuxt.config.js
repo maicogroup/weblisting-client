@@ -32,8 +32,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/lightGallery.client.js',
+    '~/plugins/vue-js-modal.js',
     '~/plugins/editor.client.js',
-    '~/plugins/lightGallery.client.js'
   ],
 
 
@@ -63,8 +64,20 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxtjs/router'
+    '@nuxtjs/router',
+    '@nuxtjs/toast'
   ],
+
+  toast: {
+    position: 'top-right',
+    register: [{
+      name: 'my-error',
+      message: 'Oops...Something went wrong',
+      options: {
+        type: 'error'
+      }
+    }]
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

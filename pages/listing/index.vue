@@ -48,7 +48,80 @@
     <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
       <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
-      <ContactInfor class="lg:ml-9 hidden lg:flex lg:flex-col mt-14" />
+      <div class="ml-9 mt-14 hidden lg:block">
+        <ContactInfor />
+        <div class="border mt-4 p-4">
+          <p class="font-bold mb-2">
+            Xem theo giá
+          </p>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 3})">
+            Dưới 3 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 3, gtln: 5})">
+            Từ 3 - 5 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 5, gtln: 7})">
+            Từ 5 - 7 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 7, gtln: 10})">
+            Từ 7 - 10 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 10, gtln: 15})">
+            Từ 10 - 15 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 15, gtln: 20})">
+            Từ 15 - 20 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 20, gtln: 30})">
+            Từ 20 - 30 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 30, gtln: undefined})">
+            Trên 30 triệu
+          </quick-filter-button>
+        </div>
+
+        <div class="border mt-4 p-4">
+          <p class="font-bold mb-2">
+            Xem theo diện tích
+          </p>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({dtnn: undefined, dtln: 30})">
+            Dưới 30 m²
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({dtnn: 30, dtln: 50})">
+            Từ 30 - 50 m²
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({dtnn: 50, dtln: 70})">
+            Từ 50 - 70 m²
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({dtnn: 70, dtln: 100})">
+            Từ 70 - 100 m²
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({dtnn: 100, dtln: undefined})">
+            Trên 100 m²
+          </quick-filter-button>
+        </div>
+
+        <div class="border mt-4 p-4">
+          <p class="font-bold mb-2">
+            Xem theo phòng ngủ
+          </p>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({slpn: ['1']})">
+            1 phòng ngủ
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({slpn: ['2']})">
+            2 phòng ngủ
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({slpn: ['3']})">
+            3 phòng ngủ
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({slpn: ['4']})">
+            4 phòng ngủ
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({slpn: ['5+']})">
+            5+ phòng ngủ
+          </quick-filter-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -66,11 +139,12 @@ import TypeFilterDropdown from './components/filtering/type-filter-dropdown.vue'
 import PriceFilterDropdown from './components/filtering/price-filter-dropdown.vue';
 import AcreageFilterDropdown from './components/filtering/acreage-filter-dropdown.vue';
 import BedroomFilterDropdown from './components/filtering/bedroom-filter-dropdown.vue';
+import QuickFilterButton from './components/quick-filter-button.vue';
 import Divider from '~/components/Divider.vue';
 
 export default {
   name: 'PostList',
-  components: { ProjectHeader, ListPost, ContactInfor, Divider, LocationFtilerDropdown, ProjectFilterDropdown, DirectionFilterDropdown, TypeFilterDropdown, PriceFilterDropdown, AcreageFilterDropdown, BedroomFilterDropdown },
+  components: { ProjectHeader, ListPost, ContactInfor, Divider, LocationFtilerDropdown, ProjectFilterDropdown, DirectionFilterDropdown, TypeFilterDropdown, PriceFilterDropdown, AcreageFilterDropdown, BedroomFilterDropdown, QuickFilterButton },
   data () {
     return {
       // filter dùng để lọc
@@ -125,6 +199,12 @@ export default {
       this.inputFilter = { ...this.filter };
     }
 
+    if (this.$route.query.demand === 'Bán') {
+      this.setSellButtonActiveState(true);
+    } else {
+      this.setSellButtonActiveState(false);
+    }
+
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
@@ -140,6 +220,12 @@ export default {
 
         this.filter = newFilter;
         this.inputFilter = { ...newFilter };
+
+        if (this.$route.query.demand === 'Bán') {
+          this.setSellButtonActiveState(true);
+        } else {
+          this.setSellButtonActiveState(false);
+        }
       }
     );
   },
@@ -190,7 +276,6 @@ export default {
   },
 
   methods: {
-
     setSellButtonActiveState (state) {
       this.sellButtonIsActive = state;
       this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
@@ -200,55 +285,42 @@ export default {
       const filter = {};
       const query = this.$route.query;
 
-      if (query.demand === 'Bán') {
-        filter.demand = query.demand;
-        this.setSellButtonActiveState(true);
-      } else {
-        filter.demand = query.demand;
-        this.setSellButtonActiveState(false);
-      }
+      filter.demand = query.demand;
+      filter.type = query.loai;
 
-      if (query.type) {
-        filter.type = query.type;
-      }
-
-      if (query.city || query.district) {
+      if (query.tp || query.quan) {
         filter.location = {
-          city: query.city,
-          district: query.district
+          city: query.tp,
+          district: query.quan
         };
       }
 
       if (query.gtnn || query.gtln) {
-        filter.priceRange = {};
+        const parsedPriceFrom = parseInt(query.gtnn);
+        const parsedPriceTo = parseInt(query.gtln);
 
-        if (query.gtnn) {
-          filter.priceRange.from = parseInt(query.gtnn);
-        }
-
-        if (query.gtln) {
-          filter.priceRange.to = parseInt(query.gtln);
-        }
+        filter.priceRange = {
+          from: isNaN(parsedPriceFrom) ? null : parsedPriceFrom,
+          to: isNaN(parsedPriceTo) ? null : parsedPriceTo
+        };
       }
 
       if (query.dtnn || query.dtln) {
-        filter.acreageRange = { };
+        const parsedAcreageFrom = parseInt(query.dtnn);
+        const parsedAcreageTo = parseInt(query.dtln);
 
-        if (query.dtnn) {
-          filter.acreageRange.from = parseInt(query.dtnn);
-        }
-
-        if (query.dtln) {
-          filter.acreageRange.to = parseInt(query.dtln);
-        }
+        filter.acreageRange = {
+          from: isNaN(parsedAcreageFrom) ? null : parsedAcreageFrom,
+          to: isNaN(parsedAcreageTo) ? null : parsedAcreageTo
+        };
       }
 
-      if (query.directions) {
-        filter.directions = Array.isArray(query.directions) ? query.directions : [query.directions];
+      if (query.huong) {
+        filter.directions = Array.isArray(query.huong) ? query.huong : [query.huong];
       }
 
-      if (query.bedroomOptions) {
-        filter.bedroomOptions = Array.isArray(query.bedroomOptions) ? query.bedroomOptions : [query.bedroomOptions];
+      if (query.slpn) {
+        filter.bedroomOptions = Array.isArray(query.slpn) ? query.slpn : [query.slpn];
       }
       return filter;
     },
@@ -293,28 +365,17 @@ export default {
       const query = {};
 
       if (this.filter.demand) {
-        const tempDemand = this.filter.demand;
-
-        if (tempDemand) {
-          query.demand = tempDemand;
-        }
+        query.demand = this.filter.demand;
       }
 
       if (this.filter.type) {
-        const tempType = this.filter.type;
-
-        if (tempType) {
-          query.type = tempType;
-        }
+        query.loai = this.filter.type;
       }
 
       if (this.filter.location) {
-        const tempLocation = this.filter.location;
-
-        if (tempLocation) {
-          query.city = tempLocation.city;
-          query.district = tempLocation.district;
-        }
+        const location = this.filter.location;
+        query.tp = location.city;
+        query.quan = location.district;
       }
 
       if (this.filter.priceRange) {
@@ -342,22 +403,20 @@ export default {
       }
 
       if (this.filter.directions) {
-        const tempDirections = this.filter.directions;
-
-        if (tempDirections) {
-          query.directions = tempDirections;
-        }
+        query.huong = this.filter.directions;
       }
 
       if (this.filter.bedroomOptions) {
-        const tempBedroomOptions = this.filter.bedroomOptions;
-
-        if (tempBedroomOptions) {
-          query.bedroomOptions = tempBedroomOptions;
-        }
+        query.slpn = this.filter.bedroomOptions;
       }
 
       this.$router.push({ path, query });
+    },
+
+    /** các query được đưa vào sẽ dùng để sửa giá trị của các query hiện tại hoặc thêm query mới cho url */
+    updateUrlQueryAndNavigate (query) {
+      this.$router.push({ path: this.$route.path, query: { ...this.$route.query, ...query } })
+        .catch(() => {});
     }
   }
 };

@@ -30,7 +30,7 @@
           <NuxtLink class="w-32 h-32 md:w-64 md:h-44 shrink-0" :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`">
             <img class="w-full h-full object-cover" :src="post.srcimage" alt="Bonnie image">
           </NuxtLink>
-          <div class="flex flex-col justify-between h-32 md:h-44">
+          <div class="flex flex-col justify-between h-32 md:h-44 w-full">
             <div class="flex flex-col justify-between h-full">
               <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-desktop mt-2 color-orange font-bold leading-6 ov-flow-hidden">
                 {{ post.pageInfor.title }}
@@ -49,7 +49,7 @@
                 {{ post.description }}
               </p>
             </div>
-            <div class="mb-2 mt-4 flex justify-between items-end">
+            <div class="mb-2 mt-4 flex justify-between items-end w-full">
               <div v-if="post.tags != null" class="inline-flex space-x-1 items-center">
                 <p v-for="item in post.tags" :key="item" class="text-xs font-bold leading-sm uppercase px-3 py-1 bg-red-400 text-white rounded-full">
                   {{ item }}

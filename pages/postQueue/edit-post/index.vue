@@ -1,8 +1,9 @@
 <template>
   <div class="px-5 w-full max-w-screen-xl mx-5">
-    <h1 class="text-3xl font-medium mb-7">
+    <h1 class="text-3xl font-medium mb-5">
       Chỉnh sửa tin đăng {{post.pageInfor.title}}
     </h1>
+    <em class="text-md text-gray-400 mb-5">Trạng thái: {{post.status}}</em>
     <h1 class="font-bold text-lg mb-2">
       Thông tin trang
     </h1>
@@ -188,6 +189,7 @@ const getPost = gql`query GetPost($condition: PostCollectionFilterInput)
                     slug,
                     metaDescription
                   },
+                  status
                   tags
                 }
               }`;
@@ -273,7 +275,8 @@ export default {
     return {
       modalIsShowing: false,
       dragData3: {},
-       listData: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+      listData: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+      slugToCheck: "",
       currentPost: {},
       newTag: '',
       editorOption: {
@@ -397,6 +400,7 @@ export default {
             }
           }
         }).then((data) => {
+          this.slugToCheck = this.currentPost.pageInfor.slug;
           this.$toast.show("Cập nhật thành công!", {
           type: "success",
           theme: "bubble",
@@ -421,6 +425,11 @@ export default {
         this.post.tags.forEach(tag => this.currentPost.tags.push(tag));
         if (this.modalIsShowing == true) { 
           this.publishPost();
+        }
+        else {
+          if (this.slugToCheck != this.post.pageInfor.slug) {
+            location.replace(this.post.pageInfor.slug);
+          }
         }
         this.$modal.hide("update-before-publish");
         }).catch((error) => {

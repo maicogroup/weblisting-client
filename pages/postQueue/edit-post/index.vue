@@ -107,10 +107,17 @@
         </li>
       </ul>
     </div>
-    <div class="list row">
-      <drag-sortable v-for="(item, index) in listData" v-model="dragData3" :key="item" :index="index" @sortend="sortend($event, listData)" replace-direction="horizontal">
-        Item {{ item }}
-      </drag-sortable>
+    <h1 class="font-bold text-lg my-2">
+      Hình ảnh
+      </h1>
+      <em class="mb-2">Bạn có thể kéo để thay đổi vị trí ảnh</em>
+    <div class="pannel mt-10" style="width:100%">
+      
+      <div class="list row">
+        <drag-sortable v-for="(item, index) in post.gallery" v-model="dragData2" :key="item" :index="index" @sortend="sortend($event, post.gallery)" replace-direction="horizontal">
+          <img style="user-drag:none; -webkit-user-drag:none;" :src="imgUrl + item">
+        </drag-sortable>
+      </div>
     </div>
     <div class="flex justify-end mt-5 space-x-2">
       <button @click="updatePost" class="bg-blue-400 hover:bg-blue-600 text-white font-bold h-10 py-2 px-4 rounded flex item-center">
@@ -153,8 +160,12 @@
 }
 .list {
   position: relative;
-  height: 400px;
+  height: 500px;
   overflow: auto;
+}
+.list img {
+  width:200px;
+  height:215px;
 }
 .list > * {
   width: 100px;
@@ -215,9 +226,6 @@ const getAllSlugs = gql`query getPostsSlugs
 export default {
   components: { dragSortable },
   name: 'EditPost',
-  comonents: {
-    dragSortable
-  },
   apollo: {
     post: { 
       query() {
@@ -245,6 +253,7 @@ export default {
   },
   mounted() {
     console.log("mounted, static data of the post will be fetched here");
+    console.log(this.post.gallery);
     this.currentPost = {
       id: this.post.id,
       acreage: this.post.acreage,
@@ -274,8 +283,10 @@ export default {
   data () {
     return {
       modalIsShowing: false,
+      dragData2: {},
       dragData3: {},
-      listData: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+      imgUrl: "https://maico-hub-record.ss-hn-1.bizflycloud.vn/",
+      listData: [1,2,3,4,5],
       slugToCheck: "",
       currentPost: {},
       newTag: '',
@@ -359,7 +370,8 @@ export default {
       if ((this.currentPost.pageInfor.title == this.post.pageInfor.title) && (this.currentPost.pageInfor.slug == this.post.pageInfor.slug)
         && (this.currentPost.pageInfor.metaDescription == this.post.pageInfor.metaDescription) && (this.currentPost.apartmentNumber == this.post.apartmentNumber)
         && (this.currentPost.acreage == this.post.acreage) && (this.currentPost.floor == this.post.floor) && (this.currentPost.block == this.post.block)
-        && (this.currentPost.description == this.post.description) && (this.currentPost.tags.length == this.post.tags.length))
+        && (this.currentPost.description == this.post.description) && (this.currentPost.tags.length == this.post.tags.length)
+        && (this.currentPost.gallery.forEach(x => this.post.gallery.forEach(c => x == c))))
         {
           this.$toast.show("Cập nhật thất bại, dữ liệu chưa có thay đổi gì!", {
             type: "error",
@@ -391,6 +403,7 @@ export default {
               block: this.post.block,
               description: this.post.description,
               floor: this.post.floor,
+              gallery: this.post.gallery,
               pageInfor: {
                 title: this.post.pageInfor.title,
                 slug: this.post.pageInfor.slug,
@@ -451,7 +464,8 @@ export default {
         if ((this.currentPost.pageInfor.title != this.post.pageInfor.title) || (this.currentPost.pageInfor.slug != this.post.pageInfor.slug)
         || (this.currentPost.pageInfor.metaDescription != this.post.pageInfor.metaDescription) || (this.currentPost.apartmentNumber != this.post.apartmentNumber)
         || (this.currentPost.acreage != this.post.acreage) || (this.currentPost.floor != this.post.floor) || (this.currentPost.block != this.post.block)
-        || (this.currentPost.description != this.post.description) || (this.currentPost.tags.length != this.post.tags.length))
+        || (this.currentPost.description != this.post.description) || (this.currentPost.tags.length != this.post.tags.length)
+        || (this.currentPost.gallery.forEach(x => this.post.gallery.forEach(c => x == c))))
         {
           this.modalIsShowing = true;
           this.$modal.show("update-before-publish");
@@ -462,7 +476,8 @@ export default {
         || (this.post.block == null || this.post.block == "") || (this.post.description == null || this.post.description == "")
         || (this.post.floor == null || this.post.floor <= 0) || (this.post.tags.length == 0)
         || (this.post.pageInfor.title == null || this.post.pageInfor.title == "") || (this.post.pageInfor.slug == null || this.post.pageInfor.slug == "")
-        || (this.post.pageInfor.metaDescription == null || this.post.pageInfor.metaDescription == ""))
+        || (this.post.pageInfor.metaDescription == null || this.post.pageInfor.metaDescription == "")
+        || (this.post.gallery.length == 0))
         {
           this.$toast.show("Tất cả dữ liệu không được để trống, vui lòng cập nhật và kiểm tra lại!", {
             type: "error",

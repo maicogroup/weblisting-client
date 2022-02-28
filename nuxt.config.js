@@ -15,8 +15,10 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-
-    ]
+    ],
+    // script: [
+    //   { src: '/js/onBeforeUnload.js', body: true, isSSR: false }
+    // ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -32,8 +34,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/lightGallery.client.js',
+    '~/plugins/vue-js-modal.js',
     '~/plugins/editor.client.js',
-    '~/plugins/lightGallery.client.js'
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -62,8 +65,25 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/router',
+    'cookie-universal-nuxt',
     '@nuxtjs/toast'
   ],
+  router: {
+    middleware: ['cookies', 'userBehaviorTracking']
+  },
+
+  toast: {
+    position: 'top-right',
+    register: [ // Register custom toasts
+      {
+        name: 'my-error',
+        message: 'Oops...Something went wrong',
+        options: {
+          type: 'error'
+        }
+      }
+    ]
+},
 
   toast: {
     position: 'top-right',

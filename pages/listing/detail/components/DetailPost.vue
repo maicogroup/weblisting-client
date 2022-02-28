@@ -251,7 +251,7 @@ export default ({
       if (demand === 'Cho Thuê') {
         return `${price / 1e6} triệu/tháng`;
       } else {
-        return `${(price / 1e9).toFixed(2)} tỷ`;
+        return `${parseFloat((price / 1e9).toFixed(2))} tỷ`;
       }
     }
   }

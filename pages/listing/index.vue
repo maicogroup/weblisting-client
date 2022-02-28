@@ -286,10 +286,7 @@ export default {
       const query = this.$route.query;
 
       filter.demand = query.demand ?? 'Cho Thuê';
-
-      if (query.type) {
-        filter.type = query.type;
-      }
+      filter.type = query.loai;
 
       if (query.tp || query.quan) {
         filter.location = {

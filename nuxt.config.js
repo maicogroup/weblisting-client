@@ -76,14 +76,16 @@ export default {
 
   toast: {
     position: 'top-right',
-    register: [{
-      name: 'my-error',
-      message: 'Oops...Something went wrong',
-      options: {
-        type: 'error'
+    register: [ // Register custom toasts
+      {
+        name: 'my-error',
+        message: 'Oops...Something went wrong',
+        options: {
+          type: 'error'
+        }
       }
-    }]
-  },
+    ]
+},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

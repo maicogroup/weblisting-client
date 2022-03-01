@@ -274,7 +274,7 @@ export default {
         }
       }
 
-      if (filter.directions && filter.directions.length !== 0) {
+      if (filter.directions && filter.directions.length > 0) {
         conditions.direction = {
           in: filter.directions
         };
@@ -290,7 +290,7 @@ export default {
         }
       }
 
-      if (filter.bedroomOptions) {
+      if (filter.bedroomOptions && filter.bedroomOptions.length > 0) {
         conditions.or = [];
         if (filter.bedroomOptions.includes('5+')) {
           conditions.or.push({ totalBedRoom: { gte: 5 } });

@@ -96,7 +96,7 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Diện tích sử dụng</span>
-            <span class="re-properties-content"> 2</span>
+            <span class="re-properties-content"> {{post.usageAcreage}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Block</span>
@@ -108,7 +108,7 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Đặc điểm khác</span>
-            <span class="re-properties-content"> Nhà mới, dọn dẹp vào ở ngay</span>
+            <span class="re-properties-content"> {{post.otherSpecification}}</span>
           </p>
         </div>
         <div style="width:48%; margin-left:2%; float:right;" class="p-2">
@@ -126,7 +126,7 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng nhà</span>
-            <span class="re-properties-content"> Mặt tiền</span>
+            <span class="re-properties-content"> {{post.viewDirection}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Pháp lý</span>
@@ -134,7 +134,7 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">View</span>
-            <span class="re-properties-content"> Nhìn ra Landmark 81</span>
+            <span class="re-properties-content"> {{post.view}}</span>
           </p>
         </div>
       </div>
@@ -172,37 +172,6 @@
           </div>
         </div>
       </div>
-      
-      <!-- <div>
-        <table class="lg:mx-0 table-fixed h-36 text-sm leading-4">
-          <tbody>
-            <tr class="border border-solid h-10">
-              <td class="px-8 whitespace-nowrap font-bold">
-                Nhu cầu:
-              </td>
-              <td class="pr-8 w-full">
-                {{ post.demand }}
-              </td>
-            </tr>
-            <tr class="border border-solid h-10">
-              <td class="px-8 whitespace-nowrap font-bold">
-                Địa chỉ:
-              </td>
-              <td class="pr-8">
-                {{ `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}` }}
-              </td>
-            </tr>
-            <tr class="border border-solid h-10">
-              <td class="px-8 whitespace-nowrap font-bold">
-                Pháp lý:
-              </td>
-              <td>
-                {{ post.project.juridical }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div> -->
       <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-8 mb-4">
         Google Map
       </h3>

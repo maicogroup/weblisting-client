@@ -386,10 +386,6 @@ export default {
   height: 100px;
 }
 
-.shrink-0 {
-  flex-shrink: 0;
-}
-
 .item-flex-start {
   align-items: flex-start;
 }
@@ -406,7 +402,4 @@ export default {
   border: none;
 }
 
-.grow {
-  flex-grow: 1;
-}
 </style>

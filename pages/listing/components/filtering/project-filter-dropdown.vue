@@ -64,7 +64,7 @@
         </filter-dropdown-item>
 
         <template v-if="projects !== null">
-          <filter-dropdown-item v-for="project in filteredProjects" :key="project.projectName" @click="handleSelectProject(project)">
+          <filter-dropdown-item v-for="project in filteredProjects" :key="project.id" @click="handleSelectProject(project)">
             {{ project.projectName }}
           </filter-dropdown-item>
         </template>

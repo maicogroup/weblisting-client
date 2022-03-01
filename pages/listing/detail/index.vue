@@ -14,6 +14,7 @@ const getPostQuery = gql`
   query GetPost($condition: PostCollectionFilterInput) {
         post( where: $condition ) {
           id
+          block
           gallery
           acreage
           price

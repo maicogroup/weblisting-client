@@ -33,7 +33,7 @@
         <type-filter-dropdown :selected-option="inputFilter.type" @optionchanged="handleTypeFilterChanged" />
         <location-ftiler-dropdown :selected-option="inputFilter.location" @optionchanged="handleLocationFilterChanged" />
         <project-filter-dropdown :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged" />
-        <price-filter-dropdown :selected-option="inputFilter.priceRange" @optionchanged="handlePriceFilterChanged" />
+        <price-filter-dropdown :selected-option="inputFilter.priceRange" :demand="inputFilter.demand" @optionchanged="handlePriceFilterChanged" />
         <acreage-filter-dropdown :selected-option="inputFilter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
         <direction-filter-dropdown :selected-option="inputFilter.directions" @optionchanged="handleDirectionFilterChanged" />
         <bedroom-filter-dropdown :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
@@ -176,7 +176,7 @@ export default {
     },
 
     showIfPostsOfOneProject () {
-      return this.$route.params.slug !== null && this.project !== null;
+      return this.$route.params.slug !== undefined;
     },
 
     sellButtonClasses () {
@@ -197,12 +197,6 @@ export default {
       // còn bên client thì ngược lại: apollo đc gọi trước created
       this.filter = { ...this.createFilterFromUrl(), ...this.filter };
       this.inputFilter = { ...this.filter };
-    }
-
-    if (this.$route.query.demand === 'Bán') {
-      this.setSellButtonActiveState(true);
-    } else {
-      this.setSellButtonActiveState(false);
     }
 
     if (this.$route.query.demand === 'Bán') {

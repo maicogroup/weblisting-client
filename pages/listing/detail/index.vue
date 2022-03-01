@@ -30,6 +30,10 @@ const getPostQuery = gql`
           demand
           status
           tags
+          usageAcreage
+          otherSpecification
+          view
+          viewDirection
           pageInfor {
             title
             slug

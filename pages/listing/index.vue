@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 <template>
   <div class="w-full max-w-screen-xl px-4">
-    <div class="z-10 w-full fixed left-0 top-after-header flex space-x-4 bg-white shadow-sm px-4">
+    <div class="z-10 w-full fixed left-0 top-after-header hidden md:flex space-x-4 bg-white shadow-sm px-4">
       <div class="double-button my-4 flex">
         <button :class="`text-base py-2 px-4 border rounded-l-md ${sellButtonClasses}`" @click="setSellButtonActiveState(true)">
           Bán
@@ -33,7 +34,7 @@
         <type-filter-dropdown :selected-option="inputFilter.type" @optionchanged="handleTypeFilterChanged" />
         <location-ftiler-dropdown :selected-option="inputFilter.location" @optionchanged="handleLocationFilterChanged" />
         <project-filter-dropdown :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged" />
-        <price-filter-dropdown :selected-option="inputFilter.priceRange" :demand="inputFilter.demand" @optionchanged="handlePriceFilterChanged" />
+        <price-filter-dropdown :selected-option="inputFilter.priceRange" @optionchanged="handlePriceFilterChanged" />
         <acreage-filter-dropdown :selected-option="inputFilter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
         <direction-filter-dropdown :selected-option="inputFilter.directions" @optionchanged="handleDirectionFilterChanged" />
         <bedroom-filter-dropdown :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
@@ -42,6 +43,27 @@
       <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
         Tìm kiếm
       </button>
+    </div>
+    <div class="relative my-4">
+      <div class="w-full block md:hidden">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+          <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              class="w-6 h-6"
+            >
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+          <h4 class="focus:text-gray-900 focus:outline-none text-gray-400">Tìm kiếm</h4>
+        </span>
+        <input type="button" class="w-full border py-2 pl-10 pr-2 h-full rounded-md" placeholder="Tìm kiếm..." @click="filterResponsive = true">
+      </div>
     </div>
     <div class="filter-bar-blank-space" />
     <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" />
@@ -54,58 +76,30 @@
           <p class="font-bold mb-2">
             Xem theo giá
           </p>
-          <div v-if="this.sellButtonIsActive == false">
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 3})">
-              Dưới 3 triệu
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 3, gtln: 5})">
-              Từ 3 - 5 triệu
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 5, gtln: 7})">
-              Từ 5 - 7 triệu
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 7, gtln: 10})">
-              Từ 7 - 10 triệu
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 10, gtln: 15})">
-              Từ 10 - 15 triệu
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 15, gtln: 20})">
-              Từ 15 - 20 triệu
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 20, gtln: 30})">
-              Từ 20 - 30 triệu
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 30, gtln: undefined})">
-              Trên 30 triệu
-            </quick-filter-button>
-          </div>
-          <div v-else>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 1})">
-              Dưới 1 tỷ
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 1, gtln: 2})">
-              Từ 1 tỷ - đến 2 tỷ
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 2, gtln: 3})">
-              Từ 2 tỷ - đến 3 tỷ
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 3, gtln: 5})">
-              Từ 3 tỷ - đến 5 tỷ
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 5, gtln: 7})">
-              Từ 5 tỷ - đến 7 tỷ
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 7, gtln: 10})">
-              Từ 7 tỷ - đến 10 tỷ
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 10, gtln: 20})">
-              Từ 10 tỷ - đến 20 tỷ
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 20, gtln: undefined})">
-              Trên 20 tỷ
-            </quick-filter-button>
-          </div>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 3})">
+            Dưới 3 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 3, gtln: 5})">
+            Từ 3 - 5 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 5, gtln: 7})">
+            Từ 5 - 7 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 7, gtln: 10})">
+            Từ 7 - 10 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 10, gtln: 15})">
+            Từ 10 - 15 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 15, gtln: 20})">
+            Từ 15 - 20 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 20, gtln: 30})">
+            Từ 20 - 30 triệu
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 30, gtln: undefined})">
+            Trên 30 triệu
+          </quick-filter-button>
         </div>
 
         <div class="border mt-4 p-4">
@@ -157,6 +151,387 @@
         v-html="project.sEOContent"
       />
     </div>
+    <div
+      class="fixed inset-0 h-full w-full z-30 bg-white opacity-100"
+    >
+      <div class="flex justify-between mt-5 items-center mb-4">
+        <h4 class="mr-auto ml-auto text-base">
+          Tìm kiếm bất động sản
+        </h4>
+        <div
+          @click="filterResponsive = false"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 relative"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      </div>
+      <div class="relative mx-2.5">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+          <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              class="w-6 h-6"
+            >
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </span>
+        <input type="search" class="w-full border py-2 pl-10 pr-2 h-11 rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm...">
+      </div>
+      <div class="double-button my-4 flex w-full mx-2.5">
+        <button :class="`text-base py-2 px-4 border rounded-l-md w-49-and-half-percent ${sellButtonClasses}`" @click="setSellButtonActiveState(true)">
+          Bán
+        </button>
+        <button :class="`text-base whitespace-nowrap py-2 px-4 border rounded-r-md  w-49 ${rentButtonClasses}`" @click="setSellButtonActiveState(false)">
+          Cho thuê
+        </button>
+      </div>
+      <div class="mx-2.5">
+        <type-filter-option :selected-option="inputFilter.type" @optionchanged="handleTypeFilterChanged" />
+
+        <location-filter-option :selected-option="inputFilter.location" @optionchanged="handleLocationFilterChanged" />
+
+        <price-filter-option :selected-option="inputFilter.priceRange" @optionchanged="handlePriceFilterChanged" />
+
+        <acreage-filter-option :selected-option="inputFilter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
+
+        <project-filter-option :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged" />
+
+        <direction-filter-options :selected-option="inputFilter.directions" @optionchanged="handleDirectionFilterChanged" />
+
+        <bedroom-filter-options :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
+      </div>
+
+      <!-- <p class="mb-4">
+        Bạn phải chọn <span><p class="text-sky-500">Khu vực</p></span> trước
+      </p> -->
+    </div>
+
+    // chon khu vuc mobile
+    <div
+      v-if="isShowArea"
+      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
+    >
+      <div
+        class="flex justify-between"
+      >
+        <h4 class="mr-auto ml-auto">
+          Chọn khu vực
+        </h4>
+        <div
+          @click="isShowArea = false"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 relative"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      </div>
+      <div class="relative my-4 w-full">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+          <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              class="w-6 h-6"
+            >
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </span>
+        <input type="search" class="w-full border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm Tỉnh/Thành phố">
+      </div>
+      <div
+        class="flex justify-between"
+        @click="isShowDistrict = true"
+      >
+        <p>TP Hồ Chí Minh</p>
+        <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 13L7 7L1 1" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+    </div>
+
+    // show district
+    <div
+      v-if="isShowDistrict"
+      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
+    >
+      <div
+        class="flex justify-between"
+      >
+        <h4 class="mr-auto ml-auto">
+          TP. Hồ Chí Minh
+        </h4>
+        <div
+          @click="isShowDistrict = false"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 relative"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      </div>
+      <div class="relative my-4 w-full">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+          <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              class="w-6 h-6"
+            >
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </span>
+        <input type="search" class="w-full border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm Tỉnh/Thành phố">
+      </div>
+      <div
+        class="flex justify-between"
+      >
+        <p>Quận 9</p>
+        <input type="radio" checked="checked">
+      </div>
+    </div>
+
+    //chon khoang gia
+    <div
+      v-if="isShowPriceRange"
+      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
+    >
+      <div
+        class="flex justify-between"
+      >
+        <h4 class="mr-auto ml-auto">
+          Chọn giá
+        </h4>
+        <div
+          @click="isShowPriceRange = false"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 relative"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      </div>
+      <div class="ml-auto mr-auto flex justify-center items-center px-6 mt-3">
+        <label class="flex items-center">
+          <input class="w-14 px-2 py-1 text-center text-sm border rounded-md outline-none">
+          <p>triệu</p>
+        </label>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12H4" />
+        </svg>
+        <label class="flex items-center">
+          <input class="w-14 px-2 py-1 text-center text-sm border rounded-md outline-none">
+          <p>triệu</p>
+        </label>
+      </div>
+      <div
+        class="flex justify-between"
+      >
+        <p>Tất cả</p>
+        <input type="radio" checked="checked">
+      </div>
+    </div>
+
+    //chon khoang dien tich
+    <div
+      v-if="isShowAcreage"
+      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
+    >
+      <div
+        class="flex justify-between"
+      >
+        <h4 class="mr-auto ml-auto">
+          Chọn diện tích
+        </h4>
+        <div
+          @click="isShowAcreage = false"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 relative"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      </div>
+      <div class="ml-auto mr-auto flex justify-center items-center px-6 mt-3">
+        <label class="flex items-center">
+          <input class="w-14 px-2 py-1 text-center text-sm border rounded-md outline-none">
+          <p>m²</p>
+        </label>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12H4" />
+        </svg>
+        <label class="flex items-center">
+          <input class="w-14 px-2 py-1 text-center text-sm border rounded-md outline-none">
+          <p>m²</p>
+        </label>
+      </div>
+      <div
+        class="flex justify-between"
+      >
+        <p>Tất cả</p>
+        <input type="radio" checked="checked">
+      </div>
+    </div>
+
+    //chon khoang du an
+    <div
+      v-if="isShowProject"
+      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
+    >
+      <div
+        class="flex justify-between"
+      >
+        <h4 class="mr-auto ml-auto">
+          Chọn dự án
+        </h4>
+        <div
+          @click="isShowProject = false"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 relative"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      </div>
+      <div class="relative my-4 w-full">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+          <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              class="w-6 h-6"
+            >
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </span>
+        <input type="search" class="w-full border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm dự án">
+      </div>
+      <div
+        class="flex justify-between"
+      >
+        <p>Tất cả</p>
+        <input type="radio" checked="checked">
+      </div>
+    </div>
+
+    //chon huong
+    <div
+      v-if="isShowDirection"
+      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
+    >
+      <div
+        class="flex justify-between"
+      >
+        <h4 class="mr-auto ml-auto">
+          Chọn hướng
+        </h4>
+        <div
+          @click="isShowDirection = false"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 relative"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="flex justify-between"
+      >
+        <p>Tất cả</p>
+        <input type="radio" checked="checked">
+      </div>
+    </div>
+
+    //chon so phong
+    <div
+      v-if="isShowRoomOption"
+      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
+    >
+      <div
+        class="flex justify-between"
+      >
+        <h4 class="mr-auto ml-auto">
+          Chọn số phòng ngủ
+        </h4>
+        <div
+          @click="isShowRoomOption = false"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 relative"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="flex justify-between"
+      >
+        <p>Tất cả</p>
+        <input type="radio" checked="checked">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -175,11 +550,18 @@ import PriceFilterDropdown from './components/filtering/price-filter-dropdown.vu
 import AcreageFilterDropdown from './components/filtering/acreage-filter-dropdown.vue';
 import BedroomFilterDropdown from './components/filtering/bedroom-filter-dropdown.vue';
 import QuickFilterButton from './components/quick-filter-button.vue';
+import TypeFilterOption from './components/responsive-filtering/type-filter-option.vue';
+import LocationFilterOption from './components/responsive-filtering/location-filter-option.vue';
+import PriceFilterOption from './components/responsive-filtering/price-filter-option.vue';
+import AcreageFilterOption from './components/responsive-filtering/acreage-filter-option.vue';
+import DirectionFilterOptions from './components/responsive-filtering/direction-filter-options.vue';
+import ProjectFilterOption from './components/responsive-filtering/project-filter-option.vue';
+import BedroomFilterOptions from './components/responsive-filtering/bedroom-filter-options.vue';
 import Divider from '~/components/Divider.vue';
 
 export default {
   name: 'PostList',
-  components: { ProjectHeader, ListPost, ContactInfor, Divider, LocationFtilerDropdown, ProjectFilterDropdown, DirectionFilterDropdown, TypeFilterDropdown, PriceFilterDropdown, AcreageFilterDropdown, BedroomFilterDropdown, QuickFilterButton },
+  components: { ProjectHeader, ListPost, ContactInfor, Divider, LocationFtilerDropdown, ProjectFilterDropdown, DirectionFilterDropdown, TypeFilterDropdown, PriceFilterDropdown, AcreageFilterDropdown, BedroomFilterDropdown, QuickFilterButton, TypeFilterOption, LocationFilterOption, PriceFilterOption, AcreageFilterOption, ProjectFilterOption, DirectionFilterOptions, BedroomFilterOptions },
   data () {
     return {
       // filter dùng để lọc
@@ -188,7 +570,16 @@ export default {
       // filter đang được người dùng chỉnh sửa, chuẩn bị dùng để lọc
       inputFilter: {},
       searchButtonPressed: false,
-      tempSEOContent: '**Hello World**'
+      tempSEOContent: '**Hello World**',
+      filterResponsive: false,
+      isShowApartmentType: false,
+      isShowArea: false,
+      isShowDistrict: false,
+      isShowPriceRange: false,
+      isShowAcreage: false,
+      isShowProject: false,
+      isShowDirection: false,
+      isShowRoomOption: false
     };
   },
   head () {
@@ -215,7 +606,7 @@ export default {
       return marked(this.tempSEOContent);
     },
     showIfPostsOfOneProject () {
-      return this.$route.params.slug !== undefined;
+      return this.$route.params.slug !== null && this.project !== null;
     },
 
     sellButtonClasses () {
@@ -230,6 +621,12 @@ export default {
   created () {
     this.filter = this.createFilterFromUrl();
     this.inputFilter = { ...this.filter };
+
+    if (this.$route.query.demand === 'Bán') {
+      this.setSellButtonActiveState(true);
+    } else {
+      this.setSellButtonActiveState(false);
+    }
 
     if (this.$route.query.demand === 'Bán') {
       this.setSellButtonActiveState(true);
@@ -460,8 +857,24 @@ export default {
 </script>
 
 <style scoped>
+.grow {
+  flex-grow: 1;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
 .filter-bar-blank-space {
   height: 42px;
+}
+
+.w-49{
+  width: 49%;
+}
+
+.w-49-and-half-percent {
+  width: 49.5%;
 }
 
 .top-after-header {
@@ -470,5 +883,9 @@ export default {
 
 .double-button {
   font-size: 0;
+}
+
+.bg-black-73{
+  background: #000000BA;
 }
 </style>

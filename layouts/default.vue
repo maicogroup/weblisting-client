@@ -2,7 +2,7 @@
   <div>
     <MainHeader />
     {{ this.$cookies.get(this.$route.fullPath) }}
-    <div class="relative z-10 mt-32 flex justify-center max-w-full">
+    <div class="relative mt-32 flex justify-center max-w-full">
       <Nuxt />
     </div>
     <MainFooter />

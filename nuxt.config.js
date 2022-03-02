@@ -34,7 +34,7 @@ export default {
   plugins: [
     '~/plugins/lightGallery.client.js',
     '~/plugins/vue-js-modal.js',
-    '~/plugins/editor.client.js',
+    '~/plugins/editor.client.js'
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -81,17 +81,6 @@ export default {
         }
       }
     ]
-},
-
-  toast: {
-    position: 'top-right',
-    register: [{
-      name: 'my-error',
-      message: 'Oops...Something went wrong',
-      options: {
-        type: 'error'
-      }
-    }]
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

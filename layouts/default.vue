@@ -1,8 +1,7 @@
 <template>
   <div>
     <MainHeader />
-    {{ this.$cookies.get(this.$route.fullPath) }}
-    <div class="relative mt-32 flex justify-center max-w-full">
+    <div class="relative mt-20 md:mt-32 flex justify-center max-w-full">
       <Nuxt />
     </div>
     <MainFooter />
@@ -56,7 +55,6 @@ export default {
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
-      debugger;
     }
   }
 };

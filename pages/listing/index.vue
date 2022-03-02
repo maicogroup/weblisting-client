@@ -45,7 +45,7 @@
       </button>
     </div>
     <div class="relative my-4">
-      <div class="w-full block md:hidden">
+      <div class="w-full block md:hidden" v-on:click="openCloseMobileFilter">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
             <svg
@@ -62,10 +62,10 @@
           </button>
           <h4 class="focus:text-gray-900 focus:outline-none text-gray-400">Tìm kiếm</h4>
         </span>
-        <input type="button" class="w-full border py-2 pl-10 pr-2 h-full rounded-md" placeholder="Tìm kiếm..." @click="filterResponsive = true">
+        <input type="button" class="w-full border py-2 pl-10 pr-2 h-full rounded-md" placeholder="Tìm kiếm..." >
       </div>
     </div>
-    <div class="filter-bar-blank-space" />
+    <div class="filter-bar-blank-space hidden md:block" />
     <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" />
     <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
@@ -152,14 +152,14 @@
       />
     </div>
     <div
-      class="fixed inset-0 h-full w-full z-30 bg-white opacity-100"
+      class="fixed inset-0 h-full w-full z-30 bg-white opacity-100" v-if="this.filterResponsive == true"
     >
       <div class="flex justify-between mt-5 items-center mb-4">
         <h4 class="mr-auto ml-auto text-base">
           Tìm kiếm bất động sản
         </h4>
         <div
-          @click="filterResponsive = false"
+          v-on:click="openCloseMobileFilter"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -213,7 +213,9 @@
 
         <bedroom-filter-options :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
       </div>
-
+      <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
+        Tìm kiếm
+      </button>
       <!-- <p class="mb-4">
         Bạn phải chọn <span><p class="text-sky-500">Khu vực</p></span> trước
       </p> -->
@@ -532,6 +534,7 @@
         <input type="radio" checked="checked">
       </div>
     </div>
+    
   </div>
 </template>
 
@@ -710,7 +713,9 @@ export default {
       this.sellButtonIsActive = state;
       this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
     },
-
+    openCloseMobileFilter(){
+      this.filterResponsive = !this.filterResponsive
+    },
     createFilterFromUrl () {
       const filter = {};
       const query = this.$route.query;

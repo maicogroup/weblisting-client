@@ -38,7 +38,7 @@
           </button>
         </div>
       </div>
-      <div class="lg:mx-0 w-full flex space-x-12  bd-color-858585 mt-3 text-sm leading-4 border-t border-b border-zinc-800 pb-7 pt-6 border-solid">
+      <div class="lg:mx-0 w-full flex space-x-12  bd-color-858585 mt-3 text-sm leading-4 border-t border-b pb-7 pt-6 border-solid" style="border-color:#E5E5E5;">
         <div class="">
           <h4 class="font-normal color-8c8c8c">
             Mức giá
@@ -75,33 +75,76 @@
           </p>
         </div>
       </div>
-      <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-6 mb-2.5">
-        Thông tin mô tả
-      </h3>
-      <p class="lg:mx-0 " v-html="post.description" />
-      <div>
+      <div class="flex justify-between items-center mt-5">
         <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-3 mb-3.5">
-          Nội thất
+          Đặc điểm bất động sản
         </h3>
-        <div class="grid sm:grid-cols-1 md:grid-cols-3">
-          <div v-for="item in post.furnitures" :key="item">
-            <div class="w-6/12 float-left text-sm bg-gray-50 border border-gray-200 border-solid p-4">
-              {{ item }}
-            </div>
-            <div class="w-6/12 float-left border border-gray-200 border-solid p-4 flex justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#32c82b"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ><polyline points="20 6 9 17 4 12" /></svg>
-            </div>
-          </div>
+        <div class="">
+          <span class="text-gray-400">Mã bất động sản:</span> 
+          <span class="re-properties-content">{{post.pageInfor.slug.slice(-5)}}</span>
+        </div>
+      </div>
+      <div style="width: 100%; height: 280px;">
+        <div style="width:48%; margin-right:2%; float:left;" class="p-2">
+          <p class="re-properties-frame">
+            <span class="re-properties">Giá</span>
+            <span class="re-properties-content"> {{formatPrice(post.price, post.demand)}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Phòng tắm</span>
+            <span class="re-properties-content"> {{post.totalWC}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Diện tích sử dụng</span>
+            <span class="re-properties-content"> {{post.usageAcreage}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Block</span>
+            <span class="re-properties-content"> {{post.block}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Hướng cửa</span>
+            <span class="re-properties-content"> {{post.direction}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Đặc điểm khác</span>
+            <span class="re-properties-content"> {{post.otherSpecification}}</span>
+          </p>
+        </div>
+        <div style="width:48%; margin-left:2%; float:right;" class="p-2">
+          <p class="re-properties-frame">
+            <span class="re-properties">Phòng ngủ</span>
+            <span class="re-properties-content"> {{post.totalBedRoom}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Diện tích</span>
+            <span class="re-properties-content"> {{post.acreage}} m<sup>2</sup></span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Tầng</span>
+            <span class="re-properties-content"> {{post.floor}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Hướng nhà</span>
+            <span class="re-properties-content"> {{post.viewDirection}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Pháp lý</span>
+            <span class="re-properties-content"> {{post.project.juridical}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">View</span>
+            <span class="re-properties-content"> {{post.view}}</span>
+          </p>
+        </div>
+      </div>
+      <div class="flex justify-start items-center space-x-3">
+        <h3 class="re-properties" style="padding-left:8px;">
+          Nội thất:
+        </h3>
+        <div v-for="item in post.furnitures" :key="item">
+          <button v-if="item == 'Trống' || item == 'Ko'" class="btn red-furnitures">{{item}}</button>
+          <button v-else class="btn green-furnitures">{{item}}</button>
         </div>
       </div>
       <div>
@@ -129,41 +172,8 @@
           </div>
         </div>
       </div>
-      <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-3 mb-3.5">
-        Đặc điểm bất động sản
-      </h3>
-      <div>
-        <table class="lg:mx-0 table-fixed h-36 text-sm leading-4">
-          <tbody>
-            <tr class="border border-solid h-10">
-              <td class="px-8 whitespace-nowrap font-bold">
-                Nhu cầu:
-              </td>
-              <td class="pr-8 w-full">
-                {{ post.demand }}
-              </td>
-            </tr>
-            <tr class="border border-solid h-10">
-              <td class="px-8 whitespace-nowrap font-bold">
-                Địa chỉ:
-              </td>
-              <td class="pr-8">
-                {{ `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}` }}
-              </td>
-            </tr>
-            <tr class="border border-solid h-10">
-              <td class="px-8 whitespace-nowrap font-bold">
-                Pháp lý:
-              </td>
-              <td>
-                {{ post.project.juridical }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-8 mb-4">
-        Đặc điểm bất động sản
+        Google Map
       </h3>
       <iframe :src="`${post.project.address.googleMapLocation}`" class="w-full h-64 mt-4" loading="lazy" />
       <div class="lg:hidden mx-0 mt-5 mb-3">
@@ -275,5 +285,54 @@ export default ({
   .bd-color-858585
   {
     border-color: #858585;
+  }
+  .re-properties-frame {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #E5E5E5;
+    padding-bottom: 7px;
+    margin-bottom:10px;
+
+  }
+  .re-properties {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #999999;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .re-properties-content {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    color: #505050;
+  }
+  .btn {
+  width: 71px;
+  height: 26px;
+  border: 1px solid black;
+  background-color: white;
+  color: black;
+  font-family: Roboto;
+  font-style: normal;
+  line-height: 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-inline: 5px;
+}
+  .green-furnitures {
+    color: green;
+    border-color: #07A35D;
+  }
+  .red-furnitures {
+    color: red;
+    border-color: #FF375F;
   }
 </style>

@@ -4,30 +4,45 @@
       Chỉnh sửa tin đăng {{post.pageInfor.title}}
     </h1>
     <em class="text-md text-gray-400 mb-5">Trạng thái: {{post.status}}</em>
-    <h1 class="font-bold text-lg mb-2">
+    <h2 class="font-bold text-lg mb-2">
       Thông tin trang
-    </h1>
+    </h2>
     <div class="flex flex-col w-full ml-2">
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
           Slug:
         </p>
-        <input :placeholder="post.pageInfor.slug" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.pageInfor.slug">
+        <em class="text-sm text-gray-400 mb-5">Độ dài tối đa: 51</em>
+        <br>
+        <div class="flex justify-between items-center">
+          <input :placeholder="post.pageInfor.slug" maxlength="51" type="text" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.slug">
+          <p class="content" :value="this.post.pageInfor.slug.length">{{this.post.pageInfor.slug.length}}/51</p>
+        </div>
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
           Title:
         </p>
-        <input :placeholder="post.pageInfor.title" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.pageInfor.title">
+        <em class="text-sm text-gray-400 mb-5">Độ dài tối đa: 63 - Độ dài tối thiểu: 30</em>
+        <br>
+        <div class="flex justify-between items-center">
+          <input :placeholder="post.pageInfor.title" type="text" maxlength="63" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.title">
+          <p class="content" :value="this.post.pageInfor.title.length">{{this.post.pageInfor.title.length}}/63</p>
+        </div>
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
           Meta: 
         </p>
-        <input :placeholder="post.pageInfor.metaDescription" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.pageInfor.metaDescription">
+        <em class="text-sm text-gray-400 mb-5">Độ dài tối đa: 155 ký tự - Độ dài tối thiểu: 70 ký tự</em>
+        <br>
+        <div class="flex justify-between items-center">
+          <input :placeholder="post.pageInfor.metaDescription" maxlength="155" type="text" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.metaDescription">
+          <p class="content" :value="this.post.pageInfor.metaDescription.length">{{this.post.pageInfor.metaDescription.length}}/155</p>
+        </div>
       </div>
     </div>
-    <h1 class="font-bold text-lg mb-2 mt-6">Thông tin về dự án</h1>
+    <h2 class="font-bold text-lg mb-2 mt-6">Thông tin về dự án</h2>
     <div class="flex flex-col w-full ml-2">
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
@@ -43,6 +58,12 @@
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
+          Diện tích sử dụng (m<sup>2</sup>): 
+        </p>
+        <input :placeholder="post.usageAcreage" type="number" class="w-full border rounded-md mb-2 pl-4" v-model="post.usageAcreage">
+      </div>
+      <div class="my-2">
+        <p class="font-medium mr-6 text-md">
           Số tầng:
         </p>
         <input :placeholder="post.floor" type="number" class="w-full border rounded-md mb-2 pl-4" v-model="post.floor">
@@ -53,10 +74,28 @@
         </p>
         <input :placeholder="post.block" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.block">
       </div>
+      <div class="my-2">
+        <p class="font-medium mr-6 text-md">
+          Hướng view:
+        </p>
+        <input :placeholder="post.viewDirection" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.viewDirection">
+      </div>
+      <div class="my-2">
+        <p class="font-medium mr-6 text-md">
+          View:
+        </p>
+        <input :placeholder="post.view" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.view">
+      </div>
+      <div class="my-2">
+        <p class="font-medium mr-6 text-md">
+          Đặc điểm khác:
+        </p>
+        <input :placeholder="post.otherSpecification" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.otherSpecification">
+      </div>
     </div>
-    <h1 class="font-bold text-lg mb-2 mt-6">
+    <h2 class="font-bold text-lg mb-2 mt-6">
       Mô tả
-    </h1>
+    </h2>
     <client-only>
       <quill-editor
         ref="myQuillEditor"
@@ -69,9 +108,9 @@
       />
     </client-only>
     <div class=" mb-2 mt-16 text-lg flex justify-between">
-      <h1 class="font-bold">
+      <h2 class="font-bold">
         Tags
-      </h1>
+      </h2>
       <div class="flex justify-between items-center">
         <input
           v-model="newTag"
@@ -100,6 +139,45 @@
             viewBox="0 0 24 24"
             stroke="currentColor"
             @click="deleteTag(item)"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {{ item }}
+        </li>
+      </ul>
+    </div>
+    <div class=" mb-2 mt-16 text-lg flex justify-between">
+      <h2 class="font-bold">
+        Nội thất
+      </h2>
+      <div class="flex justify-between items-center">
+        <input
+          v-model="newFurniture"
+          class="border rounded-md pl-4 w-64 mr-3"
+          placeholder="Thêm nội thất mới cho bài viết..."
+        >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 hover:text-green-500 cursor-pointer"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          @click="addNewFurniture"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+    </div>
+    <div class="mt-4 rounded-lg border-8 py-3 px-5">
+      <ul>
+        <li v-for="item in post.furnitures" :key="item" class="bgc-cornflowerblue rounded-lg inline-flex mr-4 mt-2 mb-3 bg-lime-300 p-2 list-none" title="xóa nội thất">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 cursor-pointer mr-2 text-slate-400 hover:text-red-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            @click="deleteFurniture(item)"
           >
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -179,6 +257,15 @@
 .list.row > * {
   display: inline-block;
 }
+.content {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    color: #999999;
+  }
+  
 </style>
 
 <script>
@@ -194,14 +281,19 @@ const getPost = gql`query GetPost($condition: PostCollectionFilterInput)
                   block,
                   description,
                   floor,
+                  furnitures,
                   gallery,
+                  otherSpecification,
                   pageInfor {
                     title,
                     slug,
                     metaDescription
                   },
-                  status
-                  tags
+                  status,
+                  tags,
+                  usageAcreage,
+                  view,
+                  viewDirection,
                 }
               }`;
 
@@ -243,12 +335,6 @@ export default {
           }
         }
       }
-    },
-    postsWithPagination: {
-      query() {
-        return getAllSlugs
-      },
-      update: data => data.postsWithPagination
     }
   },
   mounted() {
@@ -261,13 +347,18 @@ export default {
       block: this.post.block,
       description: this.post.description,
       floor: this.post.floor,
-      gallery: this.post.gallery,
+      furnitures: [],
+      gallery: [],
+      otherSpecification: this.post.otherSpecification,
       pageInfor: {
         title: this.post.pageInfor.title,
         slug: this.post.pageInfor.slug,
         metaDescription: this.post.pageInfor.metaDescription
       },
-      tags: []
+      tags: [],
+      usageAcreage: this.post.usageAcreage,
+      view: this.post.view,
+      viewDirection: this.post.viewDirection
     };
     if (this.post.tags != null) 
     {
@@ -276,8 +367,18 @@ export default {
     else {
       this.post.tags = [];
     }
-    console.log("All slugs:");
-    console.log(this.postsWithPagination);
+    if (this.post.furnitures != null) {
+      this.post.furnitures.forEach(x => this.currentPost.furnitures.push(x));
+    }
+    else {
+      this.post.furnitures = [];
+    }
+    if (this.post.gallery != null) { 
+      this.post.gallery.forEach(c => this.currentPost.gallery.push(c));
+    }
+    else {
+      this.post.gallery = [];
+    }
   },
 
   data () {
@@ -288,8 +389,10 @@ export default {
       imgUrl: "https://maico-hub-record.ss-hn-1.bizflycloud.vn/",
       listData: [1,2,3,4,5],
       slugToCheck: "",
+      imageIsChanged: false,
       currentPost: {},
       newTag: '',
+      newFurniture: '',
       editorOption: {
         // Some Quill options...
         theme: 'snow',
@@ -311,6 +414,7 @@ export default {
   },
   methods: {
     sortend (e, list) {
+      this.imageIsChanged = true;
       const { oldIndex, newIndex } = e;
       this.rearrange(list, oldIndex, newIndex);
     },
@@ -364,15 +468,50 @@ export default {
         position: "top-right"
       });
     },
+    addNewFurniture() {
+      if (this.newFurniture == '' || this.post.furnitures.includes(this.newFurniture)) {
+        this.$toast.show("Nội thất đã tồn tại, vui lòng thử lại!",
+        {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+          position: "top-right"
+        });
+        return;
+      }
+      this.post.furnitures.push(this.newFurniture);
+      this.newFurniture = '';
+      this.$toast.show("Thêm thành công! Nhớ cập nhật nha!!!", {
+        type: "success",
+        theme: "bubble",
+        duration: 3000,
+        position: "top-right"
+      });
+    },
+    deleteFurniture(item) {
+      var index = this.currentPost.furnitures.indexOf(item);
+      this.post.furnitures.splice(index, 1);
+      this.$toast.show("Xoá thành công! Nhớ cập nhật nha!!!", {
+        type: "success",
+        theme: "bubble",
+        duration: 3000,
+        position: "top-right",
+      });
+    },
 
     updatePost() {
+      console.log(this.post);
+      console.log(this.currentPost);
       // compare default post with all changes from post
       if ((this.currentPost.pageInfor.title == this.post.pageInfor.title) && (this.currentPost.pageInfor.slug == this.post.pageInfor.slug)
         && (this.currentPost.pageInfor.metaDescription == this.post.pageInfor.metaDescription) && (this.currentPost.apartmentNumber == this.post.apartmentNumber)
         && (this.currentPost.acreage == this.post.acreage) && (this.currentPost.floor == this.post.floor) && (this.currentPost.block == this.post.block)
         && (this.currentPost.description == this.post.description) && (this.currentPost.tags.length == this.post.tags.length)
-        && (this.currentPost.gallery.forEach(x => this.post.gallery.forEach(c => x == c))))
+        && (this.currentPost.otherSpecification == this.post.otherSpecification) && (this.currentPost.usageAcreage == this.post.usageAcreage) 
+        && (this.currentPost.view == this.post.view) && (this.currentPost.viewDirection == this.post.viewDirection)
+        && (this.currentPost.furnitures.length == this.post.furnitures.length) && (this.imageIsChanged == false))
         {
+        
           this.$toast.show("Cập nhật thất bại, dữ liệu chưa có thay đổi gì!", {
             type: "error",
             theme: "bubble",
@@ -381,8 +520,8 @@ export default {
           });
           return;
         }
-        if ((this.post.acreage == null || this.post.acreage <= 0) || (this.post.floor == null || this.post.floor <= 0)) {
-          this.$toast.show("Diện tích và Tầng phải lớn hơn 0!", {
+        if ((this.post.acreage == null || this.post.acreage <= 0) || (this.post.floor == null || this.post.floor <= 0) || (this.post.usageAcreage <= 0)) {
+          this.$toast.show("Diện tích, Diện tích sử dụng và Tầng phải lớn hơn 0!", {
             type: "error",
             theme: "bubble",
             duration: 3000,
@@ -391,8 +530,36 @@ export default {
           this.$modal.hide("update-before-publish")
           return;
         }
+        if (this.post.pageInfor.title.length < 30 || this.post.pageInfor.title.length > 63) {
+          this.$toast.show("Tiêu đề có độ dài từ 30 đến 63 ký tự!", {
+            type: "error",
+            theme: "bubble",
+            duration: 3000,
+            position: "top-right"
+          });
+          return;
+        }
+        if (this.post.pageInfor.slug.length > 51) {
+          this.$toast.show("Slug có độ dài bằng 51 ký tự!", {
+            type: "error",
+            theme: "bubble",
+            duration: 3000,
+            position: "top-right"
+          });
+          return;
+        }
+        if (this.post.pageInfor.metaDescription.length < 70 || this.post.pageInfor.metaDescription.length > 155) {
+          this.$toast.show("Meta description có độ dài từ 70 đến 155 ký tự!", {
+            type: 'error',
+            theme: 'bubble',
+            duration: 3000,
+            position: 'top-right'
+          });
+          return;
+        }
         this.post.acreage = Number(this.post.acreage);
         this.post.floor = Number(this.post.floor);
+        this.post.usageAcreage = Number(this.post.usageAcreage);
         this.$apollo.mutate({
           mutation: updatePost,
           variables: {
@@ -403,13 +570,18 @@ export default {
               block: this.post.block,
               description: this.post.description,
               floor: this.post.floor,
+              furniture: this.post.furnitures,
               gallery: this.post.gallery,
+              otherSpecification: this.post.otherSpecification,
               pageInfor: {
                 title: this.post.pageInfor.title,
                 slug: this.post.pageInfor.slug,
                 metaDescription: this.post.pageInfor.metaDescription
               },
-              tags: this.post.tags
+              tags: this.post.tags,
+              usageAcreage: this.post.usageAcreage,
+              view: this.post.view,
+              viewDirection: this.post.viewDirection
             }
           }
         }).then((data) => {
@@ -426,16 +598,22 @@ export default {
           apartmentNumber: this.post.apartmentNumber,
           block: this.post.block,
           description: this.post.description,
+          furnitures: [],
           floor: this.post.floor,
           gallery: this.post.gallery,
+          otherSpecification: this.post.otherSpecification,
           pageInfor: {
             title: this.post.pageInfor.title,
             slug: this.post.pageInfor.slug,
             metaDescription: this.post.pageInfor.metaDescription
           },
-          tags: []
+          tags: [],
+          usageAcreage: this.post.usageAcreage,
+          view: this.post.view,
+          viewDirection: this.post.viewDirection
         };
         this.post.tags.forEach(tag => this.currentPost.tags.push(tag));
+        this.post.furnitures.forEach(c => this.currentPost.furnitures.push(c));
         if (this.modalIsShowing == true) { 
           this.publishPost();
         }
@@ -465,19 +643,23 @@ export default {
         || (this.currentPost.pageInfor.metaDescription != this.post.pageInfor.metaDescription) || (this.currentPost.apartmentNumber != this.post.apartmentNumber)
         || (this.currentPost.acreage != this.post.acreage) || (this.currentPost.floor != this.post.floor) || (this.currentPost.block != this.post.block)
         || (this.currentPost.description != this.post.description) || (this.currentPost.tags.length != this.post.tags.length)
-        || (this.currentPost.gallery.forEach(x => this.post.gallery.forEach(c => x == c))))
+        || (this.currentPost.gallery.forEach(x => this.post.gallery.forEach(c => x != c))) || (this.currentPost.furnitures.length != this.post.furnitures.length)
+        || (this.currentPost.otherSpecification != this.post.otherSpecification) || (this.currentPost.usageAcreage != this.post.usageAcreage) 
+        || (this.currentPost.view != this.post.view) || (this.currentPost.viewDirection != this.post.viewDirection)|| (this.imageIsChanged == true))
         {
           this.modalIsShowing = true;
           this.$modal.show("update-before-publish");
           return;
         }
-
+        console.log(this.post);
         if ((this.post.acreage == null || this.post.acreage <= 0) || (this.post.apartmentNumber == null || this.post.apartmentNumber == "") 
         || (this.post.block == null || this.post.block == "") || (this.post.description == null || this.post.description == "")
         || (this.post.floor == null || this.post.floor <= 0) || (this.post.tags.length == 0)
         || (this.post.pageInfor.title == null || this.post.pageInfor.title == "") || (this.post.pageInfor.slug == null || this.post.pageInfor.slug == "")
         || (this.post.pageInfor.metaDescription == null || this.post.pageInfor.metaDescription == "")
-        || (this.post.gallery.length == 0))
+        || (this.post.gallery.length == 0) || (this.post.furnitures.length == 0) || (this.post.usageAcreage == null || this.post.usageAcreage <= 0)
+        || (this.post.otherSpecification == null || this.post.otherSpecification == "") || (this.post.view == null || this.post.view == "")
+        || (this.post.viewDirection == null || this.post.viewDirection == ""))
         {
           this.$toast.show("Tất cả dữ liệu không được để trống, vui lòng cập nhật và kiểm tra lại!", {
             type: "error",

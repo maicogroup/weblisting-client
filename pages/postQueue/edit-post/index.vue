@@ -12,19 +12,34 @@
         <p class="font-medium mr-6 text-md">
           Slug:
         </p>
-        <input :placeholder="post.pageInfor.slug" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.pageInfor.slug">
+        <em class="text-sm text-gray-400 mb-5">Độ dài tối đa: 51</em>
+        <br>
+        <div class="flex justify-between items-center">
+          <input :placeholder="post.pageInfor.slug" maxlength="51" type="text" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.slug">
+          <p class="content" :value="this.post.pageInfor.slug.length">{{this.post.pageInfor.slug.length}}/51</p>
+        </div>
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
           Title:
         </p>
-        <input :placeholder="post.pageInfor.title" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.pageInfor.title">
+        <em class="text-sm text-gray-400 mb-5">Độ dài tối đa: 63 - Độ dài tối thiểu: 30</em>
+        <br>
+        <div class="flex justify-between items-center">
+          <input :placeholder="post.pageInfor.title" type="text" maxlength="63" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.title">
+          <p class="content" :value="this.post.pageInfor.title.length">{{this.post.pageInfor.title.length}}/63</p>
+        </div>
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
           Meta: 
         </p>
-        <input :placeholder="post.pageInfor.metaDescription" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.pageInfor.metaDescription">
+        <em class="text-sm text-gray-400 mb-5">Độ dài tối đa: 155 ký tự - Độ dài tối thiểu: 70 ký tự</em>
+        <br>
+        <div class="flex justify-between items-center">
+          <input :placeholder="post.pageInfor.metaDescription" maxlength="155" type="text" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.metaDescription">
+          <p class="content" :value="this.post.pageInfor.metaDescription.length">{{this.post.pageInfor.metaDescription.length}}/155</p>
+        </div>
       </div>
     </div>
     <h2 class="font-bold text-lg mb-2 mt-6">Thông tin về dự án</h2>
@@ -155,7 +170,7 @@
     </div>
     <div class="mt-4 rounded-lg border-8 py-3 px-5">
       <ul>
-        <li v-for="item in post.furnitures" :key="item" class="bgc-cornflowerblue rounded-lg inline-flex mr-4 mt-2 mb-3 bg-lime-300 p-2 list-none" title="xóa tag">
+        <li v-for="item in post.furnitures" :key="item" class="bgc-cornflowerblue rounded-lg inline-flex mr-4 mt-2 mb-3 bg-lime-300 p-2 list-none" title="xóa nội thất">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6 cursor-pointer mr-2 text-slate-400 hover:text-red-600"
@@ -242,6 +257,15 @@
 .list.row > * {
   display: inline-block;
 }
+.content {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    color: #999999;
+  }
+  
 </style>
 
 <script>
@@ -504,6 +528,33 @@ export default {
             position: "top-right"
           });
           this.$modal.hide("update-before-publish")
+          return;
+        }
+        if (this.post.pageInfor.title.length < 30 || this.post.pageInfor.title.length > 63) {
+          this.$toast.show("Tiêu đề có độ dài từ 30 đến 63 ký tự!", {
+            type: "error",
+            theme: "bubble",
+            duration: 3000,
+            position: "top-right"
+          });
+          return;
+        }
+        if (this.post.pageInfor.slug.length > 51) {
+          this.$toast.show("Slug có độ dài bằng 51 ký tự!", {
+            type: "error",
+            theme: "bubble",
+            duration: 3000,
+            position: "top-right"
+          });
+          return;
+        }
+        if (this.post.pageInfor.metaDescription.length < 70 || this.post.pageInfor.metaDescription.length > 155) {
+          this.$toast.show("Meta description có độ dài từ 70 đến 155 ký tự!", {
+            type: 'error',
+            theme: 'bubble',
+            duration: 3000,
+            position: 'top-right'
+          });
           return;
         }
         this.post.acreage = Number(this.post.acreage);

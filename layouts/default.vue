@@ -52,11 +52,11 @@ export default {
       redirect: 'follow'
       };
 
-      fetch("https://localhost:7247/graphql/", requestOptions)
+      fetch("http://maicogroup.net:3001/graphql/", requestOptions)
       .then(response => response.text())
-      .then(result => console.log(result))
+      .then(result => console.log("result: ", result))
       .catch(error => console.log('error', error));
-      debugger;
+      //debugger;
     }
   }
 };

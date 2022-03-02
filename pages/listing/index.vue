@@ -34,7 +34,7 @@
         <type-filter-dropdown :selected-option="inputFilter.type" @optionchanged="handleTypeFilterChanged" />
         <location-ftiler-dropdown :selected-option="inputFilter.location" @optionchanged="handleLocationFilterChanged" />
         <project-filter-dropdown :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged" />
-        <price-filter-dropdown :selected-option="inputFilter.priceRange" @optionchanged="handlePriceFilterChanged" />
+        <price-filter-dropdown :selected-option="inputFilter.priceRange" :demand="inputFilter.demand" @optionchanged="handlePriceFilterChanged" />
         <acreage-filter-dropdown :selected-option="inputFilter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
         <direction-filter-dropdown :selected-option="inputFilter.directions" @optionchanged="handleDirectionFilterChanged" />
         <bedroom-filter-dropdown :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
@@ -72,37 +72,65 @@
       <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
       <div class="ml-9 mt-14 hidden lg:block">
         <ContactInfor />
-        <div class="border mt-4 p-4">
+        <div class="border mt-4 p-4 rounded">
           <p class="font-bold mb-2">
             Xem theo giá
           </p>
-          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 3})">
-            Dưới 3 triệu
-          </quick-filter-button>
-          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 3, gtln: 5})">
-            Từ 3 - 5 triệu
-          </quick-filter-button>
-          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 5, gtln: 7})">
-            Từ 5 - 7 triệu
-          </quick-filter-button>
-          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 7, gtln: 10})">
-            Từ 7 - 10 triệu
-          </quick-filter-button>
-          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 10, gtln: 15})">
-            Từ 10 - 15 triệu
-          </quick-filter-button>
-          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 15, gtln: 20})">
-            Từ 15 - 20 triệu
-          </quick-filter-button>
-          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 20, gtln: 30})">
-            Từ 20 - 30 triệu
-          </quick-filter-button>
-          <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 30, gtln: undefined})">
-            Trên 30 triệu
-          </quick-filter-button>
+          <div v-if="this.sellButtonIsActive == false">
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 3})">
+              Dưới 3 triệu
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 3, gtln: 5})">
+              Từ 3 - 5 triệu
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 5, gtln: 7})">
+              Từ 5 - 7 triệu
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 7, gtln: 10})">
+              Từ 7 - 10 triệu
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 10, gtln: 15})">
+              Từ 10 - 15 triệu
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 15, gtln: 20})">
+              Từ 15 - 20 triệu
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 20, gtln: 30})">
+              Từ 20 - 30 triệu
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 30, gtln: undefined})">
+              Trên 30 triệu
+            </quick-filter-button>
+          </div>
+          <div v-else>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 1})">
+              Dưới 1 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 1, gtln: 2})">
+              Từ 1 tỷ - đến 2 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 2, gtln: 3})">
+              Từ 2 tỷ - đến 3 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 3, gtln: 5})">
+              Từ 3 tỷ - đến 5 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 5, gtln: 7})">
+              Từ 5 tỷ - đến 7 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 7, gtln: 10})">
+              Từ 7 tỷ - đến 10 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 10, gtln: 20})">
+              Từ 10 tỷ - đến 20 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 20, gtln: undefined})">
+              Trên 20 tỷ
+            </quick-filter-button>
+          </div>
         </div>
 
-        <div class="border mt-4 p-4">
+        <div class="border mt-4 p-4 rounded">
           <p class="font-bold mb-2">
             Xem theo diện tích
           </p>
@@ -123,7 +151,7 @@
           </quick-filter-button>
         </div>
 
-        <div class="border mt-4 p-4">
+        <div class="border mt-4 p-4 rounded">
           <p class="font-bold mb-2">
             Xem theo phòng ngủ
           </p>
@@ -609,7 +637,7 @@ export default {
       return marked(this.tempSEOContent);
     },
     showIfPostsOfOneProject () {
-      return this.$route.params.slug !== null && this.project !== null;
+      return this.$route.params.slug !== undefined;
     },
 
     sellButtonClasses () {
@@ -622,13 +650,14 @@ export default {
   },
 
   created () {
-    this.filter = this.createFilterFromUrl();
-    this.inputFilter = { ...this.filter };
-
-    if (this.$route.query.demand === 'Bán') {
-      this.setSellButtonActiveState(true);
+    if (process.server) {
+      // không rõ tại sao nhưng server created sẽ đc gọi trước apollo
+      this.filter = this.createFilterFromUrl();
+      this.inputFilter = { ...this.filter };
     } else {
-      this.setSellButtonActiveState(false);
+      // còn bên client thì ngược lại: apollo đc gọi trước created
+      this.filter = { ...this.createFilterFromUrl(), ...this.filter };
+      this.inputFilter = { ...this.filter };
     }
 
     if (this.$route.query.demand === 'Bán') {
@@ -636,7 +665,6 @@ export default {
     } else {
       this.setSellButtonActiveState(false);
     }
-
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
@@ -697,7 +725,7 @@ export default {
       },
 
       skip () {
-        return this.filter === null || this.$route.params.slug === null;
+         return this.$route.params.slug === undefined;
       },
 
       variables () {
@@ -796,6 +824,7 @@ export default {
       this.searchButtonPressed = true;
       this.filter = { ...this.inputFilter };
       this.filterResponsive = false;
+      
       let path = '/danh-sach-can-ho';
       if (this.filter.project) {
         path = path + '/' + this.filter.project.pageInfor.slug;
@@ -862,14 +891,6 @@ export default {
 </script>
 
 <style scoped>
-.grow {
-  flex-grow: 1;
-}
-
-.shrink-0 {
-  flex-shrink: 0;
-}
-
 .filter-bar-blank-space {
   height: 42px;
 }

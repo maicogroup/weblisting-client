@@ -193,7 +193,14 @@
       
       <div class="list row">
         <drag-sortable v-for="(item, index) in post.gallery" v-model="dragData2" :key="item" :index="index" @sortend="sortend($event, post.gallery)" replace-direction="horizontal">
-          <img style="user-drag:none; -webkit-user-drag:none;" :src="imgUrl + item">
+          <div v-if="item.includes('.mp4')">
+            <video controls>
+              <source :src="imgUrl + item" type="video/mp4">
+            </video>
+          </div>
+          <div v-else>
+            <img style="user-drag:none; -webkit-user-drag:none;" :src="imgUrl + item">
+          </div>
         </drag-sortable>
       </div>
     </div>

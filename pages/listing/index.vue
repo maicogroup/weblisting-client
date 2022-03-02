@@ -186,18 +186,8 @@
         <h4 class="mr-auto ml-auto text-base">
           Tìm kiếm bất động sản
         </h4>
-        <div
-          v-on:click="openCloseMobileFilter"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 relative"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+        <div v-on:click="openCloseMobileFilter" class="absolute right-3">
+         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f71e1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
         </div>
       </div>
       <div class="relative mx-2.5">
@@ -231,7 +221,7 @@
 
         <location-filter-option :selected-option="inputFilter.location" @optionchanged="handleLocationFilterChanged" />
 
-        <price-filter-option :selected-option="inputFilter.priceRange" @optionchanged="handlePriceFilterChanged" />
+        <price-filter-option :selected-option="inputFilter.priceRange" :demand="inputFilter.demand" @optionchanged="handlePriceFilterChanged" />
 
         <acreage-filter-option :selected-option="inputFilter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
 
@@ -241,9 +231,12 @@
 
         <bedroom-filter-options :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
       </div>
-      <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
-        Tìm kiếm
-      </button>
+      <div class="flex justify-center">
+         <button class="whitespace-nowrap rounded-md px-6 py-2 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
+            Tìm kiếm
+          </button>
+      </div>
+     
       <!-- <p class="mb-4">
         Bạn phải chọn <span><p class="text-sky-500">Khu vực</p></span> trước
       </p> -->
@@ -263,15 +256,7 @@
         <div
           @click="isShowArea = false"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 relative"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#32c82b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H6M12 5l-7 7 7 7"/></svg>
         </div>
       </div>
       <div class="relative my-4 w-full">
@@ -824,7 +809,7 @@ export default {
       this.searchButtonPressed = true;
       this.filter = { ...this.inputFilter };
       this.filterResponsive = false;
-      
+
       let path = '/danh-sach-can-ho';
       if (this.filter.project) {
         path = path + '/' + this.filter.project.pageInfor.slug;

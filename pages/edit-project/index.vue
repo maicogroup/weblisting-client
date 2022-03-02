@@ -85,7 +85,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
                             </button>
                         </label>
-                        <div v-if="project.address.googleMapLocation.includes('https')">
+                        <div v-if="project.address.googleMapLocation !== null && project.address.googleMapLocation.includes('https')">
                             <iframe :src="project.address.googleMapLocation" width="100%" height="400px" loading="lazy" />
                         </div>
                         <div v-else>
@@ -131,10 +131,8 @@
                             </p>
                         </div>
                         <br>
-                        
                     </div>
                     <div class="flex justify-end my-2" v-if="!isEditting">
-                        
                         <button class="text-white px-3 py-1 bg-gray-400 rounded" @click="handleUpdateProjectUtilities(project.utilities)">Chỉnh sửa</button>
                     </div>
                     <div class="flex justify-end space-x-1" v-else>
@@ -182,6 +180,23 @@
                             </div>
                         </div>
                     </div> 
+                </expand-panel>
+
+                <expand-panel title="Nội dung SEO">
+                    <div>
+<client-only>
+      <quill-editor
+        ref="myQuillEditor"
+        v-model="project.sEOContent"
+        class="h-52 mb-11"
+        :options="editorOption"
+        @blur="onEditorBlur($event)"
+        @focus="onEditorFocus($event)"
+        @ready="onEditorReady($event)"
+      />
+    </client-only>
+    <button v-if="selectedUtilities.length == 0" class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectInformation(project.id)">Cập nhật</button>
+                    </div>
                 </expand-panel>
             </div>
         </div>
@@ -304,12 +319,10 @@
 </template>
 
 <script type="text/javascript">
-import gql from "graphql-tag";
-import { expandPanel } from 'vue-expand-panel'
-
+import gql from 'graphql-tag';
+import { expandPanel } from 'vue-expand-panel';
 // import styles
 import '~/assets/css/vue-expander.css';
-
 const getProject = gql`query GetProject($condition: ProjectCollectionFilterInput)
             {
                 projects(where: $condition) {
@@ -324,8 +337,9 @@ const getProject = gql`query GetProject($condition: ProjectCollectionFilterInput
                         city,
                         googleMapLocation
                     },
-                    utilities
+                    utilities,
                     images,
+                    sEOContent,
                     pageInfors {
                         title,
                         slug,
@@ -333,7 +347,6 @@ const getProject = gql`query GetProject($condition: ProjectCollectionFilterInput
                     }
                 }
             }`;
-
 export default {
     name: "EditProject",
     apollo: {
@@ -357,17 +370,42 @@ export default {
             isEditting: false,
             newUtility: "",
             currentUtilities: {},
-            selectedUtilities: []
+            selectedUtilities: [],
+            editorOption: {
+        // Some Quill options...
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            [{ font: [] }],
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+            ['blockquote', 'code-block'],
+            [{ list: 'ordered' }, { list: 'bullet' }, { align: [] }],
+            [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+            [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+            [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+            ['clean'] // remove formatting button
+          ]
+        }
+      }
         }
     },
     methods: {
+      onEditorBlur (editor) {
+      console.log('editor blur!', editor);
+    },
+    onEditorFocus (editor) {
+      console.log('editor focus!', editor);
+    },
+    onEditorReady (editor) {
+      console.log('editor ready!', editor);
+    },
         handleUpdateProjectInformation() {
             this.isEditting = true;
         },
         updateProjectInformation(id) {
             const project = this.projects.filter(x => x.id == id);
             this.$apollo.mutate({
-
                 mutation: gql`mutation UpdateProjectInformation($input: UpdateProjectInput!) {
                     updateProject(input: $input) {
                         string
@@ -379,7 +417,8 @@ export default {
                         projectName: project[0].projectName,
                         investor: project[0].investor,
                         juridical: project[0].juridical,
-                        description: project[0].description
+                        description: project[0].description,
+                        sEOContent: project[0].sEOContent
                     }
                 }
                 
@@ -484,9 +523,7 @@ export default {
                     const { projects } = store.readQuery(query);
                     const project = projects.filter(x => x.id == id);
                     project[0].address.googleMapLocation = item;
-
                     store.writeQuery({...query, data: {projects: projects}});
-
                 }
             })
             this.$modal.hide('google-map-edit-modal')
@@ -615,7 +652,8 @@ export default {
             this.isEditting = false;
         },
         addNewProjectImage(id, images) {
-            if (images.includes(this.currentImage)) {
+            if (images.includes(this.currentImage)) 
+            {
                 this.$toast.show("Hình ảnh đã tồn tại, vui lòng thử lại!", {
                     type: "error",
                     theme: "bubble",
@@ -831,7 +869,6 @@ export default {
             this.$modal.show("page-information-detail");
         },
         updatePageInformation() {
-
             if ((this.currentPageInfor.title == this.currentPageInfor.staticPageInfor.title) 
                     && (this.currentPageInfor.slug == this.currentPageInfor.staticPageInfor.slug)
                         && (this.currentPageInfor.metaDescription == this.currentPageInfor.staticPageInfor.metaDescription)) 
@@ -855,12 +892,10 @@ export default {
                     return;
                 }
             }
-
             var index = this.pageInfors.indexOf(this.pageInfors.find(x => x.slug == this.currentPageInfor.staticPageInfor.slug));
             this.pageInfors[index].title = this.currentPageInfor.title;
             this.pageInfors[index].slug = this.currentPageInfor.slug;
             this.pageInfors[index].metaDescription = this.currentPageInfor.metaDescription;
-
             this.$apollo.mutate({
                 mutation: gql`mutation UpdatePageInformation($input: UpdateProjectInput!)
                 {

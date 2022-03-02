@@ -795,7 +795,7 @@ export default {
     handleFilterButtonPressed () {
       this.searchButtonPressed = true;
       this.filter = { ...this.inputFilter };
-
+      this.filterResponsive = false;
       let path = '/danh-sach-can-ho';
       if (this.filter.project) {
         path = path + '/' + this.filter.project.pageInfor.slug;

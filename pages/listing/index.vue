@@ -129,6 +129,12 @@ export default {
     this.filter = this.createFilterFromUrl();
     this.inputFilter = { ...this.filter };
 
+    if (this.$route.query.demand === 'Bán') {
+      this.setSellButtonActiveState(true);
+    } else {
+      this.setSellButtonActiveState(false);
+    }
+
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
@@ -216,6 +222,7 @@ export default {
       if (query.type) {
         filter.type = query.type;
       }
+
 
       if (query.city || query.district) {
         filter.location = {
@@ -372,6 +379,10 @@ export default {
 <style scoped>
 .grow {
   flex-grow: 1;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
 }
 
 .filter-bar-blank-space {

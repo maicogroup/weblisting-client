@@ -179,9 +179,6 @@ import Divider from '~/components/Divider.vue';
 
 export default {
   name: 'PostList',
-  props:{
-     isPreview: { type: Boolean, default: false }
-  },
   components: { ProjectHeader, ListPost, ContactInfor, Divider, LocationFtilerDropdown, ProjectFilterDropdown, DirectionFilterDropdown, TypeFilterDropdown, PriceFilterDropdown, AcreageFilterDropdown, BedroomFilterDropdown, QuickFilterButton },
   data () {
     return {
@@ -245,9 +242,6 @@ export default {
       this.setSellButtonActiveState(true);
     } else {
       this.setSellButtonActiveState(false);
-    }
-    if(this.isPreview){
-      this.filter.isPreview = true;
     }
     this.$watch(
       () => this.$route.params,

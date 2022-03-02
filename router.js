@@ -41,11 +41,6 @@ export function createRouter () {
         component: PostList
       },
       {
-        path: '/danh-sach-can-ho-preview/:slug',
-        component: PostList,
-        props:{isPreview: true}
-      },
-      {
         path: '/danh-sach-can-ho',
         component: PostList
       },

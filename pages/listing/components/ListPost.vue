@@ -229,9 +229,9 @@ export default {
 
     createConditionParamter (filter) {
       const conditions = { };
-      if(!filter.isPreview){
-        conditions.status = { eq: "Publish"}
-      }
+      // if(!filter.isPreview){
+      //   conditions.status = { eq: "Publish"}
+      // }
       if (filter.demand) {
         conditions.demand = { eq: filter.demand };
       }

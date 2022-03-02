@@ -25,13 +25,11 @@
       @mouseenter="entered = true"
       @mouseleave="entered = false"
     >
-      <p class="font-semibold pb-2 px-4">
+      <p class="font-semibold px-6 py-2">
         Chọn số lượng phòng ngủ
       </p>
 
-      <divider />
-
-      <div class="flex space-x-4 px-4 my-2">
+      <div class="flex space-x-4 px-6">
         <div class="flex-col space-y-1">
           <label v-for="option in bedroomOptions.filter((_, index) => index % 2 === 0)" :key="option" class="flex items-center">
             <input v-model="selectedChoices" :value="option" type="checkbox" class="form-checkbox h-4 w-4 text-gray-600">
@@ -46,7 +44,7 @@
         </div>
       </div>
 
-      <divider />
+      <divider class="mt-2" />
 
       <div class="flex space-x-2 justify-center mt-3 mb-1">
         <button class="px-2 py-1 hover:text-red-700" @click="clearSelectedChoices">

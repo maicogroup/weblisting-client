@@ -14,11 +14,9 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ],
-    // script: [
-    //   { src: '/js/onBeforeUnload.js', body: true, isSSR: false }
-    // ]
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,400;0,500;0,700;1,400&display=swap' }
+    ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -57,7 +55,7 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://localhost:54261/graphql/'
+        httpEndpoint: 'http://maicogroup.net:3001/graphql/'
       }
     }
   },

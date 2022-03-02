@@ -20,22 +20,26 @@
       v-if="open"
       ref="dropdownContent"
       tabindex="0"
-      class="text-sm absolute right-0 py-2 bg-white top-16 w-60 rounded-none shadow-xl"
+      class="text-sm absolute right-0 py-2 bg-white top-16 rounded-none shadow-xl"
       @mouseenter="entered = true"
       @mouseleave="entered = false"
     >
-      <p class="font-semibold pb-2 px-4">
+      <p class="font-semibold px-6 py-2">
         Chọn giá
       </p>
 
-      <div class="flex justify-center">
-        <div>
-          <input :value="customRange.from" :class="`w-16 px-2 py-1 text-center text-sm border rounded-md outline-none ${borderRedIfInvalid}`" @input="handleCustomRangeFromChanged">
-          <svg xmlns="http://www.w3.org/2000/svg" class="inline h-4 w-4 mx-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-          <input :value="customRange.to" :class="`w-16 px-2 py-1 text-center text-sm border rounded-md outline-none ${borderRedIfInvalid}`" @input="handleCustomRangeToChanged">
-        </div>
+      <div class="flex justify-between items-center px-6 mt-3">
+        <label class="flex items-center">
+          <input :value="customRange.from" :class="`w-14 px-2 py-1 text-center text-sm border rounded-md outline-none ${borderRedIfInvalid}`" @input="handleCustomRangeFromChanged">
+          <span class="ml-1">{{ priceUnit }}</span>
+        </label>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12H4" />
+        </svg>
+        <label class="flex items-center">
+          <input :value="customRange.to" :class="`w-14 px-2 py-1 text-center text-sm border rounded-md outline-none ${borderRedIfInvalid}`" @input="handleCustomRangeToChanged">
+          <span class="ml-1">{{ priceUnit }}</span>
+        </label>
       </div>
 
       <p :class="`mt-1 px-4 text-xs text-red-700 ${showIfInvalid}`">
@@ -44,22 +48,26 @@
 
       <divider class="mt-2" />
 
-      <filter-dropdown-item @click="handleSelectAllPrices">
+      <filter-dropdown-item class="text-dark-red" @click="handleSelectAllPrices">
         Tất cả mức giá
       </filter-dropdown-item>
-      <filter-dropdown-item v-for="range in priceRanges" :key="`${range.from}-${range.to}`" @click="handleSelectPriceRange(range)">
+      <filter-dropdown-item v-for="range in priceRanges" :key="`${range.from}-${range.to}`" class="flex justify-between" @click="handleSelectPriceRange(range)">
         <template v-if="range.from === 0">
-          Dưới {{ range.to }} triệu
+          Dưới {{ range.to }} {{ priceUnit }}
         </template>
         <template v-else-if="range.to === null">
-          Trên {{ range.from }} triệu
+          Trên {{ range.from }} {{ priceUnit }}
         </template>
         <template v-else>
-          Từ {{ range.from }} triệu
-          <svg xmlns="http://www.w3.org/2000/svg" class="inline h-5 w-5 mx-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          <span class="range-text">
+            Từ {{ range.from }} {{ priceUnit }}
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12H4" />
           </svg>
-          {{ range.to }} triệu
+          <span class="range-text text-right">
+            đến {{ range.to }} {{ priceUnit }}
+          </span>
         </template>
       </filter-dropdown-item>
 
@@ -87,7 +95,8 @@ export default {
   components: { FilterDropdownItem },
 
   props: {
-    selectedOption: { type: Object, default: null }
+    selectedOption: { type: Object, default: null },
+    demand: { type: String, optional: false, default: null }
   },
 
   data () {
@@ -97,12 +106,23 @@ export default {
       displaySelected: 'Tất cả',
       customRange: { from: 0, to: 0 },
       prevCustomRange: { from: 0, to: 0 },
-      priceRanges: [{ from: 0, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 10 }, { from: 10, to: 20 }, { from: 20, to: 30 }, { from: 30, to: 50 }, { from: 50, to: 100 }, { from: 100, to: null }],
       MAX_VALUE: 999999
     };
   },
 
   computed: {
+    priceUnit () {
+      return this.demand === 'Bán' ? 'tỷ' : 'triệu';
+    },
+
+    priceRanges () {
+      if (this.demand === 'Bán') {
+        return [{ from: 0, to: 1 }, { from: 1, to: 2 }, { from: 2, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 7 }, { from: 7, to: 10 }, { from: 10, to: 20 }, { from: 20, to: null }];
+      } else {
+        return [{ from: 0, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 7 }, { from: 7, to: 10 }, { from: 19, to: 15 }, { from: 15, to: 20 }, { from: 25, to: 30 }, { from: 30, to: null }];
+      }
+    },
+
     customRangeIsInvalid () {
       return (this.customRange.from > this.customRange.to);
     },
@@ -137,11 +157,17 @@ export default {
       handler (option) {
         if (option) {
           this.displaySelected = this.formatRange(option);
+          this.setCustomRange(option);
         } else {
           this.displaySelected = 'Tất cả';
+          this.setCustomRange({ from: 0, to: 0 });
         }
       },
       immediate: true
+    },
+
+    demand () {
+      this.$emit('optionchanged', null);
     }
   },
 
@@ -194,17 +220,24 @@ export default {
     },
 
     formatRange (range) {
+      const unit = this.demand === 'Bán' ? 'tỷ' : 'triệu';
+
       if (!range.from || range.from === 0) {
-        return range.to === 0 ? 'Tất cả' : `Dưới ${range.to} triệu`;
+        return range.to === 0 ? 'Tất cả' : `Dưới ${range.to} ${unit}`;
       } else if (!range.to) {
-        return `Trên ${range.from} triệu`;
+        return `Trên ${range.from} ${unit}`;
       } else {
-        return `${range.from} - ${range.to} triệu`;
+        return `${range.from} - ${range.to} ${unit}`;
       }
     },
 
     handleSelectPriceRange (range) {
       this.open = false;
+      this.setCustomRange(range);
+      this.$emit('optionchanged', { ...range });
+    },
+
+    setCustomRange (range) {
       if (range.to) {
         this.prevCustomRange = { ...range };
         this.customRange = { ...range };
@@ -212,7 +245,6 @@ export default {
         this.prevCustomRange = { from: 0, to: 0 };
         this.customRange = { from: 0, to: 0 };
       }
-      this.$emit('optionchanged', { ...range });
     },
 
     handleSelectAllPrices () {
@@ -224,3 +256,13 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.range-text {
+  width: 77px;
+}
+
+.text-dark-red {
+  color: #961B12;
+}
+</style>

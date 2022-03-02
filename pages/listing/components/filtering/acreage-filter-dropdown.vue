@@ -25,18 +25,22 @@
       @mouseenter="entered = true"
       @mouseleave="entered = false"
     >
-      <p class="text-sm font-semibold pb-2 px-4">
+      <p class="font-semibold px-6 py-2">
         Chọn diện tích
       </p>
 
-      <div class="flex justify-center">
-        <div>
-          <input :value="customRange.from" :class="`w-16 px-2 py-1 text-center text-sm border rounded-md outline-none ${borderRedIfInvalid}`" @input="handleCustomRangeFromChanged">
-          <svg xmlns="http://www.w3.org/2000/svg" class="inline h-4 w-4 mx-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-          <input :value="customRange.to" :class="`w-16 px-2 py-1 text-center text-sm border rounded-md outline-none ${borderRedIfInvalid}`" @input="handleCustomRangeToChanged">
-        </div>
+      <div class="flex justify-between items-center px-6 mt-3">
+        <label class="flex items-center">
+          <input :value="customRange.from" :class="`w-14 px-2 py-1 text-center text-sm border rounded-md outline-none ${borderRedIfInvalid}`" @input="handleCustomRangeFromChanged">
+          <span class="ml-1">m²</span>
+        </label>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12H4" />
+        </svg>
+        <label class="flex items-center">
+          <input :value="customRange.to" :class="`w-14 px-2 py-1 text-center text-sm border rounded-md outline-none ${borderRedIfInvalid}`" @input="handleCustomRangeToChanged">
+          <span class="ml-1">m²</span>
+        </label>
       </div>
 
       <p :class="`mt-1 px-4 text-xs text-red-700 ${showIfInvalid}`">
@@ -45,10 +49,10 @@
 
       <divider class="mt-2" />
 
-      <filter-dropdown-item @click="handleSelectAllSize">
+      <filter-dropdown-item class="text-dark-red" @click="handleSelectAllSize">
         Tất cả diện tích
       </filter-dropdown-item>
-      <filter-dropdown-item v-for="range in acreageRanges" :key="`${range.from}-${range.to}`" @click="handleSelectAcreageRange(range)">
+      <filter-dropdown-item v-for="range in acreageRanges" :key="`${range.from}-${range.to}`" class="flex justify-between" @click="handleSelectAcreageRange(range)">
         <template v-if="range.from === 0">
           Dưới {{ range.to }} m²
         </template>
@@ -56,11 +60,15 @@
           Trên {{ range.from }} m²
         </template>
         <template v-else>
-          Từ {{ range.from }} m²
-          <svg xmlns="http://www.w3.org/2000/svg" class="inline h-5 w-5 mx-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          <span class="range-text">
+            Từ {{ range.from }} m²
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12H4" />
           </svg>
-          {{ range.to }} m²
+          <span class="range-text text-right">
+            đến {{ range.to }} m²
+          </span>
         </template>
       </filter-dropdown-item>
 
@@ -229,3 +237,13 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.range-text {
+  width: 85px;
+}
+
+.text-dark-red {
+  color: #961B12;
+}
+</style>

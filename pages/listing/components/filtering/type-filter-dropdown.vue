@@ -24,13 +24,13 @@
       @mouseenter="entered = true"
       @mouseleave="entered = false"
     >
-      <p class="font-semibold pb-2 px-4">
+      <p class="font-semibold px-6 py-2">
         Chọn loại nhà đất
       </p>
 
       <divider />
 
-      <filter-dropdown-item @click="handleSelectAllTypes">
+      <filter-dropdown-item class="text-dark-red" @click="handleSelectAllTypes">
         Tất cả nhà đất
       </filter-dropdown-item>
       <filter-dropdown-item @click="handleSelecType('Căn hộ chung cư')">
@@ -132,3 +132,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.text-dark-red {
+  color: #961B12;
+}
+</style>

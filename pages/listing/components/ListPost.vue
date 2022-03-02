@@ -252,12 +252,14 @@ export default {
         const priceRange = filter.priceRange;
         conditions.price = {};
 
+        const scale = filter.demand === 'Bán' ? 1e9 : 1e6;
+
         if (priceRange.from) {
-          conditions.price.gte = priceRange.from * 1000000;
+          conditions.price.gte = priceRange.from * scale;
         }
 
         if (filter.priceRange.to) {
-          conditions.price.lte = priceRange.to * 1000000;
+          conditions.price.lte = priceRange.to * scale;
         }
       }
 
@@ -384,10 +386,6 @@ export default {
   height: 100px;
 }
 
-.shrink-0 {
-  flex-shrink: 0;
-}
-
 .item-flex-start {
   align-items: flex-start;
 }
@@ -404,7 +402,4 @@ export default {
   border: none;
 }
 
-.grow {
-  flex-grow: 1;
-}
 </style>

@@ -25,11 +25,11 @@
       @mouseenter="entered = true"
       @mouseleave="entered = false"
     >
-      <div class="flex justify-between pb-2 px-4">
-        <p class="font-semibold mb-1">
+      <div class="flex justify-between pl-6 pr-4">
+        <p class="font-semibold py-2">
           Chọn khu vực
         </p>
-        <button v-if="firstOption !== null" class="hover:bg-gray-100 rounded-full p-1" @click="handleGoBack">
+        <button v-if="firstOption !== null" class="hover:bg-gray-100 rounded-full my-1 px-1" @click="handleGoBack">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-4 w-4"
@@ -70,6 +70,7 @@
       <template v-if="firstOption === null">
         <filter-dropdown-item
           v-if="searchInput.trim() === ''"
+          class="text-dark-red"
           @click="handleSelectAllLocation"
         >
           Tất cả khu vực
@@ -210,6 +211,8 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+.text-dark-red {
+  color: #961B12;
+}
 </style>

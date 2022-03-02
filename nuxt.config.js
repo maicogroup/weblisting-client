@@ -71,13 +71,14 @@ export default {
   },
 
   toast: {
-    position: 'top-right',
+    position: 'center',
     register: [ // Register custom toasts
       {
-        name: 'my-error',
-        message: 'Oops...Something went wrong',
+        name: 'featured-not-supported',
+        message: 'Tính năng này đang được hoàn thiện, cảm ơn bạn đã nhấn',
         options: {
-          type: 'error'
+          type: 'success',
+          duration: 4000
         }
       }
     ]

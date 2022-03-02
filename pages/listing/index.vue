@@ -50,7 +50,7 @@
       <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
       <div class="ml-9 mt-14 hidden lg:block">
         <ContactInfor />
-        <div class="border mt-4 p-4">
+        <div class="border mt-4 p-4 rounded">
           <p class="font-bold mb-2">
             Xem theo giá
           </p>
@@ -108,7 +108,7 @@
           </div>
         </div>
 
-        <div class="border mt-4 p-4">
+        <div class="border mt-4 p-4 rounded">
           <p class="font-bold mb-2">
             Xem theo diện tích
           </p>
@@ -129,7 +129,7 @@
           </quick-filter-button>
         </div>
 
-        <div class="border mt-4 p-4">
+        <div class="border mt-4 p-4 rounded">
           <p class="font-bold mb-2">
             Xem theo phòng ngủ
           </p>
@@ -179,6 +179,9 @@ import Divider from '~/components/Divider.vue';
 
 export default {
   name: 'PostList',
+  props:{
+     isPreview: { type: Boolean, default: false }
+  },
   components: { ProjectHeader, ListPost, ContactInfor, Divider, LocationFtilerDropdown, ProjectFilterDropdown, DirectionFilterDropdown, TypeFilterDropdown, PriceFilterDropdown, AcreageFilterDropdown, BedroomFilterDropdown, QuickFilterButton },
   data () {
     return {
@@ -228,15 +231,24 @@ export default {
   },
 
   created () {
-    this.filter = this.createFilterFromUrl();
-    this.inputFilter = { ...this.filter };
+    if (process.server) {
+      // không rõ tại sao nhưng server created sẽ đc gọi trước apollo
+      this.filter = this.createFilterFromUrl();
+      this.inputFilter = { ...this.filter };
+    } else {
+      // còn bên client thì ngược lại: apollo đc gọi trước created
+      this.filter = { ...this.createFilterFromUrl(), ...this.filter };
+      this.inputFilter = { ...this.filter };
+    }
 
     if (this.$route.query.demand === 'Bán') {
       this.setSellButtonActiveState(true);
     } else {
       this.setSellButtonActiveState(false);
     }
-
+    if(this.isPreview){
+      this.filter.isPreview = true;
+    }
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
@@ -297,7 +309,7 @@ export default {
       },
 
       skip () {
-        return this.filter === null || this.$route.params.slug === null;
+         return this.$route.params.slug === undefined;
       },
 
       variables () {

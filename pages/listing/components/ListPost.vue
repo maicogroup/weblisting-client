@@ -26,7 +26,7 @@
         <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-mobile color-orange font-bold text-base leading-6 ov-flow-hidden ">
           {{ post.pageInfor.title }}
         </NuxtLink>
-        <div class="flex item-flex-start space-x-4 md:border mt-2 pr-3 ">
+        <div class="flex item-flex-start space-x-4 md:border mt-2 pr-3 rounded">
           <NuxtLink class="w-32 h-32 md:w-64 md:h-44 shrink-0" :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`">
             <img class="w-full h-full object-cover" :src="post.srcimage" alt="Bonnie image">
           </NuxtLink>

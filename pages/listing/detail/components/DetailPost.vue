@@ -84,8 +84,8 @@
           <span class="re-properties-content">{{post.pageInfor.slug.slice(-5)}}</span>
         </div>
       </div>
-      <div style="width: 100%; height: 280px;">
-        <div style="width:48%; margin-right:2%; float:left;" class="p-2">
+      <div class="grid md:grid-cols-2 grid-cols-1 md:gap-6 h-auto">
+        <div class="p-2">
           <p class="re-properties-frame">
             <span class="re-properties">Giá</span>
             <span class="re-properties-content"> {{formatPrice(post.price, post.demand)}}</span>
@@ -111,7 +111,7 @@
             <span class="re-properties-content"> {{post.otherSpecification}}</span>
           </p>
         </div>
-        <div style="width:48%; margin-left:2%; float:right;" class="p-2">
+        <div class="p-2">
           <p class="re-properties-frame">
             <span class="re-properties">Phòng ngủ</span>
             <span class="re-properties-content"> {{post.totalBedRoom}}</span>
@@ -138,13 +138,15 @@
           </p>
         </div>
       </div>
-      <div class="flex justify-start items-center space-x-3">
-        <h3 class="re-properties" style="padding-left:8px;">
+      <div class="flex justify-start items-center space-x-3 float-left mb-2 w-full h-auto">
+        <h3 class="re-properties pl-2 w-40 md:w-auto">
           Nội thất:
         </h3>
-        <div v-for="item in post.furnitures" :key="item">
-          <button v-if="item == 'Trống' || item == 'Ko'" class="btn red-furnitures">{{item}}</button>
-          <button v-else class="btn green-furnitures">{{item}}</button>
+        <div class="flex flex-wrap justify-start items-center my-2">
+        <div v-for="item in post.furnitures" :key="item" class="my-auto">
+          <button v-if="item == 'Trống' || item == 'Ko'" class="btn red-furnitures my-1">{{item}}</button>
+          <button v-else class="btn green-furnitures my-1">{{item}}</button>
+        </div>
         </div>
       </div>
       <div>
@@ -319,6 +321,7 @@ export default ({
   border: 1px solid black;
   background-color: white;
   color: black;
+  float:left;
   font-family: Roboto;
   font-style: normal;
   line-height: 16px;

@@ -50,7 +50,7 @@
       <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
       <div class="ml-9 mt-14 hidden lg:block">
         <ContactInfor />
-        <div class="border mt-4 p-4">
+        <div class="border mt-4 p-4 rounded">
           <p class="font-bold mb-2">
             Xem theo giá
           </p>
@@ -108,7 +108,7 @@
           </div>
         </div>
 
-        <div class="border mt-4 p-4">
+        <div class="border mt-4 p-4 rounded">
           <p class="font-bold mb-2">
             Xem theo diện tích
           </p>
@@ -129,7 +129,7 @@
           </quick-filter-button>
         </div>
 
-        <div class="border mt-4 p-4">
+        <div class="border mt-4 p-4 rounded">
           <p class="font-bold mb-2">
             Xem theo phòng ngủ
           </p>

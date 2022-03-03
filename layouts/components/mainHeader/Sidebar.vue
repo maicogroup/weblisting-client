@@ -91,7 +91,7 @@
 export default {
   name: 'MainHeaderSidebar',
   props: {
-    projects: { type: Object, optional: false, default: null }
+    projects: { type: Array, optional: false, default: null }
   },
 
   methods: {

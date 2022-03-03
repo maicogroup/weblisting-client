@@ -252,7 +252,7 @@
       </p> -->
     </div>
 
-    // chon khu vuc mobile
+    <!-- chon khu vuc mobile -->
     <div
       v-if="isShowArea"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -308,7 +308,7 @@
       </div>
     </div>
 
-    // show district
+    <!-- // show district -->
     <div
       v-if="isShowDistrict"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -359,7 +359,7 @@
       </div>
     </div>
 
-    //chon khoang gia
+    <!-- //chon khoang gia -->
     <div
       v-if="isShowPriceRange"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -405,7 +405,7 @@
       </div>
     </div>
 
-    //chon khoang dien tich
+    <!-- chon khoang dien tich -->
     <div
       v-if="isShowAcreage"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -451,7 +451,7 @@
       </div>
     </div>
 
-    //chon khoang du an
+    <!-- chon khoang du an -->
     <div
       v-if="isShowProject"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -502,7 +502,7 @@
       </div>
     </div>
 
-    //chon huong
+    <!-- chon huong -->
     <div
       v-if="isShowDirection"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -535,7 +535,7 @@
       </div>
     </div>
 
-    //chon so phong
+    <!-- chon so phong -->
     <div
       v-if="isShowRoomOption"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"

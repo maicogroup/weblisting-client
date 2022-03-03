@@ -10,7 +10,7 @@
       </p>
 
       <Dropdown item-width="200px" title="Thuê">
-        <DropdownItem @click="handleSelectAllTypes">
+        <DropdownItem @click="handleSelectAllTypes('Cho Thuê')">
           Tất cả nhà đất
         </DropdownItem>
         <DropdownItem @click="handleSelecType('Căn hộ', 'Cho Thuê')">
@@ -31,7 +31,7 @@
       </Dropdown>
 
       <Dropdown item-width="200px" title="Mua">
-        <DropdownItem @click="handleSelecType('Căn hộ', 'Bán')">
+        <DropdownItem @click="handleSelectAllTypes('Bán')">
           Tất cả nhà đất
         </DropdownItem>
         <DropdownItem @click="handleSelecType('Căn hộ', 'Bán')">
@@ -53,7 +53,9 @@
 
       <Dropdown class="hidden lg:inline" item-width="220px" title="Dự án">
         <div class=" max-h-96 overflow-y-auto overflow-x-hidden">
-          <DropdownItem> Tất cả dự án </DropdownItem>
+          <nuxt-link to="/danh-sach-can-ho" class="block px-4 py-2 capitalize text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer">
+            Tất cả dự án
+          </nuxt-link>
           <nuxt-link
             v-for="project in projects"
             :key="project.id"
@@ -109,7 +111,7 @@
       @click="showSidebar = false"
     />
 
-    <Sidebar v-if="showSidebar" class="z-20" />
+    <Sidebar v-if="showSidebar" :projects="projects" class="z-20" @closeSidebar="showSidebar = false" />
   </div>
 </template>
 

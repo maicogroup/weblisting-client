@@ -4,35 +4,61 @@
   <div class="no-scrollbar absolute right-0 top-0 overflow-auto bg-white">
     <nav class="w-64 h-screen">
       <Menu title="Thuê">
-        <MenuItem>Tất cả nhà đất</MenuItem>
-        <MenuItem>Căn hộ</MenuItem>
-        <MenuItem>Duplex</MenuItem>
-        <MenuItem>Officetel</MenuItem>
-        <MenuItem>Penthouse</MenuItem>
-        <MenuItem>ShopHouse</MenuItem>
+        <MenuItem @click="handleSelectAllTypes('Cho Thuê')">
+          Tất cả nhà đất
+        </MenuItem>
+        <MenuItem @click="handleSelecType('Căn hộ', 'Cho Thuê')">
+          Căn hộ
+        </MenuItem>
+        <MenuItem @click="handleSelecType('Duplex', 'Cho Thuê')">
+          Duplex
+        </MenuItem>
+        <MenuItem @click="handleSelecType('Officetel', 'Cho Thuê')">
+          Officetel
+        </MenuItem>
+        <MenuItem @click="handleSelecType('Penthouse', 'Cho Thuê')">
+          Penthouse
+        </MenuItem>
+        <MenuItem @click="handleSelecType('ShopHouse', 'Cho Thuê')">
+          ShopHouse
+        </MenuItem>
       </Menu>
 
       <Menu title="Mua">
-        <MenuItem>Tất cả nhà đất</MenuItem>
-        <MenuItem>Căn hộ</MenuItem>
-        <MenuItem>Duplex</MenuItem>
-        <MenuItem>Officetel</MenuItem>
-        <MenuItem>Penthouse</MenuItem>
-        <MenuItem>ShopHouse</MenuItem>
+        <MenuItem @click="handleSelectAllTypes('Bán')">
+          Tất cả nhà đất
+        </MenuItem>
+        <MenuItem @click="handleSelecType('Căn hộ', 'Bán')">
+          Căn hộ
+        </MenuItem>
+        <MenuItem @click="handleSelecType('Duplex', 'Bán')">
+          Duplex
+        </MenuItem>
+        <MenuItem @click="handleSelecType('Officetel', 'Bán')">
+          Officetel
+        </MenuItem>
+        <MenuItem @click="handleSelecType('Penthouse', 'Bán')">
+          Penthouse
+        </MenuItem>
+        <MenuItem @click="handleSelecType('ShopHouse', 'Bán')">
+          ShopHouse
+        </MenuItem>
       </Menu>
 
       <Menu title="Dự án">
-        <MenuItem> Tất cả dự án </MenuItem>
-        <MenuItem> Lavita Charm </MenuItem>
-        <MenuItem> River Panorama </MenuItem>
-        <MenuItem> Emerald Percinct Celadon City </MenuItem>
-        <MenuItem> Topaz Elite </MenuItem>
-        <MenuItem> Đạt Gia Residence </MenuItem>
-        <MenuItem> Sunview Town </MenuItem>
-        <MenuItem> 4S Linh Đông </MenuItem>
-        <MenuItem> 9 View </MenuItem>
-        <MenuItem> Botanica Premier </MenuItem>
-        <MenuItem> Centum Wealth </MenuItem>
+        <div class=" max-h-96 overflow-y-auto overflow-x-hidden" @click="$emit('closeSidebar')">
+          <nuxt-link to="/danh-sach-can-ho" class="py-2 px-12 block text-sm text-gray-600 hover:bg-blue-500 hover:text-white cursor-pointer">
+            Tất cả dự án
+          </nuxt-link>
+          <nuxt-link
+            v-for="project in projects"
+            :key="project.id"
+            class="py-2 px-12 block text-sm text-gray-600 hover:bg-blue-500 hover:text-white cursor-pointer"
+            :to="`/danh-sach-can-ho/${project.pageInfors[0].slug}`"
+          >
+            {{ project.projectName }}
+          </nuxt-link>
+        </div>
       </Menu>
 
       <Menu title="Về chúng tôi">
@@ -63,7 +89,31 @@
 
 <script>
 export default {
-  name: 'Sidebar'
+  name: 'MainHeaderSidebar',
+  props: {
+    projects: { type: Object, optional: false, default: null }
+  },
+
+  methods: {
+    handleSelecType (type, demand) {
+      const path = '/danh-sach-can-ho';
+      const query = {
+        loai: type,
+        demand
+      };
+
+      this.$router.push({ path, query });
+      this.$emit('closeSidebar');
+    },
+
+    handleSelectAllTypes (demand) {
+      const path = '/danh-sach-can-ho';
+      const query = { demand };
+
+      this.$router.push({ path, query });
+      this.$emit('closeSidebar');
+    }
+  }
 };
 </script>
 

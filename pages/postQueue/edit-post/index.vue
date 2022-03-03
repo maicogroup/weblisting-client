@@ -619,6 +619,7 @@ export default {
           view: this.post.view,
           viewDirection: this.post.viewDirection
         };
+        this.imageIsChanged = false;
         this.post.tags.forEach(tag => this.currentPost.tags.push(tag));
         this.post.furnitures.forEach(c => this.currentPost.furnitures.push(c));
         if (this.modalIsShowing == true) { 

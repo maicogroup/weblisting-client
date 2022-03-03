@@ -30,21 +30,17 @@
 
       <div class="flex justify-between items-center px-6 mt-3">
         <label class="flex items-center">
-          <input :value="customRange.from" :class="`w-14 px-2 py-1 text-center text-sm border rounded-md outline-none ${borderRedIfInvalid}`" @input="handleCustomRangeFromChanged">
+          <input :value="customRange.from" placeholder="Từ" class="w-14 px-2 py-1 text-center text-sm border rounded-md outline-none" @input="handleCustomRangeFromChanged">
           <span class="ml-1">{{ priceUnit }}</span>
         </label>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12H4" />
         </svg>
         <label class="flex items-center">
-          <input :value="customRange.to" :class="`w-14 px-2 py-1 text-center text-sm border rounded-md outline-none ${borderRedIfInvalid}`" @input="handleCustomRangeToChanged">
+          <input :value="customRange.to" placeholder="Đến" class="w-14 px-2 py-1 text-center text-sm border rounded-md outline-none" @input="handleCustomRangeToChanged">
           <span class="ml-1">{{ priceUnit }}</span>
         </label>
       </div>
-
-      <p :class="`mt-1 px-4 text-xs text-red-700 ${showIfInvalid}`">
-        *Khoảng giá không hợp lệ
-      </p>
 
       <divider class="mt-2" />
 
@@ -70,20 +66,6 @@
           </span>
         </template>
       </filter-dropdown-item>
-
-      <divider />
-
-      <div class="flex space-x-2 justify-center mt-3 mb-1">
-        <button class="px-2 py-1 hover:text-red-700" @click="resetCustomRange">
-          Đặt lại
-        </button>
-        <button class="border rounded-md px-2 py-1 hover:text-white hover:bg-gray-700" @click="open = false">
-          Hủy
-        </button>
-        <button :class="`border font-semibold rounded-md px-2 py-1 ${disabilityClasses}`" :disabled="customRangeIsInvalid" @click="applyCustomRange">
-          Áp dụng
-        </button>
-      </div>
     </div>
   </div>
 </template>
@@ -104,8 +86,7 @@ export default {
       open: false,
       entered: false,
       displaySelected: 'Tất cả',
-      customRange: { from: 0, to: 0 },
-      prevCustomRange: { from: 0, to: 0 },
+      customRange: { from: null, to: null },
       MAX_VALUE: 999999
     };
   },
@@ -121,21 +102,6 @@ export default {
       } else {
         return [{ from: 0, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 7 }, { from: 7, to: 10 }, { from: 19, to: 15 }, { from: 15, to: 20 }, { from: 25, to: 30 }, { from: 30, to: null }];
       }
-    },
-
-    customRangeIsInvalid () {
-      return (this.customRange.from > this.customRange.to);
-    },
-    showIfInvalid () {
-      return this.customRangeIsInvalid ? '' : 'hidden';
-    },
-
-    borderRedIfInvalid () {
-      return this.customRangeIsInvalid ? 'border-red-700' : '';
-    },
-
-    disabilityClasses () {
-      return this.customRangeIsInvalid ? 'text-gray-400 cursor-not-allowed' : 'hover:text-white hover:bg-gray-700';
     }
   },
 
@@ -148,8 +114,18 @@ export default {
         // setTimeout để tránh listen các click event hiện tại
         setTimeout(() => document.addEventListener('click', this.closeIfOutsideOfDropdown), 0);
       } else {
-        this.customRange = { ...this.prevCustomRange };
         document.removeEventListener('click', this.closeIfOutsideOfDropdown);
+
+        const { from, to } = this.customRange;
+
+        const bothAreNumber = from !== null && to !== null;
+        if (bothAreNumber && to - from < 0) {
+          this.customRange = { from: to, to: from };
+        } else if (bothAreNumber && to === 0 && from === 0) {
+          this.customRange = { from: null, to: null };
+        }
+
+        this.$emit('optionchanged', { ...this.customRange });
       }
     },
 
@@ -160,7 +136,7 @@ export default {
           this.setCustomRange(option);
         } else {
           this.displaySelected = 'Tất cả';
-          this.setCustomRange({ from: 0, to: 0 });
+          this.setCustomRange({ from: null, to: null });
         }
       },
       immediate: true
@@ -176,59 +152,52 @@ export default {
       this.open = this.entered;
     },
 
-    resetCustomRange () {
-      this.customRange = { from: 0, to: 0 };
-    },
-
-    applyCustomRange () {
-      this.prevCustomRange = { ...this.customRange };
-
-      if (this.customRange.from === 0 && this.customRange.to === 0) {
-        // chọn tất cả
-        this.$emit('optionchanged', null);
-      } else {
-        this.$emit('optionchanged', { ...this.customRange });
-      }
-    },
-
     handleCustomRangeFromChanged (e) {
       if (e.target.value.trim() === '') {
-        this.customRange = { ...this.customRange, from: 0 };
-        return;
+        this.customRange.from = null;
+      } else {
+        const value = parseInt(e.target.value);
+        if (isNaN(value)) {
+          this.customRange = { ...this.customRange };
+        } else {
+          this.customRange.from = Math.min(this.MAX_VALUE, value);
+        }
       }
 
-      const value = parseInt(e.target.value);
-      if (!isNaN(value)) {
-        this.customRange = { ...this.customRange, from: (value > this.MAX_VALUE) ? this.MAX_VALUE : value };
-      } else {
-        this.customRange = { ...this.customRange };
-      }
+      this.$emit('optionchanged', { ...this.customRange });
     },
 
     handleCustomRangeToChanged (e) {
       if (e.target.value.trim() === '') {
-        this.customRange = { ...this.customRange, to: 0 };
-        return;
+        this.customRange.to = null;
+      } else {
+        const value = parseInt(e.target.value);
+        if (isNaN(value)) {
+          this.customRange = { ...this.customRange };
+        } else {
+          this.customRange.to = Math.min(this.MAX_VALUE, value);
+        }
       }
 
-      const value = parseInt(e.target.value);
-      if (!isNaN(value)) {
-        this.customRange = { ...this.customRange, to: (value > this.MAX_VALUE) ? this.MAX_VALUE : value };
-      } else {
-        this.customRange = { ...this.customRange };
-      }
+      this.$emit('optionchanged', { ...this.customRange });
     },
 
     formatRange (range) {
       const unit = this.demand === 'Bán' ? 'tỷ' : 'triệu';
 
-      if (!range.from || range.from === 0) {
-        return range.to === 0 ? 'Tất cả' : `Dưới ${range.to} ${unit}`;
-      } else if (!range.to) {
-        return `Trên ${range.from} ${unit}`;
-      } else {
-        return `${range.from} - ${range.to} ${unit}`;
+      if (range.from === null || range.from === 0) {
+        return (range.to === null || range.to === 0) ? 'Tất cả' : `Dưới ${range.to} ${unit}`;
       }
+
+      if (range.to === null) {
+        return `Trên ${range.from} ${unit}`;
+      }
+
+      return `${range.from} - ${range.to} ${unit}`;
+    },
+
+    setCustomRange (range) {
+      this.customRange = { ...range };
     },
 
     handleSelectPriceRange (range) {
@@ -237,20 +206,9 @@ export default {
       this.$emit('optionchanged', { ...range });
     },
 
-    setCustomRange (range) {
-      if (range.to) {
-        this.prevCustomRange = { ...range };
-        this.customRange = { ...range };
-      } else {
-        this.prevCustomRange = { from: 0, to: 0 };
-        this.customRange = { from: 0, to: 0 };
-      }
-    },
-
     handleSelectAllPrices () {
       this.open = false;
-      this.prevCustomRange = { from: 0, to: 0 };
-      this.customRange = { from: 0, to: 0 };
+      this.customRange = { from: null, to: null };
       this.$emit('optionchanged', null);
     }
   }

@@ -2,7 +2,9 @@
   <div
     class="fixed z-20 top-0 left-0 right-0 bg-white flex justify-between items-center px-5 py-3 border-b"
   >
-    <img class="h-12" src="~/assets/maico.png">
+    <nuxt-link to="/">
+      <img class="h-12" src="~/assets/maico.png">
+    </nuxt-link>
 
     <div class="hidden md:flex flex justify-between items-center space-x-10">
       <p class="font-bold hidden xl:block">

@@ -10,7 +10,7 @@
         </button>
       </div>
 
-      <div class="relative my-4">
+      <div class="hidden 2xl:block relative my-4">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
             <svg

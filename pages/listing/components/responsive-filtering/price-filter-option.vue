@@ -1,34 +1,29 @@
 <template>
-  <div
-    class="inline relative"
-  >
-    <button
-      class="text-sm relative bg-white text-gray-800 px-2 hover:bg-gray-100 h-full"
-      @click="open = !open"
-    >
-      <div class="inline-flex justify-between items-end">
-        <span class="mr-1">Giá</span>
-        <svg class="inline h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-        </svg>
-      </div>
-      <p class="text-center w-28 truncate ... relative text-gray-600">
-        {{ displaySelected }}
-      </p>
-    </button>
+  <div>
+    <div class="w-full flex justify-between border rounded h-11 items-center px-3 mb-4" @click="open = !open">
+      <p> {{ displaySelected }} </p>
+      <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 13L7 7L1 1" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
     <div
       v-if="open"
       ref="dropdownContent"
-      tabindex="0"
-      class="text-sm absolute right-0 py-2 bg-white top-16 rounded-none shadow-xl"
-      @mouseenter="entered = true"
-      @mouseleave="entered = false"
+      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
     >
-      <p class="font-semibold px-6 py-2">
-        Chọn giá
-      </p>
+      <div
+        class="flex justify-between border-b rounded"
+      >
+        <div @click="open = false" class="absolute top-1.5 left-2" >
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#32c82b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H6M12 5l-7 7 7 7"/></svg>
+        </div>
+        <p class="font-semibold px-6 py-2  mr-auto ml-auto ">
+          Chọn giá
+        </p>
+        
+      </div>
 
-      <div class="flex justify-between items-center px-6 mt-3">
+      <div class="flex justify-center items-center px-6 mt-3">
         <label class="flex items-center">
           <input :value="customRange.from" :class="`w-14 px-2 py-1 text-center text-sm border rounded-md outline-none ${borderRedIfInvalid}`" @input="handleCustomRangeFromChanged">
           <span class="ml-1">{{ priceUnit }}</span>
@@ -46,53 +41,43 @@
         *Khoảng giá không hợp lệ
       </p>
 
-      <divider class="mt-2" />
-
-      <filter-dropdown-item class="text-dark-red" @click="handleSelectAllPrices">
-        Tất cả mức giá
-      </filter-dropdown-item>
-      <filter-dropdown-item v-for="range in priceRanges" :key="`${range.from}-${range.to}`" class="flex justify-between" @click="handleSelectPriceRange(range)">
-        <template v-if="range.from === 0">
-          Dưới {{ range.to }} {{ priceUnit }}
-        </template>
-        <template v-else-if="range.to === null">
-          Trên {{ range.from }} {{ priceUnit }}
-        </template>
-        <template v-else>
-          <span class="range-text">
-            Từ {{ range.from }} {{ priceUnit }}
-          </span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12H4" />
-          </svg>
-          <span class="range-text text-right">
-            đến {{ range.to }} {{ priceUnit }}
-          </span>
-        </template>
-      </filter-dropdown-item>
-
-      <divider />
-
-      <div class="flex space-x-2 justify-center mt-3 mb-1">
-        <button class="px-2 py-1 hover:text-red-700" @click="resetCustomRange">
-          Đặt lại
-        </button>
-        <button class="border rounded-md px-2 py-1 hover:text-white hover:bg-gray-700" @click="open = false">
-          Hủy
-        </button>
-        <button :class="`border font-semibold rounded-md px-2 py-1 ${disabilityClasses}`" :disabled="customRangeIsInvalid" @click="applyCustomRange">
-          Áp dụng
-        </button>
+      <div class="flex justify-between h-11 border-b items-center mx-3">
+        <p>Tất cả mức giá</p>
+        <input type="radio" checked="checked" @click="handleSelectAllPrices">
+      </div>
+      <div
+        v-for="range in priceRanges"
+        :key="`${range.from}-${range.to}`"
+        class="flex justify-between h-11 border-b items-center mx-3"
+      >
+        <div class="flex justify-start">
+          <template v-if="range.from === 0">
+            Dưới {{ range.to }} {{ priceUnit }}
+          </template>
+          <template v-else-if="range.to === null">
+            Trên {{ range.from }} {{ priceUnit }}
+          </template>
+          <template v-else>
+            <span class="range-text">
+              Từ {{ range.from }} {{ priceUnit }}
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12H4" />
+            </svg>
+            <span class="range-text text-right">
+              đến {{ range.to }} {{ priceUnit }}
+            </span>
+          </template>
+        </div>
+        <input type="radio" @click="handleSelectPriceRange(range)">
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import FilterDropdownItem from './filter-dropdown-item.vue';
 export default {
-  name: 'PriceFilterDropdown',
-  components: { FilterDropdownItem },
+  name: 'PriceFilterOption',
 
   props: {
     selectedOption: { type: Object, default: null },
@@ -103,7 +88,7 @@ export default {
     return {
       open: false,
       entered: false,
-      displaySelected: 'Tất cả',
+      displaySelected: 'Giá',
       customRange: { from: 0, to: 0 },
       prevCustomRange: { from: 0, to: 0 },
       MAX_VALUE: 999999
@@ -119,7 +104,7 @@ export default {
       if (this.demand === 'Bán') {
         return [{ from: 0, to: 1 }, { from: 1, to: 2 }, { from: 2, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 7 }, { from: 7, to: 10 }, { from: 10, to: 20 }, { from: 20, to: null }];
       } else {
-        return [{ from: 0, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 7 }, { from: 7, to: 10 }, { from: 19, to: 15 }, { from: 15, to: 20 }, { from: 25, to: 30 }, { from: 30, to: null }];
+        return [{ from: 0, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 7 }, { from: 7, to: 10 }, { from: 10, to: 15 }, { from: 15, to: 20 }, { from: 25, to: 30 }, { from: 30, to: null }];
       }
     },
 
@@ -140,26 +125,13 @@ export default {
   },
 
   watch: {
-    open (value) {
-      if (value === true) {
-        // khi mở dropdown thì chuột chưa chạm vào nội dung nên biến entered phải mặc định bằng false
-        this.entered = false;
-
-        // setTimeout để tránh listen các click event hiện tại
-        setTimeout(() => document.addEventListener('click', this.closeIfOutsideOfDropdown), 0);
-      } else {
-        this.customRange = { ...this.prevCustomRange };
-        document.removeEventListener('click', this.closeIfOutsideOfDropdown);
-      }
-    },
-
     selectedOption: {
       handler (option) {
         if (option) {
           this.displaySelected = this.formatRange(option);
           this.setCustomRange(option);
         } else {
-          this.displaySelected = 'Tất cả';
+          this.displaySelected = 'Giá';
           this.setCustomRange({ from: 0, to: 0 });
         }
       },
@@ -172,9 +144,6 @@ export default {
   },
 
   methods: {
-    closeIfOutsideOfDropdown () {
-      this.open = this.entered;
-    },
 
     resetCustomRange () {
       this.customRange = { from: 0, to: 0 };
@@ -258,10 +227,6 @@ export default {
 </script>
 
 <style scoped>
-.range-text {
-  width: 77px;
-}
-
 .text-dark-red {
   color: #961B12;
 }

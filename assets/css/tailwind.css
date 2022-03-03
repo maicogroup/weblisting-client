@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Roboto', sans-serif;
+  }
+}
+
+@layer utilities {
+  .grow {
+    flex-grow: 1;
+  }
+
+  .shrink-0 {
+    flex-shrink: 0;
+  }
+}

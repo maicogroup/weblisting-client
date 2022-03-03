@@ -1,4 +1,4 @@
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = process.env.NODE_ENV === 'development';
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -14,11 +14,9 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ],
-    // script: [
-    //   { src: '/js/onBeforeUnload.js', body: true, isSSR: false }
-    // ]
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,400;0,500;0,700;1,400&display=swap' }
+    ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -36,26 +34,24 @@ export default {
   plugins: [
     '~/plugins/lightGallery.client.js',
     '~/plugins/vue-js-modal.js',
-    '~/plugins/editor.client.js',
+    '~/plugins/editor.client.js'
   ],
-
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
-    //'@nuxtjs/eslint-module',
+    // '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
     '@nuxtjs/apollo'
   ],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: [
-      {
-        path: '~/components', // will get any components nested in let's say /components/test too
-        pathPrefix: false
-      }
-    ]
-  ,
+    {
+      path: '~/components', // will get any components nested in let's say /components/test too
+      pathPrefix: false
+    }
+  ],
   apollo: {
     clientConfigs: {
       default: {
@@ -75,27 +71,28 @@ export default {
   },
 
   toast: {
-    position: 'top-right',
+    position: 'center',
     register: [ // Register custom toasts
       {
-        name: 'my-error',
-        message: 'Oops...Something went wrong',
+        name: 'featured-not-supported',
+        message: 'Tính năng này đang được hoàn thiện, cảm ơn bạn đã nhấn',
         options: {
-          type: 'error'
+          type: 'success',
+          duration: 4000
         }
       }
     ]
-},
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     babel: {
-      compact: !isDev ,
-      sourceRoot : __dirname
+      compact: !isDev,
+      sourceRoot: __dirname
     },
-    extend(config, {isClient}) {
+    extend (config, { isClient }) {
       if (isDev) {
-        config.devtool = isClient ? 'source-map' : 'inline-source-map'
+        config.devtool = isClient ? 'source-map' : 'inline-source-map';
       }
     }
   }

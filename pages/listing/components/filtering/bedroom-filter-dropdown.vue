@@ -46,17 +46,9 @@
 
       <divider class="mt-2" />
 
-      <div class="flex space-x-2 justify-center mt-3 mb-1">
-        <button class="px-2 py-1 hover:text-red-700" @click="clearSelectedChoices">
-          Đặt lại
-        </button>
-        <button class="border rounded-md px-2 py-1 hover:text-white hover:bg-gray-700" @click="open = false">
-          Hủy
-        </button>
-        <button :class="`border font-semibold rounded-md px-2 py-1 hover:text-white hover:bg-gray-700`" @click="applyOption">
-          Áp dụng
-        </button>
-      </div>
+      <button class="ml-6 mt-3 mb-1 border rounded-md px-2 py-1 hover:text-white hover:bg-gray-700" @click="clearSelectedChoices">
+        Đặt lại
+      </button>
     </div>
   </div>
 </template>
@@ -74,7 +66,6 @@ export default {
       entered: false,
       displaySelected: 'Tất cả',
       bedroomOptions: ['1', '2', '3', '4', '5', '5+'],
-      prevSelectedChoices: [],
       selectedChoices: []
     };
   },
@@ -88,7 +79,6 @@ export default {
         // setTimeout để tránh listen các click event hiện tại
         setTimeout(() => document.addEventListener('click', this.closeIfOutsideOfDropdown), 0);
       } else {
-        this.selectedChoices = [...this.prevSelectedChoices];
         document.removeEventListener('click', this.closeIfOutsideOfDropdown);
       }
     },
@@ -97,13 +87,33 @@ export default {
       handler (option) {
         if (option) {
           this.displaySelected = option.length > 0 ? option.join(', ') : 'Tất cả';
-          this.prevSelectedChoices = [...option];
           this.selectedChoices = [...option];
         } else {
           this.displaySelected = 'Tất cả';
         }
       },
       immediate: true
+    },
+
+    selectedChoices (newChoices, oldChoices) {
+      if (newChoices.length !== oldChoices.length) {
+        this.selectedChoices = newChoices;
+        this.$emit('optionchanged', newChoices);
+        return;
+      }
+
+      let theSame = true;
+      for (let i = 0; i < newChoices.length; ++i) {
+        if (newChoices[i] !== oldChoices[i]) {
+          theSame = false;
+          break;
+        }
+      }
+
+      if (!theSame) {
+        this.selectedChoices = newChoices;
+        this.$emit('optionchanged', newChoices);
+      }
     }
   },
 
@@ -114,11 +124,7 @@ export default {
 
     clearSelectedChoices () {
       this.selectedChoices = [];
-    },
-
-    applyOption () {
-      this.prevSelectedChoices = [...this.selectedChoices];
-      this.$emit('optionchanged', [...this.selectedChoices]);
+      this.$emit('optionchanged', []);
     }
   }
 };

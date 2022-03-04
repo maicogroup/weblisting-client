@@ -633,9 +633,45 @@ export default {
       isShowRoomOption: false
     };
   },
+
   head () {
+    let title;
+    if (this.$route.params.slug) {
+      title = this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title;
+    } else {
+      const type = this.filter.type ?? 'căn hộ';
+      const demand = this.filter.demand;
+
+      let price = '';
+      if (this.filter.priceRange) {
+        const unit = demand === 'Bán' ? 'tỷ' : 'triệu';
+        const { from, to } = this.filter.priceRange;
+        if (from && to) {
+          price = `, giá từ ${from} ${unit} đến ${to} ${unit}`;
+        } else if (from) {
+          price = `, giá trên ${from} ${unit}`;
+        } else {
+          price = `, giá dưới ${to} ${unit}`;
+        }
+      }
+
+      let acreage = '';
+      if (this.filter.acreageRange) {
+        const { from, to } = this.filter.acreageRange;
+        if (from && to) {
+          acreage = `, diện tích từ ${from} m² đến ${to} m²`;
+        } else if (from) {
+          acreage = `, diện tích trên ${from} m²`;
+        } else {
+          acreage = `, diện tích dưới ${to} m²`;
+        }
+      }
+
+      title = `${demand} nhà đất ${type}${price}${acreage}`;
+    }
+
     return {
-      title: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title,
+      title,
       meta: [{
         hid: 'description',
         name: 'description',

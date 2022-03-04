@@ -100,7 +100,7 @@ export default {
       if (this.demand === 'Bán') {
         return [{ from: 0, to: 1 }, { from: 1, to: 2 }, { from: 2, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 7 }, { from: 7, to: 10 }, { from: 10, to: 20 }, { from: 20, to: null }];
       } else {
-        return [{ from: 0, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 7 }, { from: 7, to: 10 }, { from: 19, to: 15 }, { from: 15, to: 20 }, { from: 25, to: 30 }, { from: 30, to: null }];
+        return [{ from: 0, to: 3 }, { from: 3, to: 5 }, { from: 5, to: 7 }, { from: 7, to: 10 }, { from: 10, to: 15 }, { from: 15, to: 20 }, { from: 25, to: 30 }, { from: 30, to: null }];
       }
     }
   },

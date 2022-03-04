@@ -127,7 +127,7 @@ export default {
       cities: [
         {
           name: 'Hồ Chí Minh',
-          districts: ['Q9', 'Q2']
+          districts: ['Thủ Đức', 'Q9', 'Q2']
         }
       ]
     };

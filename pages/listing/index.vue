@@ -3,10 +3,10 @@
   <div class="w-full max-w-screen-xl px-4">
     <div class="z-10 w-full fixed left-0 top-after-header hidden md:flex space-x-4 bg-white shadow-sm px-4">
       <div class="double-button my-4 flex">
-        <button :class="`text-base py-2 px-4 border rounded-l-md ${sellButtonClasses}`" @click="setSellButtonActiveState(true)">
+        <button :class="`text-base py-2 px-4 border rounded-l-md ${sellButtonClasses}`" @click="setFilterDemandOption('Bán')">
           Bán
         </button>
-        <button :class="`text-base whitespace-nowrap py-2 px-4 border rounded-r-md ${rentButtonClasses}`" @click="setSellButtonActiveState(false)">
+        <button :class="`text-base whitespace-nowrap py-2 px-4 border rounded-r-md ${rentButtonClasses}`" @click="setFilterDemandOption('Cho Thuê')">
           Cho thuê
         </button>
       </div>
@@ -76,7 +76,7 @@
           <p class="font-bold mb-2">
             Xem theo giá
           </p>
-          <div v-if="sellButtonIsActive == false">
+          <div v-if="filter.demand === 'Cho Thuê'">
             <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 3})">
               Dưới 3 triệu
             </quick-filter-button>
@@ -220,10 +220,10 @@
         <input type="search" class="w-full border py-2 pl-10 pr-2 h-11 rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm...">
       </div>
       <div class="double-button my-4 flex w-full mx-2.5">
-        <button :class="`text-base py-2 px-4 border rounded-l-md w-49-and-half-percent ${sellButtonClasses}`" @click="setSellButtonActiveState(true)">
+        <button :class="`text-base py-2 px-4 border rounded-l-md w-49-and-half-percent ${sellButtonClasses}`" @click="setFilterDemandOption('Bán')">
           Bán
         </button>
-        <button :class="`text-base whitespace-nowrap py-2 px-4 border rounded-r-md  w-49 ${rentButtonClasses}`" @click="setSellButtonActiveState(false)">
+        <button :class="`text-base whitespace-nowrap py-2 px-4 border rounded-r-md  w-49 ${rentButtonClasses}`" @click="setFilterDemandOption('Cho Thuê')">
           Cho thuê
         </button>
       </div>
@@ -602,7 +602,6 @@ export default {
     return {
       // filter dùng để lọc
       filter: null,
-      sellButtonIsActive: false,
       // filter đang được người dùng chỉnh sửa, chuẩn bị dùng để lọc
       inputFilter: {},
       searchButtonPressed: false,
@@ -646,11 +645,11 @@ export default {
     },
 
     sellButtonClasses () {
-      return this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
+      return this.inputFilter.demand === 'Bán' ? 'bg-gray-200' : 'hover:bg-gray-100';
     },
 
     rentButtonClasses () {
-      return !this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
+      return this.inputFilter.demand !== 'Bán' ? 'bg-gray-200' : 'hover:bg-gray-100';
     }
   },
 
@@ -665,11 +664,6 @@ export default {
       this.inputFilter = { ...this.filter };
     }
 
-    if (this.$route.query.demand === 'Bán') {
-      this.setSellButtonActiveState(true);
-    } else {
-      this.setSellButtonActiveState(false);
-    }
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
@@ -685,12 +679,6 @@ export default {
 
         this.filter = newFilter;
         this.inputFilter = { ...newFilter };
-
-        if (this.$route.query.demand === 'Bán') {
-          this.setSellButtonActiveState(true);
-        } else {
-          this.setSellButtonActiveState(false);
-        }
       }
     );
   },
@@ -742,9 +730,8 @@ export default {
   },
 
   methods: {
-    setSellButtonActiveState (state) {
-      this.sellButtonIsActive = state;
-      this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
+    setFilterDemandOption (option) {
+      this.inputFilter.demand = option;
     },
 
     openCloseMobileFilter () {

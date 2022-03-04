@@ -743,7 +743,7 @@ export default {
       const query = this.$route.query;
 
       filter.demand = query.demand ?? 'Cho Thuê';
-      filter.type = query.loai;
+      filter.type = query.type;
 
       if (query.type) {
         filter.type = query.type;
@@ -751,14 +751,14 @@ export default {
 
       if (query.city || query.district) {
         filter.location = {
-          city: query.tp,
-          district: query.quan
+          city: query.city,
+          district: query.district
         };
       }
 
-      if (query.gtnn || query.gtln) {
-        const parsedPriceFrom = parseInt(query.gtnn);
-        const parsedPriceTo = parseInt(query.gtln);
+      if (query.priceFrom || query.priceTo) {
+        const parsedPriceFrom = parseInt(query.priceFrom);
+        const parsedPriceTo = parseInt(query.priceTo);
 
         filter.priceRange = {
           from: isNaN(parsedPriceFrom) ? null : parsedPriceFrom,
@@ -766,9 +766,9 @@ export default {
         };
       }
 
-      if (query.dtnn || query.dtln) {
-        const parsedAcreageFrom = parseInt(query.dtnn);
-        const parsedAcreageTo = parseInt(query.dtln);
+      if (query.acreageFrom || query.acreageTo) {
+        const parsedAcreageFrom = parseInt(query.acreageFrom);
+        const parsedAcreageTo = parseInt(query.acreageTo);
 
         filter.acreageRange = {
           from: isNaN(parsedAcreageFrom) ? null : parsedAcreageFrom,
@@ -776,12 +776,12 @@ export default {
         };
       }
 
-      if (query.huong) {
-        filter.directions = Array.isArray(query.huong) ? query.huong : [query.huong];
+      if (query.directions) {
+        filter.directions = Array.isArray(query.directions) ? query.directions : [query.directions];
       }
 
-      if (query.slpn) {
-        filter.bedroomOptions = Array.isArray(query.slpn) ? query.slpn : [query.slpn];
+      if (query.bedroomOptions) {
+        filter.bedroomOptions = Array.isArray(query.bedroomOptions) ? query.bedroomOptions : [query.bedroomOptions];
       }
 
       return filter;
@@ -832,24 +832,24 @@ export default {
       }
 
       if (this.filter.type) {
-        query.loai = this.filter.type;
+        query.type = this.filter.type;
       }
 
       if (this.filter.location) {
         const location = this.filter.location;
-        query.tp = location.city;
-        query.quan = location.district;
+        query.city = location.city;
+        query.district = location.district;
       }
 
       if (this.filter.priceRange) {
         const { from, to } = this.swapRangeValueIfInvalid(this.filter.priceRange);
 
         if (from) {
-          query.gtnn = from;
+          query.priceFrom = from;
         }
 
         if (to) {
-          query.gtln = to;
+          query.priceTo = to;
         }
       }
 
@@ -857,20 +857,20 @@ export default {
         const { from, to } = this.swapRangeValueIfInvalid(this.filter.acreageRange);
 
         if (from) {
-          query.dtnn = from;
+          query.acreageFrom = from;
         }
 
         if (to) {
-          query.dtln = to;
+          query.acreageTo = to;
         }
       }
 
       if (this.filter.directions) {
-        query.huong = this.filter.directions;
+        query.directions = this.filter.directions;
       }
 
       if (this.filter.bedroomOptions) {
-        query.slpn = this.filter.bedroomOptions;
+        query.bedroomOptions = this.filter.bedroomOptions;
       }
 
       this.$router.push({ path, query });

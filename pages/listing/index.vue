@@ -11,7 +11,7 @@
         </button>
       </div>
 
-      <div class="relative my-4">
+      <div class="filter-search-bar relative my-4">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
             <svg
@@ -27,7 +27,7 @@
             </svg>
           </button>
         </span>
-        <input type="search" class="border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm...">
+        <input type="search" class="w-full border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm...">
       </div>
 
       <div class="flex justify-between grow">
@@ -39,6 +39,19 @@
         <direction-filter-dropdown :selected-option="inputFilter.directions" @optionchanged="handleDirectionFilterChanged" />
         <bedroom-filter-dropdown :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
       </div>
+
+      <button class="my-auto text-gray-600 hover:text-gray-800 px-2 h-fit" @click="resetFilter">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+      </button>
 
       <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
         Tìm kiếm
@@ -242,8 +255,11 @@
 
         <bedroom-filter-options :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
       </div>
-      <div class="flex justify-center">
-        <button class="whitespace-nowrap rounded-md px-6 py-2 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
+      <div class="mx-2.5 flex space-x-2">
+        <button class="px-6 py-2 shrink-0 border rounded-md my-4 hover:bg-gray-100" @click="resetFilter">
+          Đặt lại
+        </button>
+        <button class="grow whitespace-nowrap rounded-md px-6 py-2 bg-green-500 hover:bg-green-700 text-white my-4" @click="handleFilterButtonPressed">
           Tìm kiếm
         </button>
       </div>
@@ -734,6 +750,10 @@ export default {
       this.inputFilter.demand = option;
     },
 
+    resetFilter () {
+      this.inputFilter = { demand: 'Cho Thuê' };
+    },
+
     openCloseMobileFilter () {
       this.filterResponsive = !this.filterResponsive;
     },
@@ -899,6 +919,11 @@ export default {
 <style scoped>
 .filter-bar-blank-space {
   height: 42px;
+}
+
+.filter-search-bar {
+  min-width: 8rem;
+  max-width: 12rem;
 }
 
 .w-49{

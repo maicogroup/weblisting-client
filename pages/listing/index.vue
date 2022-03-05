@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 <template>
   <div class="w-full max-w-screen-xl px-4">
     <div class="z-10 w-full fixed left-0 top-after-header hidden md:flex space-x-4 bg-white shadow-sm px-4">
@@ -11,7 +10,7 @@
         </button>
       </div>
 
-      <div class="relative my-4">
+      <div class="hidden 2xl:block relative my-4">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
             <svg
@@ -45,7 +44,7 @@
       </button>
     </div>
     <div class="relative my-4">
-      <div class="w-full block md:hidden" v-on:click="openCloseMobileFilter">
+      <div class="w-full block md:hidden" @click="openCloseMobileFilter">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
             <svg
@@ -62,7 +61,7 @@
           </button>
           <h4 class="focus:text-gray-900 focus:outline-none text-gray-400">Tìm kiếm</h4>
         </span>
-        <input type="button" class="w-full border py-2 pl-10 pr-2 h-full rounded-md" placeholder="Tìm kiếm..." >
+        <input type="button" class="w-full border py-2 pl-10 pr-2 h-full rounded-md" placeholder="Tìm kiếm...">
       </div>
     </div>
     <div class="filter-bar-blank-space hidden md:block" />
@@ -76,7 +75,7 @@
           <p class="font-bold mb-2">
             Xem theo giá
           </p>
-          <div v-if="this.sellButtonIsActive == false">
+          <div v-if="sellButtonIsActive == false">
             <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 3})">
               Dưới 3 triệu
             </quick-filter-button>
@@ -180,14 +179,25 @@
       />
     </div>
     <div
-      class="fixed inset-0 h-full w-full z-30 bg-white opacity-100" v-if="this.filterResponsive == true"
+      v-if="filterResponsive == true"
+      class="fixed inset-0 h-full w-full z-30 bg-white opacity-100"
     >
       <div class="flex justify-between mt-5 items-center mb-4">
         <h4 class="mr-auto ml-auto text-base">
           Tìm kiếm bất động sản
         </h4>
-        <div v-on:click="openCloseMobileFilter" class="absolute right-3">
-         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f71e1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+        <div class="absolute right-3" @click="openCloseMobileFilter">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#f71e1e"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>
         </div>
       </div>
       <div class="relative mx-2.5">
@@ -232,17 +242,17 @@
         <bedroom-filter-options :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
       </div>
       <div class="flex justify-center">
-         <button class="whitespace-nowrap rounded-md px-6 py-2 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
-            Tìm kiếm
-          </button>
+        <button class="whitespace-nowrap rounded-md px-6 py-2 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
+          Tìm kiếm
+        </button>
       </div>
-     
+
       <!-- <p class="mb-4">
         Bạn phải chọn <span><p class="text-sky-500">Khu vực</p></span> trước
       </p> -->
     </div>
 
-    // chon khu vuc mobile
+    <!-- chon khu vuc mobile -->
     <div
       v-if="isShowArea"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -256,7 +266,17 @@
         <div
           @click="isShowArea = false"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#32c82b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H6M12 5l-7 7 7 7"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#32c82b"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ><path d="M19 12H6M12 5l-7 7 7 7" /></svg>
         </div>
       </div>
       <div class="relative my-4 w-full">
@@ -288,7 +308,7 @@
       </div>
     </div>
 
-    // show district
+    <!-- // show district -->
     <div
       v-if="isShowDistrict"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -339,7 +359,7 @@
       </div>
     </div>
 
-    //chon khoang gia
+    <!-- //chon khoang gia -->
     <div
       v-if="isShowPriceRange"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -385,7 +405,7 @@
       </div>
     </div>
 
-    //chon khoang dien tich
+    <!-- chon khoang dien tich -->
     <div
       v-if="isShowAcreage"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -431,7 +451,7 @@
       </div>
     </div>
 
-    //chon khoang du an
+    <!-- chon khoang du an -->
     <div
       v-if="isShowProject"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -482,7 +502,7 @@
       </div>
     </div>
 
-    //chon huong
+    <!-- chon huong -->
     <div
       v-if="isShowDirection"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -515,7 +535,7 @@
       </div>
     </div>
 
-    //chon so phong
+    <!-- chon so phong -->
     <div
       v-if="isShowRoomOption"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -547,7 +567,6 @@
         <input type="radio" checked="checked">
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -710,7 +729,7 @@ export default {
       },
 
       skip () {
-         return this.$route.params.slug === undefined;
+        return this.$route.params.slug === undefined;
       },
 
       variables () {
@@ -726,9 +745,11 @@ export default {
       this.sellButtonIsActive = state;
       this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
     },
-    openCloseMobileFilter(){
-      this.filterResponsive = !this.filterResponsive
+
+    openCloseMobileFilter () {
+      this.filterResponsive = !this.filterResponsive;
     },
+
     createFilterFromUrl () {
       const filter = {};
       const query = this.$route.query;

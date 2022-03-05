@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 <template>
   <div class="w-full max-w-screen-xl px-4">
     <div class="z-10 w-full fixed left-0 top-after-header hidden md:flex space-x-4 bg-white shadow-sm px-4">
@@ -11,7 +10,7 @@
         </button>
       </div>
 
-      <div class="filter-search-bar relative my-4">
+      <div class="hidden 2xl:block relative my-4">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
             <svg
@@ -269,7 +268,7 @@
       </p> -->
     </div>
 
-    // chon khu vuc mobile
+    <!-- chon khu vuc mobile -->
     <div
       v-if="isShowArea"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -325,7 +324,7 @@
       </div>
     </div>
 
-    // show district
+    <!-- // show district -->
     <div
       v-if="isShowDistrict"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -376,7 +375,7 @@
       </div>
     </div>
 
-    //chon khoang gia
+    <!-- //chon khoang gia -->
     <div
       v-if="isShowPriceRange"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -422,7 +421,7 @@
       </div>
     </div>
 
-    //chon khoang dien tich
+    <!-- chon khoang dien tich -->
     <div
       v-if="isShowAcreage"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -468,7 +467,7 @@
       </div>
     </div>
 
-    //chon khoang du an
+    <!-- chon khoang du an -->
     <div
       v-if="isShowProject"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -519,7 +518,7 @@
       </div>
     </div>
 
-    //chon huong
+    <!-- chon huong -->
     <div
       v-if="isShowDirection"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
@@ -552,7 +551,7 @@
       </div>
     </div>
 
-    //chon so phong
+    <!-- chon so phong -->
     <div
       v-if="isShowRoomOption"
       class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"

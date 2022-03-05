@@ -194,7 +194,7 @@
     </div>
     <div
       v-if="filterResponsive == true"
-      class="fixed inset-0 h-full w-full z-30 bg-white opacity-100"
+      class="no-scrollbar overflow-auto fixed inset-0 h-full w-full z-30 bg-white opacity-100"
     >
       <div class="flex justify-between mt-5 items-center mb-4">
         <h4 class="mr-auto ml-auto text-base">
@@ -968,5 +968,16 @@ export default {
 
 .bg-black-73{
   background: #000000BA;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 </style>

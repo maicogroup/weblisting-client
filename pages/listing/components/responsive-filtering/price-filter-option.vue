@@ -36,7 +36,7 @@
 
       <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectAllPrices">
         <p>Tất cả mức giá</p>
-        <input type="radio" checked="checked">
+        <input type="radio" :checked="isSelected(null)">
       </div>
       <div
         v-for="range in priceRanges"
@@ -63,7 +63,7 @@
             </span>
           </template>
         </div>
-        <input type="radio">
+        <input type="radio" :checked="isSelected(range)">
       </div>
     </div>
   </div>
@@ -119,6 +119,9 @@ export default {
   },
 
   methods: {
+    isSelected (range) {
+      return range?.from === this.selectedOption?.from && range?.to === this.selectedOption?.to;
+    },
 
     resetCustomRange () {
       this.customRange = { from: 0, to: 0 };

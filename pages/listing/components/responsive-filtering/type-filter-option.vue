@@ -35,27 +35,27 @@
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectAllTypes">
         <p>Tất cả nhà đất</p>
-        <input type="radio" checked="checked">
+        <input type="radio" :checked="isSelected(null)">
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectType('Căn hộ chung cư')">
         <p>Căn hộ chung cư</p>
-        <input type="radio">
+        <input type="radio" :checked="isSelected('Căn hộ chung cư')">
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectType('Duplex')">
         <p>Duplex</p>
-        <input type="radio">
+        <input type="radio" :checked="isSelected('Duplex')">
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectType('Officetel')">
         <p>Officetel</p>
-        <input type="radio">
+        <input type="radio" :checked="isSelected('Officetel')">
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectType('Penthouse')">
         <p>Penthouse</p>
-        <input type="radio">
+        <input type="radio" :checked="isSelected('Penthouse')">
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectType('ShopHouse')">
         <p>ShopHouse</p>
-        <input type="radio">
+        <input type="radio" :checked="isSelected('ShopHouse')">
       </div>
     </div>
   </div>
@@ -113,6 +113,10 @@ export default {
     handleSelectType (option) {
       this.open = false;
       this.$emit('optionchanged', option);
+    },
+
+    isSelected (type) {
+      return type === this.selectedOption;
     },
 
     handleSelectAllTypes () {

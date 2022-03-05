@@ -39,12 +39,12 @@
         @click="handleSelectAllProjectOption"
       >
         <p>Tất cả dự án</p>
-        <input type="radio" checked="checked">
+        <input type="radio" :checked="isSelected(null)">
       </div>
       <template v-if="projects !== null">
         <div v-for="project in filteredProjects" :key="project.id" class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectProject(project)">
           <p>{{ project.projectName }}</p>
-          <input type="radio">
+          <input :checked="isSelected(project)" type="radio">
         </div>
       </template>
     </div>
@@ -91,7 +91,6 @@ export default {
   },
 
   watch: {
-
     selectedOption: {
       handler (option) {
         if (option) {
@@ -105,6 +104,10 @@ export default {
   },
 
   methods: {
+    isSelected (project) {
+      return project?.id === this.selectedOption?.id;
+    },
+
     handleSelectProject (project) {
       this.open = false;
       this.$emit('optionchanged', {

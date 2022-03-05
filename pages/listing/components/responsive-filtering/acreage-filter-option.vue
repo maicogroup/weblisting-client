@@ -36,7 +36,7 @@
 
       <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectAllSize">
         <p>Tất cả diện tích</p>
-        <input type="radio" checked="checked">
+        <input type="radio" :checked="isSelected(null)">
       </div>
       <div
         v-for="range in acreageRanges"
@@ -63,7 +63,7 @@
             </span>
           </template>
         </div>
-        <input type="radio" @click="handleSelectAcreageRange(range)">
+        <input type="radio" :checked="isSelected(range)" @click="handleSelectAcreageRange(range)">
       </div>
     </div>
   </div>
@@ -80,7 +80,6 @@ export default {
   data () {
     return {
       open: false,
-      entered: false,
       displaySelected: 'Diện tích',
       acreageRanges: [{ from: 0, to: 30 }, { from: 30, to: 50 }, { from: 50, to: 80 }, { from: 80, to: 100 }, { from: 100, to: 300 }, { from: 300, to: 500 }, { from: 500, to: null }],
       MAX_VALUE: 999999
@@ -109,6 +108,10 @@ export default {
       } else {
         return `${range.from} - ${range.to} m²`;
       }
+    },
+
+    isSelected (range) {
+      return range?.from === this.selectedOption?.from && range?.to === this.selectedOption?.to;
     },
 
     handleSelectAcreageRange (range) {

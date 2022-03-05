@@ -801,10 +801,6 @@ export default {
       filter.demand = query.demand ?? 'Cho Thuê';
       filter.type = query.type;
 
-      if (query.type) {
-        filter.type = query.type;
-      }
-
       if (query.city || query.district) {
         filter.location = {
           city: query.city,

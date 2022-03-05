@@ -132,7 +132,7 @@ export default {
   },
 
   props: {
-    selectedOption: { type: String, default: null }
+    selectedOption: { type: Object, default: null }
   },
 
   data () {

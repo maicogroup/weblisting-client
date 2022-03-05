@@ -38,7 +38,9 @@
         class="flex justify-between h-11 border-b items-center mx-3"
         @click="handleSelectAllProjectOption"
       >
-        <p>Tất cả dự án</p>
+        <p class="text-dark-red">
+          Tất cả dự án
+        </p>
         <input type="radio" :checked="isSelected(null)">
       </div>
       <template v-if="projects !== null">

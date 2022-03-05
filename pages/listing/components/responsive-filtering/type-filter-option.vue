@@ -34,7 +34,9 @@
         </p>
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectAllTypes">
-        <p>Tất cả nhà đất</p>
+        <p class="text-dark-red">
+          Tất cả nhà đất
+        </p>
         <input type="radio" :checked="isSelected(null)">
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectType('Căn hộ chung cư')">

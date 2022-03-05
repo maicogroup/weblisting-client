@@ -35,7 +35,9 @@
       </div>
 
       <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectAllSize">
-        <p>Tất cả diện tích</p>
+        <p class="text-dark-red">
+          Tất cả diện tích
+        </p>
         <input type="radio" :checked="isSelected(null)">
       </div>
       <div

@@ -34,8 +34,8 @@
         </p>
       </div>
 
-      <div class="relative my-4 w-full">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+      <div class="relative my-4 w-full px-3">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-4">
           <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
             <svg
               fill="none"
@@ -58,10 +58,10 @@
         class="flex justify-between h-11 border-b items-center mx-3"
         @click="handleSelectAllLocation"
       >
-        <p>Tất cả khu vực</p>
-        <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 13L7 7L1 1" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+        <p class="text-dark-red">
+          Tất cả khu vực
+        </p>
+        <input type="radio" :checked="selectedOption === null">
       </div>
       <div
         v-for="city in filteredCities"
@@ -99,16 +99,36 @@
             </svg>
           </div>
         </div>
+
+        <div class="relative my-4 w-full px-3">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-4">
+            <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                class="w-6 h-6"
+              >
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </span>
+          <input v-model="searchInput" type="search" class="w-full border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm Quận/Huyện">
+        </div>
+
         <div
           v-for="district in filteredDistricts"
           :key="district"
-          class="flex justify-between h-11 border-b items-center mx-3 mt-5"
+          class="flex justify-between h-11 border-b items-center mx-3"
           @click="handleSelectSecondOption(district)"
         >
           <p>
             {{ district }}
           </p>
-          <input type="radio">
+          <input type="radio" :checked="isSelected(district)">
         </div>
       </div>
     </div>
@@ -184,6 +204,10 @@ export default {
   },
 
   methods: {
+    isSelected (district) {
+      return district === this.selectedOption?.district;
+    },
+
     handleSelectFirstOption (city) {
       this.isShowDistrict = true;
       this.selectedCity = city;

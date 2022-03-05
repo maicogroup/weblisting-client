@@ -219,10 +219,9 @@ export default {
     },
 
     formatPrice (price) {
-      if(price < 100000000) {
+      if (price < 100000000) {
         return `${price / 1e6} triệu/tháng`;
-      }
-      else {
+      } else {
         return `${parseFloat((price / 1e9).toFixed(2))} tỷ`;
       }
     },

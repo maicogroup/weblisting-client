@@ -2,15 +2,15 @@
   <div class="w-full max-w-screen-xl px-4">
     <div class="z-10 w-full fixed left-0 top-after-header hidden md:flex space-x-4 bg-white shadow-sm px-4">
       <div class="double-button my-4 flex">
-        <button :class="`text-base py-2 px-4 border rounded-l-md ${sellButtonClasses}`" @click="setSellButtonActiveState(true)">
+        <button :class="`text-base py-2 px-4 border rounded-l-md ${sellButtonClasses}`" @click="setFilterDemandOption('Bán')">
           Bán
         </button>
-        <button :class="`text-base whitespace-nowrap py-2 px-4 border rounded-r-md ${rentButtonClasses}`" @click="setSellButtonActiveState(false)">
+        <button :class="`text-base whitespace-nowrap py-2 px-4 border rounded-r-md ${rentButtonClasses}`" @click="setFilterDemandOption('Cho Thuê')">
           Cho thuê
         </button>
       </div>
 
-      <div class="hidden 2xl:block relative my-4">
+      <div class="hidden xl:block filter-search-bar relative my-4">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
           <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
             <svg
@@ -26,7 +26,7 @@
             </svg>
           </button>
         </span>
-        <input type="search" class="border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm...">
+        <input type="search" class="w-full border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm...">
       </div>
 
       <div class="flex justify-between grow">
@@ -38,6 +38,19 @@
         <direction-filter-dropdown :selected-option="inputFilter.directions" @optionchanged="handleDirectionFilterChanged" />
         <bedroom-filter-dropdown :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
       </div>
+
+      <button class="my-auto text-gray-600 hover:text-gray-800 px-2 h-fit" @click="resetFilter">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+      </button>
 
       <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
         Tìm kiếm
@@ -75,7 +88,7 @@
           <p class="font-bold mb-2">
             Xem theo giá
           </p>
-          <div v-if="sellButtonIsActive == false">
+          <div v-if="filter.demand === 'Cho Thuê'">
             <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 3})">
               Dưới 3 triệu
             </quick-filter-button>
@@ -180,7 +193,7 @@
     </div>
     <div
       v-if="filterResponsive == true"
-      class="fixed inset-0 h-full w-full z-30 bg-white opacity-100"
+      class="no-scrollbar overflow-auto fixed inset-0 h-full w-full z-30 bg-white opacity-100"
     >
       <div class="flex justify-between mt-5 items-center mb-4">
         <h4 class="mr-auto ml-auto text-base">
@@ -218,11 +231,11 @@
         </span>
         <input type="search" class="w-full border py-2 pl-10 pr-2 h-11 rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm...">
       </div>
-      <div class="double-button my-4 flex w-full mx-2.5">
-        <button :class="`text-base py-2 px-4 border rounded-l-md w-49-and-half-percent ${sellButtonClasses}`" @click="setSellButtonActiveState(true)">
+      <div class="double-button my-4 flex mx-2.5">
+        <button :class="`w-1/2 grow text-base py-2 px-4 border rounded-l-md ${sellButtonClasses}`" @click="setFilterDemandOption('Bán')">
           Bán
         </button>
-        <button :class="`text-base whitespace-nowrap py-2 px-4 border rounded-r-md  w-49 ${rentButtonClasses}`" @click="setSellButtonActiveState(false)">
+        <button :class="`w-1/2 grow text-base whitespace-nowrap py-2 px-4 border rounded-r-md ${rentButtonClasses}`" @click="setFilterDemandOption('Cho Thuê')">
           Cho thuê
         </button>
       </div>
@@ -241,8 +254,11 @@
 
         <bedroom-filter-options :selected-option="inputFilter.bedroomOptions" @optionchanged="handleBedroomFilterChanged" />
       </div>
-      <div class="flex justify-center">
-        <button class="whitespace-nowrap rounded-md px-6 py-2 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
+      <div class="mx-2.5 flex space-x-2">
+        <button class="px-6 py-2 shrink-0 border rounded-md my-4 hover:bg-gray-100" @click="resetFilter">
+          Đặt lại
+        </button>
+        <button class="grow whitespace-nowrap rounded-md px-6 py-2 bg-green-500 hover:bg-green-700 text-white my-4" @click="handleFilterButtonPressed">
           Tìm kiếm
         </button>
       </div>
@@ -601,7 +617,6 @@ export default {
     return {
       // filter dùng để lọc
       filter: null,
-      sellButtonIsActive: false,
       // filter đang được người dùng chỉnh sửa, chuẩn bị dùng để lọc
       inputFilter: {},
       searchButtonPressed: false,
@@ -617,9 +632,45 @@ export default {
       isShowRoomOption: false
     };
   },
+
   head () {
+    let title;
+    if (this.$route.params.slug) {
+      title = this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title;
+    } else {
+      const type = this.filter.type ?? 'căn hộ';
+      const demand = this.filter.demand;
+
+      let price = '';
+      if (this.filter.priceRange) {
+        const unit = demand === 'Bán' ? 'tỷ' : 'triệu';
+        const { from, to } = this.filter.priceRange;
+        if (from && to) {
+          price = `, giá từ ${from} ${unit} đến ${to} ${unit}`;
+        } else if (from) {
+          price = `, giá trên ${from} ${unit}`;
+        } else {
+          price = `, giá dưới ${to} ${unit}`;
+        }
+      }
+
+      let acreage = '';
+      if (this.filter.acreageRange) {
+        const { from, to } = this.filter.acreageRange;
+        if (from && to) {
+          acreage = `, diện tích từ ${from} m² đến ${to} m²`;
+        } else if (from) {
+          acreage = `, diện tích trên ${from} m²`;
+        } else {
+          acreage = `, diện tích dưới ${to} m²`;
+        }
+      }
+
+      title = `${demand} nhà đất ${type}${price}${acreage}`;
+    }
+
     return {
-      title: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title,
+      title,
       meta: [{
         hid: 'description',
         name: 'description',
@@ -645,11 +696,11 @@ export default {
     },
 
     sellButtonClasses () {
-      return this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
+      return this.inputFilter.demand === 'Bán' ? 'bg-gray-200' : 'hover:bg-gray-100';
     },
 
     rentButtonClasses () {
-      return !this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
+      return this.inputFilter.demand !== 'Bán' ? 'bg-gray-200' : 'hover:bg-gray-100';
     }
   },
 
@@ -664,11 +715,6 @@ export default {
       this.inputFilter = { ...this.filter };
     }
 
-    if (this.$route.query.demand === 'Bán') {
-      this.setSellButtonActiveState(true);
-    } else {
-      this.setSellButtonActiveState(false);
-    }
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
@@ -684,12 +730,6 @@ export default {
 
         this.filter = newFilter;
         this.inputFilter = { ...newFilter };
-
-        if (this.$route.query.demand === 'Bán') {
-          this.setSellButtonActiveState(true);
-        } else {
-          this.setSellButtonActiveState(false);
-        }
       }
     );
   },
@@ -741,9 +781,12 @@ export default {
   },
 
   methods: {
-    setSellButtonActiveState (state) {
-      this.sellButtonIsActive = state;
-      this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
+    setFilterDemandOption (option) {
+      this.inputFilter.demand = option;
+    },
+
+    resetFilter () {
+      this.inputFilter = { demand: 'Cho Thuê' };
     },
 
     openCloseMobileFilter () {
@@ -754,22 +797,19 @@ export default {
       const filter = {};
       const query = this.$route.query;
 
-      filter.demand = query.demand;
-      filter.type = query.loai;
+      filter.demand = query.demand ?? 'Cho Thuê';
+      filter.type = query.type;
 
-      if (query.type) {
-        filter.type = query.type;
-      }
       if (query.city || query.district) {
         filter.location = {
-          city: query.tp,
-          district: query.quan
+          city: query.city,
+          district: query.district
         };
       }
 
-      if (query.gtnn || query.gtln) {
-        const parsedPriceFrom = parseInt(query.gtnn);
-        const parsedPriceTo = parseInt(query.gtln);
+      if (query.priceFrom || query.priceTo) {
+        const parsedPriceFrom = parseInt(query.priceFrom);
+        const parsedPriceTo = parseInt(query.priceTo);
 
         filter.priceRange = {
           from: isNaN(parsedPriceFrom) ? null : parsedPriceFrom,
@@ -777,9 +817,9 @@ export default {
         };
       }
 
-      if (query.dtnn || query.dtln) {
-        const parsedAcreageFrom = parseInt(query.dtnn);
-        const parsedAcreageTo = parseInt(query.dtln);
+      if (query.acreageFrom || query.acreageTo) {
+        const parsedAcreageFrom = parseInt(query.acreageFrom);
+        const parsedAcreageTo = parseInt(query.acreageTo);
 
         filter.acreageRange = {
           from: isNaN(parsedAcreageFrom) ? null : parsedAcreageFrom,
@@ -787,12 +827,12 @@ export default {
         };
       }
 
-      if (query.huong) {
-        filter.directions = Array.isArray(query.huong) ? query.huong : [query.huong];
+      if (query.directions) {
+        filter.directions = Array.isArray(query.directions) ? query.directions : [query.directions];
       }
 
-      if (query.slpn) {
-        filter.bedroomOptions = Array.isArray(query.slpn) ? query.slpn : [query.slpn];
+      if (query.bedroomOptions) {
+        filter.bedroomOptions = Array.isArray(query.bedroomOptions) ? query.bedroomOptions : [query.bedroomOptions];
       }
 
       return filter;
@@ -843,48 +883,59 @@ export default {
       }
 
       if (this.filter.type) {
-        query.loai = this.filter.type;
+        query.type = this.filter.type;
       }
 
       if (this.filter.location) {
         const location = this.filter.location;
-        query.tp = location.city;
-        query.quan = location.district;
+        query.city = location.city;
+        query.district = location.district;
       }
 
       if (this.filter.priceRange) {
-        const { from, to } = this.filter.priceRange;
+        const { from, to } = this.swapRangeValueIfInvalid(this.filter.priceRange);
 
         if (from) {
-          query.gtnn = from;
+          query.priceFrom = from;
         }
 
         if (to) {
-          query.gtln = to;
+          query.priceTo = to;
         }
       }
 
       if (this.filter.acreageRange) {
-        const { from, to } = this.filter.acreageRange;
+        const { from, to } = this.swapRangeValueIfInvalid(this.filter.acreageRange);
 
         if (from) {
-          query.dtnn = from;
+          query.acreageFrom = from;
         }
 
         if (to) {
-          query.dtln = to;
+          query.acreageTo = to;
         }
       }
 
       if (this.filter.directions) {
-        query.huong = this.filter.directions;
+        query.directions = this.filter.directions;
       }
 
       if (this.filter.bedroomOptions) {
-        query.slpn = this.filter.bedroomOptions;
+        query.bedroomOptions = this.filter.bedroomOptions;
       }
 
       this.$router.push({ path, query });
+    },
+
+    /** trường hợp người dùng bấm tìm kiếm trước khi range được swap bởi filter dropdown */
+    swapRangeValueIfInvalid (range) {
+      const bothAreNumber = range.from !== null && range.to !== null;
+
+      if (bothAreNumber && range.to - range.from < 0) {
+        return { from: range.to, to: range.from };
+      }
+
+      return range;
     },
 
     /** các query được đưa vào sẽ dùng để sửa giá trị của các query hiện tại hoặc thêm query mới cho url */
@@ -901,12 +952,9 @@ export default {
   height: 42px;
 }
 
-.w-49{
-  width: 49%;
-}
-
-.w-49-and-half-percent {
-  width: 49.5%;
+.filter-search-bar {
+  min-width: 8rem;
+  max-width: 12rem;
 }
 
 .top-after-header {
@@ -919,5 +967,16 @@ export default {
 
 .bg-black-73{
   background: #000000BA;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 </style>

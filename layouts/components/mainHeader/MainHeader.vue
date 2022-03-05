@@ -2,17 +2,15 @@
   <div
     class="fixed z-20 top-0 left-0 right-0 bg-white flex justify-between items-center px-5 py-3 border-b"
   >
-    <nuxt-link to="/">
-      <img class="h-12" src="~/assets/maico.png">
-    </nuxt-link>
+    <img class="h-12" src="~/assets/maico.png">
 
     <div class="hidden md:flex flex justify-between items-center space-x-10">
       <p class="font-bold hidden xl:block">
-        096 167 71 67
+        0903 234 045
       </p>
 
       <Dropdown item-width="200px" title="Thuê">
-        <DropdownItem @click="handleSelectAllTypes('Cho Thuê')">
+        <DropdownItem @click="handleSelectAllTypes">
           Tất cả nhà đất
         </DropdownItem>
         <DropdownItem @click="handleSelecType('Căn hộ', 'Cho Thuê')">
@@ -33,7 +31,7 @@
       </Dropdown>
 
       <Dropdown item-width="200px" title="Mua">
-        <DropdownItem @click="handleSelectAllTypes('Bán')">
+        <DropdownItem @click="handleSelecType('Căn hộ', 'Bán')">
           Tất cả nhà đất
         </DropdownItem>
         <DropdownItem @click="handleSelecType('Căn hộ', 'Bán')">
@@ -55,9 +53,7 @@
 
       <Dropdown class="hidden lg:inline" item-width="220px" title="Dự án">
         <div class=" max-h-96 overflow-y-auto overflow-x-hidden">
-          <nuxt-link to="/danh-sach-can-ho" class="block px-4 py-2 capitalize text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer">
-            Tất cả dự án
-          </nuxt-link>
+          <DropdownItem> Tất cả dự án </DropdownItem>
           <nuxt-link
             v-for="project in projects"
             :key="project.id"
@@ -113,7 +109,7 @@
       @click="showSidebar = false"
     />
 
-    <Sidebar v-if="showSidebar && projects !== null" :projects="projects" class="z-20" @closeSidebar="showSidebar = false" />
+    <Sidebar v-if="showSidebar" class="z-20" />
   </div>
 </template>
 

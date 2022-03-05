@@ -33,29 +33,29 @@
           Chọn loại căn hộ
         </p>
       </div>
-      <div class="flex justify-between h-11 border-b items-center mx-3">
+      <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectAllTypes">
         <p>Tất cả nhà đất</p>
-        <input type="radio" checked="checked" @click="handleSelectAllTypes">
+        <input type="radio" checked="checked">
       </div>
-      <div class="flex justify-between h-11 border-b items-center mx-3">
+      <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectType('Căn hộ chung cư')">
         <p>Căn hộ chung cư</p>
-        <input type="radio" @click="handleSelectType('Căn hộ chung cư')">
+        <input type="radio">
       </div>
-      <div class="flex justify-between h-11 border-b items-center mx-3">
+      <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectType('Duplex')">
         <p>Duplex</p>
-        <input type="radio" @click="handleSelectType('Duplex')">
+        <input type="radio">
       </div>
-      <div class="flex justify-between h-11 border-b items-center mx-3">
+      <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectType('Officetel')">
         <p>Officetel</p>
-        <input type="radio" @click="handleSelectType('Officetel')">
+        <input type="radio">
       </div>
-      <div class="flex justify-between h-11 border-b items-center mx-3">
+      <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectType('Penthouse')">
         <p>Penthouse</p>
-        <input type="radio" @click="handleSelectType('Penthouse')">
+        <input type="radio">
       </div>
-      <div class="flex justify-between h-11 border-b items-center mx-3">
+      <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectType('ShopHouse')">
         <p>ShopHouse</p>
-        <input type="radio" @click="handleSelectType('ShopHouse')">
+        <input type="radio">
       </div>
     </div>
   </div>
@@ -84,7 +84,6 @@ export default {
   data () {
     return {
       open: false,
-      entered: false,
       displaySelected: 'Loại căn hộ',
       searchInput: ''
     };
@@ -98,18 +97,6 @@ export default {
   },
 
   watch: {
-    open (value) {
-      if (value === true) {
-        // khi mở dropdown thì chuột chưa chạm vào nội dung nên biến entered phải mặc định bằng false
-        this.entered = false;
-
-        // setTimeout để tránh listen các click event hiện tại
-        setTimeout(() => document.addEventListener('click', this.closeIfOutsideOfDropdown), 0);
-      } else {
-        document.removeEventListener('click', this.closeIfOutsideOfDropdown);
-      }
-    },
-
     selectedOption: {
       handler (option) {
         if (option) {
@@ -123,10 +110,6 @@ export default {
   },
 
   methods: {
-    closeIfOutsideOfDropdown () {
-      this.open = this.entered;
-    },
-
     handleSelectType (option) {
       this.open = false;
       this.$emit('optionchanged', option);

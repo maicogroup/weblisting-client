@@ -34,14 +34,15 @@
         </p>
       </div>
 
-      <div class="flex justify-between h-11 border-b items-center mx-3">
+      <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectAllSize">
         <p>Tất cả diện tích</p>
-        <input type="radio" checked="checked" @click="handleSelectAcreageRange(range)">
+        <input type="radio" checked="checked">
       </div>
       <div
         v-for="range in acreageRanges"
         :key="`${range.from}-${range.to}`"
         class="flex justify-between h-11 border-b items-center mx-3"
+        @click="handleSelectAcreageRange(range)"
       >
         <div class="flex justify-start">
           <template v-if="range.from === 0">

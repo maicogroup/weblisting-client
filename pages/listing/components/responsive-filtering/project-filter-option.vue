@@ -36,14 +36,15 @@
       <div
         v-if="searchInput.trim() === ''"
         class="flex justify-between h-11 border-b items-center mx-3"
+        @click="handleSelectAllProjectOption"
       >
         <p>Tất cả dự án</p>
-        <input type="radio" checked="checked" @click="handleSelectAllProjectOption">
+        <input type="radio" checked="checked">
       </div>
       <template v-if="projects !== null">
         <div v-for="project in filteredProjects" :key="project.id" class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectProject(project)">
           <p>{{ project.projectName }}</p>
-          <input type="radio" @click="handleSelectProject(project)">
+          <input type="radio">
         </div>
       </template>
     </div>

@@ -34,14 +34,15 @@
         </p>
       </div>
 
-      <div class="flex justify-between h-11 border-b items-center mx-3">
+      <div class="flex justify-between h-11 border-b items-center mx-3" @click="handleSelectAllPrices">
         <p>Tất cả mức giá</p>
-        <input type="radio" checked="checked" @click="handleSelectAllPrices">
+        <input type="radio" checked="checked">
       </div>
       <div
         v-for="range in priceRanges"
         :key="`${range.from}-${range.to}`"
         class="flex justify-between h-11 border-b items-center mx-3"
+        @click="handleSelectPriceRange(range)"
       >
         <div class="flex justify-start">
           <template v-if="range.from === 0">
@@ -62,7 +63,7 @@
             </span>
           </template>
         </div>
-        <input type="radio" @click="handleSelectPriceRange(range)">
+        <input type="radio">
       </div>
     </div>
   </div>

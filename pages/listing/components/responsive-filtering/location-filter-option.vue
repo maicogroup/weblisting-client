@@ -56,7 +56,7 @@
       <div
         v-if="searchInput.trim() === ''"
         class="flex justify-between h-11 border-b items-center mx-3"
-        @click="handleSelectAllLocation "
+        @click="handleSelectAllLocation"
       >
         <p>Tất cả khu vực</p>
         <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -103,14 +103,12 @@
           v-for="district in filteredDistricts"
           :key="district"
           class="flex justify-between h-11 border-b items-center mx-3 mt-5"
+          @click="handleSelectSecondOption(district)"
         >
           <p>
             {{ district }}
           </p>
-          <input
-            type="radio"
-            @click="handleSelectSecondOption(district)"
-          >
+          <input type="radio">
         </div>
       </div>
     </div>

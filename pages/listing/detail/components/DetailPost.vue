@@ -77,7 +77,7 @@
       </div>
       <div class="flex justify-between items-center mt-5">
         <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-3 mb-3.5">
-          Đặc điểm bất động sản
+          Mô tả căn hộ
         </h3>
         <div class="">
           <span class="text-gray-400">Mã bất động sản:</span> 
@@ -85,7 +85,7 @@
         </div>
       </div>
       <div class="grid md:grid-cols-2 grid-cols-1 md:gap-6 h-auto">
-        <div class="p-2">
+        <div class="p-2 hidden md:block">
           <p class="re-properties-frame">
             <span class="re-properties">Giá</span>
             <span class="re-properties-content"> {{formatPrice(post.price, post.demand)}}</span>
@@ -111,7 +111,7 @@
             <span class="re-properties-content"> {{post.otherSpecification}}</span>
           </p>
         </div>
-        <div class="p-2">
+        <div class="p-2 hidden md:block">
           <p class="re-properties-frame">
             <span class="re-properties">Phòng ngủ</span>
             <span class="re-properties-content"> {{post.totalBedRoom}}</span>
@@ -131,6 +131,56 @@
           <p class="re-properties-frame">
             <span class="re-properties">Pháp lý</span>
             <span class="re-properties-content"> {{post.project.juridical}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">View</span>
+            <span class="re-properties-content"> {{post.view}}</span>
+          </p>
+        </div>
+        <div class="p-2 md:hidden">
+          <p class="re-properties-frame">
+            <span class="re-properties">Giá</span>
+            <span class="re-properties-content"> {{formatPrice(post.price, post.demand)}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Phòng ngủ</span>
+            <span class="re-properties-content"> {{post.totalBedRoom}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Phòng tắm</span>
+            <span class="re-properties-content"> {{post.totalWC}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Diện tích</span>
+            <span class="re-properties-content"> {{post.acreage}} m<sup>2</sup></span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Diện tích sử dụng</span>
+            <span class="re-properties-content"> {{post.usageAcreage}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Tầng</span>
+            <span class="re-properties-content"> {{post.floor}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Block</span>
+            <span class="re-properties-content"> {{post.block}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Hướng nhà</span>
+            <span class="re-properties-content"> {{post.viewDirection}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Hướng cửa</span>
+            <span class="re-properties-content"> {{post.direction}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Pháp lý</span>
+            <span class="re-properties-content"> {{post.project.juridical}}</span>
+          </p>
+          <p class="re-properties-frame">
+            <span class="re-properties">Đặc điểm khác</span>
+            <span class="re-properties-content"> {{post.otherSpecification}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">View</span>
@@ -175,7 +225,7 @@
         </div>
       </div>
       <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-8 mb-4">
-        Google Map
+        Xem trên bản đồ
       </h3>
       <iframe :src="`${post.project.address.googleMapLocation}`" class="w-full h-64 mt-4" loading="lazy" />
       <div class="lg:hidden mx-0 mt-5 mb-3">
@@ -186,14 +236,14 @@
           <div class="items-center flex flex-row mb-4">
             <img
               class="h-14 w-14 mr-3.5 rounded-full ring-2 ring-white"
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              src="http://crm.maicogroup.net/assets/images/logo.png"
               alt=""
             >
             <h3 class="text-sm color-707070 leading-4 font-bold">
-              Team IT vô đối
+              Maico
             </h3>
           </div>
-          <button class="bd-color-858585 color-707070 rounded w-full h-10 border text-sm font-bold mb-7">
+          <button @click="featureNotSupported" class="bd-color-858585 color-707070 rounded w-full h-10 border text-sm font-bold mb-7">
             Yêu cầu liên hệ lại
           </button>
           <div class="w-full border-b bd-color-858585" />
@@ -265,6 +315,14 @@ export default ({
       } else {
         return `${parseFloat((price / 1e9).toFixed(2))} tỷ`;
       }
+    },
+    featureNotSupported() {
+      this.$toast.show("Tính năng này đang được hoàn thiện, cảm ơn bạn đã nhấn", {
+        type: "success",
+        theme: "bubble",
+        duration: 4000,
+        position: "top-center"
+      });
     }
   }
 

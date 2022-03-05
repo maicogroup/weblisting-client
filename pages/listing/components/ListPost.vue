@@ -26,7 +26,7 @@
         <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-mobile color-orange font-bold text-base leading-6 ov-flow-hidden ">
           {{ post.pageInfor.title }}
         </NuxtLink>
-        <div class="flex item-flex-start space-x-4 md:border mt-2 pr-3 ">
+        <div class="flex item-flex-start space-x-4 md:border mt-2 pr-3 rounded">
           <NuxtLink class="w-32 h-32 md:w-64 md:h-44 shrink-0" :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`">
             <img class="w-full h-full object-cover" :src="post.srcimage" alt="Bonnie image">
           </NuxtLink>
@@ -46,7 +46,8 @@
                 {{ post.address }}
               </p>
               <p class="description text-justify mt-2">
-                {{ post.description }}
+                <!-- {{ post.description }} -->
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed facilisis, velit non tincidunt lobortis, metus nisl pretium massa, sed luctus dui libero ut quam. Sed dictum mauris nisl, id fermentum nibh vulputate non. Mauris varius eros orci, vitae condimentum risus tristique vitae. Mauris quis mi ac erat suscipit sodales sit amet quis est. Nullam eu elementum odio. Morbi nec varius dolor, eu luctus elit. Nunc a leo non tortor aliquet mollis vestibulum eget arcu. Pellentesque aliquet faucibus augue, sit amet tempus risus mattis non.
               </p>
             </div>
             <div class="mb-2 mt-4 flex justify-between items-end w-full">
@@ -218,7 +219,7 @@ export default {
     },
 
     formatPrice (price) {
-      if (this.filter.demand === 'Cho Thuê') {
+      if (price < 100000000) {
         return `${price / 1e6} triệu/tháng`;
       } else {
         return `${parseFloat((price / 1e9).toFixed(2))} tỷ`;
@@ -227,7 +228,9 @@ export default {
 
     createConditionParamter (filter) {
       const conditions = { };
-
+      // if(!filter.isPreview){
+      //   conditions.status = { eq: "Publish"}
+      // }
       if (filter.demand) {
         conditions.demand = { eq: filter.demand };
       }
@@ -252,12 +255,14 @@ export default {
         const priceRange = filter.priceRange;
         conditions.price = {};
 
+        const scale = filter.demand === 'Bán' ? 1e9 : 1e6;
+
         if (priceRange.from) {
-          conditions.price.gte = priceRange.from * 1000000;
+          conditions.price.gte = priceRange.from * scale;
         }
 
         if (filter.priceRange.to) {
-          conditions.price.lte = priceRange.to * 1000000;
+          conditions.price.lte = priceRange.to * scale;
         }
       }
 
@@ -384,10 +389,6 @@ export default {
   height: 100px;
 }
 
-.shrink-0 {
-  flex-shrink: 0;
-}
-
 .item-flex-start {
   align-items: flex-start;
 }
@@ -404,7 +405,4 @@ export default {
   border: none;
 }
 
-.grow {
-  flex-grow: 1;
-}
 </style>

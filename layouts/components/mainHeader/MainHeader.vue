@@ -6,7 +6,7 @@
 
     <div class="hidden md:flex flex justify-between items-center space-x-10">
       <p class="font-bold hidden xl:block">
-        096 167 71 67
+        0903 234 045
       </p>
 
       <Dropdown item-width="200px" title="Thuê">

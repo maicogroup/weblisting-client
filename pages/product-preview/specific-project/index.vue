@@ -269,14 +269,6 @@ function createMockReview () {
 </script>
 
 <style scoped>
-  .shrink-0 {
-    flex-shrink: 0;
-  }
-
-  .grow {
-    flex-grow: 1;
-  }
-
     /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
       display: none;

@@ -25,7 +25,7 @@
       @mouseenter="entered = true"
       @mouseleave="entered = false"
     >
-      <p class="font-semibold pb-2 px-4">
+      <p class="font-semibold px-6 py-2">
         Chọn dự án
       </p>
 
@@ -58,6 +58,7 @@
       <div class="max-h-96 overflow-y-auto overflow-x-hidden">
         <filter-dropdown-item
           v-if="searchInput.trim() === ''"
+          class="text-dark-red"
           @click="handleSelectAllProjectOption"
         >
           Tất cả dự án
@@ -163,3 +164,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.text-dark-red {
+  color: #961B12;
+}
+</style>

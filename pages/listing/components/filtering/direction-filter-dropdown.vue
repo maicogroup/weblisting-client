@@ -25,13 +25,11 @@
       @mouseenter="entered = true"
       @mouseleave="entered = false"
     >
-      <p class="font-semibold pb-2 px-4">
+      <p class="font-semibold px-6 py-2">
         Chọn hướng
       </p>
 
-      <divider />
-
-      <div class="flex space-x-4 px-4 my-2">
+      <div class="flex space-x-4 px-6">
         <div class="flex-col space-y-1">
           <label v-for="direction in directions.filter((_, index) => index % 2 === 0)" :key="direction" :for="direction" class="flex items-center">
             <input :id="direction" v-model="selectedChoices" :value="direction" type="checkbox" class="form-checkbox h-4 w-4 text-gray-600">
@@ -46,19 +44,11 @@
         </div>
       </div>
 
-      <divider />
+      <divider class="mt-2" />
 
-      <div class="flex space-x-2 justify-center mt-3 mb-1">
-        <button class="px-2 py-1 hover:text-red-700" @click="clearSelectedChoices">
-          Đặt lại
-        </button>
-        <button class="border rounded-md px-2 py-1 hover:text-white hover:bg-gray-700" @click="open = false">
-          Hủy
-        </button>
-        <button :class="`border font-semibold rounded-md px-2 py-1 hover:text-white hover:bg-gray-700`" @click="applyOption">
-          Áp dụng
-        </button>
-      </div>
+      <button class="ml-6 mt-3 mb-1 border rounded-md px-2 py-1 hover:text-white hover:bg-gray-700" @click="clearSelectedChoices">
+        Đặt lại
+      </button>
     </div>
   </div>
 </template>
@@ -77,7 +67,6 @@ export default {
       entered: false,
       displaySelected: 'Tất cả',
       directions: ['Đông', 'Tây', 'Nam', 'Bắc', 'Đông Nam', 'Tây Nam', 'Đông Bắc', 'Tây Bắc'],
-      prevSelectedChoices: [],
       selectedChoices: []
     };
   },
@@ -91,7 +80,6 @@ export default {
         // setTimeout để tránh listen các click event hiện tại
         setTimeout(() => document.addEventListener('click', this.closeIfOutsideOfDropdown), 0);
       } else {
-        this.selectedChoices = [...this.prevSelectedChoices];
         document.removeEventListener('click', this.closeIfOutsideOfDropdown);
       }
     },
@@ -100,13 +88,24 @@ export default {
       handler (option) {
         if (option) {
           this.displaySelected = option.length > 0 ? option.join(', ') : 'Tất cả';
-          this.prevSelectedChoices = [...option];
           this.selectedChoices = [...option];
         } else {
           this.displaySelected = 'Tất cả';
         }
       },
       immediate: true
+    },
+
+    selectedChoices (newChoices, oldChoices) {
+      if (newChoices.length !== oldChoices.length) {
+        this.$emit('optionchanged', newChoices);
+        return;
+      }
+
+      const theSame = newChoices.every((_, index) => newChoices[index] === oldChoices[index]);
+      if (!theSame) {
+        this.$emit('optionchanged', newChoices);
+      }
     }
   },
 
@@ -117,11 +116,6 @@ export default {
 
     clearSelectedChoices () {
       this.selectedChoices = [];
-    },
-
-    applyOption () {
-      this.prevSelectedChoices = [...this.selectedChoices];
-      this.$emit('optionchanged', [...this.selectedChoices]);
     }
   }
 };

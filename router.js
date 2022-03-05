@@ -30,6 +30,7 @@ export function createRouter () {
       {
         path: '/chinh-sua-tin-dang/:slug',
         component: EditPost
+
       },
       {
         path: '/danh-sach-cho',

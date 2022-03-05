@@ -1,8 +1,7 @@
 <template>
   <div>
     <MainHeader />
-    {{ this.$cookies.get(this.$route.fullPath) }}
-    <div class="relative z-10 mt-32 flex justify-center max-w-full">
+    <div class="relative mt-20 md:mt-32 flex justify-center max-w-full">
       <Nuxt />
     </div>
     <MainFooter />
@@ -52,11 +51,10 @@ export default {
       redirect: 'follow'
       };
 
-      fetch("https://localhost:7247/graphql/", requestOptions)
+      fetch("http://maicogroup.net:3001/graphql/", requestOptions)
       .then(response => response.text())
-      .then(result => console.log(result))
+      .then(result => console.log("result: ", result))
       .catch(error => console.log('error', error));
-      debugger;
     }
   }
 };

@@ -14,11 +14,9 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ],
-    // script: [
-    //   { src: '/js/onBeforeUnload.js', body: true, isSSR: false }
-    // ]
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,400;0,500;0,700;1,400&display=swap' }
+    ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -36,7 +34,7 @@ export default {
   plugins: [
     '~/plugins/lightGallery.client.js',
     '~/plugins/vue-js-modal.js',
-    '~/plugins/editor.client.js',
+    '~/plugins/editor.client.js'
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -73,17 +71,18 @@ export default {
   },
 
   toast: {
-    position: 'top-right',
+    position: 'center',
     register: [ // Register custom toasts
       {
-        name: 'my-error',
-        message: 'Oops...Something went wrong',
+        name: 'featured-not-supported',
+        message: 'Tính năng này đang được hoàn thiện, cảm ơn bạn đã nhấn',
         options: {
-          type: 'error'
+          type: 'success',
+          duration: 4000
         }
       }
     ]
-},
+  },
 
   toast: {
     position: 'top-right',

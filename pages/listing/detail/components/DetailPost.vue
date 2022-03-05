@@ -206,11 +206,11 @@
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-5 mb-3">
           <p class="re-properties pl-2">Tiện ích vị trí</p>
-          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">Masteri Thảo Điền sẽ mang lại cho bạn và gia đình một cuộc sống đẳng cấp hoàn hảo thể hiện từ vị trí, phong cách sống, không gian thiên nhiên trong lành đến những tiện ích hiện đại và dịch vụ tiện nghi, tạo nên một môi trường sống lý tưởng, tạo dựng nền tảng và phát triển tương lai.</p>
+          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">{{post.project.utilities.locationUtilites}}</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-5 mb-3">
           <p class="re-properties pl-2">Tiện ích nội khu</p>
-          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">Masteri Thảo Điền sẽ mang lại cho bạn và gia đình một cuộc sống đẳng cấp hoàn hảo thể hiện từ vị trí, phong cách sống, không gian thiên nhiên trong lành đến những tiện ích hiện đại và dịch vụ tiện nghi, tạo nên một môi trường sống lý tưởng, tạo dựng nền tảng và phát triển tương lai.</p>
+          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">{{post.project.utilities.internalUtilites}}</p>
         </div>
       </div>
       <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-8 mb-4">

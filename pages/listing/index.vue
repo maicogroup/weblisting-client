@@ -50,11 +50,32 @@
       <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
       <ContactInfor class="lg:ml-9 hidden lg:flex lg:flex-col mt-14" />
     </div>
-    <div v-if="project && showIfPostsOfOneProject">
+    <div v-if="project && showIfPostsOfOneProject" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
       <div
-        class="rounded-lg border w-4/5 mr-auto ml-auto mt-9 mb-5"
-        v-html="project.sEOContent"
-      />
+        :class="`overflow-hidden text-ellipsis mt-5 mx-2 ${sEOContentClasses}` "
+      >
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta ipsa autem quis voluptates, rem sint dolorem quos nemo illo fugit. Ratione culpa nostrum asperiores fuga nam perferendis cumque, hic laudantium.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta ipsa autem quis voluptates, rem sint dolorem quos nemo illo fugit. Ratione culpa nostrum asperiores fuga nam perferendis cumque, hic laudantium.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta ipsa autem quis voluptates, rem sint dolorem quos nemo illo fugit. Ratione culpa nostrum asperiores fuga nam perferendis cumque, hic laudantium.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+      </div>
+      <p class="text-center font-bold read-more my-4" @click="setSEOContentActiveState()">
+        {{ readMoreContent }}
+      </p>
     </div>
   </div>
 </template>
@@ -83,10 +104,12 @@ export default {
       // filter dùng để lọc
       filter: null,
       sellButtonIsActive: false,
+      readMoreButtonIsActive: false,
       // filter đang được người dùng chỉnh sửa, chuẩn bị dùng để lọc
       inputFilter: {},
       searchButtonPressed: false,
-      tempSEOContent: '**Hello World**'
+      tempSEOContent: '**Hello World**',
+      readMoreContent: 'Xem thêm'
     };
   },
   head () {
@@ -122,6 +145,10 @@ export default {
 
     rentButtonClasses () {
       return !this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
+    },
+
+    sEOContentClasses () {
+      return this.readMoreButtonIsActive ? 'h-fit opacity-100' : 'h-60 opacity-60';
     }
   },
 
@@ -202,6 +229,15 @@ export default {
 
   methods: {
 
+    setSEOContentActiveState () {
+      this.readMoreButtonIsActive = !this.readMoreButtonIsActive;
+      if (this.readMoreButtonIsActive === true) {
+        this.readMoreContent = 'Thu gọn';
+      } else {
+        this.readMoreContent = 'Xem thêm';
+      }
+    },
+
     setSellButtonActiveState (state) {
       this.sellButtonIsActive = state;
       this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
@@ -222,7 +258,6 @@ export default {
       if (query.type) {
         filter.type = query.type;
       }
-
 
       if (query.city || query.district) {
         filter.location = {
@@ -395,5 +430,20 @@ export default {
 
 .double-button {
   font-size: 0;
+}
+
+.read-more {
+  color: #408b54f2;
+  cursor: pointer;
+  transition: all 0.5;
+}
+
+.read-more:hover {
+  color: #a1e7b4f2;
+  text-decoration: underline;
+}
+
+.delay-3000 {
+  transition-delay: 3s;
 }
 </style>

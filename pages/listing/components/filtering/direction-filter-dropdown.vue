@@ -98,21 +98,12 @@ export default {
 
     selectedChoices (newChoices, oldChoices) {
       if (newChoices.length !== oldChoices.length) {
-        this.selectedChoices = newChoices;
         this.$emit('optionchanged', newChoices);
         return;
       }
 
-      let theSame = true;
-      for (let i = 0; i < newChoices.length; ++i) {
-        if (newChoices[i] !== oldChoices[i]) {
-          theSame = false;
-          break;
-        }
-      }
-
+      const theSame = newChoices.every((_, index) => newChoices[index] === oldChoices[index]);
       if (!theSame) {
-        this.selectedChoices = newChoices;
         this.$emit('optionchanged', newChoices);
       }
     }

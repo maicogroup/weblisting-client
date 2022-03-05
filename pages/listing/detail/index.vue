@@ -49,7 +49,10 @@ const getPostQuery = gql`
             juridical
             investor
             projectName
-            utilities
+            utilities {
+              locationUtilites
+              internalUtilites
+            }
           }
         }
       }

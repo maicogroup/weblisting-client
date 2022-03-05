@@ -1,6 +1,6 @@
 <template>
   <div class="drag-sortable"
-    style="width:200px; height:215px; margin-inline:5px;"
+    style="width:190px; height:215px; margin-inline:5px;"
     :class="{ dragging: dragging, 'reversing': reversing }"
     :style="rootStyle"
     @mousedown="onMouseDown"

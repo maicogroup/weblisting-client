@@ -195,33 +195,22 @@
         <div class="flex flex-wrap justify-start items-center my-2">
         <div v-for="item in post.furnitures" :key="item" class="my-auto">
           <button v-if="item == 'Trống' || item == 'Ko'" class="btn red-furnitures my-1">{{item}}</button>
+          <button v-else-if="item == 'Full'" class="btn green-furnitures my-1">Đầy đủ</button>
           <button v-else class="btn green-furnitures my-1">{{item}}</button>
         </div>
         </div>
       </div>
       <div>
         <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-3 mb-3.5">
-          Tiện ích
+          Ưu điểm dự án
         </h3>
-        <div class="grid md:grid-cols-3 sm:grid-cols-1">
-          <div v-for="item in post.project.utilities" :key="item">
-            <div class="w-6/12 float-left text-sm bg-gray-50 border border-gray-200 border-solid p-4">
-              {{ item }}
-            </div>
-            <div class="w-6/12 float-left border border-gray-200 border-solid p-4 flex justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#32c82b"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ><polyline points="20 6 9 17 4 12" /></svg>
-            </div>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-5 mb-3">
+          <p class="re-properties pl-2">Tiện ích vị trí</p>
+          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">Masteri Thảo Điền sẽ mang lại cho bạn và gia đình một cuộc sống đẳng cấp hoàn hảo thể hiện từ vị trí, phong cách sống, không gian thiên nhiên trong lành đến những tiện ích hiện đại và dịch vụ tiện nghi, tạo nên một môi trường sống lý tưởng, tạo dựng nền tảng và phát triển tương lai.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-5 mb-3">
+          <p class="re-properties pl-2">Tiện ích nội khu</p>
+          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">Masteri Thảo Điền sẽ mang lại cho bạn và gia đình một cuộc sống đẳng cấp hoàn hảo thể hiện từ vị trí, phong cách sống, không gian thiên nhiên trong lành đến những tiện ích hiện đại và dịch vụ tiện nghi, tạo nên một môi trường sống lý tưởng, tạo dựng nền tảng và phát triển tương lai.</p>
         </div>
       </div>
       <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-8 mb-4">

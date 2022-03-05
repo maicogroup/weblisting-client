@@ -42,7 +42,7 @@
         </div>
       </div>
     </div>
-    <h2 class="font-bold text-lg mb-2 mt-6">Thông tin về dự án</h2>
+    <h2 class="font-bold text-lg mb-2 mt-6">Thông tin về tin đăng</h2>
     <div class="flex flex-col w-full ml-2">
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
@@ -76,15 +76,15 @@
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
-          Hướng view:
+          Hướng nhà:
         </p>
         <input :placeholder="post.viewDirection" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.viewDirection">
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
-          View:
+          Hướng cửa:
+          <input :placeholder="post.direction" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.direction">
         </p>
-        <input :placeholder="post.view" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.view">
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
@@ -92,6 +92,51 @@
         </p>
         <input :placeholder="post.otherSpecification" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.otherSpecification">
       </div>
+      <div class="my-2">
+        <p class="font-medium mr-6 text-md">
+          View:
+        </p>
+        <input :placeholder="post.view" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.view">
+      </div>
+    </div>
+    <div class=" mb-2 mt-8 text-lg flex justify-between">
+      <h2 class="font-bold">
+        Nội thất
+      </h2>
+      <div class="flex justify-between items-center">
+        <input
+          v-model="newFurniture"
+          class="border rounded-md pl-4 w-64 mr-3"
+          placeholder="Thêm nội thất mới cho bài viết..."
+        >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 hover:text-green-500 cursor-pointer"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          @click="addNewFurniture"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+    </div>
+    <div class="mt-4 rounded-lg border-8 py-3 px-5">
+      <ul>
+        <li v-for="item in post.furnitures" :key="item" class="bgc-cornflowerblue rounded-lg inline-flex mr-4 mt-2 mb-3 bg-lime-300 p-2 list-none" title="xóa nội thất">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 cursor-pointer mr-2 text-slate-400 hover:text-red-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            @click="deleteFurniture(item)"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {{ item }}
+        </li>
+      </ul>
     </div>
     <h2 class="font-bold text-lg mb-2 mt-6">
       Mô tả
@@ -146,52 +191,14 @@
         </li>
       </ul>
     </div>
-    <div class=" mb-2 mt-16 text-lg flex justify-between">
-      <h2 class="font-bold">
-        Nội thất
-      </h2>
-      <div class="flex justify-between items-center">
-        <input
-          v-model="newFurniture"
-          class="border rounded-md pl-4 w-64 mr-3"
-          placeholder="Thêm nội thất mới cho bài viết..."
-        >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 hover:text-green-500 cursor-pointer"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          @click="addNewFurniture"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
-    </div>
-    <div class="mt-4 rounded-lg border-8 py-3 px-5">
-      <ul>
-        <li v-for="item in post.furnitures" :key="item" class="bgc-cornflowerblue rounded-lg inline-flex mr-4 mt-2 mb-3 bg-lime-300 p-2 list-none" title="xóa nội thất">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 cursor-pointer mr-2 text-slate-400 hover:text-red-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            @click="deleteFurniture(item)"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          {{ item }}
-        </li>
-      </ul>
-    </div>
+    
     <h1 class="font-bold text-lg my-2">
       Hình ảnh
       </h1>
       <em class="mb-2">Bạn có thể kéo để thay đổi vị trí ảnh</em>
     <div class="pannel mt-10" style="width:100%">
       
-      <div class="list row">
+      <div class="list row ">
         <drag-sortable v-for="(item, index) in post.gallery" v-model="dragData2" :key="item" :index="index" @sortend="sortend($event, post.gallery)" replace-direction="horizontal">
           <div v-if="item.includes('.mp4')">
             <video controls>
@@ -245,11 +252,12 @@
 }
 .list {
   position: relative;
-  height: 500px;
+  height: auto;
   overflow: auto;
+  text-align: center;
 }
 .list img {
-  width:200px;
+  width:190px;
   height:215px;
 }
 .list > * {
@@ -284,13 +292,17 @@ const getPost = gql`query GetPost($condition: PostCollectionFilterInput)
                 post(where: $condition) {
                   id,
                   acreage,
+                  direction
+                  usageAcreage,
+                  otherSpecification,
+                  view
+                  viewDirection
                   apartmentNumber,
                   block,
                   description,
                   floor,
                   furnitures,
                   gallery,
-                  otherSpecification,
                   pageInfor {
                     title,
                     slug,
@@ -298,9 +310,6 @@ const getPost = gql`query GetPost($condition: PostCollectionFilterInput)
                   },
                   status,
                   tags,
-                  usageAcreage,
-                  view,
-                  viewDirection,
                 }
               }`;
 
@@ -311,17 +320,6 @@ const updatePost = gql`mutation deletePostTag($input: UpdatePostInput!)
             string
           }
         }`;
-const getAllSlugs = gql`query getPostsSlugs 
-  {
-    postsWithPagination {
-      items {
-        pageInfor {
-          slug
-        }
-      },
-      totalCount
-    }
-  }`
 export default {
   components: { dragSortable },
   name: 'EditPost',

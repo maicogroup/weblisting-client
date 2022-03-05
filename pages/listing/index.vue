@@ -232,11 +232,11 @@
         </span>
         <input type="search" class="w-full border py-2 pl-10 pr-2 h-11 rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm...">
       </div>
-      <div class="double-button my-4 flex w-full mx-2.5">
-        <button :class="`text-base py-2 px-4 border rounded-l-md w-49-and-half-percent ${sellButtonClasses}`" @click="setFilterDemandOption('Bán')">
+      <div class="double-button my-4 flex mx-2.5">
+        <button :class="`grow text-base py-2 px-4 border rounded-l-md ${sellButtonClasses}`" @click="setFilterDemandOption('Bán')">
           Bán
         </button>
-        <button :class="`text-base whitespace-nowrap py-2 px-4 border rounded-r-md  w-49 ${rentButtonClasses}`" @click="setFilterDemandOption('Cho Thuê')">
+        <button :class="`grow text-base whitespace-nowrap py-2 px-4 border rounded-r-md ${rentButtonClasses}`" @click="setFilterDemandOption('Cho Thuê')">
           Cho thuê
         </button>
       </div>
@@ -960,14 +960,6 @@ export default {
 .filter-search-bar {
   min-width: 8rem;
   max-width: 12rem;
-}
-
-.w-49{
-  width: 49%;
-}
-
-.w-49-and-half-percent {
-  width: 49.5%;
 }
 
 .top-after-header {

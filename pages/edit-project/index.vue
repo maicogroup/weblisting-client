@@ -6,7 +6,7 @@
             <h1 class="font-semidbold text-lg">{{project.projectName}}</h1>
             <div class="p-2 h-auto" style="width:1000px;">
                 <expand-panel title="Thông tin">
-                    <div v-if="isEditting">
+                    <div>
                         <p class="mb-2">
                             <label class="font-semibold">Tên dự án:</label>
                             <input type="text" class="w-1/2" v-model="project.projectName">
@@ -24,33 +24,12 @@
                             <textarea type="text" class="w-1/2" rows="4" v-model="project.description"></textarea>
                         </p>
                     </div>
-                    <div v-else>
-                        <p class="mb-2">
-                            <label class="font-semibold">Tên dự án:</label>
-                            <span class="w-1/2">{{project.projectName}}</span>
-                        </p>
-                        <p class="mb-2">
-                            <label class="font-semibold">Chủ đầu tư:</label>
-                            <span class="w-1/2">{{project.investor}}</span>
-                        </p>
-                        <p class="mb-2">
-                            <label class="font-semibold">Pháp lý:</label>
-                            <span class="w-1/2">{{project.juridical}}</span>
-                        </p>
-                        <p>
-                            <label class="font-semibold">Mô tả:</label>
-                            <span class="w-1/2" style="text-align:justify;">{{project.description}}</span>
-                        </p>
-                    </div>
-                    <div class="flex justify-end my-2" v-if="isEditting">
+                    <div class="flex justify-end my-2">
                         <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectInformation(project.id)">Cập nhật</button>
-                    </div>
-                    <div class="flex justify-end my-2" v-else>
-                        <button class="text-white px-3 py-1 bg-gray-400 rounded" @click="handleUpdateProjectInformation">Chỉnh sửa</button>
                     </div>
                 </expand-panel>
                 <expand-panel title="Địa chỉ">
-                    <div v-if="isEditting">
+                    <div>
                         <p class="mb-2">
                             <label class="font-semibold">Tên đường:</label>
                             <input type="text" class="w-1/2" v-model="project.address.street">
@@ -64,24 +43,10 @@
                             <input type="text" class="w-1/2" v-model="project.address.city">
                         </p>
                     </div>
-                    <div v-else>
-                        <p class="mb-2">
-                            <label class="font-semibold">Tên đường:</label>
-                            <span class="w-1/2">{{project.address.street}}</span>
-                        </p>
-                        <p class="mb-2">
-                            <label class="font-semibold">Quận:</label>
-                            <span class="w-1/2">{{project.address.district}}</span>
-                        </p>
-                        <p class="mb-2">
-                            <label class="font-semibold">Thành phố: </label>
-                            <span class="w-1/2">{{project.address.city}}</span>
-                        </p>
-                    </div>
                     <div>
                         <label class="font-semibold flex items-center">
                             Google Map: &nbsp;&nbsp;
-                            <button @click="showGoogleMapEditModal(project.id, project.address)" v-if="isEditting">
+                            <button @click="showGoogleMapEditModal(project.id, project.address)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
                             </button>
                         </label>
@@ -94,51 +59,22 @@
                             </em>
                         </div>
                     </div>
-                    <div class="flex justify-end my-2" v-if="isEditting">
+                    <div class="flex justify-end my-2">
                         <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectAddress(project.id, currentProjectAddress.street, currentProjectAddress.district, currentProjectAddress.city, currentProjectAddress.googleMapLocation)">Cập nhật</button>
-                    </div>
-                    <div class="flex justify-end my-2" v-else>
-                        <button class="text-white px-3 py-1 bg-gray-400 rounded" @click="handleUpdateProjectAddress(project.id, project.address.street, project.address.district, project.address.city, project.address.googleMapLocation)">Chỉnh sửa</button>
                     </div>
                 </expand-panel>
 
                 <expand-panel title="Tiện ích">
-                    <div v-if="!isEditting">
-                        <ul>
-                            <li v-for="(item, index) in project.utilities" :key="index">{{item}}</li>
-                        </ul>
-                    </div>
-                    <div v-else>
-                        <div class="flex justify-start items-center">
-                            <input type="text" class="w-1/5 my-2" v-model="newUtility" placeholder="Thêm tiện ích mới">
-                            <button @click="addNewProjectUtility(project.id, project.utilities)">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-                            </button>
-                        </div>
-                        <ul>
-                            <li v-for="(item, index) in project.utilities" :key="index" class="flex justify-start items-center">
-                                <input v-if="selectedUtilities.length == 0" type="text" class="w-1/5 my-2" v-model="project.utilities[index]">
-                                <input v-else type="text" class="w-1/5 my-2" v-model="project.utilities[index]" disabled>
-
-                                <input type="checkbox" :value="project.utilities[index]" v-model="selectedUtilities" name="check" id="check" class="justify-items-start" style="margin-left:10px; width:20px;">
-                            </li>
-                        </ul>
-                        <p v-if="selectedUtilities.length > 0" class="mt-2 text-lg font-semibold">Đã chọn: </p>
-                        <div style="float:left; width:600px">
-                            <p v-for="(item, index) in selectedUtilities" :key="index" style="float:left;">
-                                <span v-if="index == (selectedUtilities.length - 1)">{{item}}</span>
-                                <span v-else>{{item}}, &nbsp;</span>
-                            </p>
-                        </div>
-                        <br>
-                    </div>
-                    <div class="flex justify-end my-2" v-if="!isEditting">
-                        <button class="text-white px-3 py-1 bg-gray-400 rounded" @click="handleUpdateProjectUtilities(project.utilities)">Chỉnh sửa</button>
-                    </div>
-                    <div class="flex justify-end space-x-1" v-else>
-                        <button v-if="selectedUtilities.length > 0" @click="selectedUtilities = []" class="text-white px-3 py-1 bg-gray-400 rounded">Đặt lại</button>
-                        <button v-if="selectedUtilities.length > 0" class="text-white px-3 py-1 bg-red-400 rounded" @click="showDeleteProjectUtilitiesModal(project.id)">Xóa</button>
-                        <button v-if="selectedUtilities.length == 0" class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectUtilities(project.id)">Cập nhật</button>
+                    <p>
+                        <label for="meta" class="font-semibold">Tiện ích vị trí:</label>
+                        <textarea type="text" class="w-1/2" rows="4" v-model="project.utilities.locationUtilites"></textarea>
+                    </p>
+                    <p>
+                        <label for="meta" class="font-semibold">Tiện ích nội khu:</label>
+                        <textarea type="text" class="w-1/2" rows="4" v-model="project.utilities.internalUtilites"></textarea>
+                    </p>
+                    <div class="flex justify-end space-x-1">
+                        <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectUtilities(project.id)">Cập nhật</button>
                     </div>
                 </expand-panel>
 
@@ -184,18 +120,18 @@
 
                 <expand-panel title="Nội dung SEO">
                     <div>
-<client-only>
-      <quill-editor
-        ref="myQuillEditor"
-        v-model="project.sEOContent"
-        class="h-52 mb-11"
-        :options="editorOption"
-        @blur="onEditorBlur($event)"
-        @focus="onEditorFocus($event)"
-        @ready="onEditorReady($event)"
-      />
-    </client-only>
-    <button v-if="selectedUtilities.length == 0" class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectInformation(project.id)">Cập nhật</button>
+                        <client-only>
+                            <quill-editor
+                                ref="myQuillEditor"
+                                v-model="project.sEOContent"
+                                class="h-52 mb-11"
+                                :options="editorOption"
+                                @blur="onEditorBlur($event)"
+                                @focus="onEditorFocus($event)"
+                                @ready="onEditorReady($event)"
+                            />
+                            </client-only>
+                            <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectInformation(project.id)">Cập nhật</button>
                     </div>
                 </expand-panel>
             </div>
@@ -337,7 +273,10 @@ const getProject = gql`query GetProject($condition: ProjectCollectionFilterInput
                         city,
                         googleMapLocation
                     },
-                    utilities,
+                    utilities {
+                        internalUtilites,
+                        locationUtilites
+                    },
                     images,
                     sEOContent,
                     pageInfors {
@@ -367,27 +306,23 @@ export default {
             currentProjectAddress: {},
             currentImage: "",
             updateImages: {},
-            isEditting: false,
-            newUtility: "",
-            currentUtilities: {},
-            selectedUtilities: [],
             editorOption: {
-        // Some Quill options...
-        theme: 'snow',
-        modules: {
-          toolbar: [
-            [{ font: [] }],
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-            ['blockquote', 'code-block'],
-            [{ list: 'ordered' }, { list: 'bullet' }, { align: [] }],
-            [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
-            [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-            [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-            ['clean'] // remove formatting button
-          ]
-        }
-      }
+                // Some Quill options...
+                theme: 'snow',
+                modules: {
+                toolbar: [
+                    [{ font: [] }],
+                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                    ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+                    ['blockquote', 'code-block'],
+                    [{ list: 'ordered' }, { list: 'bullet' }, { align: [] }],
+                    [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+                    [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+                    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+                    ['clean'] // remove formatting button
+                ]
+                }
+            }
         }
     },
     methods: {
@@ -400,9 +335,6 @@ export default {
     onEditorReady (editor) {
       console.log('editor ready!', editor);
     },
-        handleUpdateProjectInformation() {
-            this.isEditting = true;
-        },
         updateProjectInformation(id) {
             const project = this.projects.filter(x => x.id == id);
             this.$apollo.mutate({
@@ -430,10 +362,6 @@ export default {
                 position: "top-right"
             });
             this.currentProjectInfor = {};
-            this.isEditting = false;
-        },
-        handleUpdateProjectAddress() {
-            this.isEditting = true;
         },
         updateProjectAddress(id) {
             const project = this.projects.filter(x => x.id == id);
@@ -462,7 +390,6 @@ export default {
                 postition: "top-right"
             });
             this.currentProjectAddress = {};
-            this.isEditting = false;
         },
         showGoogleMapEditModal(id, address) {
             this.currentProjectAddress = {
@@ -485,7 +412,6 @@ export default {
                     position: "top-right"
                 });
                 this.currentProjectAddress = {};
-                this.isEditting = false;
                 return;
             }
             if (item == "") {
@@ -496,7 +422,6 @@ export default {
                     position: "top-right"
                 });
                 this.currentProjectAddress = {};
-                this.isEditting = false;
                 return;
             }
             this.$apollo.mutate({
@@ -534,10 +459,6 @@ export default {
                 position: "top-right"
             })
             this.currentProjectAddress = {};
-            this.isEditting = false;
-        },
-        handleUpdateProjectUtilities(utilities) {
-            this.isEditting = true;
         },
         updateProjectUtilities(id) {
             var project = this.projects.filter(x => x.id == id);
@@ -551,7 +472,10 @@ export default {
                 variables: {
                     input: { 
                         id: id,
-                        utilities: project[0].utilities
+                        utilities: {
+                            internalUtilites: project[0].utilities.internalUtilites,
+                            locationUtilites: project[0].utilities.locationUtilites
+                        }
                     }
                 }
             })
@@ -561,95 +485,6 @@ export default {
                 duration: 2000,
                 postition: "top-right"
             });
-            this.currentUtilities = {};
-            this.isEditting = false;
-        },
-        addNewProjectUtility(id, utilities) 
-        {
-            if (utilities.includes(this.newUtility)) {
-                this.$toast.show("Đã có tiện ích này, vui lòng thử lại!!", {
-                    theme: "bubble",
-                    type: "error",
-                    position: "top-right",
-                    duration: 2000
-                })
-                return
-            }
-            if (this.newUtility == "") 
-            {
-                this.$toast.show("Chưa có dữ liệu, vui lòng thử lại!!", {
-                    theme: "bubble",
-                    type: "error",
-                    position: "top-right",
-                    duration: 2000
-                })
-                return 
-            }
-            utilities.push(this.newUtility);
-            this.$apollo.mutate({
-                mutation: gql`mutation UpdateProjectUtilities($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-                variables: {
-                    input: { 
-                        id: id,
-                        utilities: utilities
-                    }
-                }
-            });
-            this.newUtility = ""
-            this.$toast.show("Thêm tiện ích thành công!!!", {
-                theme: "bubble",
-                type: "success",
-                position: "top-right",
-                duration: 2000
-            })
-        },
-        showDeleteProjectUtilitiesModal(id) {
-            this.projectId = id;
-            this.$modal.show("delete-project-utilities");
-        },
-        deleteProjectUtilities(id) 
-        {
-            const project = this.projects.filter(x => x.id == id);
-            project[0].utilities = project[0].utilities.filter(x => !this.selectedUtilities.includes(x))
-            this.$apollo.mutate({
-                mutation: gql`mutation DeleteProjectUtilities($input: UpdateProjectInput!)
-                {
-                    updateProject(input: $input)
-                    {
-                        string
-                    }
-                }`,
-                variables: {
-                    input: 
-                    {
-                        id: id,
-                        utilities: project[0].utilities
-                    }
-                },
-                update: (store, {data: {deleteUtility}}) => {
-                    const query = {
-                        query: getProject
-                    };
-                    const { projects } = store.readQuery(query);
-                    var project = projects.filter(x => x.id == id);
-                    project[0].utilities = project[0].utilities.filter(x => !this.selectedUtilities.includes(x))
-                    store.writeQuery({...query, data: {projects: projects}})
-                }
-            })
-            this.$toast.show("Xóa tiện ích thành công!", {
-                theme: "bubble",
-                type: "success",
-                position: "top-right",
-                duration: 2000
-            })
-            this.$modal.hide("delete-project-utilities");
-            this.selectedUtilities = [];
-            this.projectId = "";
-            this.isEditting = false;
         },
         addNewProjectImage(id, images) {
             if (images.includes(this.currentImage)) 

@@ -191,8 +191,29 @@
     <div v-if="project && showIfPostsOfOneProject" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
       <div
         :class="`overflow-hidden text-ellipsis mt-5 mx-2 ${sEOContentClasses}` "
-        v-html="project.sEOContent"
-      />
+      >
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta ipsa autem quis voluptates, rem sint dolorem quos nemo illo fugit. Ratione culpa nostrum asperiores fuga nam perferendis cumque, hic laudantium.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta ipsa autem quis voluptates, rem sint dolorem quos nemo illo fugit. Ratione culpa nostrum asperiores fuga nam perferendis cumque, hic laudantium.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta ipsa autem quis voluptates, rem sint dolorem quos nemo illo fugit. Ratione culpa nostrum asperiores fuga nam perferendis cumque, hic laudantium.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
+      </div>
+      <p class="text-center font-bold read-more my-4" @click="setSEOContentActiveState()">
+        {{ readMoreContent }}
+      </p>
     </div>
     <div
       v-if="filterResponsive == true"

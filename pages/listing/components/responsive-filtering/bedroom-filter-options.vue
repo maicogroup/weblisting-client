@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="w-full flex justify-between border rounded h-11 items-center px-3 mb-4" @click="open = !open">
-      <p> {{ displaySelected }} </p>
+      <p class="truncate ...">
+        {{ displaySelected }}
+      </p>
       <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M1 13L7 7L1 1" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
@@ -14,13 +16,22 @@
       <div
         class="flex justify-between border-b rounded"
       >
-        <div @click="open = false" class="absolute top-1.5 left-2" >
-          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#32c82b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H6M12 5l-7 7 7 7"/></svg>
+        <div class="absolute top-1.5 left-2" @click="open = false">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#32c82b"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ><path d="M19 12H6M12 5l-7 7 7 7" /></svg>
         </div>
         <p class="font-semibold px-6 py-2  mr-auto ml-auto ">
           Chọn số lượng phòng ngủ
         </p>
-       
       </div>
       <div class="flex space-x-4 px-6">
         <div class="flex-col space-y-1 w-full">
@@ -53,11 +64,10 @@ export default {
   },
 
   watch: {
-
     selectedOption: {
       handler (option) {
         if (option) {
-          this.displaySelected = option.length > 0 ? option.join(', ') : 'Tất cả';
+          this.displaySelected = option.length > 0 ? `Số lượng phòng: ${option.join(', ')}` : 'Số lượng phòng';
           this.prevSelectedChoices = [...option];
           this.selectedChoices = [...option];
         } else {
@@ -65,6 +75,18 @@ export default {
         }
       },
       immediate: true
+    },
+
+    selectedChoices (newChoices, oldChoices) {
+      if (newChoices.length !== oldChoices.length) {
+        this.$emit('optionchanged', newChoices);
+        return;
+      }
+
+      const theSame = newChoices.every((_, index) => newChoices[index] === oldChoices[index]);
+      if (!theSame) {
+        this.$emit('optionchanged', newChoices);
+      }
     }
   }
 };

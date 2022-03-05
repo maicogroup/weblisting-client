@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="w-full flex justify-between border rounded h-11 items-center px-3 mb-4" @click="open = !open">
-      <p> {{ displaySelected }} </p>
+      <p class="truncate ...">
+        {{ displaySelected }}
+      </p>
       <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M1 13L7 7L1 1" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
@@ -14,17 +16,26 @@
       <div
         class="flex justify-between border-b rounded"
       >
-        <div @click="open = false" class="absolute top-1.5 left-2" >
-          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#32c82b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H6M12 5l-7 7 7 7"/></svg>
+        <div class="absolute top-1.5 left-2" @click="open = false">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#32c82b"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ><path d="M19 12H6M12 5l-7 7 7 7" /></svg>
         </div>
         <p class="font-semibold px-6 py-2  mr-auto ml-auto">
           Chọn khu vực
         </p>
-        
       </div>
 
-      <div class="relative my-4 w-full">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+      <div class="relative my-4 w-full px-3">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-4">
           <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
             <svg
               fill="none"
@@ -45,12 +56,12 @@
       <div
         v-if="searchInput.trim() === ''"
         class="flex justify-between h-11 border-b items-center mx-3"
-        @click="handleSelectAllLocation "
+        @click="handleSelectAllLocation"
       >
-        <p>Tất cả khu vực</p>
-        <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 13L7 7L1 1" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+        <p class="text-dark-red">
+          Tất cả khu vực
+        </p>
+        <input type="radio" :checked="selectedOption === null">
       </div>
       <div
         v-for="city in filteredCities"
@@ -88,18 +99,36 @@
             </svg>
           </div>
         </div>
+
+        <div class="relative my-4 w-full px-3">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-4">
+            <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                class="w-6 h-6"
+              >
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </span>
+          <input v-model="searchInput" type="search" class="w-full border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm Quận/Huyện">
+        </div>
+
         <div
           v-for="district in filteredDistricts"
           :key="district"
-          class="flex justify-between h-11 border-b items-center mx-3 mt-5"
+          class="flex justify-between h-11 border-b items-center mx-3"
+          @click="handleSelectSecondOption(district)"
         >
           <p>
             {{ district }}
           </p>
-          <input
-            type="radio"
-            @click="handleSelectSecondOption(district)"
-          >
+          <input type="radio" :checked="isSelected(district)">
         </div>
       </div>
     </div>
@@ -123,7 +152,7 @@ export default {
   },
 
   props: {
-    selectedOption: { type: String, default: null }
+    selectedOption: { type: Object, default: null }
   },
 
   data () {
@@ -139,7 +168,7 @@ export default {
       cities: [
         {
           name: 'Hồ Chí Minh',
-          districts: ['Q9', 'Q2']
+          districts: ['Q9', 'Q2', 'Thủ Đức']
         }
       ]
     };
@@ -161,7 +190,7 @@ export default {
     selectedOption: {
       handler (option) {
         if (option) {
-          this.displaySelected = option.city;
+          this.displaySelected = 'Khu vực: ' + option.city;
 
           if (option.district) {
             this.displaySelected += ', ' + option.district;
@@ -175,6 +204,10 @@ export default {
   },
 
   methods: {
+    isSelected (district) {
+      return district === this.selectedOption?.district;
+    },
+
     handleSelectFirstOption (city) {
       this.isShowDistrict = true;
       this.selectedCity = city;
@@ -183,7 +216,6 @@ export default {
     },
 
     handleSelectAllLocation () {
-      this.displaySelected = 'Tất cả';
       this.$emit('optionchanged', null);
       this.open = false;
     },

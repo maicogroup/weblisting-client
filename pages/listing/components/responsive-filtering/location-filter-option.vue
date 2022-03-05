@@ -170,7 +170,7 @@ export default {
     selectedOption: {
       handler (option) {
         if (option) {
-          this.displaySelected = option.city;
+          this.displaySelected = 'Khu vực: ' + option.city;
 
           if (option.district) {
             this.displaySelected += ', ' + option.district;
@@ -192,7 +192,6 @@ export default {
     },
 
     handleSelectAllLocation () {
-      this.displaySelected = 'Tất cả';
       this.$emit('optionchanged', null);
       this.open = false;
     },

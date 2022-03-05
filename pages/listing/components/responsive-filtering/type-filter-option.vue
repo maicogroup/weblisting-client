@@ -14,13 +14,22 @@
       <div
         class="flex justify-between border-b rounded"
       >
-        <div @click="open = false" class="absolute top-1.5 left-2" >
-          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#32c82b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H6M12 5l-7 7 7 7"/></svg>
+        <div class="absolute top-1.5 left-2" @click="open = false">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#32c82b"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ><path d="M19 12H6M12 5l-7 7 7 7" /></svg>
         </div>
         <p class="font-semibold px-6 py-2  mr-auto ml-auto ">
           Chọn loại căn hộ
         </p>
-       
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3">
         <p>Tất cả nhà đất</p>
@@ -28,23 +37,23 @@
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3">
         <p>Căn hộ chung cư</p>
-        <input type="radio" @click="handleSelecType('Căn hộ chung cư')">
+        <input type="radio" @click="handleSelectType('Căn hộ chung cư')">
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3">
         <p>Duplex</p>
-        <input type="radio" @click="handleSelecType('Duplex')">
+        <input type="radio" @click="handleSelectType('Duplex')">
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3">
         <p>Officetel</p>
-        <input type="radio" @click="handleSelecType('Officetel')">
+        <input type="radio" @click="handleSelectType('Officetel')">
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3">
         <p>Penthouse</p>
-        <input type="radio" @click="handleSelecType('Penthouse')">
+        <input type="radio" @click="handleSelectType('Penthouse')">
       </div>
       <div class="flex justify-between h-11 border-b items-center mx-3">
         <p>ShopHouse</p>
-        <input type="radio" @click="handleSelecType('ShopHouse')">
+        <input type="radio" @click="handleSelectType('ShopHouse')">
       </div>
     </div>
   </div>
@@ -102,7 +111,7 @@ export default {
     selectedOption: {
       handler (option) {
         if (option) {
-          this.displaySelected = option;
+          this.displaySelected = 'Loại căn hộ: ' + option;
         } else {
           this.displaySelected = 'Loại căn hộ';
         }
@@ -116,7 +125,7 @@ export default {
       this.open = this.entered;
     },
 
-    handleSelecType (option) {
+    handleSelectType (option) {
       this.open = false;
       this.$emit('optionchanged', option);
     },

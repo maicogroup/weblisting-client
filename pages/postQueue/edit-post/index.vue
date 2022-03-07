@@ -106,7 +106,7 @@
       <div class="flex justify-between items-center">
         <input
           v-model="newFurniture"
-          class="border rounded-md pl-4 w-64 mr-3"
+          class="border rounded-md pl-2 w-64 mr-3"
           placeholder="Thêm nội thất mới cho bài viết..."
         >
         <svg
@@ -159,7 +159,7 @@
       <div class="flex justify-between items-center">
         <input
           v-model="newTag"
-          class="border rounded-md pl-4 w-64 mr-3"
+          class="border rounded-md pl-2 w-64 mr-3"
           placeholder="Thêm tag mới cho bài viết..."
         >
         <svg

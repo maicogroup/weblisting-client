@@ -2,7 +2,7 @@
     <div class="vue-expand-panel p-2 h-auto">
         <h1 class="text-center font-bold text-lg">CHỈNH SỬA DỰ ÁN</h1>
         <br>
-        <div class="w-auto h-auto p-2 border-4 rounded m-5" v-for="(project, index) in projects" :key="index">
+        <div class="w-auto h-auto p-2 border-2 rounded m-5" v-for="(project, index) in projects" :key="index">
             <h1 class="font-semidbold text-lg">{{project.projectName}}</h1>
             <div class="p-2 h-auto" style="width:1000px;">
                 <expand-panel title="Thông tin">

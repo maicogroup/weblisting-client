@@ -104,7 +104,7 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng cửa</span>
-            <span class="re-properties-content"> {{post.direction}}</span>
+            <span class="re-properties-content"> {{post.viewDirection}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Đặc điểm khác</span>
@@ -126,7 +126,7 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng nhà</span>
-            <span class="re-properties-content"> {{post.viewDirection}}</span>
+            <span class="re-properties-content"> {{post.direction}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Pháp lý</span>
@@ -168,11 +168,11 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng nhà</span>
-            <span class="re-properties-content"> {{post.viewDirection}}</span>
+            <span class="re-properties-content"> {{post.direction}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng cửa</span>
-            <span class="re-properties-content"> {{post.direction}}</span>
+            <span class="re-properties-content"> {{post.viewDirection}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Pháp lý</span>

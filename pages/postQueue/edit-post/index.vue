@@ -252,13 +252,17 @@
 }
 .list {
   position: relative;
-  height: auto;
+  height: 500px;
   overflow: auto;
-  text-align: center;
 }
 .list img {
   width:190px;
   height:215px;
+  object-fit: contain;
+}
+.list video {
+  width: 190px;
+  height: 215px;
 }
 .list > * {
   width: 100px;

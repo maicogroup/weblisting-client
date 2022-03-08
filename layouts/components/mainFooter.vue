@@ -1,5 +1,5 @@
 <template>
-    <div class="relative z-0 mt-3 flex justify-center max-w-full bg-gray-200">
+    <div class="z-0 mt-3 flex justify-center max-w-full bg-gray-200">
         <div class="w-full max-w-screen-xl my-5">
             <div class="md:w-1/2 w-full float-left text-center md:text-left">
                 <div class="flex justify-center md:block">

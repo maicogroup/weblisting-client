@@ -184,33 +184,12 @@
           </quick-filter-button>
         </div>
       </div>
-      <p class="text-center font-bold read-more my-4" @click="setSEOContentActiveState()">
-        {{ readMoreContent }}
-      </p>
     </div>
     <div v-if="project && showIfPostsOfOneProject" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
       <div
         :class="`overflow-hidden text-ellipsis mt-5 mx-2 ${sEOContentClasses}` "
-      >
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta ipsa autem quis voluptates, rem sint dolorem quos nemo illo fugit. Ratione culpa nostrum asperiores fuga nam perferendis cumque, hic laudantium.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta ipsa autem quis voluptates, rem sint dolorem quos nemo illo fugit. Ratione culpa nostrum asperiores fuga nam perferendis cumque, hic laudantium.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta ipsa autem quis voluptates, rem sint dolorem quos nemo illo fugit. Ratione culpa nostrum asperiores fuga nam perferendis cumque, hic laudantium.</p>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero minima odio at, illo soluta sed ex aut architecto et mollitia. Fuga debitis dicta, illo placeat illum voluptatum at dolorem dolores.</p>
-      </div>
+        v-html="project.sEOContent"
+      />
       <p class="text-center font-bold read-more my-4" @click="setSEOContentActiveState()">
         {{ readMoreContent }}
       </p>
@@ -641,7 +620,6 @@ export default {
     return {
       // filter dùng để lọc
       filter: null,
-      sellButtonIsActive: false,
       readMoreButtonIsActive: false,
       // filter đang được người dùng chỉnh sửa, chuẩn bị dùng để lọc
       inputFilter: {},
@@ -727,7 +705,7 @@ export default {
     },
 
     rentButtonClasses () {
-      return !this.sellButtonIsActive ? 'bg-gray-200' : 'hover:bg-gray-100';
+      return this.inputFilter.demand !== 'Bán' ? 'bg-gray-200' : 'hover:bg-gray-100';
     },
 
     sEOContentClasses () {
@@ -822,11 +800,6 @@ export default {
       }
     },
 
-    setSellButtonActiveState (state) {
-      this.sellButtonIsActive = state;
-      this.inputFilter.demand = this.sellButtonIsActive ? 'Bán' : 'Cho Thuê';
-    },
-
     setFilterDemandOption (option) {
       this.inputFilter.demand = option;
     },
@@ -842,17 +815,14 @@ export default {
     createFilterFromUrl () {
       const filter = {};
       const query = this.$route.query;
-
       filter.demand = query.demand ?? 'Cho Thuê';
       filter.type = query.type;
-
       if (query.city || query.district) {
         filter.location = {
           city: query.city,
           district: query.district
         };
       }
-
       if (query.priceFrom || query.priceTo) {
         const parsedPriceFrom = parseInt(query.priceFrom);
         const parsedPriceTo = parseInt(query.priceTo);
@@ -869,15 +839,12 @@ export default {
           to: isNaN(parsedAcreageTo) ? null : parsedAcreageTo
         };
       }
-
       if (query.directions) {
         filter.directions = Array.isArray(query.directions) ? query.directions : [query.directions];
       }
-
       if (query.bedroomOptions) {
         filter.bedroomOptions = Array.isArray(query.bedroomOptions) ? query.bedroomOptions : [query.bedroomOptions];
       }
-
       return filter;
     },
 
@@ -913,64 +880,46 @@ export default {
       this.searchButtonPressed = true;
       this.filter = { ...this.inputFilter };
       this.filterResponsive = false;
-
       let path = '/danh-sach-can-ho';
       if (this.filter.project) {
         path = path + '/' + this.filter.project.pageInfor.slug;
       }
-
       const query = {};
-
       if (this.filter.demand) {
-        const tempDemand = this.filter.demand;
-
-        if (tempDemand) {
-          query.demand = tempDemand;
-        }
+        query.demand = this.filter.demand;
       }
-
       if (this.filter.type) {
         query.type = this.filter.type;
       }
-
       if (this.filter.location) {
         const location = this.filter.location;
         query.city = location.city;
         query.district = location.district;
       }
-
       if (this.filter.priceRange) {
         const { from, to } = this.swapRangeValueIfInvalid(this.filter.priceRange);
-
         if (from) {
           query.priceFrom = from;
         }
-
         if (to) {
           query.priceTo = to;
         }
       }
-
       if (this.filter.acreageRange) {
         const { from, to } = this.swapRangeValueIfInvalid(this.filter.acreageRange);
-
         if (from) {
           query.acreageFrom = from;
         }
-
         if (to) {
           query.acreageTo = to;
         }
       }
-
       if (this.filter.directions) {
         query.directions = this.filter.directions;
       }
-
       if (this.filter.bedroomOptions) {
         query.bedroomOptions = this.filter.bedroomOptions;
       }
-
       this.$router.push({ path, query });
     },
 

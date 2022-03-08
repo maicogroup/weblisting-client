@@ -1,8 +1,11 @@
 <template>
   <div class="mx-2" id="post-queue">
-    <p class="mb-4 text-gray-600">
-      Hiện có {{ totalCount }} bài viết chờ duyệt
-    </p>
+    <div class="flex justify-between space-x-3 items-center mb-5">
+      <p class="text-gray-600">
+        Hiện có {{ totalCount }} bài viết chờ duyệt
+      </p>
+      <project-filter-dropdown :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged"></project-filter-dropdown>
+     </div>
     <div v-if="postsWithPagination != null" class="flex-col space-y-6 mb-4">
       <div v-for="post in postsWithPagination.items" :key="post.id" class="bg-white rounded-md max-w-4xl mx-auto p-4 hover:shadow-lg border-gray-400 border border-solid">
         <div class="flex justify-between">
@@ -97,10 +100,11 @@
 
 <script>
 import { gql } from 'graphql-tag';
+import ProjectFilterDropdown from './components/project-filter-dropdown.vue';
 
 const getPostQuery = gql`
-        query GetWaitingPosts($skip: Int, $take: Int) { 
-          postsWithPagination (where: {or: [{status: {eq: "Draft"}}, {status: {eq: "Updated"}}]}, take: $take, skip: $skip) {
+        query GetWaitingPosts($skip: Int, $take: Int, $condition: PostCollectionFilterInput) { 
+          postsWithPagination (take: $take, skip: $skip, where: $condition) {
             items {
               id
               createdAt
@@ -117,10 +121,12 @@ const getPostQuery = gql`
         }
       }`;
 export default {
+  components: { ProjectFilterDropdown },
   name: 'ListpostsPage',
   data () {
     return{
-      pageIndex: 1
+      pageIndex: 1,
+      inputFilter: {}
     }
   },
   apollo: {
@@ -132,12 +138,53 @@ export default {
       variables () {
         return{
             take: 5,
-            skip: 0
+            skip: 0,
+            condition: {
+              or: [
+                {status: {eq: "Draft"}},
+                {status: {eq: "Updated"}}
+              ]
+            }
         }
       }
     }
   },
+  watch: {
+    inputFilter: function(filter) {
+      if (filter.project) {
+        this.$apollo.queries.postsWithPagination.refetch({
+          condition: {
+            or: [
+              {status: {eq: "Draft"}},
+              {status: {eq: "Updated"}}
+            ],
+            projectId: {eq: this.inputFilter.project.id}
+          },
+          take: 5, 
+          skip: 0
+          });
+        this.pageIndex = 1;
+      }
+      else {
+        this.$apollo.queries.postsWithPagination.refetch({
+          condition: {
+            or: [
+              {status: {eq: "Draft"}},
+              {status: {eq: "Updated"}}
+            ]
+          },
+          take: 5, 
+          skip: 0
+          });
+        this.pageIndex = 1;
+      }
+      
+    }
+  },
   methods: {
+    handleProjectFilterChanged (project) {
+      this.inputFilter = { ...this.inputFilter, project };
+    },
     isStringNullOrWhitespace (str) {
       return str === null || str.trim() === '';
     },
@@ -162,6 +209,7 @@ export default {
       });
       this.pageIndex = index;
       document.getElementById("post-queue").scrollIntoView(true);
+      console.log("kaka");
     },
     postPush: function(post){
       const postTemp = post

@@ -69,11 +69,11 @@
                 <expand-panel title="Tiện ích">
                     <p>
                         <label for="meta" class="font-semibold">Tiện ích vị trí:</label>
-                        <textarea type="text" class="w-1/2" rows="4" v-model="project.utilities.locationUtilites"></textarea>
+                        <textarea type="text" class="w-1/2" rows="4" v-model="project.utilities.locationUtilities"></textarea>
                     </p>
                     <p>
                         <label for="meta" class="font-semibold">Tiện ích nội khu:</label>
-                        <textarea type="text" class="w-1/2" rows="4" v-model="project.utilities.internalUtilites"></textarea>
+                        <textarea type="text" class="w-1/2" rows="4" v-model="project.utilities.internalUtilities"></textarea>
                     </p>
                     <div class="flex justify-end space-x-1">
                         <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectUtilities(project.id)">Cập nhật</button>
@@ -277,8 +277,8 @@ const getProject = gql`query GetProject($condition: ProjectCollectionFilterInput
                         googleMapLocation
                     },
                     utilities {
-                        internalUtilites,
-                        locationUtilites
+                        internalUtilities,
+                        locationUtilities
                     },
                     images,
                     sEOContent,
@@ -500,8 +500,8 @@ export default {
                     input: { 
                         id: id,
                         utilities: {
-                            internalUtilites: project[0].utilities.internalUtilites,
-                            locationUtilites: project[0].utilities.locationUtilites
+                            internalUtilities: project[0].utilities.internalUtilities,
+                            locationUtilities: project[0].utilities.locationUtilities
                         }
                     }
                 }

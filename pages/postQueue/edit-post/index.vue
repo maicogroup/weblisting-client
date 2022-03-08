@@ -78,7 +78,7 @@
         <p class="font-medium mr-6 text-md">
           Hướng nhà:
         </p>
-        <input :placeholder="post.viewDirection" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.viewDirection">
+        <input :placeholder="post.doorDirection" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.doorDirection">
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
@@ -300,7 +300,7 @@ const getPost = gql`query GetPost($condition: PostCollectionFilterInput)
                   usageAcreage,
                   otherSpecification,
                   view
-                  viewDirection
+                  doorDirection
                   apartmentNumber,
                   block,
                   description,
@@ -367,7 +367,7 @@ export default {
       tags: [],
       usageAcreage: this.post.usageAcreage,
       view: this.post.view,
-      viewDirection: this.post.viewDirection
+      doorDirection: this.post.doorDirection
     };
     if (this.post.tags != null) 
     {
@@ -517,7 +517,7 @@ export default {
         && (this.currentPost.acreage == this.post.acreage) && (this.currentPost.floor == this.post.floor) && (this.currentPost.block == this.post.block)
         && (this.currentPost.description == this.post.description) && (this.currentPost.tags.length == this.post.tags.length)
         && (this.currentPost.otherSpecification == this.post.otherSpecification) && (this.currentPost.usageAcreage == this.post.usageAcreage) 
-        && (this.currentPost.view == this.post.view) && (this.currentPost.viewDirection == this.post.viewDirection)
+        && (this.currentPost.view == this.post.view) && (this.currentPost.doorDirection == this.post.doorDirection)
         && (this.currentPost.furnitures.length == this.post.furnitures.length) && (this.imageIsChanged == false))
         {
         
@@ -590,7 +590,7 @@ export default {
               tags: this.post.tags,
               usageAcreage: this.post.usageAcreage,
               view: this.post.view,
-              viewDirection: this.post.viewDirection
+              doorDirection: this.post.doorDirection
             }
           }
         }).then((data) => {
@@ -619,7 +619,7 @@ export default {
           tags: [],
           usageAcreage: this.post.usageAcreage,
           view: this.post.view,
-          viewDirection: this.post.viewDirection
+          doorDirection: this.post.doorDirection
         };
         this.imageIsChanged = false;
         this.post.tags.forEach(tag => this.currentPost.tags.push(tag));
@@ -655,7 +655,7 @@ export default {
         || (this.currentPost.description != this.post.description) || (this.currentPost.tags.length != this.post.tags.length)
         || (this.currentPost.gallery.forEach(x => this.post.gallery.forEach(c => x != c))) || (this.currentPost.furnitures.length != this.post.furnitures.length)
         || (this.currentPost.otherSpecification != this.post.otherSpecification) || (this.currentPost.usageAcreage != this.post.usageAcreage) 
-        || (this.currentPost.view != this.post.view) || (this.currentPost.viewDirection != this.post.viewDirection)|| (this.imageIsChanged == true))
+        || (this.currentPost.view != this.post.view) || (this.currentPost.doorDirection != this.post.doorDirection)|| (this.imageIsChanged == true))
         {
           this.modalIsShowing = true;
           this.$modal.show("update-before-publish");
@@ -669,7 +669,7 @@ export default {
         || (this.post.pageInfor.metaDescription == null || this.post.pageInfor.metaDescription == "")
         || (this.post.gallery.length == 0) || (this.post.furnitures.length == 0) || (this.post.usageAcreage == null || this.post.usageAcreage <= 0)
         || (this.post.otherSpecification == null || this.post.otherSpecification == "") || (this.post.view == null || this.post.view == "")
-        || (this.post.viewDirection == null || this.post.viewDirection == ""))
+        || (this.post.doorDirection == null || this.post.doorDirection == ""))
         {
           this.$toast.show("Tất cả dữ liệu không được để trống, vui lòng cập nhật và kiểm tra lại!", {
             type: "error",

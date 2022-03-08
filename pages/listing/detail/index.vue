@@ -33,7 +33,7 @@ const getPostQuery = gql`
           usageAcreage
           otherSpecification
           view
-          viewDirection
+          doorDirection
           pageInfor {
             title
             slug
@@ -50,8 +50,8 @@ const getPostQuery = gql`
             investor
             projectName
             utilities {
-              locationUtilites
-              internalUtilites
+              locationUtilities
+              internalUtilities
             }
           }
         }

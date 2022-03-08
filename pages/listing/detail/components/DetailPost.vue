@@ -104,7 +104,7 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng cửa</span>
-            <span class="re-properties-content"> {{post.direction}}</span>
+            <span class="re-properties-content"> {{post.doorDirection}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Đặc điểm khác</span>
@@ -126,7 +126,7 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng nhà</span>
-            <span class="re-properties-content"> {{post.viewDirection}}</span>
+            <span class="re-properties-content"> {{post.direction}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Pháp lý</span>
@@ -168,11 +168,11 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng nhà</span>
-            <span class="re-properties-content"> {{post.viewDirection}}</span>
+            <span class="re-properties-content"> {{post.direction}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng cửa</span>
-            <span class="re-properties-content"> {{post.direction}}</span>
+            <span class="re-properties-content"> {{post.doorDirection}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Pháp lý</span>
@@ -206,11 +206,11 @@
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-5 mb-3">
           <p class="re-properties pl-2">Tiện ích vị trí</p>
-          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">{{post.project.utilities.locationUtilites}}</p>
+          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">{{post.project.utilities.locationUtilities}}</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-5 mb-3">
           <p class="re-properties pl-2">Tiện ích nội khu</p>
-          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">{{post.project.utilities.internalUtilites}}</p>
+          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">{{post.project.utilities.locationUtilities}}</p>
         </div>
       </div>
       <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-8 mb-4">

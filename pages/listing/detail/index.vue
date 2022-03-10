@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between lg:px-5 w-full max-w-screen-xl">
-    <DetailPost :post="post" class="lg:w-9/12 lg:mr-9 w-full" />
-    <ContactInfor class="lg:block hidden" />
+    <detail-post :post="post" class="lg:w-9/12 lg:mr-9 w-full" />
+    <contact-infor class="lg:block hidden" />
   </div>
 </template>
 

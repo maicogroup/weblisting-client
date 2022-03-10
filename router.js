@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import EditPost from '~/pages/postQueue/edit-post/index';
-import PostQueuePage from '~/pages/postQueue/index';
+import EditPost from '~/pages/post-queue/edit-post/index';
+import PostQueuePage from '~/pages/post-queue/index';
 import PostList from '~/pages/listing/index';
 import EditProject from "~/pages/edit-project/index";
 import DetailPost from '~/pages/listing/detail/index';

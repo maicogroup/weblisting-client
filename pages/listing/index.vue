@@ -592,9 +592,9 @@
 import { gql } from 'graphql-tag';
 
 import { marked } from 'marked';
-import ProjectHeader from './components/ProjectHeader.vue';
-import ListPost from './components/ListPost.vue';
-import ContactInfor from './components/ContactInfor.vue';
+import ProjectHeader from './components/project-header.vue';
+import ListPost from './components/list-post.vue';
+import ContactInfor from './components/contract-infor.vue';
 import LocationFtilerDropdown from './components/filtering/location-filter-dropdown.vue';
 import ProjectFilterDropdown from './components/filtering/project-filter-dropdown.vue';
 import DirectionFilterDropdown from './components/filtering/direction-filter-dropdown.vue';
@@ -614,7 +614,25 @@ import Divider from '~/components/Divider.vue';
 
 export default {
   name: 'PostList',
-  components: { ProjectHeader, ListPost, ContactInfor, Divider, LocationFtilerDropdown, ProjectFilterDropdown, DirectionFilterDropdown, TypeFilterDropdown, PriceFilterDropdown, AcreageFilterDropdown, BedroomFilterDropdown, QuickFilterButton, TypeFilterOption, LocationFilterOption, PriceFilterOption, AcreageFilterOption, ProjectFilterOption, DirectionFilterOptions, BedroomFilterOptions },
+  components: { ProjectHeader, 
+                ListPost, 
+                ContactInfor, 
+                Divider, 
+                LocationFtilerDropdown, 
+                ProjectFilterDropdown, 
+                DirectionFilterDropdown, 
+                TypeFilterDropdown, 
+                PriceFilterDropdown, 
+                AcreageFilterDropdown, 
+                BedroomFilterDropdown, 
+                QuickFilterButton, 
+                TypeFilterOption, 
+                LocationFilterOption, 
+                PriceFilterOption, 
+                AcreageFilterOption, 
+                ProjectFilterOption, 
+                DirectionFilterOptions, 
+                BedroomFilterOptions },
   data () {
     return {
       // filter dùng để lọc

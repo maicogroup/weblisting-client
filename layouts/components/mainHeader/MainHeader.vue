@@ -109,7 +109,7 @@
       @click="showSidebar = false"
     />
 
-    <Sidebar v-if="showSidebar" class="z-20" />
+    <Sidebar v-if="showSidebar" :projects="projects" class="z-20" />
   </div>
 </template>
 

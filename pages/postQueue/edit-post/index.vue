@@ -12,33 +12,28 @@
         <p class="font-medium mr-6 text-md">
           Slug:
         </p>
-        <em class="text-sm text-gray-400 mb-5">Độ dài tối đa: 51</em>
         <br>
         <div class="flex justify-between items-center">
-          <input :placeholder="post.pageInfor.slug" maxlength="51" type="text" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.slug">
-          <p class="content" :value="this.post.pageInfor.slug.length">{{this.post.pageInfor.slug.length}}/51</p>
+          <input :placeholder="post.pageInfor.slug" type="text" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.slug">
         </div>
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
           Title:
         </p>
-        <em class="text-sm text-gray-400 mb-5">Độ dài tối đa: 63 - Độ dài tối thiểu: 30</em>
+        
         <br>
         <div class="flex justify-between items-center">
-          <input :placeholder="post.pageInfor.title" type="text" maxlength="63" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.title">
-          <p class="content" :value="this.post.pageInfor.title.length">{{this.post.pageInfor.title.length}}/63</p>
+          <input :placeholder="post.pageInfor.title" type="text" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.title">
         </div>
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
           Meta: 
         </p>
-        <em class="text-sm text-gray-400 mb-5">Độ dài tối đa: 155 ký tự - Độ dài tối thiểu: 70 ký tự</em>
         <br>
         <div class="flex justify-between items-center">
-          <input :placeholder="post.pageInfor.metaDescription" maxlength="155" type="text" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.metaDescription">
-          <p class="content" :value="this.post.pageInfor.metaDescription.length">{{this.post.pageInfor.metaDescription.length}}/155</p>
+          <input :placeholder="post.pageInfor.metaDescription"  type="text" class="w-11/12 border rounded-md mb-2 pl-4" v-model="post.pageInfor.metaDescription">
         </div>
       </div>
     </div>
@@ -539,33 +534,7 @@ export default {
           this.$modal.hide("update-before-publish")
           return;
         }
-        if (this.post.pageInfor.title.length < 30 || this.post.pageInfor.title.length > 63) {
-          this.$toast.show("Tiêu đề có độ dài từ 30 đến 63 ký tự!", {
-            type: "error",
-            theme: "bubble",
-            duration: 3000,
-            position: "top-right"
-          });
-          return;
-        }
-        if (this.post.pageInfor.slug.length > 51) {
-          this.$toast.show("Slug có độ dài bằng 51 ký tự!", {
-            type: "error",
-            theme: "bubble",
-            duration: 3000,
-            position: "top-right"
-          });
-          return;
-        }
-        if (this.post.pageInfor.metaDescription.length < 70 || this.post.pageInfor.metaDescription.length > 155) {
-          this.$toast.show("Meta description có độ dài từ 70 đến 155 ký tự!", {
-            type: 'error',
-            theme: 'bubble',
-            duration: 3000,
-            position: 'top-right'
-          });
-          return;
-        }
+       
         this.post.acreage = Number(this.post.acreage);
         this.post.floor = Number(this.post.floor);
         this.post.usageAcreage = Number(this.post.usageAcreage);

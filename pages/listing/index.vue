@@ -185,11 +185,13 @@
         </div>
       </div>
     </div>
-    <div v-if="project && showIfPostsOfOneProject">
-      <div
-        class="rounded-lg border w-4/5 mr-auto ml-auto mt-9 mb-5"
-        v-html="project.sEOContent"
-      />
+    <div v-if="project && showIfPostsOfOneProject && project.sEOContent" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
+      <div :class="`overflow-hidden text-ellipsis mt-5 mx-2   ${sEOContentClasses}` "
+          v-html="project.sEOContent">
+      </div>
+      <p class="text-center font-bold read-more my-4" @click="setSEOContentActiveState()">
+        {{ readMoreContent }}
+      </p>
     </div>
     <div
       v-if="filterResponsive == true"
@@ -617,10 +619,12 @@ export default {
     return {
       // filter dùng để lọc
       filter: null,
+      readMoreButtonIsActive: false,
       // filter đang được người dùng chỉnh sửa, chuẩn bị dùng để lọc
       inputFilter: {},
       searchButtonPressed: false,
       tempSEOContent: '**Hello World**',
+      readMoreContent: 'Xem thêm',
       filterResponsive: false,
       isShowApartmentType: false,
       isShowArea: false,
@@ -701,6 +705,10 @@ export default {
 
     rentButtonClasses () {
       return this.inputFilter.demand !== 'Bán' ? 'bg-gray-200' : 'hover:bg-gray-100';
+    },
+
+    sEOContentClasses () {
+      return this.readMoreButtonIsActive ? 'h-fit opacity-100 ql-editor' : 'h-60 opacity-60';
     }
   },
 
@@ -769,7 +777,8 @@ export default {
       },
 
       skip () {
-        return this.$route.params.slug === undefined;
+        //return this.filter === null || this.$route.params.slug === null;
+        return this.$route.params.slug === undefined
       },
 
       variables () {
@@ -781,6 +790,16 @@ export default {
   },
 
   methods: {
+
+    setSEOContentActiveState () {
+      this.readMoreButtonIsActive = !this.readMoreButtonIsActive;
+      if (this.readMoreButtonIsActive === true) {
+        this.readMoreContent = 'Thu gọn';
+      } else {
+        this.readMoreContent = 'Xem thêm';
+      }
+    },
+
     setFilterDemandOption (option) {
       this.inputFilter.demand = option;
     },
@@ -796,45 +815,36 @@ export default {
     createFilterFromUrl () {
       const filter = {};
       const query = this.$route.query;
-
       filter.demand = query.demand ?? 'Cho Thuê';
       filter.type = query.type;
-
       if (query.city || query.district) {
         filter.location = {
           city: query.city,
           district: query.district
         };
       }
-
       if (query.priceFrom || query.priceTo) {
         const parsedPriceFrom = parseInt(query.priceFrom);
         const parsedPriceTo = parseInt(query.priceTo);
-
         filter.priceRange = {
           from: isNaN(parsedPriceFrom) ? null : parsedPriceFrom,
           to: isNaN(parsedPriceTo) ? null : parsedPriceTo
         };
       }
-
       if (query.acreageFrom || query.acreageTo) {
         const parsedAcreageFrom = parseInt(query.acreageFrom);
         const parsedAcreageTo = parseInt(query.acreageTo);
-
         filter.acreageRange = {
           from: isNaN(parsedAcreageFrom) ? null : parsedAcreageFrom,
           to: isNaN(parsedAcreageTo) ? null : parsedAcreageTo
         };
       }
-
       if (query.directions) {
         filter.directions = Array.isArray(query.directions) ? query.directions : [query.directions];
       }
-
       if (query.bedroomOptions) {
         filter.bedroomOptions = Array.isArray(query.bedroomOptions) ? query.bedroomOptions : [query.bedroomOptions];
       }
-
       return filter;
     },
 
@@ -870,60 +880,46 @@ export default {
       this.searchButtonPressed = true;
       this.filter = { ...this.inputFilter };
       this.filterResponsive = false;
-
       let path = '/danh-sach-can-ho';
       if (this.filter.project) {
         path = path + '/' + this.filter.project.pageInfor.slug;
       }
-
       const query = {};
-
       if (this.filter.demand) {
         query.demand = this.filter.demand;
       }
-
       if (this.filter.type) {
         query.type = this.filter.type;
       }
-
       if (this.filter.location) {
         const location = this.filter.location;
         query.city = location.city;
         query.district = location.district;
       }
-
       if (this.filter.priceRange) {
         const { from, to } = this.swapRangeValueIfInvalid(this.filter.priceRange);
-
         if (from) {
           query.priceFrom = from;
         }
-
         if (to) {
           query.priceTo = to;
         }
       }
-
       if (this.filter.acreageRange) {
         const { from, to } = this.swapRangeValueIfInvalid(this.filter.acreageRange);
-
         if (from) {
           query.acreageFrom = from;
         }
-
         if (to) {
           query.acreageTo = to;
         }
       }
-
       if (this.filter.directions) {
         query.directions = this.filter.directions;
       }
-
       if (this.filter.bedroomOptions) {
         query.bedroomOptions = this.filter.bedroomOptions;
       }
-
       this.$router.push({ path, query });
     },
 
@@ -963,6 +959,21 @@ export default {
 
 .double-button {
   font-size: 0;
+}
+
+.read-more {
+  color: #408b54f2;
+  cursor: pointer;
+  transition: all 0.5;
+}
+
+.read-more:hover {
+  color: #a1e7b4f2;
+  text-decoration: underline;
+}
+
+.delay-3000 {
+  transition-delay: 3s;
 }
 
 .bg-black-73{

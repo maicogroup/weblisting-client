@@ -7,8 +7,8 @@
 
 <script>
 import { gql } from 'graphql-tag';
-import DetailPost from './components/DetailPost.vue';
-import ContactInfor from './components/ContactInfor.vue';
+import DetailPost from './components/detail-post.vue';
+import ContactInfor from './components/contract-infor.vue';
 
 const getPostQuery = gql`
   query GetPost($condition: PostCollectionFilterInput) {

@@ -344,4 +344,8 @@ export default ({
     color: red;
     border-color: #FF375F;
   }
+
+  .zalo-share-button {
+    z-index: 0;
+  }
 </style>

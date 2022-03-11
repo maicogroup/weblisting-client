@@ -1,7 +1,11 @@
 <template>
-  <div class="flex justify-between lg:px-5 w-full max-w-screen-xl">
-    <detail-post :post="post" class="lg:w-9/12 lg:mr-9 w-full" />
-    <contact-infor class="lg:block hidden" />
+  <div class="lg:px-5 w-full max-w-screen-xl">
+    <div class="flex justify-between">
+      <detail-post v-if="post !== undefined" :post="post" class="lg:w-9/12 lg:mr-9 w-full" />
+      <contact-infor class="lg:block hidden" />
+    </div>
+
+    <recommended-posts v-if="recommendedPosts !== undefined && recommendedPosts.length > 0" :posts="recommendedPosts" />
   </div>
 </template>
 
@@ -9,7 +13,7 @@
 import { gql } from 'graphql-tag';
 import DetailPost from './components/detail-post.vue';
 import ContactInfor from './components/contract-infor.vue';
-
+import RecommendedPosts from './components/recommended-posts.vue';
 const getPostQuery = gql`
   query GetPost($condition: PostCollectionFilterInput) {
         post( where: $condition ) {
@@ -40,6 +44,7 @@ const getPostQuery = gql`
             metaDescription
           }
           project{
+            id
             address{
               street
               district
@@ -58,15 +63,40 @@ const getPostQuery = gql`
       }
 `;
 
+const getRecommendedPosts = gql`
+  query GetRecommendedPosts($filter: PostCollectionFilterInput!) {
+  postsWithPagination(take:10, where: $filter){
+    items {
+      demand
+      id
+      price
+      totalBedRoom
+      totalWC
+      acreage
+      gallery
+      pageInfor {
+        title
+        slug
+      }
+      project {
+        id
+        address {
+          street,
+          district,
+          city
+        }
+      },
+      lastUpdatedAt
+    }
+  }
+}`;
+
 export default {
   name: 'DetailApartmentPage',
-  components: { ContactInfor, DetailPost },
+  components: { ContactInfor, DetailPost, RecommendedPosts },
   apollo: {
     post: {
-      query () {
-        return getPostQuery;
-      },
-      update: data => data.post,
+      query: getPostQuery,
       variables () {
         return {
           condition: {
@@ -78,8 +108,25 @@ export default {
           }
         };
       }
+    },
+
+    recommendedPosts: {
+      query: getRecommendedPosts,
+      update: data => data.postsWithPagination.items,
+      skip () {
+        return this.post === undefined;
+      },
+      variables () {
+        return {
+          filter: {
+            demand: { eq: this.post.demand },
+            projectId: { eq: this.post.project.id }
+          }
+        };
+      }
     }
   },
+
   head () {
     return {
       title: this.post?.pageInfor.title,
@@ -92,7 +139,3 @@ export default {
   }
 };
 </script>
-
-<style>
-
-</style>

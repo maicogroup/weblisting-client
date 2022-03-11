@@ -73,12 +73,12 @@
         <p class="font-medium mr-6 text-md">
           Hướng nhà:
         </p>
-        <input :placeholder="post.doorDirection" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.doorDirection">
+        <input :placeholder="post.direction" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.direction">
       </div>
       <div class="my-2">
         <p class="font-medium mr-6 text-md">
-          Hướng cửa:
-          <input :placeholder="post.direction" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.direction">
+          Hướng cửa (view):
+          <input :placeholder="post.doorDirection" type="text" class="w-full border rounded-md mb-2 pl-4" v-model="post.doorDirection">
         </p>
       </div>
       <div class="my-2">
@@ -632,8 +632,8 @@ export default {
         }
         console.log(this.post);
         if ((this.post.acreage == null || this.post.acreage <= 0) || (this.post.apartmentNumber == null || this.post.apartmentNumber == "") 
-        || (this.post.block == null || this.post.block == "") || (this.post.description == null || this.post.description == "")
-        || (this.post.floor == null || this.post.floor <= 0) || (this.post.tags.length == 0)
+        || (this.post.block == null || this.post.block == "")
+        || (this.post.floor == null || this.post.floor <= 0)
         || (this.post.pageInfor.title == null || this.post.pageInfor.title == "") || (this.post.pageInfor.slug == null || this.post.pageInfor.slug == "")
         || (this.post.pageInfor.metaDescription == null || this.post.pageInfor.metaDescription == "")
         || (this.post.gallery.length == 0) || (this.post.furnitures.length == 0) || (this.post.usageAcreage == null || this.post.usageAcreage <= 0)

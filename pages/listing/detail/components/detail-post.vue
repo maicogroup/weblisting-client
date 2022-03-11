@@ -1,14 +1,14 @@
 <template>
-  <div v-if="post != null">
+  <div>
     <div class="h-96 w-full">
       <gallery :items="gallery" />
     </div>
-    <div class="mx-5">
-      <h1 class="mt-6 lg:mx-0  font-bold text-2xl">
+    <div class="mx-5 lg:mx-0">
+      <h1 class="mt-6 font-bold text-2xl">
         {{ post.pageInfor.title }}
       </h1>
       <div class="mt-3 flex flex-col md:flex-row md:justify-between">
-        <h4 class="lg:mx-0 font-normal color-3f3f3f text-sm leading-4">
+        <h4 class="font-normal color-3f3f3f text-sm leading-4">
           {{ `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}` }}
         </h4>
         <div class="mt-2 md:mt-0 flex space-x-2">
@@ -41,17 +41,17 @@
 
       <divider class="my-4" />
 
-      <div class="flex justify-between items-center items-start">
-        <h3 class="lg:mx-0 font-bold text-lg leading-5 mb-3.5">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-lg leading-5">
           Mô tả căn hộ
         </h3>
-        <div class="">
+        <div class="text-sm font-medium">
           <span class="text-gray-400">Mã bất động sản:</span>
           <span class="re-properties-content">{{ post.pageInfor.slug.slice(-5) }}</span>
         </div>
       </div>
       <div class="grid md:grid-cols-2 grid-cols-1 md:gap-6 h-auto">
-        <div class="p-2 hidden md:block">
+        <div class="hidden md:block">
           <p class="re-properties-frame">
             <span class="re-properties">Giá</span>
             <span class="re-properties-content"> {{ formatPrice(post.price, post.demand) }}</span>
@@ -77,7 +77,7 @@
             <span class="re-properties-content"> {{ post.otherSpecification }}</span>
           </p>
         </div>
-        <div class="p-2 hidden md:block">
+        <div class="hidden md:block">
           <p class="re-properties-frame">
             <span class="re-properties">Phòng ngủ</span>
             <span class="re-properties-content"> {{ post.totalBedRoom }}</span>
@@ -103,7 +103,7 @@
             <span class="re-properties-content"> {{ post.view }}</span>
           </p>
         </div>
-        <div class="p-2 md:hidden">
+        <div class="md:hidden">
           <p class="re-properties-frame">
             <span class="re-properties">Giá</span>
             <span class="re-properties-content"> {{ formatPrice(post.price, post.demand) }}</span>
@@ -155,7 +155,7 @@
         </div>
       </div>
       <div class="flex justify-start items-center space-x-3 float-left mb-2 w-full h-auto">
-        <h3 class="re-properties pl-2 w-40 md:w-auto">
+        <h3 class="re-properties w-40 md:w-auto">
           Nội thất:
         </h3>
         <div class="flex flex-wrap justify-start items-center my-2">
@@ -173,27 +173,27 @@
         </div>
       </div>
       <div>
-        <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-3 mb-3.5">
+        <h3 class="font-bold text-lg leading-5 mt-3 mb-3.5">
           Ưu điểm dự án
         </h3>
-        <div class="grid grid-cols-1 md:grid-cols-5 mb-3">
-          <p class="re-properties pl-2">
+        <div class="grid grid-cols-1 md:grid-cols-5 mb-3 text-sm">
+          <p class="font-bold">
             Tiện ích vị trí
           </p>
-          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">
+          <p class="col-span-4 text-justify mt-1 md:mt-0">
             {{ post.project.utilities.locationUtilities }}
           </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-5 mb-3">
-          <p class="re-properties pl-2">
+        <div class="grid grid-cols-1 md:grid-cols-5 mb-3 text-sm">
+          <p class="font-bold">
             Tiện ích nội khu
           </p>
-          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">
+          <p class="col-span-4 text-justify mt-1 md:mt-0">
             {{ post.project.utilities.internalUtilities }}
           </p>
         </div>
       </div>
-      <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-8 mb-4">
+      <h3 class="font-bold text-lg leading-5 mt-8 mb-4">
         Xem trên bản đồ
       </h3>
       <iframe :src="`${post.project.address.googleMapLocation}`" class="w-full h-64 mt-4" loading="lazy" />

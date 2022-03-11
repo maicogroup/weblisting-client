@@ -38,45 +38,11 @@
           </button>
         </div>
       </div>
-      <div class="lg:mx-0 w-full flex space-x-12  bd-color-858585 mt-3 text-sm leading-4 border-t border-b pb-7 pt-6 border-solid" style="border-color:#E5E5E5;">
-        <div class="">
-          <h4 class="font-normal color-8c8c8c">
-            Mức giá
-          </h4>
-          <p class="font-bold">
-            {{ formatPrice(post.price, post.demand) }}
-          </p>
-        </div>
-        <div class="">
-          <h4 class="font-normal color-8c8c8c">
-            Diện tích
-          </h4>
-          <p class="font-bold">
-            {{ post.acreage }} m²
-          </p>
-        </div>
-        <div class="">
-          <h4 class="font-normal color-8c8c8c">
-            Cơ cấu phòng
-          </h4>
-          <p v-if="post.totalWC != 0" class="font-bold">
-            {{ `${post.totalBedRoom}PN${post.totalWC}WC` }}
-          </p>
-          <p v-else class="font-bold">
-            {{ post.type }}
-          </p>
-        </div>
-        <div>
-          <h4 class="font-normal color-8c8c8c">
-            Hướng
-          </h4>
-          <p class="font-bold">
-            {{ post.direction }}
-          </p>
-        </div>
-      </div>
-      <div class="flex justify-between items-center mt-5">
-        <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-3 mb-3.5">
+
+      <divider class="my-4" />
+
+      <div class="flex justify-between items-center items-start">
+        <h3 class="lg:mx-0 font-bold text-lg leading-5 mb-3.5">
           Mô tả căn hộ
         </h3>
         <div class="">
@@ -250,25 +216,6 @@
             </svg>
             <p>096 167 71 67</p>
           </a>
-        </div>
-        <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-5 mb-3">
-          Tìm kiếm theo từ khóa
-        </h3>
-        <div class="mb-10 lg:mx-0 ">
-          <ul class="w-5/6">
-            <li class="inline-block px-3 bcolor-e5e5e5 color-5a5a5a rounded-2xl mb-2.5">
-              Cho thue chung cu quan 2
-            </li>
-            <li class="inline-block px-3 bcolor-e5e5e5 color-5a5a5a rounded-2xl mb-2.5">
-              Cho thue chung cu quan 2 5PN
-            </li>
-            <li class="inline-block px-3 bcolor-e5e5e5 color-5a5a5a rounded-2xl mb-2.5">
-              Cho thue chung cu quan 2 5PN
-            </li>
-            <li class="inline-block px-3 bcolor-e5e5e5 color-5a5a5a rounded-2xl mb-2.5">
-              Cho thue chung cu quan 2
-            </li>
-          </ul>
         </div>
       </div>
     </div>

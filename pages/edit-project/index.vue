@@ -1,7 +1,6 @@
 <template>
     <div class="vue-expand-panel p-2 h-auto">
         <h1 class="text-center font-bold text-lg mb-5">CHỈNH SỬA DỰ ÁN</h1>
-        {{project.projectName}}
         <div class="flex items-center justify-center">
             <project-filter-dropdown :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged"></project-filter-dropdown>
         </div>
@@ -12,7 +11,7 @@
                     <div>
                         <p class="mb-2">
                             <label class="font-semibold">Tên dự án:</label>
-                            <input type="text" class="w-1/2" v-model="project.projectName">
+                            <input type="text" class="w-1/2" v-model="project.projectName" @onfocusout="() => flag = true">
                         </p>
                         <p class="mb-2">
                             <label class="font-semibold">Chủ đầu tư:</label>
@@ -77,14 +76,14 @@
                         <textarea type="text" class="w-1/2" rows="4" v-model="project.utilities.internalUtilities"></textarea>
                     </p>
                     <div class="flex justify-end space-x-1">
-                        <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectUtilities(project.id)">Cập nhật</button>
+                        <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectUtilities">Cập nhật</button>
                     </div>
                 </expand-panel>
 
                 <expand-panel title="Hình ảnh">
                     <div class="flex justify-start items-center">
-                        <input type="text" class="w-1/5 my-2" v-model="currentImage" placeholder="Thêm hình ảnh mới">
-                        <button @click="addNewProjectImage(project.id, project.images)">
+                        <input type="text" class="w-1/5 my-2" v-model="newImage" placeholder="Thêm hình ảnh mới">
+                        <button @click="addNewProjectImage">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                         </button>
                     </div>
@@ -92,10 +91,10 @@
                         <div class="w-100 mx-2" style="float:left" v-for="(item, index) in project.images" :key="index">
                             <img class="w-40 h-32 mr-2 my-2" :src="item" alt="alternative text"/>
                             <div class="flex justify-evenly">
-                                <button name="edit-button" @click="showUpdateProjectImageModal(project.id, project.images, index)">
+                                <button name="edit-button" @click="showUpdateProjectImageModal(index)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
                                 </button>
-                                <button name="delete" @click="showDeleteProjectImageModal(project.id, project.images, project.images[index])">
+                                <button name="delete" @click="showDeleteProjectImageModal(index)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                 </button>
                             </div>
@@ -104,16 +103,16 @@
                 </expand-panel>
                 <expand-panel title="Thông tin SEO">
                     <div class="my-2">
-                            <button class="px-3 py-1 bg-gray-300 rounded" @click="showAddNewPageInforModal(project.id, project.pageInfors)">Thêm thông tin mới</button>
+                            <button class="px-3 py-1 bg-gray-300 rounded" @click="() => $modal.show('add-new-page-information')">Thêm thông tin mới</button>
                     </div>
                     <div class="container mb-5" v-for="(item, index) in project.pageInfors" :key="index">
                         <div class="flex justify-between items-center">
                             <p>{{item.title}}</p>
                             <div class="flex justify-around items-center space-x-1">
-                                <button @click="showPageInforModal(project.id, project.pageInfors, item, index)">
+                                <button name="edit-page-infor" @click="showPageInforModal(index)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
                                 </button>
-                                <button name="delete" @click="showDeletePageInforModal(project.id, item)">
+                                <button name="delete" @click="showDeletePageInforModal(index)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                 </button>
                             </div>
@@ -144,17 +143,17 @@
             <div class="p-2 m-2">
                 <p class="mb-3">
                     <label for="title" class="font-semibold">Tiêu đề:</label>
-                    <input type="text" class="w-1/2" style="width: 50% !important" v-model="currentPageInfor.title">
+                    <input type="text" class="w-1/2" style="width: 50% !important" v-model="project.pageInfors[pageInforIndex].title">
                 </p>
                 
                 <p class="mb-3">
                     <label for="slug" class="font-semibold">Slug:</label>
-                    <input type="text" class="w-1/2" style="width: 50% !important" v-model="currentPageInfor.slug">
+                    <input type="text" class="w-1/2" style="width: 50% !important" v-model="project.pageInfors[pageInforIndex].slug">
                 </p>
                 
                 <p>
                     <label for="meta" class="font-semibold">Meta description:</label>
-                    <textarea type="text" class="w-1/2" rows="4" v-model="currentPageInfor.metaDescription"></textarea>
+                    <textarea type="text" class="w-1/2" rows="4" v-model="project.pageInfors[pageInforIndex].metaDescription"></textarea>
                 </p>
                 <div class="flex justify-end space-x-3 my-2">
                     <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('page-information-detail')">Quay lại</button>
@@ -167,17 +166,17 @@
             <div class="p-2 m-2">
                 <p class="mb-3">
                     <label for="title" class="font-semibold">Tiêu đề:</label>
-                    <input type="text" class="w-1/2" style="width: 50% !important" v-model="currentPageInfor.title" disabled>
+                    <input type="text" class="w-1/2" style="width: 50% !important" v-model="project.pageInfors[pageInforIndex].title" disabled>
                 </p>
                 
                 <p class="mb-3">
                     <label for="slug" class="font-semibold">Slug:</label>
-                    <input type="text" class="w-1/2" style="width: 50% !important" v-model="currentPageInfor.slug" disabled>
+                    <input type="text" class="w-1/2" style="width: 50% !important" v-model="project.pageInfors[pageInforIndex].slug" disabled>
                 </p>
                 
                 <p>
                     <label for="meta" class="font-semibold">Meta description:</label>
-                    <textarea type="text" class="w-1/2" rows="4" v-model="currentPageInfor.metaDescription" disabled></textarea>
+                    <textarea type="text" class="w-1/2" rows="4" v-model="project.pageInfors[pageInforIndex].metaDescription" disabled></textarea>
                 </p>
                 <div class="flex justify-end space-x-3 my-2">
                     <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('delete-page-information')">Quay lại</button>
@@ -204,7 +203,7 @@
                 </p>
                 <div class="flex justify-end space-x-3 my-2">
                     <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('add-new-page-information')">Quay lại</button>
-                    <button class="px-3 py-1 bg-green-400 rounded" @click="addNewPageInfor(newPageInfor.id, currentPageInfor)">Đồng ý</button>
+                    <button class="px-3 py-1 bg-green-400 rounded" @click="addNewPageInfor">Đồng ý</button>
                 </div>
             </div>
         </modal>
@@ -236,7 +235,7 @@
                 <h2 class="mt-2 text-lg font-semibold text-center">Chỉnh sửa hình ảnh</h2>
                 <p class="m-10">
                     <label class="font-semibold">Url: </label> 
-                    <input type="text" style="width:90% !important" v-model="updateImages.item">
+                    <input type="text" style="width:90% !important" v-model="project.images[imageIndex]">
                 </p>
                 <div class="flex justify-end space-x-3 m-2 my-2">
                     <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('edit-project-image')">Quay lại</button>
@@ -250,7 +249,7 @@
                 <p class="px-2 my-3">Lưu ý, sau khi xóa, hành động này sẽ không thể hoàn tác!</p>
                 <div class="flex justify-end space-x-3 m-2 my-2">
                     <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('delete-project-image')">Quay lại</button>
-                    <button class="text-white px-3 py-1 bg-green-400 rounded" @click="deleteProjectImage(updateImages.id, updateImages.images, updateImages.img)">Đồng ý</button>
+                    <button class="text-white px-3 py-1 bg-green-400 rounded" @click="deleteProjectImage">Đồng ý</button>
                 </div>
             </div>
         </modal>
@@ -324,15 +323,19 @@ export default {
                 locationUtilities: this.project.utilities.locationUtilities
             },
             images: [],
-            sEoContent: this.project.sEoContent,
-            pageInfors: {
-                slug: this.project.pageInfors.slug,
-                title: this.project.pageInfors.title,
-                metaDescription: this.project.pageInfors.metaDescription
-            }
+            sEOContent: this.project.sEOContent,
+            pageInfors: []
         }
         this.project.images.forEach(x => this.currentProject.images.push(x));
-        console.log(this.project);
+        for (let i = 0; i < this.project.pageInfors.length; i++) {
+            var pageInfor = {
+                slug: this.project.pageInfors[i].slug,
+                title: this.project.pageInfors[i].title,
+                metaDescription: this.project.pageInfors[i].metaDescription
+            }
+            this.currentProject.pageInfors.push(pageInfor);
+        }
+        console.log(this.currentProject);
     },
     components: {
         expandPanel,
@@ -340,16 +343,13 @@ export default {
     },
     data() {
         return {
+            flag: false,
             currentProject: {},
             inputFilter: {},
-            projectId: "",
             newPageInfor: {},
-            currentProjectInfor: {},
-            currentPageInfor: {},
-            pageInfors: {},
-            currentProjectAddress: {},
-            currentImage: "",
-            updateImages: {},
+            newImage: "",
+            imageIndex: 0,
+            pageInforIndex: 0,
             editorOption: {
                 // Some Quill options...
                 theme: 'snow',
@@ -370,6 +370,12 @@ export default {
         }
     },
     watch: {
+        // project: { 
+        //     handler(data, newData) {
+        //         console.log("watch start");
+        //     },
+        //     deep: true,
+        // },
         inputFilter: function(filter) {
             console.log(filter);
             console.log(this.inputFilter);
@@ -382,8 +388,8 @@ export default {
                         }
                     },
                 });
-                console.log("Project name after refetech: ", this.project.projectName);
-                this.currentProject = {
+                setTimeout(() => {
+                    this.currentProject = {
                     id: this.project.id,
                     projectName: this.project.projectName,
                     investor: this.project.investor,
@@ -400,7 +406,7 @@ export default {
                         locationUtilities: this.project.utilities.locationUtilities
                     },
                     images: [],
-                    sEoContent: this.project.sEoContent,
+                    sEOContent: this.project.sEOContent,
                     pageInfors: {
                         slug: this.project.pageInfors.slug,
                         title: this.project.pageInfors.title,
@@ -408,122 +414,141 @@ export default {
                     }
                 }
                 this.project.images.forEach(x => this.currentProject.images.push(x));
-            }
-            
-            
+                for (let i = 0; i < this.project.pageInfors.length; i++) {
+                    var pageInfor = {
+                        slug: this.project.pageInfors[i].slug,
+                        title: this.project.pageInfors[i].title,
+                        metaDescription: this.project.pageInfors[i].metaDescription
+                    }
+                    this.currentProject.pageInfors.push(pageInfor);
+                }
+                }, 1000);
+                this.pageInforIndex = 0;
+                this.imageIndex = 0;
+            }  
         }
     },
     methods: {
-    handleProjectFilterChanged(project) {
-        this.inputFilter = {...this.inputFilter, project};
-    },
-      onEditorBlur (editor) {
-      //console.log('editor blur!', editor);
-    },
-    onEditorFocus (editor) {
-      //console.log('editor focus!', editor);
-    },
-    onEditorReady (editor) {
-      //console.log('editor ready!', editor);
-    },
-    updateProjectInformation() {
-        if ((this.currentProject.projectName == this.project.projectName) && (this.currentProject.investor == this.project.investor)
-            && (this.currentProject.juridical == this.project.juridical) && (this.currentProject.description == this.project.description)
-            && (this.currentProject.sEoContent == this.project.sEoContent))
-            {
-                this.$toast.show("Dữ liệu chưa có thay đổi!", {
-                    type: "error",
-                    theme: "bubble",
-                    duration: 3000,
-                    position: "top-right"
-                });
-                return;
-            }
-        this.$apollo.mutate({
-            mutation: gql`mutation UpdateProjectInformation($input: UpdateProjectInput!) {
-                updateProject(input: $input) {
-                    string
+        handleProjectFilterChanged(project) {
+            this.inputFilter = {...this.inputFilter, project};
+        },
+        onEditorBlur (editor) {
+        //console.log('editor blur!', editor);
+        },
+        onEditorFocus (editor) {
+        //console.log('editor focus!', editor);
+        },
+        onEditorReady (editor) {
+        //console.log('editor ready!', editor);
+        },
+        updateProjectInformation() {
+            if ((this.currentProject.projectName == this.project.projectName) && (this.currentProject.investor == this.project.investor)
+                && (this.currentProject.juridical == this.project.juridical) && (this.currentProject.description == this.project.description)
+                && (this.currentProject.sEOContent == this.project.sEOContent))
+                {
+                    this.$toast.show("Dữ liệu chưa có thay đổi!", {
+                        type: "error",
+                        theme: "bubble",
+                        duration: 3000,
+                        position: "top-right"
+                    });
+                    return;
                 }
-            }`,
-            variables: {
-                input: { 
-                    id: this.project.id,
-                    projectName: this.project.projectName,
-                    investor: this.project.investor,
-                    juridical: this.project.juridical,
-                    description: this.project.description,
-                    sEOContent: this.project.sEOContent
+            this.$apollo.mutate({
+                mutation: gql`mutation UpdateProjectInformation($input: UpdateProjectInput!) {
+                    updateProject(input: $input) {
+                        string
+                    }
+                }`,
+                variables: {
+                    input: { 
+                        id: this.project.id,
+                        projectName: this.project.projectName,
+                        investor: this.project.investor,
+                        juridical: this.project.juridical,
+                        description: this.project.description,
+                        sEOContent: this.project.sEOContent
+                    }
                 }
+                
+            }),
+            this.$toast.show("Thay đổi thành công!", {
+                type: "success",
+                duration: 2000,
+                theme: "bubble",
+                position: "top-right"
+            });
+            this.currentProject.projectName = this.project.projectName;
+            this.currentProject.investor = this.project.investor;
+            this.currentProject.juridical = this.project.juridical;
+            this.currentProject.description = this.project.description;
+            this.currentProject.sEOContent = this.project.sEOContent; 
+        },
+        updateProjectAddress() {
+            if ((this.currentProject.address.street == this.project.address.street) && (this.currentProject.address.district == this.project.address.district)
+                && (this.currentProject.address.city == this.project.address.city) && (this.currentProject.address.googleMapLocation == this.project.address.googleMapLocation)){
+                    this.$toast.show("Dữ liệu chưa có thay đổi", {
+                        type: "error",
+                        theme: "bubble",
+                        duration: 3000,
+                        position: "top-right"
+                    });
+                    return;
+                }
+            // if (this.project.address.googleMapLocation == "") {
+            //     this.$toast.show("Google map không được để trống, vui lòng thử lại!", {
+            //         type: "error",
+            //         theme: "bubble",
+            //         duration: 2000,
+            //         position: "top-right"
+            //     });
+            //     return;
+            // }    
+            this.$apollo.mutate({
+                mutation: gql`mutation UpdateProjectAddress($input: UpdateProjectInput!) {
+                    updateProject(input: $input) {
+                        string
+                    }
+                }`,
+                variables: {
+                    input: {
+                        id: this.project.id,
+                        address: {
+                            street: this.project.address.street,
+                            district: this.project.address.district,
+                            city: this.project.address.city,
+                            googleMapLocation: this.project.address.googleMapLocation
+                        }
+                    }
+                }
+            });
+            this.$toast.show("Thay đổi thành công!", {
+                type: "success",
+                theme: "bubble",
+                duration: 2000,
+                postition: "top-right"
+            });
+            if (this.currentProject.address.googleMapLocation != this.project.address.googleMapLocation) {
+                this.$modal.hide('google-map-edit-modal');
             }
+            this.currentProject.address.street = this.project.address.street;
+            this.currentProject.address.district = this.project.address.district;
+            this.currentProject.address.city = this.project.address.city;
+            this.currentProject.address.googleMapLocation = this.project.address.googleMapLocation;
             
-        }),
-        this.$toast.show("Thay đổi thành công!", {
-            type: "success",
-            duration: 2000,
-            theme: "bubble",
-            position: "top-right"
-        });
-        this.currentProject.projectName = this.project.projectName;
-        this.currentProject.investor = this.project.investor;
-        this.currentProject.juridical = this.project.juridical;
-        this.currentProject.description = this.project.description;
-        this.currentProject.sEoContent = this.project.sEoContent; 
-    },
-    updateProjectAddress() {
-        if ((this.currentProject.address.street == this.project.address.street) && (this.currentProject.address.district == this.project.address.district)
-            && (this.currentProject.address.city == this.project.address.city) && (this.currentProject.address.googleMapLocation == this.project.address.googleMapLocation)){
+        },
+        updateProjectUtilities() {
+            if ((this.currentProject.utilities.locationUtilities == this.project.utilities.locationUtilities) 
+                && (this.currentProject.utilities.internalUtilities == this.project.utilities.internalUtilities))
+            {
                 this.$toast.show("Dữ liệu chưa có thay đổi", {
                     type: "error",
                     theme: "bubble",
                     duration: 3000,
                     position: "top-right"
                 });
-                return;
+                return;            
             }
-        // if (this.project.address.googleMapLocation == "") {
-        //     this.$toast.show("Google map không được để trống, vui lòng thử lại!", {
-        //         type: "error",
-        //         theme: "bubble",
-        //         duration: 2000,
-        //         position: "top-right"
-        //     });
-        //     return;
-        // }    
-        this.$apollo.mutate({
-            mutation: gql`mutation UpdateProjectAddress($input: UpdateProjectInput!) {
-                updateProject(input: $input) {
-                    string
-                }
-            }`,
-            variables: {
-                input: {
-                    id: this.project.id,
-                    address: {
-                        street: this.project.address.street,
-                        district: this.project.address.district,
-                        city: this.project.address.city,
-                        googleMapLocation: this.project.address.googleMapLocation
-                    }
-                }
-            }
-        });
-        this.$toast.show("Thay đổi thành công!", {
-            type: "success",
-            theme: "bubble",
-            duration: 2000,
-            postition: "top-right"
-        });
-        if (this.currentProject.address.googleMapLocation != this.project.address.googleMapLocation) {
-            this.$modal.hide('google-map-edit-modal');
-        }
-        this.currentProject.address.street = this.project.address.street;
-        this.currentProject.address.district = this.project.address.district;
-        this.currentProject.address.city = this.project.address.city;
-        this.currentProject.address.googleMapLocation = this.project.address.googleMapLocation;
-        
-    },
-        updateProjectUtilities(id) {
-            var project = this.projects.filter(x => x.id == id);
             
             this.$apollo.mutate({
                 mutation: gql`mutation UpdateProjectUtilities($input: UpdateProjectInput!) {
@@ -533,10 +558,10 @@ export default {
                 }`,
                 variables: {
                     input: { 
-                        id: id,
+                        id: this.project.id,
                         utilities: {
-                            internalUtilities: project[0].utilities.internalUtilities,
-                            locationUtilities: project[0].utilities.locationUtilities
+                            internalUtilities: this.project.utilities.internalUtilities,
+                            locationUtilities: this.project.utilities.locationUtilities
                         }
                     }
                 }
@@ -547,9 +572,11 @@ export default {
                 duration: 2000,
                 postition: "top-right"
             });
+            this.currentProject.utilities.locationUtilities = this.project.utilities.locationUtilities;
+            this.currentProject.utilities.internalUtilities = this.project.utilities.internalUtilities;
         },
-        addNewProjectImage(id, images) {
-            if (images.includes(this.currentImage)) 
+        addNewProjectImage() {
+            if (this.currentProject.images.includes(this.newImage)) 
             {
                 this.$toast.show("Hình ảnh đã tồn tại, vui lòng thử lại!", {
                     type: "error",
@@ -557,10 +584,10 @@ export default {
                     duration: 2000,
                     position: "top-right"
                 });
-                this.currentImage = "";
+                this.newImage = "";
                 return;
             }
-            if (this.currentImage == "") {
+            if (this.newImage == "") {
                 this.$toast.show("Chưa có dữ liệu, vui lòng thử lại!", {
                     type: "error",
                     theme: "bubble",
@@ -569,7 +596,9 @@ export default {
                 });
                 return;
             }
-            images.push(this.currentImage);
+            this.project.images.push(this.newImage);
+            this.currentProject.images.push(this.newImage);
+            console.log(this.currentProject.images.length)
             this.$apollo.mutate({
                 mutation: gql`mutation AddNewProjectImage($input: UpdateProjectInput!)
                 {
@@ -579,12 +608,12 @@ export default {
                 }`,
                 variables: {
                     input: {
-                        id: id,
-                        images: images
+                        id: this.project.id,
+                        images: this.project.images
                     }
                 }
             });
-            this.currentImage = "";
+            this.newImage = "";
             this.$toast.show("Thêm thành công!", {
                 type: "success",
                 theme: "bubble",
@@ -592,19 +621,13 @@ export default {
                 position: "top-right"
             });
         },
-        showUpdateProjectImageModal(id, images, index) {
+        showUpdateProjectImageModal(index) {
             this.$modal.show("edit-project-image");
-            this.updateImages = {
-                id: id,
-                images: images,
-                item: images[index],
-                index: index
-            };
+            this.imageIndex = index;
         },
         updateProjectImage() {
-            var currentImage = this.updateImages.images[this.updateImages.index];
-            if (this.updateImages.item == currentImage) {
-                this.$toast.show("Dữ liệu chưa có thay đổi, vui lòng thử lại!", {
+            if (this.currentProject.images[this.imageIndex] == this.project.images[this.imageIndex]) {
+                this.$toast.show("Dữ liệu chưa có thay đổi gì", {
                     type: "error",
                     theme: "bubble",
                     duration: 2000,
@@ -612,7 +635,7 @@ export default {
                 });
                 return;
             }
-            if (this.updateImages.item == "") {
+            if (this.project.images[this.imageIndex] == "") {
                 this.$toast.show("Dữ liệu không được để trống, hoặc bạn có thể xóa đi hình ảnh này", {
                     type: "error",
                     theme: "bubble",
@@ -621,7 +644,6 @@ export default {
                 });
                 return;
             }
-            this.updateImages.images[this.updateImages.index] = this.updateImages.item;
             this.$apollo.mutate({
                 mutation: gql`mutation UpdateProjectImage($input: UpdateProjectInput!) {
                     updateProject(input: $input) {
@@ -630,12 +652,12 @@ export default {
                 }`,
                 variables: {
                     input: {
-                        id: this.updateImages.id, 
-                        images: this.updateImages.images
+                        id: this.project.id,
+                        images: this.project.images
                     }
                 }
             });
-            this.updateImages = {};
+            this.currentProject.images[this.imageIndex] = this.project.images[this.imageIndex];
             this.$toast.show("Thay đổi thành công!", {
                 type: "success",
                 theme: "bubble",
@@ -644,17 +666,14 @@ export default {
             });
             this.$modal.hide("edit-project-image");
         },
-        showDeleteProjectImageModal(id, images, img) {
-            console.log(id);
-            this.updateImages = {
-                id: id,
-                images: images,
-                img: img
-            }
+        showDeleteProjectImageModal(index) {
+            this.imageIndex = index;
             this.$modal.show("delete-project-image");
         },
-        deleteProjectImage(id, images, img) {
-            images = images.filter(x => x != img);
+        deleteProjectImage() {
+            this.project.images = this.project.images.filter(x => x != this.project.images[this.imageIndex]);
+            this.currentProject.images = this.currentProject.images.filter(x => x != this.currentProject.images[this.imageIndex]);
+            console.log(this.currentProject.images.length);
             this.$apollo.mutate({
                 mutation: gql`mutation DeleteProjectImage($input: UpdateProjectInput!) 
                 {
@@ -665,20 +684,9 @@ export default {
                 }`,
                 variables: {
                     input: { 
-                        id: id,
-                        images: images
+                        id: this.project.id,
+                        images: this.project.images
                     }
-                },
-                update: (store, {data: {deleteProjectImage}}) => {
-                    const query = {
-                        query: getProject
-                    };
-                    const { projects } = store.readQuery(query);
-                    const project = projects.filter(x => x.id == id);
-                    project[0].images = project[0].images.filter(x => x != img);
-                    console.log(projects);
-                    store.writeQuery({...query, data: {projects: projects}});
-                    
                 }
             });
             this.$toast.show("Xóa thành công!", {
@@ -687,22 +695,10 @@ export default {
                 duration: 2000,
                 position: "top-right"
             });
-            this.updateImages = {};
             this.$modal.hide("delete-project-image");
         },
-        showAddNewPageInforModal(id) {
-            this.$modal.show("add-new-page-information");
-            this.newPageInfor = {
-                id: id,
-                title: "",
-                slug: "",
-                metaDescription: ""
-            };
-            
-        },
         addNewPageInfor() {
-            var project = this.projects.filter(x => x.id == this.newPageInfor.id);
-            if ((this.newPageInfor.slug == "") || (project[0].pageInfors.some(x => x.slug == this.newPageInfor.slug) == true)) {
+            if ((this.newPageInfor.slug == "") || (this.currentProject.pageInfors.some(x => x.slug == this.newPageInfor.slug) == true)) {
                 this.$toast.show("Slug đã tồn tại hoặc chưa có, vui lòng thử lại!", {
                     type: "error",
                     theme: "bubble",
@@ -718,8 +714,8 @@ export default {
                 slug: this.newPageInfor.slug,
                 metaDescription: this.newPageInfor.metaDescription
             };
-            project[0].pageInfors.forEach(x => delete x["__typename"]);   
-            project[0].pageInfors.push(pageInfor);
+            this.project.pageInfors.forEach(x => delete x["__typename"]);
+            this.project.pageInfors.push(pageInfor);
             this.$apollo.mutate({
                 mutation: gql`mutation AddNewPageInfor($input: UpdateProjectInput!) 
                 {
@@ -729,13 +725,14 @@ export default {
                 }`,
                 variables: {
                     input: {
-                        id: this.newPageInfor.id,
-                        pageInfors: project[0].pageInfors
+                        id: this.project.id,
+                        pageInfors: this.project.pageInfors
                     }
                 }
             });
             this.newPageInfor = {};
-            this.currentPageInfor = {};
+            this.currentProject.pageInfors.push(pageInfor);
+            console.log(this.currentProject.pageInfors.length);
             this.$toast.show("Thêm thành công!", {
                 type: "success",
                 theme: "bubble",
@@ -744,33 +741,19 @@ export default {
             });
             this.$modal.hide("add-new-page-information");
         },
-        showPageInforModal(id, pageInfors, item, index) {
-            this.pageInfors = pageInfors;
-            this.pageInfors.forEach(x => delete x["__typename"]);
-            this.currentPageInfor = {
-                id: id,
-                index: index,
-                title: item.title,
-                slug: item.slug,
-                metaDescription: item.metaDescription,
-                // obj to compare with
-                staticPageInfor: {
-                    title: item.title,
-                    slug: item.slug,
-                    metaDescription: item.metaDescription
-                }
-            };
-            console.log(index);
-            console.log(this.pageInfors[this.currentPageInfor.index].slug)
-            console.log(this.currentPageInfor.staticPageInfor.slug)
+        showPageInforModal(index) {
+            this.pageInforIndex = index;
             this.$modal.show("page-information-detail");
         },
         updatePageInformation() {
-            if ((this.currentPageInfor.title == this.currentPageInfor.staticPageInfor.title) 
-                    && (this.currentPageInfor.slug == this.currentPageInfor.staticPageInfor.slug)
-                        && (this.currentPageInfor.metaDescription == this.currentPageInfor.staticPageInfor.metaDescription)) 
+            var index = this.pageInforIndex;
+            console.log(this.currentProject.pageInfors[index]);
+            console.log(this.project.pageInfors[index]);
+            if ((this.currentProject.pageInfors[index].slug == this.project.pageInfors[index].slug)
+                && (this.currentProject.pageInfors[index].title == this.project.pageInfors[index].title)
+                && (this.currentProject.pageInfors[index].metaDescription == this.project.pageInfors[index].metaDescription))  
             {
-                this.$toast.show("Dữ liệu chưa có thay đổi, vui lòng thử lại!", {
+                this.$toast.show("Dữ liệu chưa có thay đổi gì", {
                     type: "error",
                     theme: "bubble",
                     duration: 2000,
@@ -778,21 +761,21 @@ export default {
                 });
                 return;
             }
-            if (this.pageInfors[this.currentPageInfor.index].slug != this.currentPageInfor.slug) {
-                if ((this.currentPageInfor.slug == "") || (this.pageInfors.some(x => x.slug == this.currentPageInfor.slug))) {
+            if (this.currentProject.pageInfors[index].slug != this.project.pageInfors[index].slug) {
+                if ((this.project.pageInfors[index].slug == "") || (this.currentProject.pageInfors.some(x => x.slug == this.project.pageInfors[index].slug))) {
                     this.$toast.show("Slug đã tồn tại hoặc chưa có, vui lòng thử lại!", {
                         type: "error",
                         theme: "bubble",
                         duration: 2000,
                         position: "top-right"
                     });
+                    this.project.pageInfors[index].slug = this.currentProject.pageInfors[index].slug;
+                    this.project.pageInfors[index].title = this.currentProject.pageInfors[index].title;
+                    this.project.pageInfors[index].metaDescription = this.currentProject.pageInfors[index].metaDescription;
                     return;
                 }
             }
-            var index = this.pageInfors.indexOf(this.pageInfors.find(x => x.slug == this.currentPageInfor.staticPageInfor.slug));
-            this.pageInfors[index].title = this.currentPageInfor.title;
-            this.pageInfors[index].slug = this.currentPageInfor.slug;
-            this.pageInfors[index].metaDescription = this.currentPageInfor.metaDescription;
+            this.project.pageInfors.forEach(x => delete x["__typename"]);
             this.$apollo.mutate({
                 mutation: gql`mutation UpdatePageInformation($input: UpdateProjectInput!)
                 {
@@ -803,8 +786,8 @@ export default {
                 }`,
                 variables: {
                     input: {
-                        id: this.currentPageInfor.id,
-                        pageInfors: this.pageInfors
+                        id: this.project.id,
+                        pageInfors: this.project.pageInfors
                     }
                 }
             });
@@ -814,24 +797,21 @@ export default {
                 duration: 2000,
                 position: "top-right"
             });
-            this.currentPageInfor = {};
-            this.pageInfors = {};
+            this.currentProject.pageInfors[index].slug = this.project.pageInfors[index].slug;
+            this.currentProject.pageInfors[index].title = this.project.pageInfors[index].title;
+            this.currentProject.pageInfors[index].metaDescription = this.project.pageInfors[index].metaDescription;
             this.$modal.hide("page-information-detail");
         },
-        showDeletePageInforModal(id, item)
+        showDeletePageInforModal(index)
         {
-            this.projectId = id;
-            this.currentPageInfor = {
-                title: item.title,
-                slug: item.slug,
-                metaDescription: item.metaDescription
-            };
+            this.pageInforIndex = index;
             this.$modal.show("delete-page-information");
         },
         deletePageInfor() {
-            const project = this.projects.filter(x => x.id == this.projectId);
-            project[0].pageInfors = project[0].pageInfors.filter(x => x.slug != this.currentPageInfor.slug);
-            project[0].pageInfors.forEach(x => delete x["__typename"]);
+            var index = this.pageInforIndex;
+            this.project.pageInfors = this.project.pageInfors.filter(x => x.slug != this.project.pageInfors[index].slug);
+            this.currentProject.pageInfors = this.currentProject.pageInfors.filter(x => x.slug != this.currentProject.pageInfors[index].slug);
+            this.project.pageInfors.forEach(x => delete x["__typename"]);
             this.$apollo.mutate({
                 mutation: gql`mutation deleteProjectPageInfor($input: UpdateProjectInput!) 
                 {
@@ -842,8 +822,8 @@ export default {
                 }`,
                 variables: {
                     input: {
-                        id: this.projectId,
-                        pageInfors: project[0].pageInfors
+                        id: this.project.id,
+                        pageInfors: this.project.pageInfors
                     }
                 }
             });
@@ -853,8 +833,7 @@ export default {
                 duration: 2000,
                 position: "top-right"
             });
-            this.projectId = "";
-            this.currentPageInfor = {};
+            this.pageInforIndex = 0;
             this.$modal.hide("delete-page-information");
         }
     }

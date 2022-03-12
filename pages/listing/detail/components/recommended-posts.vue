@@ -5,12 +5,12 @@
         Có thể bạn quan tâm
       </h3>
       <div class="hidden md:block">
-        <button class="text-grat-400 px-4 py-2 border rounded-md" @click="scrollLeft">
+        <button class="text-grat-400 px-3 py-2 border rounded-md" @click="scrollLeft">
           <svg width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.3692 14.8582L0.726562 7.80924L10.3692 0.760254" stroke="#C4C4C4" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
-        <button class="text-grat-400 px-4 py-2 border rounded-md" @click="scrollRight">
+        <button class="text-grat-400 px-3 py-2 border rounded-md" @click="scrollRight">
           <svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1.44968 14.8582L11.0923 7.80924L1.44968 0.760254" stroke="#C4C4C4" stroke-linecap="round" stroke-linejoin="round" />
           </svg>

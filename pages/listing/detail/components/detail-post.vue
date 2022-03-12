@@ -39,7 +39,7 @@
         </div>
       </div>
 
-      <divider class="border-stone-200 my-4" />
+      <divider class="my-4" />
 
       <div class="flex justify-between items-center mb-4">
         <h3 class="font-bold text-lg leading-5">
@@ -72,7 +72,7 @@
             <span class="re-properties">Hướng cửa</span>
             <span class="re-properties-content"> {{ post.doorDirection }}</span>
           </p>
-          <p class="re-properties-frame">
+          <p class="re-properties-frame-last">
             <span class="re-properties">Đặc điểm khác</span>
             <span class="re-properties-content"> {{ post.otherSpecification }}</span>
           </p>
@@ -98,7 +98,7 @@
             <span class="re-properties">Pháp lý</span>
             <span class="re-properties-content"> {{ post.project.juridical }}</span>
           </p>
-          <p class="re-properties-frame">
+          <p class="re-properties-frame-last">
             <span class="re-properties">View</span>
             <span class="re-properties-content"> {{ post.view }}</span>
           </p>
@@ -148,15 +148,18 @@
             <span class="re-properties">Đặc điểm khác</span>
             <span class="re-properties-content"> {{ post.otherSpecification }}</span>
           </p>
-          <p class="re-properties-frame">
+          <p class="re-properties-frame-last">
             <span class="re-properties">View</span>
             <span class="re-properties-content"> {{ post.view }}</span>
           </p>
         </div>
       </div>
-      <div class="flex justify-start items-center space-x-3 float-left mb-2 w-full h-auto">
+
+      <divider />
+
+      <div class="my-3 flex justify-start items-center float-left w-full h-auto">
         <h3 class="re-properties w-40 md:w-auto">
-          Nội thất:
+          Nội thất
         </h3>
         <div class="flex flex-wrap justify-start items-center my-2">
           <div v-for="item in post.furnitures" :key="item" class="my-auto">
@@ -297,12 +300,20 @@ export default ({
   .re-properties-frame {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
     border-bottom: 1px solid #E7E5E4;
-    padding-bottom: 7px;
-    margin-bottom:10px;
-
+    padding-bottom: 15px;
+    margin-top: 15px;
   }
+
+  .re-properties-frame-last {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding-bottom: 15px;
+    margin-top: 15px;
+  }
+
   .re-properties {
     flex-shrink: 0;
     font-style: normal;
@@ -310,8 +321,6 @@ export default ({
     font-size: 14px;
     line-height: 16px;
     color: #999999;
-    margin-top: 5px;
-    margin-bottom: 5px;
     margin-right: 8px;
   }
   .re-properties-content {
@@ -322,26 +331,26 @@ export default ({
     color: #505050;
   }
   .btn {
-  width: 71px;
-  height: 26px;
+  padding: 5px 15px;
   border: 1px solid black;
   background-color: white;
   color: black;
   float:left;
   font-style: normal;
-  line-height: 16px;
+  font-weight: 500;
   font-size: 14px;
+  line-height: 16px;
   cursor: pointer;
   border-radius: 5px;
   margin-inline: 5px;
 }
   .green-furnitures {
-    color: green;
-    border-color: #07A35D;
+    color: #16A34A;
+    border-color: #16A34A;
   }
   .red-furnitures {
-    color: red;
-    border-color: #FF375F;
+    color: #EF4444;
+    border-color: #EF4444;
   }
 
   .zalo-share-button {

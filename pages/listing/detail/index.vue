@@ -65,7 +65,7 @@ const getPostQuery = gql`
 
 const getRecommendedPosts = gql`
   query GetRecommendedPosts($filter: PostCollectionFilterInput!) {
-  postsWithPagination(take:10, where: $filter){
+  postsWithPagination(take:10, where: $filter, order: { lastUpdatedAt: DESC }){
     items {
       demand
       id
@@ -119,6 +119,7 @@ export default {
       variables () {
         return {
           filter: {
+            id: { neq: this.post.id },
             demand: { eq: this.post.demand },
             projectId: { eq: this.post.project.id }
           }

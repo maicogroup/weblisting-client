@@ -39,7 +39,7 @@
         </div>
       </div>
 
-      <divider class="my-4" />
+      <divider class="border-stone-200 my-4" />
 
       <div class="flex justify-between items-center mb-4">
         <h3 class="font-bold text-lg leading-5">
@@ -298,13 +298,13 @@ export default ({
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E7E5E4;
     padding-bottom: 7px;
     margin-bottom:10px;
 
   }
   .re-properties {
-    font-family: Roboto;
+    flex-shrink: 0;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -312,9 +312,9 @@ export default ({
     color: #999999;
     margin-top: 5px;
     margin-bottom: 5px;
+    margin-right: 8px;
   }
   .re-properties-content {
-    font-family: Roboto;
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -328,7 +328,6 @@ export default ({
   background-color: white;
   color: black;
   float:left;
-  font-family: Roboto;
   font-style: normal;
   line-height: 16px;
   font-size: 14px;

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="shadow border-gray border w-72 rounded-md px-6 py-4 flex flex-col items-center">
+    <div class="shadow border-stone-200 border w-72 rounded-md px-6 py-4 flex flex-col items-center">
       <img
-        class="inline-block object-cover h-14 w-14 rounded-full border border-gray"
+        class="inline-block object-cover h-14 w-14 rounded-full border border-stone-200"
         src="~/assets/maico-contact-infor.png"
         alt="maico"
       >
@@ -41,9 +41,5 @@ export default {
 <style scoped>
   .shadow {
     box-shadow: 0px 2px 20px #ebebeb;
-  }
-
-  .border-gray {
-    border-color: #E7E5E4;
   }
 </style>

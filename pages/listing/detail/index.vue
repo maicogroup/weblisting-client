@@ -5,7 +5,7 @@
       <contact-infor class="lg:block hidden" />
     </div>
 
-    <recommended-posts v-if="recommendedPosts !== undefined && recommendedPosts.length > 0" :posts="recommendedPosts" />
+    <recommended-posts v-if="recommendedPosts !== undefined && recommendedPosts.length > 0" class="mb-4" :posts="recommendedPosts" />
   </div>
 </template>
 

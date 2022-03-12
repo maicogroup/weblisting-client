@@ -158,14 +158,6 @@ export default {
 </script>
 
 <style scoped>
-.text-neutral-400 {
-  color:#A3A3A3;
-}
-
-.border-stone-200 {
-  border-color: #E7E5E4;
-}
-
 .post-img {
   width: 100%;
   height: 202px;

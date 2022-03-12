@@ -5,9 +5,9 @@
     <img class="h-12" src="~/assets/maico.png">
 
     <div class="hidden md:flex flex justify-between items-center space-x-10">
-      <p class="font-bold hidden xl:block">
-        0903 234 045
-      </p>
+      <a class="font-bold hidden xl:block" href="tel:0903324045">
+        0903 324 045
+      </a>
 
       <Dropdown item-width="200px" title="Thuê">
         <DropdownItem @click="handleSelectAllTypes">

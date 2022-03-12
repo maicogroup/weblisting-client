@@ -1,10 +1,11 @@
 <template>
     <div class="vue-expand-panel p-2 h-auto">
         <h1 class="text-center font-bold text-lg mb-5">CHỈNH SỬA DỰ ÁN</h1>
+        {{project.projectName}}
         <div class="flex items-center justify-center">
             <project-filter-dropdown :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged"></project-filter-dropdown>
         </div>
-        <div class="w-auto h-auto p-2 border-2 rounded m-5" v-for="(project, index) in projects" :key="index">
+        <div class="w-auto h-auto p-2 border-2 rounded m-5">
             <h1 class="font-semidbold text-lg">{{project.projectName}}</h1>
             <div class="p-2 h-auto" style="width:1000px;">
                 <expand-panel title="Thông tin">
@@ -27,7 +28,7 @@
                         </p>
                     </div>
                     <div class="flex justify-end my-2">
-                        <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectInformation(project.id)">Cập nhật</button>
+                        <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectInformation">Cập nhật</button>
                     </div>
                 </expand-panel>
                 <expand-panel title="Địa chỉ">
@@ -48,7 +49,7 @@
                     <div>
                         <label class="font-semibold flex items-center">
                             Google Map: &nbsp;&nbsp;
-                            <button @click="showGoogleMapEditModal(project.id, project.address)">
+                            <button @click="() => $modal.show('google-map-edit-modal')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
                             </button>
                         </label>
@@ -133,7 +134,7 @@
                                 @ready="onEditorReady($event)"
                             />
                             </client-only>
-                            <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectInformation(project.id)">Cập nhật</button>
+                            <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectInformation">Cập nhật</button>
                     </div>
                 </expand-panel>
             </div>
@@ -212,11 +213,11 @@
                 <h2 class="mt-2 text-lg font-semibold text-center">Chỉnh sửa Google Map</h2>
                 <p class="m-10">
                     <label for="map" class="font-semibold">Google map:</label> 
-                    <input type="text" class="w-1/4" style="width:75% !important" v-model="currentProjectAddress.item">
+                    <input type="text" class="w-1/4" style="width:75% !important" v-model="project.address.googleMapLocation">
                 </p>
                 <div class="flex justify-end space-x-3 m-2 my-2">
                     <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('google-map-edit-modal')">Quay lại</button>
-                    <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectGoogleMap(currentProjectAddress.id, currentProjectAddress.street, currentProjectAddress.district, currentProjectAddress.city, currentProjectAddress.googleMapLocation, currentProjectAddress.item)">Đồng ý</button>
+                    <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectAddress">Đồng ý</button>
                 </div>
             </div>
         </modal>
@@ -292,9 +293,46 @@ const getProject = gql`query GetProject($condition: ProjectCollectionFilterInput
 export default {
     name: "EditProject",
     apollo: {
-        projects: { 
-            query: getProject
+        project: { 
+            query: getProject,
+            variables: {
+                condition: { 
+                    id: { 
+                        eq: "61c528268219c0a4653086bc"
+                    }
+                }
+            },
+            update: data => data.projects[0]
+
         }
+    },
+    mounted() {
+        this.currentProject = {
+            id: this.project.id,
+            projectName: this.project.projectName,
+            investor: this.project.investor,
+            juridical: this.project.juridical,
+            description: this.project.description,
+            address: {
+                street: this.project.address.street,
+                district: this.project.address.district,
+                city: this.project.address.city,
+                googleMapLocation: this.project.address.googleMapLocation
+            },
+            utilities: {
+                internalUtilities: this.project.utilities.internalUtilities,
+                locationUtilities: this.project.utilities.locationUtilities
+            },
+            images: [],
+            sEoContent: this.project.sEoContent,
+            pageInfors: {
+                slug: this.project.pageInfors.slug,
+                title: this.project.pageInfors.title,
+                metaDescription: this.project.pageInfors.metaDescription
+            }
+        }
+        this.project.images.forEach(x => this.currentProject.images.push(x));
+        console.log(this.project);
     },
     components: {
         expandPanel,
@@ -302,6 +340,7 @@ export default {
     },
     data() {
         return {
+            currentProject: {},
             inputFilter: {},
             projectId: "",
             newPageInfor: {},
@@ -332,21 +371,46 @@ export default {
     },
     watch: {
         inputFilter: function(filter) {
+            console.log(filter);
+            console.log(this.inputFilter);
+            console.log("Project name berfore refetch: ", this.project.projectName);
             if (filter.project) {
-                this.$apollo.queries.projects.refetch({
+                this.$apollo.queries.project.refetch({
                     condition: { 
                         id: {
                             eq: this.inputFilter.project.id
                         }
+                    },
+                });
+                console.log("Project name after refetech: ", this.project.projectName);
+                this.currentProject = {
+                    id: this.project.id,
+                    projectName: this.project.projectName,
+                    investor: this.project.investor,
+                    juridical: this.project.juridical,
+                    description: this.project.description,
+                    address: {
+                        street: this.project.address.street,
+                        district: this.project.address.district,
+                        city: this.project.address.city,
+                        googleMapLocation: this.project.address.googleMapLocation
+                    },
+                    utilities: {
+                        internalUtilities: this.project.utilities.internalUtilities,
+                        locationUtilities: this.project.utilities.locationUtilities
+                    },
+                    images: [],
+                    sEoContent: this.project.sEoContent,
+                    pageInfors: {
+                        slug: this.project.pageInfors.slug,
+                        title: this.project.pageInfors.title,
+                        metaDescription: this.project.pageInfors.metaDescription
                     }
-                });
+                }
+                this.project.images.forEach(x => this.currentProject.images.push(x));
             }
-            else {
-                this.$apollo.queries.projects.refetch({
-                    condition: null
-                });
-            }
-            console.log(filter);
+            
+            
         }
     },
     methods: {
@@ -362,131 +426,102 @@ export default {
     onEditorReady (editor) {
       //console.log('editor ready!', editor);
     },
-        updateProjectInformation(id) {
-            const project = this.projects.filter(x => x.id == id);
-            this.$apollo.mutate({
-                mutation: gql`mutation UpdateProjectInformation($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-                variables: {
-                    input: { 
-                        id: id,
-                        projectName: project[0].projectName,
-                        investor: project[0].investor,
-                        juridical: project[0].juridical,
-                        description: project[0].description,
-                        sEOContent: project[0].sEOContent
-                    }
-                }
-                
-            }),
-            this.$toast.show("Thay đổi thành công!", {
-                type: "success",
-                duration: 2000,
-                theme: "bubble",
-                position: "top-right"
-            });
-            this.currentProjectInfor = {};
-        },
-        updateProjectAddress(id) {
-            const project = this.projects.filter(x => x.id == id);
-            this.$apollo.mutate({
-                mutation: gql`mutation UpdateProjectAddress($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-                variables: {
-                    input: {
-                        id: id,
-                        address: {
-                            street: project[0].address.street,
-                            district: project[0].address.district,
-                            city: project[0].address.city,
-                            googleMapLocation: project[0].address.googleMapLocation
-                        }
-                    }
-                }
-            });
-            this.$toast.show("Thay đổi thành công!", {
-                type: "success",
-                theme: "bubble",
-                duration: 2000,
-                postition: "top-right"
-            });
-            this.currentProjectAddress = {};
-        },
-        showGoogleMapEditModal(id, address) {
-            this.currentProjectAddress = {
-                id: id,
-                street: address.street, 
-                district: address.district,
-                city: address.city,
-                googleMapLocation: address.googleMapLocation,
-                item: address.googleMapLocation
-            };            
-            this.$modal.show("google-map-edit-modal");
-        },
-        updateProjectGoogleMap(id, street, district, city, googleMapLocation, item)
-        {
-            if (item == googleMapLocation) {
-                this.$toast.show("Dữ liệu chưa thay đổi, vui lòng thử lại!", {
+    updateProjectInformation() {
+        if ((this.currentProject.projectName == this.project.projectName) && (this.currentProject.investor == this.project.investor)
+            && (this.currentProject.juridical == this.project.juridical) && (this.currentProject.description == this.project.description)
+            && (this.currentProject.sEoContent == this.project.sEoContent))
+            {
+                this.$toast.show("Dữ liệu chưa có thay đổi!", {
                     type: "error",
                     theme: "bubble",
-                    duration: 2000,
+                    duration: 3000,
                     position: "top-right"
                 });
-                this.currentProjectAddress = {};
                 return;
             }
-            if (item == "") {
-                this.$toast.show("Dữ liệu không được để trống, vui lòng thử lại!", {
+        this.$apollo.mutate({
+            mutation: gql`mutation UpdateProjectInformation($input: UpdateProjectInput!) {
+                updateProject(input: $input) {
+                    string
+                }
+            }`,
+            variables: {
+                input: { 
+                    id: this.project.id,
+                    projectName: this.project.projectName,
+                    investor: this.project.investor,
+                    juridical: this.project.juridical,
+                    description: this.project.description,
+                    sEOContent: this.project.sEOContent
+                }
+            }
+            
+        }),
+        this.$toast.show("Thay đổi thành công!", {
+            type: "success",
+            duration: 2000,
+            theme: "bubble",
+            position: "top-right"
+        });
+        this.currentProject.projectName = this.project.projectName;
+        this.currentProject.investor = this.project.investor;
+        this.currentProject.juridical = this.project.juridical;
+        this.currentProject.description = this.project.description;
+        this.currentProject.sEoContent = this.project.sEoContent; 
+    },
+    updateProjectAddress() {
+        if ((this.currentProject.address.street == this.project.address.street) && (this.currentProject.address.district == this.project.address.district)
+            && (this.currentProject.address.city == this.project.address.city) && (this.currentProject.address.googleMapLocation == this.project.address.googleMapLocation)){
+                this.$toast.show("Dữ liệu chưa có thay đổi", {
                     type: "error",
                     theme: "bubble",
-                    duration: 2000,
+                    duration: 3000,
                     position: "top-right"
                 });
-                this.currentProjectAddress = {};
                 return;
             }
-            this.$apollo.mutate({
-                mutation: gql`mutation UpdateProjectAddress($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-                variables: {
-                    input: {
-                        id: id,
-                        address: {
-                            street: street,
-                            district: district,
-                            city: city,
-                            googleMapLocation: item
-                        }
-                    }
-                },
-                update: (store, {data: {updateProjectGoogleMap}}) => {
-                    const query = {
-                        query: getProject
-                    };
-                    const { projects } = store.readQuery(query);
-                    const project = projects.filter(x => x.id == id);
-                    project[0].address.googleMapLocation = item;
-                    store.writeQuery({...query, data: {projects: projects}});
+        // if (this.project.address.googleMapLocation == "") {
+        //     this.$toast.show("Google map không được để trống, vui lòng thử lại!", {
+        //         type: "error",
+        //         theme: "bubble",
+        //         duration: 2000,
+        //         position: "top-right"
+        //     });
+        //     return;
+        // }    
+        this.$apollo.mutate({
+            mutation: gql`mutation UpdateProjectAddress($input: UpdateProjectInput!) {
+                updateProject(input: $input) {
+                    string
                 }
-            })
-            this.$modal.hide('google-map-edit-modal')
-            this.$toast.show("Thay đổi thành công!", {
-                type: "success",
-                duration: 2000,
-                theme: "bubble",
-                position: "top-right"
-            })
-            this.currentProjectAddress = {};
-        },
+            }`,
+            variables: {
+                input: {
+                    id: this.project.id,
+                    address: {
+                        street: this.project.address.street,
+                        district: this.project.address.district,
+                        city: this.project.address.city,
+                        googleMapLocation: this.project.address.googleMapLocation
+                    }
+                }
+            }
+        });
+        this.$toast.show("Thay đổi thành công!", {
+            type: "success",
+            theme: "bubble",
+            duration: 2000,
+            postition: "top-right"
+        });
+        if (this.currentProject.address.googleMapLocation != this.project.address.googleMapLocation) {
+            this.$modal.hide('google-map-edit-modal');
+        }
+        this.currentProject.address.street = this.project.address.street;
+        this.currentProject.address.district = this.project.address.district;
+        this.currentProject.address.city = this.project.address.city;
+        this.currentProject.address.googleMapLocation = this.project.address.googleMapLocation;
+        
+    },
         updateProjectUtilities(id) {
             var project = this.projects.filter(x => x.id == id);
             

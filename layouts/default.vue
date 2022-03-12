@@ -17,6 +17,9 @@
       </a>
     </div>
     <MainFooter />
+
+    <!-- khoảng trống để thanh yêu cầu tư vấn không che trang -->
+    <div class="md:hidden" style="height:58px" />
   </div>
 </template>
 
@@ -71,7 +74,3 @@ export default {
   }
 };
 </script>
-
-<style>
-
-</style>

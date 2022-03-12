@@ -96,6 +96,7 @@ const getPostsQuery = gql`query GetPostWithPagination($condition: PostCollection
                 apartmentState,
                 tags
                 project{
+                    id
                     address{
                         street
                         city

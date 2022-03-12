@@ -158,7 +158,7 @@
       <divider />
 
       <div class="my-3 flex justify-start items-center float-left w-full h-auto">
-        <h3 class="re-properties w-40 md:w-auto">
+        <h3 class="re-properties">
           Nội thất
         </h3>
         <div class="flex flex-wrap justify-start items-center my-2">

@@ -185,6 +185,8 @@
         </div>
       </div>
     </div>
+    <div class="h-[1px] bg-stone-200 w-full mt-[2rem] mb-[4rem]"/>
+    <ProjectThumbnail :project="project" />
     <div v-if="project && showIfPostsOfOneProject && project.sEOContent" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
       <div :class="`overflow-hidden text-ellipsis mt-5 mx-2   ${sEOContentClasses}` "
           v-html="project.sEOContent">
@@ -593,6 +595,7 @@ import { gql } from 'graphql-tag';
 
 import { marked } from 'marked';
 import ProjectHeader from './components/project-header.vue';
+import ProjectThumbnail from './components/project-thumbnail.vue';
 import ListPost from './components/list-post.vue';
 import ContactInfor from './components/contract-infor.vue';
 import LocationFtilerDropdown from './components/filtering/location-filter-dropdown.vue';
@@ -614,7 +617,8 @@ import Divider from '~/components/Divider.vue';
 
 export default {
   name: 'PostList',
-  components: { ProjectHeader, 
+  components: { ProjectHeader,
+                ProjectThumbnail, 
                 ListPost, 
                 ContactInfor, 
                 Divider, 

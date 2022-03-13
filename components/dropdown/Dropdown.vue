@@ -5,7 +5,7 @@
     class="inline relative"
   >
     <button
-      class="relative inline-flex justify-between items-end rounded-md bg-white text-gray-800 p-2"
+      class="relative inline-flex justify-between items-end rounded-md bg-white text-gray-800 p-2 border border-stone-200"
       :style="customStyle"
       @click="open = !open"
       @blur="closeIfOutsideOfDropdown"

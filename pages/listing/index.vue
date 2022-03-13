@@ -77,8 +77,8 @@
         <input type="button" class="w-full border py-2 pl-10 pr-2 h-full rounded-md" placeholder="Tìm kiếm...">
       </div>
     </div>
-    <div class="filter-bar-blank-space hidden md:block" />
-    <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" />
+    <!-- <div class="filter-bar-blank-space hidden md:block" /> -->
+    <!-- <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" /> -->
     <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
       <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />

@@ -109,8 +109,8 @@
             rounded rounded-lg
           "
         >
-          <NuxtLink
-            class="w-32 h-32 md:w-64 md:h-44 shrink-0"
+          <NuxtLink 
+            class="w-32 h-32 md:w-64 md:h-44 shrink-0 relative project overflow-hidden"
             :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
           >
             <img
@@ -118,6 +118,8 @@
               :src="post.srcimage"
               alt="Bonnie image"
             />
+            <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div> --> 
+            <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length">{{post.tags[0]}}</div>
           </NuxtLink>
           <div class="flex flex-col justify-between h-32 md:h-44 w-full">
             <div class="">
@@ -229,15 +231,15 @@
     </div>
 
     <!-- mobile list -->
-    <div id="mobile-list" class="md:hidden flex flex-col">
+    <div id="mobile-list" class="md:hidden overflow-hidden">
       <div
         v-for="post in posts"
         :key="post.id"
         class="pb-2"
       >
-        <div class="item-flex-start border border-stone-200 mt-2 rounded rounded-lg ">
+        <div class="item-flex-start border border-stone-200 mt-2 rounded rounded-lg w-full bg-white overflow-hidden">
           <NuxtLink
-            class="w-32 h-32 md:w-64 md:h-64 shrink-0"
+            class="w-full h-[202px] relative project"
             :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
           >
             <img
@@ -245,6 +247,8 @@
               :src="post.srcimage"
               alt="Bonnie image"
             />
+            <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div> --> 
+            <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length">{{post.tags[0]}}</div>
           </NuxtLink>
           <div class="flex flex-col justify-between h-28 w-full p-2">
             <div class="">
@@ -740,4 +744,22 @@ export default {
 .border-none {
   border: none;
 }
+
+.project {
+	 position: relative;
+}
+ .project .badge.diagonal {
+	 white-space: nowrap;
+	 position: absolute;
+	 padding: 5px 100px;
+	 min-width: 200px;
+	 transform: rotate(-45deg) translate(-33%, -50px);
+	 color: white;
+	 text-align: center;
+	 text-transform: uppercase;
+	 font-size: 10px;
+	 top: 0px;
+	 box-sizing: border-box;
+}
+
 </style>

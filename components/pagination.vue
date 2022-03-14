@@ -1,64 +1,194 @@
 <template>
-  <ul class=" items-center -space-x-px flex justify-center">
+  <ul class="items-center -space-x-px flex justify-center">
     <li>
-      <a 
-        class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        href="#"
+      <a
+        class="
+          h-[30px]
+          w-[30px]
+          flex
+          justify-center
+          items-center
+          ml-0
+          leading-tight
+          hover:bg-gray-300
+          border border-black
+          rounded-l-lg
+          hover:cursor-pointer
+        "
         @click="onClickFirstPage"
         :disabled="isInFirstPage"
         aria-label="Go to first page"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#000000"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" />
+        </svg>
       </a>
     </li>
 
-    <li >
+    <li>
       <a
-        class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        href="#"
+        class="
+          h-[30px]
+          w-[30px]
+          flex
+          justify-center
+          items-center
+          ml-0
+          leading-tight
+          bg-white
+          text-black
+          hover:bg-gray-300
+          border border-black
+          hover:cursor-pointer
+        "
         @click="onClickPreviousPage"
         :disabled="isInFirstPage"
         aria-label="Go to previous page"
       >
         <span class="sr-only">Previous</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#000000"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
       </a>
     </li>
 
-    <li v-for="page in pages" :key="page.name" >
+    <li
+      v-show="currentPage > 3"
+      class="
+        h-[30px]
+        w-[30px]
+        flex
+        justify-center
+        items-center
+        bg-white
+        border border-gray-700
+      "
+    >
+      ...
+    </li>
+
+    <li
+      v-for="page in pages"
+      :key="page.name"
+      :class="`${isPageActive(page.name)}`"
+      @click="onClickPage(page.name)"
+    >
       <a
-        href="#"
-        @click="onClickPage(page.name)"
         :disabled="page.isDisabled"
-        :class="`${isPageActive(page.name)}`"
         :aria-label="`Go to page number ${page.name}`"
       >
         {{ page.name }}
       </a>
     </li>
 
-    <li >
-      <a
-        class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        href="#"
-        @click="onClickNextPage"
-        :disabled="isInLastPage"
-        aria-label="Go to next page"
-      >
+    <li
+      v-show="currentPage < totalPages - 2"
+      class="
+        h-[30px]
+        w-[30px]
+        flex
+        justify-center
+        items-center
+        bg-white
+        border border-gray-700
+      "
+    >
+      ...
+    </li>
+
+    <li
+      v-show="currentPage <= totalPages - 2"
+      :class="itemClass"
+      @click="onClickPage(8)"
+    >
+      <a :aria-label="`Go to page number ${8}`"> 8 </a>
+    </li>
+
+    <li
+      class="
+        h-[30px]
+        w-[30px]
+        flex
+        justify-center
+        items-center
+        leading-tight
+        bg-white
+        text-white
+        hover:bg-gray-300
+        border border-black
+        hover:cursor-pointer
+      "
+      @click="onClickNextPage"
+    >
+      <a :disabled="isInLastPage" aria-label="Go to next page">
         <span class="sr-only">Next</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#000000"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M9 18l6-6-6-6" />
+        </svg>
       </a>
     </li>
 
-    <li>
-      <a
-        class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        href="#"
-        @click="onClickLastPage"
-        :disabled="isInLastPage"
-        aria-label="Go to last page"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 17l5-5-5-5M6 17l5-5-5-5"/></svg>
+    <li
+      class="
+        h-[30px]
+        w-[30px]
+        flex
+        justify-center
+        items-center
+        leading-tight
+        text-gray-500
+        bg-white
+        rounded-r-lg
+        border border-black
+        hover:bg-gray-300
+        hover:cursor-pointer
+      "
+      @click="onClickLastPage"
+    >
+      <a :disabled="isInLastPage" aria-label="Go to last page">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#000000"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M13 17l5-5-5-5M6 17l5-5-5-5" />
+        </svg>
       </a>
     </li>
   </ul>
@@ -90,14 +220,16 @@ export default {
       required: true,
     },
   },
-  data(){
-      return{
-          itemActiveClass: 'z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white',
-          itemClass: 'py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
-      }
+  data() {
+    return {
+      itemActiveClass:
+        "h-[30px] w-[30px] flex justify-center items-center bg-black text-white border border-gray-700 hover:cursor-pointer text-[14px]",
+      itemClass:
+        "h-[30px] w-[30px] flex justify-center items-center bg-white border border-gray-700 hover:cursor-pointer hover:bg-gray-300 text-[14px]",
+    };
   },
   computed: {
-    totalPages(){
+    totalPages() {
       return Math.ceil(this.total / this.perPage);
     },
     startPage() {
@@ -138,6 +270,7 @@ export default {
   },
   methods: {
     onClickFirstPage() {
+      if (this.isInFirstPage) return;
       this.$emit("pagechanged", 1);
     },
     onClickPreviousPage() {
@@ -146,14 +279,16 @@ export default {
       }
     },
     onClickPage(page) {
+      if (page == this.currentPage) return;
       this.$emit("pagechanged", page);
     },
     onClickNextPage() {
       if (this.currentPage < this.totalPages) {
-      this.$emit("pagechanged", this.currentPage + 1);
+        this.$emit("pagechanged", this.currentPage + 1);
       }
     },
     onClickLastPage() {
+      if (this.currentPage == this.totalPages) return;
       this.$emit("pagechanged", this.totalPages);
     },
     isPageActive(page) {

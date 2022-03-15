@@ -183,7 +183,7 @@
           <p class="font-bold">
             Tiện ích vị trí
           </p>
-          <p class="col-span-4 text-justify mt-1 md:mt-0">
+          <p class="col-span-4 mt-1 md:mt-0">
             {{ post.project.utilities.locationUtilities }}
           </p>
         </div>
@@ -191,7 +191,7 @@
           <p class="font-bold">
             Tiện ích nội khu
           </p>
-          <p class="col-span-4 text-justify mt-1 md:mt-0">
+          <p class="col-span-4 mt-1 md:mt-0">
             {{ post.project.utilities.internalUtilities }}
           </p>
         </div>

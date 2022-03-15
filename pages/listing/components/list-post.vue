@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="flex flex-col space-y-4">
-      <div v-for="post in posts" :key="post.id" class="pb-6 md:pt-0 md:border-none border-b">
+      <div v-for="post in posts" :key="post.id" class="md:pt-0 md:border-none border-b">
         <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-mobile color-orange font-bold text-base leading-6 ov-flow-hidden ">
           {{ post.pageInfor.title }}
         </NuxtLink>

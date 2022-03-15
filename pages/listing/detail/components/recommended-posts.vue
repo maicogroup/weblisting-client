@@ -5,12 +5,12 @@
         Có thể bạn quan tâm
       </h3>
       <div class="hidden md:block">
-        <button class="text-grat-400 px-3 py-2 border rounded-md" @click="scrollLeft">
+        <button class="text-grat-400 px-3 py-2 border rounded-md" @click="scrollBy(-500)">
           <svg width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.3692 14.8582L0.726562 7.80924L10.3692 0.760254" stroke="#C4C4C4" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
-        <button class="text-grat-400 px-3 py-2 border rounded-md" @click="scrollRight">
+        <button class="text-grat-400 px-3 py-2 border rounded-md" @click="scrollBy(500)">
           <svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1.44968 14.8582L11.0923 7.80924L1.44968 0.760254" stroke="#C4C4C4" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
@@ -107,14 +107,42 @@ export default {
   },
 
   methods: {
-    scrollLeft () {
+    scrollBy (amount) {
       const container = this.$refs.recommendedPostsContainer;
-      container.scroll({ left: container.scrollLeft - 400, behavior: 'smooth' });
+      const start = container.scrollLeft;
+
+      this.animate({
+        duration: 500,
+        timing: this.easeInOutSine,
+        draw: (progress) => {
+          container.scrollLeft = start + (progress * amount);
+        }
+      });
     },
 
-    scrollRight () {
-      const container = this.$refs.recommendedPostsContainer;
-      container.scroll({ left: container.scrollLeft + 400, behavior: 'smooth' });
+    // https://easings.net/#easeInOutSine
+    easeInOutSine (timeFraction) {
+      return -(Math.cos(Math.PI * timeFraction) - 1) / 2;
+    },
+
+    // https://javascript.info/js-animation
+    animate ({ timing, draw, duration }) {
+      const start = performance.now();
+
+      requestAnimationFrame(function animate (time) {
+        // timeFraction goes from 0 to 1
+        let timeFraction = (time - start) / duration;
+        if (timeFraction > 1) { timeFraction = 1; }
+
+        // calculate the current animation state
+        const progress = timing(timeFraction);
+
+        draw(progress); // draw it
+
+        if (timeFraction < 1) {
+          requestAnimationFrame(animate);
+        }
+      });
     },
 
     formatDate (dateStr) {

@@ -52,7 +52,7 @@
         </svg>
       </button>
 
-      <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
+      <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-green-600 hover:bg-green-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
         Tìm kiếm
       </button>
     </div>
@@ -185,9 +185,9 @@
         </div>
       </div>
     </div>
-    <div class="h-[1px] bg-stone-200 w-full mt-[2rem] mb-[4rem]"/>
+    <div class="h-[1px] bg-[#A8A29E] w-full mt-[1.5rem] mb-[3rem]"/>
     <ProjectThumbnail :project="project" />
-    <div v-if="project && showIfPostsOfOneProject && project.sEOContent" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
+    <div v-if="project && showIfPostsOfOneProject && project.sEOContent" class="rounded-lg border mr-auto w-full ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
       <div :class="`overflow-hidden text-ellipsis mt-5 mx-2   ${sEOContentClasses}` "
           v-html="project.sEOContent">
       </div>

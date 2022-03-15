@@ -1,10 +1,10 @@
 <template>
-  <ul class="items-center -space-x-px flex justify-center">
+  <ul class="items-center mx-auto flex justify-center mt-4 text-stone-900 bg-white">
     <li>
       <a
         class="
-          h-[30px]
-          w-[30px]
+          h-[40px]
+          w-[40px]
           flex
           justify-center
           items-center
@@ -21,12 +21,12 @@
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="15"
-          height="15"
+          width="17"
+          height="17"
           viewBox="0 0 24 24"
           fill="none"
           stroke="#000000"
-          stroke-width="2"
+          stroke-width="2.5"
           stroke-linecap="round"
           stroke-linejoin="round"
         >
@@ -38,15 +38,14 @@
     <li>
       <a
         class="
-          h-[30px]
-          w-[30px]
+          h-[40px]
+          w-[40px]
           flex
           justify-center
           items-center
           ml-0
           leading-tight
           bg-white
-          text-black
           hover:bg-gray-300
           border border-stone-200
           hover:cursor-pointer
@@ -58,12 +57,12 @@
         <span class="sr-only">Previous</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="15"
-          height="15"
+          width="17"
+          height="17"
           viewBox="0 0 24 24"
           fill="none"
           stroke="#000000"
-          stroke-width="2"
+          stroke-width="2.5"
           stroke-linecap="round"
           stroke-linejoin="round"
         >
@@ -75,8 +74,8 @@
     <li
       v-show="(currentPage >= 3 && totalPages > 4)"
       class="
-        h-[30px]
-        w-[30px]
+        h-[40px]
+        w-[40px]
         flex
         justify-center
         items-center
@@ -104,8 +103,8 @@
     <li
       v-show="currentPage <= totalPages - 2"
       class="
-        h-[30px]
-        w-[30px]
+        h-[40px]
+        w-[40px]
         flex
         justify-center
         items-center
@@ -118,8 +117,8 @@
 
     <li
       class="
-        h-[30px]
-        w-[30px]
+        h-[40px]
+        w-[40px]
         flex
         justify-center
         items-center
@@ -136,12 +135,12 @@
         <span class="sr-only">Next</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="15"
-          height="15"
+          width="17"
+          height="17"
           viewBox="0 0 24 24"
           fill="none"
           stroke="#000000"
-          stroke-width="2"
+          stroke-width="2.5"
           stroke-linecap="round"
           stroke-linejoin="round"
         >
@@ -152,8 +151,8 @@
 
     <li
       class="
-        h-[30px]
-        w-[30px]
+        h-[40px]
+        w-[40px]
         flex
         justify-center
         items-center
@@ -170,12 +169,12 @@
       <a :disabled="isInLastPage" aria-label="Go to last page">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="15"
-          height="15"
+          width="17"
+          height="17"
           viewBox="0 0 24 24"
           fill="none"
           stroke="#000000"
-          stroke-width="2"
+          stroke-width="2.5"
           stroke-linecap="round"
           stroke-linejoin="round"
         >
@@ -215,9 +214,9 @@ export default {
   data() {
     return {
       itemActiveClass:
-        "h-[30px] w-[30px] flex justify-center items-center bg-green-600 text-white border border-stone-200 hover:cursor-pointer text-[14px] font-bold",
+        "h-[40px] w-[40px] flex justify-center items-center bg-green-600 text-white border border-green-600 hover:cursor-pointer text-[14px] md:font-bold",
       itemClass:
-        "h-[30px] w-[30px] flex justify-center items-center bg-white border border-stone-200 hover:cursor-pointer hover:bg-gray-300 text-[14px] font-bold",
+        "h-[40px] w-[40px] flex justify-center items-center bg-white border border-stone-200 hover:cursor-pointer hover:bg-gray-300 text-[14px] md:font-bold",
     };
   },
   computed: {

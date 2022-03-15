@@ -1,14 +1,14 @@
 <template>
   <div id="post-subinfor" class="max-w-full grow">
     <div class="mt-2 mb-2">
-      <h1 class="text-lg font-bold">Bán căn hộ chung cư The Sun Avenue</h1>
+      <h1 class="text-[21px] md:text-[24px] text-stone-900 font-bold">Bán căn hộ chung cư The Sun Avenue</h1>
       <div class="flex justify-between md:block">
-        <p class="md:text-sm text-xs text-neutral-400 flex items-center">
-          Hiện có: {{ totalItem }} bất động sản
+        <p class="text-[12px] text-neutral-400 flex items-center">
+          Hiện có {{ totalItem }} bất động sản
         </p>
         <div class="flex justify-between text-stone-900 md:hidden">
-          <p class="text-sm flex items-center mr-2">Sắp xếp:</p>
-          <Dropdown item-width="150px" class="text-sm" :title="arrangeOption">
+          <p class="text-[14px] text-stone-900 flex items-center mr-2">Sắp xếp:</p>
+          <Dropdown item-width="150px" class="text-sm border border-stone-200 rounded-[5px]" :title="arrangeOption">
             <DropdownItem @click="order(0)"> Giá cao nhất </DropdownItem>
             <DropdownItem @click="order(1)"> Giá thấp nhất </DropdownItem>
             <DropdownItem @click="order(2)"> Mới nhất </DropdownItem>
@@ -16,14 +16,16 @@
         </div>
       </div>
       <div class="hidden md:flex w-full mt-[1rem] text-sm">
-        <div class="py-[0.05rem]">Sắp xếp:</div>
+        <div class="text-[12px] text-stone-900 py-[0.05rem]">Sắp xếp:</div>
         <div class="flex ml-1">
           <div
             :class="`
               px-3
               py-[0.05rem]
-              border 
-              ${currentOrder == 3 ? 'text-green-600' : 'text-black'}
+              border
+              rounded-[2px]
+              text-[12px] 
+              ${currentOrder == 3 ? 'text-green-600' : 'text-stone-900'}
               ${currentOrder == 3 ? 'border-green-600' : 'border-stone-200'}
               hover:border-green-600 hover:text-green-600 hover:cursor-pointer
               mx-1
@@ -37,12 +39,14 @@
               px-3
               py-[0.05rem]
               border 
-              ${currentOrder == 0 ? 'text-green-600' : 'text-black'}
-              ${currentOrder == 0 ? 'border-green-600' : 'border-stone-200'}
+              rounded-[2px]
+              text-[12px] 
+              ${currentOrder == 2 ? 'text-green-600' : 'text-stone-900'}
+              ${currentOrder == 2 ? 'border-green-600' : 'border-stone-200'}
               hover:border-green-600 hover:text-green-600 hover:cursor-pointer
               mx-1
             `"
-            @click="order(0)"
+            @click="order(2)"
           >
             Mới nhất
           </div>
@@ -51,12 +55,14 @@
               px-3
               py-[0.05rem]
               border 
-              ${currentOrder == 1 ? 'text-green-600' : 'text-black'}
-              ${currentOrder == 1 ? 'border-green-600' : 'border-stone-200'}
+              rounded-[2px]
+              text-[12px] 
+              ${currentOrder == 0 ? 'text-green-600' : 'text-stone-900'}
+              ${currentOrder == 0 ? 'border-green-600' : 'border-stone-200'}
               hover:border-green-600 hover:text-green-600 hover:cursor-pointer
               mx-1
             `"
-            @click="order(1)"
+            @click="order(0)"
           >
             Giá cao nhất
           </div>
@@ -65,12 +71,14 @@
               px-3
               py-[0.05rem]
               border 
-              ${currentOrder == 2 ? 'text-green-600' : 'text-black'}
-              ${currentOrder == 2 ? 'border-green-600' : 'border-stone-200'}
+              rounded-[2px]
+              text-[12px]
+              ${currentOrder == 1 ? 'text-green-600' : 'text-stone-900'}
+              ${currentOrder == 1 ? 'border-green-600' : 'border-stone-200'}
               hover:border-green-600 hover:text-green-600 hover:cursor-pointer
               mx-1
             `"
-            @click="order(2)"
+            @click="order(1)"
           >
             Giá thấp nhất
           </div>
@@ -110,7 +118,7 @@
           "
         >
           <NuxtLink 
-            class="w-32 h-32 md:w-64 md:h-44 shrink-0 relative project overflow-hidden"
+            class="w-32 h-32 md:w-64 md:h-[160px] shrink-0 relative project overflow-hidden"
             :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
           >
             <img
@@ -121,7 +129,7 @@
             <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div> --> 
             <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length">{{post.tags[0]}}</div>
           </NuxtLink>
-          <div class="flex flex-col justify-between h-32 md:h-44 w-full">
+          <div class="flex flex-col justify-between h-32 md:h-[160px] w-full">
             <div class="">
               <NuxtLink
                 :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
@@ -132,14 +140,14 @@
               <span class="text-neutral-400 mt-3 text-sm">{{
                 post.address
               }}</span>
-              <div class="flex my-3 text-[12px]">
+              <div class="flex my-3 text-[14px]">
                 <div class="flex">
                   <div class="flex items-center justify-center">
                     <svg
                       width="18"
                       height="12"
                       viewBox="0 0 18 12"
-                      fill="none"
+                      fill=""
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
@@ -148,7 +156,7 @@
                       />
                     </svg>
                   </div>
-                  <div class="ml-2">{{ post.totalBedRoom }}</div>
+                  <div class="ml-2 text-neutral-400">{{ post.totalBedRoom }}</div>
                 </div>
                 <div class="mx-2">·</div>
 
@@ -167,9 +175,9 @@
                       />
                     </svg>
                   </div>
-                  <div class="ml-2">{{ post.totalWC }}</div>
+                  <div class="ml-2 text-neutral-400">{{ post.totalWC }}</div>
                 </div>
-                <div class="mx-2">·</div>
+                <div class="mx-2 text-[#838383]">·</div>
 
                 <div class="flex">
                   <div class="flex items-center justify-center">
@@ -186,12 +194,12 @@
                       />
                     </svg>
                   </div>
-                  <div class="ml-2">{{ post.acreage }}</div>
+                  <div class="ml-2 text-neutral-400">{{ post.acreage }}</div>
                 </div>
               </div>
             </div>
             <div class="mb-2 mt-4 flex justify-between items-end w-full">
-              <div class="font-bold text-[20px]">{{ post.price }}</div>
+              <div class="font-bold text-[20px] text-stone-900">{{ post.price }}</div>
               <div
                 v-if="post.tags != null"
                 class="inline-flex space-x-1 items-center"
@@ -231,32 +239,32 @@
     </div>
 
     <!-- mobile list -->
-    <div id="mobile-list" class="md:hidden overflow-hidden">
+    <div id="mobile-list" class="md:hidden overflow-hidden ">
       <div
         v-for="post in posts"
         :key="post.id"
         class="pb-2"
       >
-        <div class="item-flex-start border border-stone-200 mt-2 rounded rounded-lg w-full bg-white overflow-hidden">
+        <div class="item-flex-start border border-stone-200 mt-2 rounded w-full bg-white overflow-hidden">
           <NuxtLink
             class="w-full h-[202px] relative project"
             :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
           >
             <img
-              class="w-full h-[202px] object-cover rounded-t-lg"
+              class="w-full h-[202px] object-cover rounded-t"
               :src="post.srcimage"
               alt="Bonnie image"
             />
             <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div> --> 
             <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length">{{post.tags[0]}}</div>
           </NuxtLink>
-          <div class="flex flex-col justify-between h-28 w-full p-2">
+          <div class="flex flex-col justify-between h-[113px] w-full p-2">
             <div class="">
               <div class="flex justify-between">
-                <div class="font-bold text-[20px] flex items-center h-[20px]">
+                <div class="font-bold text-[20px] text-stone-900 flex items-center h-[20px]">
                   {{ post.price }}
                 </div>
-                <div class="flex text-[12px] h-[20px]">
+                <div class="flex text-[14px] h-[20px]">
                   <div class="flex">
                     <div class="flex items-center justify-center">
                       <svg
@@ -272,7 +280,7 @@
                         />
                       </svg>
                     </div>
-                    <div class="ml-2 flex items-center">{{ post.totalBedRoom }}</div>
+                    <div class="ml-2 flex items-center text-neutral-400">{{ post.totalBedRoom }}</div>
                   </div>
                   <div class="mx-2">·</div>
 
@@ -291,7 +299,7 @@
                         />
                       </svg>
                     </div>
-                    <div class="ml-2 flex items-center">{{ post.totalWC }}</div>
+                    <div class="ml-2 flex items-center text-neutral-400">{{ post.totalWC }}</div>
                   </div>
                   <div class="mx-2">·</div>
 
@@ -310,19 +318,19 @@
                         />
                       </svg>
                     </div>
-                    <div class="ml-2 flex items-center">{{ post.acreage }}</div>
+                    <div class="ml-2 flex items-center text-neutral-400">{{ post.acreage }}</div>
                   </div>
                 </div>
               </div>
               <NuxtLink
                 :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
-                class="title-mobile color-black text-stone-900 text-[14px] leading-[16px] mt-1"
+                class="title-mobile color-black text-stone-900 text-[12px] leading-[16px] mt-1"
               >
                 {{ post.pageInfor.title }}
               </NuxtLink>
             </div>
-            <div class="flex justify-between items-end w-full">
-              <span class="text-neutral-400 mt-3 text-sm truncate w-[75%]">{{
+            <div class="flex justify-between items-end w-full text-neutral-400 text-[12px]">
+              <span class="mt-3 truncate w-[75%]">{{
                 post.address
               }}</span>
               <div
@@ -348,7 +356,7 @@
                 </p>
               </div>
               <div v-else />
-              <p class="text-sm color-a7a7a7">
+              <p class="">
                 {{ post.date }}
               </p>
             </div>
@@ -700,7 +708,6 @@ export default {
   .title-desktop {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
     overflow: hidden;
   }
 

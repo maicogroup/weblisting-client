@@ -1,5 +1,15 @@
 <template>
-  <ul class="items-center mx-auto flex justify-center mt-4 text-stone-900 bg-white">
+  <ul
+    class="
+      items-center
+      mx-auto
+      flex
+      justify-center
+      mt-4
+      text-stone-900
+      bg-white
+    "
+  >
     <li>
       <a
         class="
@@ -15,6 +25,7 @@
           rounded-l
           hover:cursor-pointer
         "
+        href="#"
         @click="onClickFirstPage"
         :disabled="isInFirstPage"
         aria-label="Go to first page"
@@ -50,6 +61,7 @@
           border border-stone-200
           hover:cursor-pointer
         "
+        href="#"
         @click="onClickPreviousPage"
         :disabled="isInFirstPage"
         aria-label="Go to previous page"
@@ -72,7 +84,7 @@
     </li>
 
     <li
-      v-show="(currentPage >= 3 && totalPages > 4)"
+      v-show="currentPage >= 3 && totalPages > 4"
       class="
         h-[40px]
         w-[40px]
@@ -86,13 +98,13 @@
       ...
     </li>
 
-    <li
-      v-for="page in pages"
-      :key="page.name"
-      :class="`${isPageActive(page.name)}`"
-      @click="onClickPage(page.name)"
-    >
+    <li class="flex">
       <a
+        v-for="page in pages"
+        :key="page.name"
+        :class="`${isPageActive(page.name)}`"
+        @click="onClickPage(page.name)"
+        href="#"
         :disabled="page.isDisabled"
         :aria-label="`Go to page number ${page.name}`"
       >
@@ -115,23 +127,25 @@
       ...
     </li>
 
-    <li
-      class="
-        h-[40px]
-        w-[40px]
-        flex
-        justify-center
-        items-center
-        leading-tight
-        bg-white
-        text-white
-        hover:bg-gray-300
-        border border-stone-200
-        hover:cursor-pointer
-      "
-      @click="onClickNextPage"
-    >
-      <a :disabled="isInLastPage" aria-label="Go to next page">
+    <li>
+      <a
+        class="
+          h-[40px]
+          w-[40px]
+          flex
+          justify-center
+          items-center
+          leading-tight
+          bg-white
+          text-white
+          hover:bg-gray-300
+          border border-stone-200
+          hover:cursor-pointer
+        "
+        @click="onClickNextPage"
+        :disabled="isInLastPage"
+        aria-label="Go to next page"
+      >
         <span class="sr-only">Next</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -149,24 +163,26 @@
       </a>
     </li>
 
-    <li
-      class="
-        h-[40px]
-        w-[40px]
-        flex
-        justify-center
-        items-center
-        leading-tight
-        text-gray-500
-        bg-white
-        rounded-r
-        border border-stone-200
-        hover:bg-gray-300
-        hover:cursor-pointer
-      "
-      @click="onClickLastPage"
-    >
-      <a :disabled="isInLastPage" aria-label="Go to last page">
+    <li>
+      <a
+        class="
+          h-[40px]
+          w-[40px]
+          flex
+          justify-center
+          items-center
+          leading-tight
+          text-gray-500
+          bg-white
+          rounded-r
+          border border-stone-200
+          hover:bg-gray-300 hover:cursor-pointer
+        "
+        @click="onClickLastPage"
+        href="#"
+        :disabled="isInLastPage"
+        aria-label="Go to last page"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="17"

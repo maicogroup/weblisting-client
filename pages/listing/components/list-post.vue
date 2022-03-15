@@ -1,18 +1,28 @@
 <template>
   <div id="post-subinfor" class="max-w-full grow">
     <div class="mt-2 mb-2">
-      <h1 class="text-[21px] md:text-[24px] text-stone-900 font-bold">Bán căn hộ chung cư The Sun Avenue</h1>
+      <h1 class="text-[21px] md:text-[24px] text-stone-900 font-bold">
+        Bán căn hộ chung cư The Sun Avenue
+      </h1>
       <div class="flex justify-between md:block">
         <p class="text-[12px] text-neutral-400 flex items-center">
           Hiện có {{ totalItem }} bất động sản
         </p>
-        <div class="flex justify-between text-stone-900 md:hidden">
-          <p class="text-[14px] text-stone-900 flex items-center mr-2">Sắp xếp:</p>
-          <Dropdown item-width="150px" class="text-sm border border-stone-200 rounded-[5px]" :title="arrangeOption">
-            <DropdownItem @click="order(0)"> Giá cao nhất </DropdownItem>
-            <DropdownItem @click="order(1)"> Giá thấp nhất </DropdownItem>
-            <DropdownItem @click="order(2)"> Mới nhất </DropdownItem>
-          </Dropdown>
+        <div class="block md:hidden">
+          <div class="flex justify-between text-stone-900 z-10">
+            <p class="text-[14px] text-stone-900 flex items-center mr-2">
+              Sắp xếp:
+            </p>
+            <Dropdown
+              item-width="150px"
+              class="text-sm border border-stone-200 rounded-[5px]"
+              :title="arrangeOption"
+            >
+              <DropdownItem @click="order(0)"> Giá cao nhất </DropdownItem>
+              <DropdownItem @click="order(1)"> Giá thấp nhất </DropdownItem>
+              <DropdownItem @click="order(2)"> Mới nhất </DropdownItem>
+            </Dropdown>
+          </div>
         </div>
       </div>
       <div class="hidden md:flex w-full mt-[1rem] text-sm">
@@ -117,8 +127,16 @@
             rounded rounded-lg
           "
         >
-          <NuxtLink 
-            class="w-32 h-32 md:w-64 md:h-[160px] shrink-0 relative project overflow-hidden"
+          <NuxtLink
+            class="
+              w-32
+              h-32
+              md:w-64 md:h-[160px]
+              shrink-0
+              relative
+              project
+              overflow-hidden
+            "
             :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
           >
             <img
@@ -126,8 +144,13 @@
               :src="post.srcimage"
               alt="Bonnie image"
             />
-            <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div> --> 
-            <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length">{{post.tags[0]}}</div>
+            <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div> -->
+            <div
+              class="diagonal badge bg-green-600"
+              v-if="post.tags && post.tags.length"
+            >
+              {{ post.tags[0] }}
+            </div>
           </NuxtLink>
           <div class="flex flex-col justify-between h-32 md:h-[160px] w-full">
             <div class="">
@@ -156,7 +179,9 @@
                       />
                     </svg>
                   </div>
-                  <div class="ml-2 text-neutral-400">{{ post.totalBedRoom }}</div>
+                  <div class="ml-2 text-neutral-400">
+                    {{ post.totalBedRoom }}
+                  </div>
                 </div>
                 <div class="mx-2">·</div>
 
@@ -199,7 +224,9 @@
               </div>
             </div>
             <div class="mb-2 mt-4 flex justify-between items-end w-full">
-              <div class="font-bold text-[20px] text-stone-900">{{ post.price }}</div>
+              <div class="font-bold text-[20px] text-stone-900">
+                {{ post.price }}
+              </div>
               <div
                 v-if="post.tags != null"
                 class="inline-flex space-x-1 items-center"
@@ -239,13 +266,19 @@
     </div>
 
     <!-- mobile list -->
-    <div id="mobile-list" class="md:hidden overflow-hidden ">
-      <div
-        v-for="post in posts"
-        :key="post.id"
-        class="pb-2"
-      >
-        <div class="item-flex-start border border-stone-200 mt-2 rounded w-full bg-white overflow-hidden">
+    <div id="mobile-list" class="md:hidden overflow-hidden">
+      <div v-for="post in posts" :key="post.id" class="pb-2">
+        <div
+          class="
+            item-flex-start
+            border border-stone-200
+            mt-2
+            rounded
+            w-full
+            bg-white
+            overflow-hidden
+          "
+        >
           <NuxtLink
             class="w-full h-[202px] relative project"
             :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
@@ -255,13 +288,26 @@
               :src="post.srcimage"
               alt="Bonnie image"
             />
-            <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div> --> 
-            <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length">{{post.tags[0]}}</div>
+            <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div> -->
+            <div
+              class="diagonal badge bg-green-600"
+              v-if="post.tags && post.tags.length"
+            >
+              {{ post.tags[0] }}
+            </div>
           </NuxtLink>
           <div class="flex flex-col justify-between h-[113px] w-full p-2">
             <div class="">
               <div class="flex justify-between">
-                <div class="font-bold text-[20px] text-stone-900 flex items-center h-[20px]">
+                <div
+                  class="
+                    font-bold
+                    text-[20px] text-stone-900
+                    flex
+                    items-center
+                    h-[20px]
+                  "
+                >
                   {{ post.price }}
                 </div>
                 <div class="flex text-[14px] h-[20px]">
@@ -280,7 +326,9 @@
                         />
                       </svg>
                     </div>
-                    <div class="ml-2 flex items-center text-neutral-400">{{ post.totalBedRoom }}</div>
+                    <div class="ml-2 flex items-center text-neutral-400">
+                      {{ post.totalBedRoom }}
+                    </div>
                   </div>
                   <div class="mx-2">·</div>
 
@@ -299,7 +347,9 @@
                         />
                       </svg>
                     </div>
-                    <div class="ml-2 flex items-center text-neutral-400">{{ post.totalWC }}</div>
+                    <div class="ml-2 flex items-center text-neutral-400">
+                      {{ post.totalWC }}
+                    </div>
                   </div>
                   <div class="mx-2">·</div>
 
@@ -318,21 +368,35 @@
                         />
                       </svg>
                     </div>
-                    <div class="ml-2 flex items-center text-neutral-400">{{ post.acreage }}</div>
+                    <div class="ml-2 flex items-center text-neutral-400">
+                      {{ post.acreage }}
+                    </div>
                   </div>
                 </div>
               </div>
               <NuxtLink
                 :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
-                class="title-mobile color-black text-stone-900 text-[12px] leading-[16px] mt-1"
+                class="
+                  title-mobile
+                  color-black
+                  text-stone-900 text-[12px]
+                  leading-[16px]
+                  mt-1
+                "
               >
                 {{ post.pageInfor.title }}
               </NuxtLink>
             </div>
-            <div class="flex justify-between items-end w-full text-neutral-400 text-[12px]">
-              <span class="mt-3 truncate w-[75%]">{{
-                post.address
-              }}</span>
+            <div
+              class="
+                flex
+                justify-between
+                items-end
+                w-full
+                text-neutral-400 text-[12px]
+              "
+            >
+              <span class="mt-3 truncate w-[75%]">{{ post.address }}</span>
               <div
                 v-if="post.tags != null"
                 class="inline-flex space-x-1 items-center"
@@ -679,6 +743,8 @@ export default {
         skipItems: 0,
       });
       this.pageIndex = 1;
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     },
   },
 };
@@ -753,20 +819,19 @@ export default {
 }
 
 .project {
-	 position: relative;
+  position: relative;
 }
- .project .badge.diagonal {
-	 white-space: nowrap;
-	 position: absolute;
-	 padding: 5px 100px;
-	 min-width: 200px;
-	 transform: rotate(-45deg) translate(-33%, -50px);
-	 color: white;
-	 text-align: center;
-	 text-transform: uppercase;
-	 font-size: 10px;
-	 top: 0px;
-	 box-sizing: border-box;
+.project .badge.diagonal {
+  white-space: nowrap;
+  position: absolute;
+  padding: 5px 100px;
+  min-width: 200px;
+  transform: rotate(-45deg) translate(-33%, -50px);
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 10px;
+  top: 0px;
+  box-sizing: border-box;
 }
-
 </style>

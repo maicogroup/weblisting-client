@@ -11,8 +11,8 @@
           ml-0
           leading-tight
           hover:bg-gray-300
-          border border-black
-          rounded-l-lg
+          border border-stone-200
+          rounded-l
           hover:cursor-pointer
         "
         @click="onClickFirstPage"
@@ -26,7 +26,7 @@
           viewBox="0 0 24 24"
           fill="none"
           stroke="#000000"
-          stroke-width="3"
+          stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
         >
@@ -48,7 +48,7 @@
           bg-white
           text-black
           hover:bg-gray-300
-          border border-black
+          border border-stone-200
           hover:cursor-pointer
         "
         @click="onClickPreviousPage"
@@ -63,7 +63,7 @@
           viewBox="0 0 24 24"
           fill="none"
           stroke="#000000"
-          stroke-width="3"
+          stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
         >
@@ -73,7 +73,7 @@
     </li>
 
     <li
-      v-show="currentPage > 3"
+      v-show="(currentPage >= 3 && totalPages > 4)"
       class="
         h-[30px]
         w-[30px]
@@ -81,7 +81,7 @@
         justify-center
         items-center
         bg-white
-        border border-gray-700
+        border border-stone-200
       "
     >
       ...
@@ -102,7 +102,7 @@
     </li>
 
     <li
-      v-show="currentPage < totalPages - 2"
+      v-show="currentPage <= totalPages - 2"
       class="
         h-[30px]
         w-[30px]
@@ -110,18 +110,10 @@
         justify-center
         items-center
         bg-white
-        border border-gray-700
+        border border-stone-200
       "
     >
       ...
-    </li>
-
-    <li
-      v-show="currentPage <= totalPages - 2"
-      :class="itemClass"
-      @click="onClickPage(8)"
-    >
-      <a :aria-label="`Go to page number ${8}`"> 8 </a>
     </li>
 
     <li
@@ -135,7 +127,7 @@
         bg-white
         text-white
         hover:bg-gray-300
-        border border-black
+        border border-stone-200
         hover:cursor-pointer
       "
       @click="onClickNextPage"
@@ -149,7 +141,7 @@
           viewBox="0 0 24 24"
           fill="none"
           stroke="#000000"
-          stroke-width="3"
+          stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
         >
@@ -168,8 +160,8 @@
         leading-tight
         text-gray-500
         bg-white
-        rounded-r-lg
-        border border-black
+        rounded-r
+        border border-stone-200
         hover:bg-gray-300
         hover:cursor-pointer
       "
@@ -183,7 +175,7 @@
           viewBox="0 0 24 24"
           fill="none"
           stroke="#000000"
-          stroke-width="3"
+          stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
         >
@@ -223,9 +215,9 @@ export default {
   data() {
     return {
       itemActiveClass:
-        "h-[30px] w-[30px] flex justify-center items-center bg-black text-white border border-gray-700 hover:cursor-pointer text-[14px]",
+        "h-[30px] w-[30px] flex justify-center items-center bg-green-600 text-white border border-stone-200 hover:cursor-pointer text-[14px] font-bold",
       itemClass:
-        "h-[30px] w-[30px] flex justify-center items-center bg-white border border-gray-700 hover:cursor-pointer hover:bg-gray-300 text-[14px]",
+        "h-[30px] w-[30px] flex justify-center items-center bg-white border border-stone-200 hover:cursor-pointer hover:bg-gray-300 text-[14px] font-bold",
     };
   },
   computed: {

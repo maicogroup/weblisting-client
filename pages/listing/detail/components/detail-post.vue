@@ -207,7 +207,7 @@
         <div class="mb-4 flex flex-col items-center">
           <img
             class="inline-block object-cover h-14 w-14 rounded-full border border-gray"
-            src="~/assets/maico-contact-infor.png"
+            src="~/static/images/maico-contact-infor.png"
             alt="maico"
           >
           <p class="mt-1 text-sm text-green-600 font-bold leading-4">

@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow border-stone-200 border w-72 rounded-md px-6 py-4 flex flex-col items-center">
+  <div class="border-stone-200 border w-72 rounded-md px-6 py-4 flex flex-col items-center">
     <img
       class="inline-block object-cover h-14 w-14 rounded-full border border-stone-200"
       src="~/assets/maico-contact-infor.png"

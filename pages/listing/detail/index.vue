@@ -1,8 +1,10 @@
 <template>
   <div class="lg:px-5 w-full max-w-screen-xl">
-    <div class="flex justify-between">
+    <div class="relative flex justify-between">
       <detail-post v-if="post !== undefined" :post="post" class="lg:w-9/12 lg:mr-9 w-full" />
-      <contact-infor class="lg:block hidden" />
+      <div class="lg:block hidden">
+        <contact-infor class="sticky-contact-infor" />
+      </div>
     </div>
 
     <recommended-posts v-if="recommendedPosts !== undefined && recommendedPosts.length > 0" class="mb-4" :posts="recommendedPosts" />
@@ -140,3 +142,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .sticky-contact-infor {
+    position: sticky;
+    top: 128px;
+  }
+</style>

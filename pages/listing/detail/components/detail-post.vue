@@ -157,21 +157,21 @@
 
       <divider />
 
-      <div class="my-3 flex justify-start items-center float-left w-full h-auto">
-        <h3 class="re-properties">
+      <div class="my-3 flex float-left w-full h-auto">
+        <h3 class="re-properties mt-1.5">
           Nội thất
         </h3>
-        <div class="flex flex-wrap justify-start items-center my-2">
-          <div v-for="item in post.furnitures" :key="item" class="my-auto">
-            <button v-if="item == 'Trống' || item == 'Ko'" class="btn red-furnitures my-1">
+        <div class="flex flex-wrap items-center gap-2">
+          <div v-for="item in post.furnitures" :key="item">
+            <div v-if="item == 'Trống' || item == 'Ko'" class="btn red-furnitures ">
               {{ item }}
-            </button>
-            <button v-else-if="item == 'Full'" class="btn green-furnitures my-1">
+            </div>
+            <div v-else-if="item == 'Full'" class="btn green-furnitures">
               Đầy đủ
-            </button>
-            <button v-else class="btn green-furnitures my-1">
+            </div>
+            <div v-else class="btn green-furnitures">
               {{ item }}
-            </button>
+            </div>
           </div>
         </div>
       </div>
@@ -342,7 +342,6 @@ export default ({
   line-height: 16px;
   cursor: pointer;
   border-radius: 5px;
-  margin-inline: 5px;
 }
   .green-furnitures {
     color: #16A34A;

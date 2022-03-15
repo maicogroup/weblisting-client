@@ -99,6 +99,15 @@ export default {
   apollo: {
     post: {
       query: getPostQuery,
+      update (data) {
+        if (data.post === null) {
+          this.$router.push({ path: '/' }).catch(() => {});
+          return;
+        }
+
+        return data.post;
+      },
+
       variables () {
         return {
           condition: {

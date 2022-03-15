@@ -789,6 +789,11 @@ export default {
       },
 
       update (data) {
+        if (data.projects.length === 0) {
+          this.$router.push({ path: '/' }).catch(() => {});
+          return;
+        }
+
         const project = data.projects[0];
 
         this.filter = { ...this.filter, project: { pageInfor: { slug: this.$route.params.slug }, id: project.id, projectName: project.projectName } };

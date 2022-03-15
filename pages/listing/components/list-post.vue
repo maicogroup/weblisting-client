@@ -96,6 +96,7 @@ const getPostsQuery = gql`query GetPostWithPagination($condition: PostCollection
                 apartmentState,
                 tags
                 project{
+                    id
                     address{
                         street
                         city
@@ -145,7 +146,7 @@ export default {
           return {
             srcimage: 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + (item.gallery.find(c => !c.includes('.mp4')) || 'apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg'),
             pageInfor: item.pageInfor,
-            price: this.formatPrice(item.price),
+            price: this.formatPrice(item.price, item.demand),
             acreage: item.acreage + 'm²',
             roomStructure: (item.type !== 'Căn hộ') ? item.type : item.totalBedRoom + 'PN' + item.totalWC + 'WC',
             address: item.project?.address.district + ', ' + item.project?.address.city,
@@ -218,8 +219,8 @@ export default {
       return content;
     },
 
-    formatPrice (price) {
-      if (price < 100000000) {
+    formatPrice (price, demand) {
+      if (demand === 'Cho Thuê') {
         return `${price / 1e6} triệu/tháng`;
       } else {
         return `${parseFloat((price / 1e9).toFixed(2))} tỷ`;

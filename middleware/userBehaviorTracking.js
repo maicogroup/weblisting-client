@@ -19,7 +19,6 @@ export default function ({ route, from, app }) {
             app.$cookies.remove(from.path);
         }
     }
-    debugger;
     app.$cookies.set(route.path, {
         site: route.fullPath,
         timeArrival: new Date(),

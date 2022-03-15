@@ -300,7 +300,7 @@ export default ({
   .re-properties-frame {
     display: flex;
     justify-content: space-between;
-    align-items: start;
+    align-items: flex-start;
     border-bottom: 1px solid #E7E5E4;
     padding-bottom: 15px;
     margin-top: 15px;
@@ -309,7 +309,7 @@ export default ({
   .re-properties-frame-last {
     display: flex;
     justify-content: space-between;
-    align-items: start;
+    align-items: flex-start;
     padding-bottom: 15px;
     margin-top: 15px;
   }
@@ -340,7 +340,6 @@ export default ({
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
-  cursor: pointer;
   border-radius: 5px;
 }
   .green-furnitures {

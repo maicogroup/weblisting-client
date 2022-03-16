@@ -83,7 +83,6 @@ export default {
 
       fetch("http://maicogroup.net:3001/graphql/", requestOptions)
       .then(response => response.text())
-      .then(result => console.log("result: ", result))
       .catch(error => console.log('error', error));
     }
   }

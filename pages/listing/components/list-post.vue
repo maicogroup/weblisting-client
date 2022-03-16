@@ -22,49 +22,69 @@
       </div>
     </div>
     <div class="flex flex-col space-y-4">
-      <div v-for="post in posts" :key="post.id" class="md:pt-0 md:border-none border-b">
-        <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-mobile color-orange font-bold text-base leading-6 ov-flow-hidden ">
-          {{ post.pageInfor.title }}
-        </NuxtLink>
-        <div class="flex item-flex-start space-x-4 md:border mt-2 pr-3 rounded">
-          <NuxtLink class="w-32 h-32 md:w-64 md:h-44 shrink-0" :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`">
-            <img class="w-full h-full object-cover" :src="post.srcimage" alt="Bonnie image">
-          </NuxtLink>
-          <div class="flex flex-col justify-between h-32 md:h-44 w-full">
-            <div class="flex flex-col justify-between h-full">
-              <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-desktop mt-2 color-orange font-bold leading-6 ov-flow-hidden">
-                {{ post.pageInfor.title }}
-              </NuxtLink>
-              <p class="text-sm sm:text-base mt-2">
-                <span class="md:mr-2">{{ post.price }}</span> -
-                <span class="md:mx-2">{{ post.acreage }}</span> -
-                <span class="md:mx-2">{{ post.roomStructure }}</span>
-                <span class="md:mr-2 hidden md:inline">-</span>
-                <span class="hidden md:inline text-gray-700">{{ post.address }}</span>
-              </p>
-              <p class="md:hidden text-sm text-gray-700 mt-3 md:mt-2">
-                {{ post.address }}
-              </p>
-              <p class="description text-justify mt-2">
-                <!-- {{ post.description }} -->
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed facilisis, velit non tincidunt lobortis, metus nisl pretium massa, sed luctus dui libero ut quam. Sed dictum mauris nisl, id fermentum nibh vulputate non. Mauris varius eros orci, vitae condimentum risus tristique vitae. Mauris quis mi ac erat suscipit sodales sit amet quis est. Nullam eu elementum odio. Morbi nec varius dolor, eu luctus elit. Nunc a leo non tortor aliquet mollis vestibulum eget arcu. Pellentesque aliquet faucibus augue, sit amet tempus risus mattis non.
-              </p>
-            </div>
-            <div class="mb-2 mt-4 flex justify-between items-end w-full">
-              <div v-if="post.tags != null" class="inline-flex space-x-1 items-center">
-                <p v-for="item in post.tags" :key="item" class="text-xs font-bold leading-sm uppercase px-3 py-1 bg-red-400 text-white rounded-full">
-                  {{ item }}
-                </p>
-              </div>
-              <div v-else />
-              <p class="text-sm color-a7a7a7">
-                {{ post.date }}
-              </p>
-            </div>
+      <div v-if="posts.length == 0">
+        <div>
+          <svg class="mx-auto" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="128" height="128" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#999" d="M31 8h-8v2h8v21h-8v2h10V10a2 2 0 0 0-2-2Z" class="clr-i-outline clr-i-outline-path-1"/><path fill="#999" d="M19.88 3H6.12A2.12 2.12 0 0 0 4 5.12V33h18V5.12A2.12 2.12 0 0 0 19.88 3ZM20 31h-3v-3H9v3H6V5.12A.12.12 0 0 1 6.12 5h13.76a.12.12 0 0 1 .12.12Z" class="clr-i-outline clr-i-outline-path-2"/><path fill="#999" d="M8 8h2v2H8z" class="clr-i-outline clr-i-outline-path-3"/><path fill="#999" d="M12 8h2v2h-2z" class="clr-i-outline clr-i-outline-path-4"/><path fill="#999" d="M16 8h2v2h-2z" class="clr-i-outline clr-i-outline-path-5"/><path fill="#999" d="M8 13h2v2H8z" class="clr-i-outline clr-i-outline-path-6"/><path fill="#999" d="M12 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-7"/><path fill="#999" d="M16 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-8"/><path fill="#999" d="M8 18h2v2H8z" class="clr-i-outline clr-i-outline-path-9"/><path fill="#999" d="M12 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-10"/><path fill="#999" d="M16 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-11"/><path fill="#999" d="M8 23h2v2H8z" class="clr-i-outline clr-i-outline-path-12"/><path fill="#999" d="M12 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-13"/><path fill="#999" d="M16 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-14"/><path fill="#999" d="M23 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-15"/><path fill="#999" d="M27 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-16"/><path fill="#999" d="M23 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-17"/><path fill="#999" d="M27 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-18"/><path fill="#999" d="M23 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-19"/><path fill="#999" d="M27 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-20"/><path fill="none" d="M0 0h36v36H0z"/></svg>
+          <p class="text-lg font-bold text-center">Rất tiếc, hiện không tìm thấy căn hộ nào <br> ở khu vực này !!!</p>
+          <div class="text-sm flex justify-center mt-3">
+            <p class="leading-6">
+              Vui lòng thử cách:
+              <ul class="ml-2" style="list-style-type: disc; list-style-position: inside;">
+                <li>Thay đổi hoặc làm mới bộ lọc</li>
+                <li>Trở lại trang chủ</li>
+              </ul>
+              <button v-on:click="goToHomePage" class="text-white bg-green-600 text-base font-bold px-10 py-4 rounded-md mt-3">Trở về trang chủ</button>
+            </p>
           </div>
         </div>
       </div>
-      <pagination :total="totalItem" :per-page="10" :current-page="pageIndex" @pagechanged="pageNavigationTo" />
+      <div v-else>
+        <div v-for="post in posts" :key="post.id" class="md:pt-0 md:border-none border-b mb-5">
+          <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-mobile color-orange font-bold text-base leading-6 ov-flow-hidden ">
+            {{ post.pageInfor.title }}
+          </NuxtLink>
+          <div class="flex item-flex-start space-x-4 md:border mt-2 pr-3 rounded">
+            <NuxtLink class="w-32 h-32 md:w-64 md:h-44 shrink-0" :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`">
+              <img class="w-full h-full object-cover" :src="post.srcimage" alt="Bonnie image">
+            </NuxtLink>
+            <div class="flex flex-col justify-between h-32 md:h-44 w-full">
+              <div class="flex flex-col justify-between h-full">
+                <NuxtLink :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`" class="title-desktop mt-2 color-orange font-bold leading-6 ov-flow-hidden">
+                  {{ post.pageInfor.title }}
+                </NuxtLink>
+                <p class="text-sm sm:text-base mt-2">
+                  <span class="md:mr-2">{{ post.price }}</span> -
+                  <span class="md:mx-2">{{ post.acreage }}</span> -
+                  <span class="md:mx-2">{{ post.roomStructure }}</span>
+                  <span class="md:mr-2 hidden md:inline">-</span>
+                  <span class="hidden md:inline text-gray-700">{{ post.address }}</span>
+                </p>
+                <p class="md:hidden text-sm text-gray-700 mt-3 md:mt-2">
+                  {{ post.address }}
+                </p>
+                <p class="description text-justify mt-2">
+                  <!-- {{ post.description }} -->
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed facilisis, velit non tincidunt lobortis, metus nisl pretium massa, sed luctus dui libero ut quam. Sed dictum mauris nisl, id fermentum nibh vulputate non. Mauris varius eros orci, vitae condimentum risus tristique vitae. Mauris quis mi ac erat suscipit sodales sit amet quis est. Nullam eu elementum odio. Morbi nec varius dolor, eu luctus elit. Nunc a leo non tortor aliquet mollis vestibulum eget arcu. Pellentesque aliquet faucibus augue, sit amet tempus risus mattis non.
+                </p>
+              </div>
+              <div class="mb-2 mt-4 flex justify-between items-end w-full">
+                <div v-if="post.tags != null" class="inline-flex space-x-1 items-center">
+                  <p v-for="item in post.tags" :key="item" class="text-xs font-bold leading-sm uppercase px-3 py-1 bg-red-400 text-white rounded-full">
+                    {{ item }}
+                  </p>
+                </div>
+                <div v-else />
+                <p class="text-sm color-a7a7a7">
+                  {{ post.date }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <pagination :total="totalItem" :per-page="10" :current-page="pageIndex" @pagechanged="pageNavigationTo" />
+      </div>
+      
+      
     </div>
   </div>
 </template>
@@ -176,6 +196,10 @@ export default {
     }
   },
   methods: {
+
+    goToHomePage(){
+       this.$router.push({ path: '/'}).catch(() => {});
+    },
     formatDate (dateStr) {
       const date = new Date(dateStr);
       const diffInDays = Math.floor((Date.now() - date.getTime()) / 86400000);

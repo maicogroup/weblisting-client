@@ -12,30 +12,32 @@
           {{ `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}` }}
         </h4>
         <div class="mt-2 md:mt-0 flex space-x-2">
-          <p class="leading-none color-3f3f3f text-sm font-bold">
-            Chia sẻ qua:
-          </p>
-          <div
-            class="zalo-share-button"
-            :data-href="shareUrl"
-            data-oaid="579745863508352884"
-            data-layout="1"
-            data-color="blue"
-            data-customize="false"
-          />
+          <client-only>
+            <p class="leading-none color-3f3f3f text-sm font-bold">
+              Chia sẻ qua:
+            </p>
+            <div
+              class="zalo-share-button"
+              :data-href="shareUrl"
+              data-oaid="579745863508352884"
+              data-layout="1"
+              data-color="blue"
+              data-customize="false"
+            />
 
-          <facebook-share-button style="line-height:0" :share-url="shareUrl" />
-          <button class="copy-link hover:text-gray-600" :data-clipboard-text="shareUrl">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-            </svg>
-          </button>
+            <facebook-share-button style="line-height:0" :share-url="shareUrl" />
+            <button class="copy-link hover:text-gray-600" :data-clipboard-text="shareUrl">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+            </button>
+          </client-only>
         </div>
       </div>
 
@@ -255,7 +257,7 @@ export default ({
       });
     },
     shareUrl () {
-      return 'http://listing.maicogroup.net' + this.$route.fullPath;
+      return process.client ? window.location.href : null;
     }
   },
 

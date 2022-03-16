@@ -52,7 +52,7 @@
         </svg>
       </button>
 
-      <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
+      <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-green-600 hover:bg-green-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
         Tìm kiếm
       </button>
     </div>
@@ -77,8 +77,8 @@
         <input type="button" class="w-full border py-2 pl-10 pr-2 h-full rounded-md" placeholder="Tìm kiếm...">
       </div>
     </div>
-    <div class="filter-bar-blank-space hidden md:block" />
-    <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" />
+    <!-- <div class="filter-bar-blank-space hidden md:block" /> -->
+    <!-- <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" /> -->
     <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
       <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
@@ -594,6 +594,7 @@ import { gql } from 'graphql-tag';
 
 import { marked } from 'marked';
 import ProjectHeader from './components/project-header.vue';
+import ProjectThumbnail from './components/project-thumbnail.vue';
 import ListPost from './components/list-post.vue';
 import ContactInfor from './components/contract-infor.vue';
 import LocationFtilerDropdown from './components/filtering/location-filter-dropdown.vue';

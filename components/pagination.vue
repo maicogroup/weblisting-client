@@ -1,64 +1,208 @@
 <template>
-  <ul class=" items-center -space-x-px flex justify-center">
+  <ul
+    class="
+      items-center
+      mx-auto
+      flex
+      justify-center
+      mt-4
+      text-stone-900
+      bg-white
+    "
+  >
     <li>
-      <a 
-        class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
+      <a
+        :class="`
+          h-[40px]
+          w-[40px]
+          flex
+          justify-center
+          items-center
+          ml-0
+          leading-tight
+          hover:bg-gray-300
+          border border-stone-200
+          rounded-l
+          hover:cursor-pointer
+          ${isInFirstPage ? 'disabled' : ''}
+          `
+        "
         href="#"
         @click="onClickFirstPage"
         :disabled="isInFirstPage"
         aria-label="Go to first page"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="17"
+          height="17"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#000000"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" />
+        </svg>
       </a>
     </li>
 
-    <li >
+    <li>
       <a
-        class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
+        :class="`
+          h-[40px]
+          w-[40px]
+          flex
+          justify-center
+          items-center
+          ml-0
+          leading-tight
+          bg-white
+          hover:bg-gray-300
+          border border-stone-200
+          hover:cursor-pointer
+          ${isInFirstPage ? 'disabled' : ''}
+        `"
         href="#"
         @click="onClickPreviousPage"
         :disabled="isInFirstPage"
         aria-label="Go to previous page"
       >
         <span class="sr-only">Previous</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="17"
+          height="17"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#000000"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
       </a>
     </li>
 
-    <li v-for="page in pages" :key="page.name" >
+    <li
+      v-show="currentPage >= 3 && totalPages > 4"
+      class="
+        h-[40px]
+        w-[40px]
+        flex
+        justify-center
+        items-center
+        bg-white
+        border border-stone-200
+      "
+    >
+      ...
+    </li>
+
+    <li class="flex">
       <a
-        href="#"
-        @click="onClickPage(page.name)"
-        :disabled="page.isDisabled"
+        v-for="page in pages"
+        :key="page.name"
         :class="`${isPageActive(page.name)}`"
+        @click="onClickPage(page.name)"
+        href="#"
+        :disabled="page.isDisabled"
         :aria-label="`Go to page number ${page.name}`"
       >
         {{ page.name }}
       </a>
     </li>
 
-    <li >
+    <li
+      v-show="currentPage <= totalPages - 2"
+      class="
+        h-[40px]
+        w-[40px]
+        flex
+        justify-center
+        items-center
+        bg-white
+        border border-stone-200
+      "
+    >
+      ...
+    </li>
+
+    <li>
       <a
-        class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
-        href="#"
+        :class="`
+          h-[40px]
+          w-[40px]
+          flex
+          justify-center
+          items-center
+          leading-tight
+          bg-white
+          text-white
+          hover:bg-gray-300
+          border border-stone-200
+          hover:cursor-pointer
+          ${isInLastPage ? 'disabled' : ''}
+          `
+        "
         @click="onClickNextPage"
         :disabled="isInLastPage"
         aria-label="Go to next page"
       >
         <span class="sr-only">Next</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="17"
+          height="17"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#000000"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M9 18l6-6-6-6" />
+        </svg>
       </a>
     </li>
 
     <li>
       <a
-        class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
-        href="#"
+        :class="`
+          h-[40px]
+          w-[40px]
+          flex
+          justify-center
+          items-center
+          leading-tight
+          text-gray-500
+          bg-white
+          rounded-r
+          border border-stone-200
+          hover:bg-gray-300 hover:cursor-pointer
+          ${isInLastPage ? 'disabled' : ''}
+          `
+        "
         @click="onClickLastPage"
+        href="#"
         :disabled="isInLastPage"
         aria-label="Go to last page"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 17l5-5-5-5M6 17l5-5-5-5"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="17"
+          height="17"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#000000"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M13 17l5-5-5-5M6 17l5-5-5-5" />
+        </svg>
       </a>
     </li>
   </ul>
@@ -90,14 +234,16 @@ export default {
       required: true,
     },
   },
-  data(){
-      return{
-          itemActiveClass: 'z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 ',
-          itemClass: 'py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 '
-      }
+  data() {
+    return {
+      itemActiveClass:
+        "h-[40px] w-[40px] flex justify-center items-center bg-green-600 text-white border border-green-600 hover:cursor-pointer text-[14px] md:font-bold disabled-number",
+      itemClass:
+        "h-[40px] w-[40px] flex justify-center items-center bg-white border border-stone-200 hover:cursor-pointer hover:bg-gray-300 text-[14px] md:font-bold",
+    };
   },
   computed: {
-    totalPages(){
+    totalPages() {
       return Math.ceil(this.total / this.perPage);
     },
     startPage() {
@@ -138,6 +284,7 @@ export default {
   },
   methods: {
     onClickFirstPage() {
+      if (this.isInFirstPage) return;
       this.$emit("pagechanged", 1);
     },
     onClickPreviousPage() {
@@ -146,14 +293,16 @@ export default {
       }
     },
     onClickPage(page) {
+      if (page == this.currentPage) return;
       this.$emit("pagechanged", page);
     },
     onClickNextPage() {
       if (this.currentPage < this.totalPages) {
-      this.$emit("pagechanged", this.currentPage + 1);
+        this.$emit("pagechanged", this.currentPage + 1);
       }
     },
     onClickLastPage() {
+      if (this.currentPage == this.totalPages) return;
       this.$emit("pagechanged", this.totalPages);
     },
     isPageActive(page) {
@@ -174,5 +323,14 @@ export default {
 .active {
   background-color: #4aae9b;
   color: #ffffff;
+}
+
+.disabled{
+  pointer-events: none;
+  opacity: .5;
+}
+
+.disabled-number {
+  pointer-events: none;
 }
 </style>

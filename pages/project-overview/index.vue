@@ -1,28 +1,28 @@
 <template>
-  <div class="w-full sm:px-36 px-5">
+  <div class="w-full sm:px-36 px-5 color-stone-900">
     <div>
       <gallery class="inline h-72 w-full sm:hidden" :items="gallery" />
     </div>
-    <div class="font-medium color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
+    <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
       <a href="#">Dự án</a>
       /
       <a href="">TP HCM</a>
       /
-      <a style="color: black" href="#">{{ project.projectName }}</a>
+      <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
     </div>
-    <h1 class="text-3xl font-bold mb-1 mt-2" @click="HandleScroll()">
+    <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
       {{ project.projectName }}
     </h1>
-    <p class="mb-4 text-sm font-normal mt-1">
+    <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
       Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
     </p>
     <div>
       <gallery class="h-72 w-full sm:inline hidden" :items="gallery" />
     </div>
     <div class="mt-1 sm:mt-5 sm:mx-44">
-      <div class="flex justify-between sm:justify-start sticky-table-of-content z-10 sm:pt-0 pt-3">
+      <div class="flex justify-between sm:justify-start sticky-table-of-content z-10 sm:pt-0 pt-3 color-stone-900">
         <button :class="isTargetingTableOfContents.isTargetingOverview ? activeTableContent : tableContentStyles" @click="ScrollToOverview()">
-          <h2 class="text-base sm:text-xl font-bold">
+          <h2 class="font-size-table-of-contents font-bold">
             Tổng quan
           </h2>
           <p class="text-sm font-medium sm:block hidden">
@@ -30,7 +30,7 @@
           </p>
         </button>
         <button :class="isTargetingTableOfContents.isTargetingGround ? activeTableContent : tableContentStyles" @click="ScrollToGround()">
-          <h2 class="text-base sm:text-xl font-bold">
+          <h2 class="font-size-table-of-contents font-bold ">
             Mặt bằng
           </h2>
           <p class="text-sm font-medium sm:block hidden">
@@ -38,7 +38,7 @@
           </p>
         </button>
         <button :class="isTargetingTableOfContents.isTargetingLocation ? activeTableContent : tableContentStyles" @click="ScrollToLocation()">
-          <h2 class="text-base sm:text-xl font-bold">
+          <h2 class="font-size-table-of-contents font-bold">
             Vị trí
           </h2>
           <p class="text-sm font-medium sm:block hidden">
@@ -46,7 +46,7 @@
           </p>
         </button>
         <button :class="isTargetingTableOfContents.isTargetingRentAndSell ? activeTableContent : tableContentStyles" @click="ScrollToSellAndRent()">
-          <h2 class="text-base sm:text-xl font-bold">
+          <h2 class="font-size-table-of-contents font-bold">
             Bán và cho thuê
           </h2>
           <p class="text-sm font-medium sm:block hidden">
@@ -54,8 +54,8 @@
           </p>
         </button>
       </div>
-      <div ref="Overview" style="scroll-margin-top: 135px" v-on:="ScrollToOverviewHandle()">
-        <h1 class="font-medium text-lg sm:text-3xl sm:my-6 my-2.5">
+      <div ref="Overview" class="color-stone-900" style="scroll-margin-top: 135px" v-on:="ScrollToOverviewHandle()">
+        <h1 class="font-medium font-size-overview sm:my-6 my-2.5">
           Tổng quan
         </h1>
         <div class="grid sm:grid-cols-2 grid-cols-1 sm:gap-6 h-auto">
@@ -88,26 +88,26 @@
             </p>
           </div>
         </div>
-        <div class="mt-1.5" v-html="project.projectPost.overview" />
+        <div class="mt-1.5 text-lg" v-html="project.projectPost.overview" />
       </div>
-      <h1 class="font-medium text-lg sm:text-3xl mt-5 sm:mt-6 mb-1 sm:mb-4">
+      <h1 class="font-medium text-lg sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
         Vị trí
       </h1>
       <div :class="showReadMoreStyles" v-html="project.projectPost.location" />
       <span :class="hideReadMoreStyles">
-        <div v-html="project.projectPost.location" />
-        <h1 class="font-medium text-lg sm:text-3xl mt-5 sm:mt-6 mb-1 sm:mb-4">
+        <div class="text-lg" v-html="project.projectPost.location" />
+        <h1 class="font-medium text-lg sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
           Thiết kế dự án
         </h1>
-        <div v-html="project.projectPost.projectDesign" />
-        <h1 class="font-medium text-2xl sm:text-3xl mt-5 sm:mt-6 mb-1 sm:mb-4">
+        <div class="text-sm" v-html="project.projectPost.projectDesign" />
+        <h1 class="font-medium text-2xl sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
           Tiện ích
         </h1>
-        <div v-html="project.projectPost.utilitySection" />
-        <h1 ref="SellAndRent" class="font-medium text-2xl sm:text-3xl mt-5 sm:mt-6 mb-1 sm:mb-4" style="scroll-margin-top: 135px">
+        <div class="text-lg" v-html="project.projectPost.utilitySection" />
+        <h1 ref="SellAndRent" class="font-medium text-2xl sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4" style="scroll-margin-top: 135px">
           Giá bán và thuê
         </h1>
-        <div v-html="project.projectPost.rentAndSellPrice" />
+        <div class="text-lg" v-html="project.projectPost.rentAndSellPrice" />
       </span>
       <button class="flex items-center ml-auto mr-auto mt-6 mb-8" @click="setReadMoreActiveState()">
         <p class="text-center text-lg read-more mr-2">
@@ -178,7 +178,7 @@
       </expand-panel>
       <expand-panel title="Tiện ích nội khu" class="sm:mt-9 mt-3.5">
         <div>
-          <ul class="list-none grid grid-cols-2 gap-2 text-sm font-bold color-505050">
+          <ul class="list-none grid grid-cols-2 gap-2 text-sm font-medium color-stone-900">
             <li v-for="utility in project.utilities.listOfUtilities" :key="utility" class="mb-2.5">
               <p>{{ utility }}</p>
             </li>
@@ -228,11 +228,11 @@
           </div>
         </div>
       </expand-panel>
-      <h1 ref="Ground" class="font-medium text-lg sm:text-3xl mt-12 sm:mt-6 mb-1.5 sm:mb-4" style="scroll-margin-top: 135px">
+      <h1 ref="Ground" class="font-size-project-ground mt-12 sm:mt-6 mb-1.5 sm:mb-4" style="scroll-margin-top: 135px">
         Mặt bằng dự án
       </h1>
       <img class="h-48 sm:h-96 w-full" :src="project.masterPlan" alt="cay xoai">
-      <h1 ref="Location" style="scroll-margin-top: 135px" class="font-medium text-lg sm:text-3xl mt-6 mb-1.5 sm:mb-4">
+      <h1 ref="Location" style="scroll-margin-top: 135px" class="font-medium text-2xl sm:text-3xl mt-6 mb-1.5 sm:mb-4">
         Vị trí dự án The Sun Avenue
       </h1>
       <iframe
@@ -401,7 +401,7 @@ export default {
       },
       isDroppingContent: false,
       readMoreContent: 'Xem thêm',
-      showReadMoreStyles: 'opacity-90 overflow-hidden max-h-6',
+      showReadMoreStyles: 'opacity-90 overflow-hidden max-h-6 text-lg',
       hideReadMoreStyles: 'hidden delay-1000',
       tableContentStyles: 'text-center sm:mr-6 table-of-content color-A3A3A3 transition-02s-all',
       activeTableContent: 'active-table-contents text-center sm:mr-6 transition-02s-all',
@@ -493,7 +493,7 @@ export default {
       } else {
         this.readMoreContent = 'Xem thêm';
         this.readMoreArrowStyle = 'rotate-arrow-down h-6 w-6';
-        this.showReadMoreStyles = 'opacity-90 overflow-hidden max-h-6';
+        this.showReadMoreStyles = 'opacity-90 overflow-hidden max-h-6 text-lg';
         this.hideReadMoreStyles = 'hidden delay-1000';
       }
     }
@@ -524,7 +524,7 @@ export default {
     font-weight: 500;
     font-size: 14px;
     line-height: 16px;
-    color: #999999;
+    color: #A3A3A3;
     margin-top: 5px;
     margin-bottom: 5px;
   }
@@ -534,7 +534,7 @@ export default {
     font-weight: 500;
     font-size: 14px;
     line-height: 16px;
-    color: #999999;
+    color: #A3A3A3;
     margin-top: 5px;
     margin-bottom: 5px;
   }
@@ -547,7 +547,7 @@ export default {
     font-weight: 700;
     font-size: 14px;
     line-height: 16px;
-    color: #505050;
+    color: #1C1917;
   }
   .drop-down-content{
 
@@ -559,10 +559,10 @@ export default {
     color: #A3A3A3;
   }
   .table-of-content:hover h2{
-    color: black;
+    color: #1C1917;;
   }
   .table-of-content:hover p{
-    color: black;
+    color: #1C1917;;
   }
   .sticky-table-of-content{
     position: sticky;
@@ -577,7 +577,7 @@ export default {
     max-width: 40%;
   }
   .active-table-contents{
-    color: black;
+    color: #1C1917;;
     padding-bottom: 5px;
     border-bottom: 2px solid #16A34A;
   }
@@ -601,5 +601,36 @@ export default {
 }
 .color-999999{
   color: #999999;
+}
+.color-stone-900{
+  color: #1C1917;
+}
+.font-size-table-of-contents{
+  font-size: 16px;
+}
+.font-size-overview{
+  font-size: 18px
+}
+.font-size-project-ground{
+  font-size: 24px
+}
+.font-size-project-name{
+  font-size: 21px;
+}
+
+@media only screen and (min-width: 602px) {
+  .font-size-table-of-contents{
+  font-size: 21px;
+}
+  .font-size-overview{
+  font-size: 28px
+}
+  .font-size-project-ground{
+  font-size: 28px
+}
+  .font-size-project-name{
+  font-size: 32px;
+}
+
 }
 </style>

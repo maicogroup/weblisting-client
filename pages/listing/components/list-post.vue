@@ -126,7 +126,7 @@
             :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
           >
             <img
-              class="w-full h-[200px] object-cover rounded-t-[4px] md:rounded-l-lg "
+              class="w-full h-[200px] object-cover rounded-t-[4px] md:rounded-l-lg md:rounded-tr-none "
               :src="post.srcimage"
               alt="Bonnie image"
             />

@@ -1,7 +1,7 @@
 <template>
   <div class="w-full sm:px-36 px-5">
     <div>
-      <gallery class="h-72 w-full sm:hidden block" :items="gallery" />
+      <gallery class="inline h-72 w-full sm:hidden" :items="gallery" />
     </div>
     <div class="font-medium color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
       <a href="#">Dự án</a>
@@ -17,7 +17,7 @@
       Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
     </p>
     <div>
-      <gallery class="h-72 w-full sm:block hidden" :items="gallery" />
+      <gallery class="h-72 w-full sm:inline hidden" :items="gallery" />
     </div>
     <div class="mt-1 sm:mt-5 sm:mx-44">
       <div class="flex justify-between sm:justify-start sticky-table-of-content z-10 sm:pt-0 pt-3">
@@ -396,7 +396,6 @@ export default {
       // dữ liệt trang tổng quan dự án
       post: {
         gallery: [
-          'apartment-resource/388072cb-ed6a-480a-9ccc-f4687790f43d/23-12-2021_1249/image/45d52d80364cfa12a35d20.jpg',
           'apartment-resource/4a29f3dc-afa2-4aee-aa91-cbce3bc49ee5/17-02-2022_0924/image/93a3b5f6ae3a62643b2b21.jpg'
         ]
       },

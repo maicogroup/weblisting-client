@@ -96,40 +96,26 @@
       </div>
     </div>
 
-    <!-- desktop list -->
-    <div id="desktop-list" class="hidden md:flex md:flex-col">
+    <div class="flex flex-col">
       <div
         v-for="post in posts"
         :key="post.id"
-        class="pb-2 md:pt-0 md:border-none border-b"
+        class="mb-2 md:pt-0 md:border-none border border-stone-200 rounded-[4px] md:rouded-0"
       >
-        <NuxtLink
-          :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
-          class="
-            title-mobile
-            color-orange
-            font-bold
-            text-base
-            leading-6
-            ov-flow-hidden
-          "
-        >
-          {{ post.pageInfor.title }}
-        </NuxtLink>
         <div
           class="
-            flex
-            item-flex-start
-            space-x-4
-            md:border
-            mt-2
-            pr-3
-            rounded rounded-lg
+            md:flex
+            md:item-flex-start
+            md:space-x-4 md:border
+            md:mt-2
+            md:pr-3
+            md:rounded-lg
+            overflow-hidden
           "
         >
           <NuxtLink
             class="
-              w-32
+              w-full
               h-32
               md:w-64 md:h-[160px]
               shrink-0
@@ -140,11 +126,12 @@
             :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
           >
             <img
-              class="w-full h-full object-cover rounded-l-lg"
+              class="w-full h-[200px] object-cover rounded-t-[4px] md:rounded-l-lg "
               :src="post.srcimage"
               alt="Bonnie image"
             />
-            <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div> -->
+             <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS -->
+             <!-- <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div>  -->
             <div
               class="diagonal badge bg-green-600"
               v-if="post.tags && post.tags.length"
@@ -152,18 +139,33 @@
               {{ post.tags[0] }}
             </div>
           </NuxtLink>
-          <div class="flex flex-col justify-between h-32 md:h-[160px] w-full">
-            <div class="">
+          <div class="flex flex-col justify-between h-[100px] md:h-[140px] w-full relative">
+            <div class="p-2 md:p-0">
               <NuxtLink
                 :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
-                class="title-desktop mt-3 color-black font-bold"
+                class="hidden md:block mt-3 color-black font-bold"
               >
                 {{ post.pageInfor.title }}
               </NuxtLink>
-              <span class="text-neutral-400 mt-3 text-sm">{{
+
+              <span class="text-neutral-400 mb-2 md:mb-0 md:mt-3 text-sm absolute md:relative bottom-0 max-w-[70%] md:max-w-[100vw] truncate">{{
                 post.address
               }}</span>
-              <div class="flex my-3 text-[14px]">
+
+              <NuxtLink
+                :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
+                class="
+                  title-mobile
+                  absolute
+                  top-7
+                  text-[12px]
+                  text-stone-900
+                "
+              >
+                {{ post.pageInfor.title }}
+              </NuxtLink>
+
+              <div class="flex my-1 md:my-3 text-[14px] absolute top-0 right-1 md:relative">
                 <div class="flex">
                   <div class="flex items-center justify-center">
                     <svg
@@ -224,7 +226,7 @@
               </div>
             </div>
             <div class="mb-2 mt-4 flex justify-between items-end w-full">
-              <div class="font-bold text-[20px] text-stone-900">
+              <div class="font-bold text-[20px] text-stone-900 absolute md:relative top-0 left-0 ml-1 md:ml-0">
                 {{ post.price }}
               </div>
               <div
@@ -250,177 +252,7 @@
                 </p>
               </div>
               <div v-else />
-              <p class="text-sm color-a7a7a7">
-                {{ post.date }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <pagination
-        :total="totalItem"
-        :per-page="10"
-        :current-page="pageIndex"
-        @pagechanged="pageNavigationTo"
-      />
-    </div>
-
-    <!-- mobile list -->
-    <div id="mobile-list" class="md:hidden overflow-hidden">
-      <div v-for="post in posts" :key="post.id" class="pb-2">
-        <div
-          class="
-            item-flex-start
-            border border-stone-200
-            mt-2
-            rounded
-            w-full
-            bg-white
-            overflow-hidden
-          "
-        >
-          <NuxtLink
-            class="w-full h-[202px] relative project"
-            :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
-          >
-            <img
-              class="w-full h-[202px] object-cover rounded-t"
-              :src="post.srcimage"
-              alt="Bonnie image"
-            />
-            <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div> -->
-            <div
-              class="diagonal badge bg-green-600"
-              v-if="post.tags && post.tags.length"
-            >
-              {{ post.tags[0] }}
-            </div>
-          </NuxtLink>
-          <div class="flex flex-col justify-between h-[113px] w-full p-2">
-            <div class="">
-              <div class="flex justify-between">
-                <div
-                  class="
-                    font-bold
-                    text-[20px] text-stone-900
-                    flex
-                    items-center
-                    h-[20px]
-                  "
-                >
-                  {{ post.price }}
-                </div>
-                <div class="flex text-[14px] h-[20px]">
-                  <div class="flex">
-                    <div class="flex items-center justify-center">
-                      <svg
-                        width="18"
-                        height="12"
-                        viewBox="0 0 18 12"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M17.1 4.95429V2.57143C17.1 1.15714 15.885 0 14.4 0H10.8C10.107 0 9.477 0.257143 9 0.668572C8.523 0.257143 7.893 0 7.2 0H3.6C2.115 0 0.9 1.15714 0.9 2.57143V4.95429C0.351 5.42571 0 6.10286 0 6.85714V12H1.8V10.2857H16.2V12H18V6.85714C18 6.10286 17.649 5.42571 17.1 4.95429ZM10.8 1.71429H14.4C14.895 1.71429 15.3 2.1 15.3 2.57143V4.28571H9.9V2.57143C9.9 2.1 10.305 1.71429 10.8 1.71429ZM2.7 2.57143C2.7 2.1 3.105 1.71429 3.6 1.71429H7.2C7.695 1.71429 8.1 2.1 8.1 2.57143V4.28571H2.7V2.57143ZM1.8 8.57143V6.85714C1.8 6.38571 2.205 6 2.7 6H15.3C15.795 6 16.2 6.38571 16.2 6.85714V8.57143H1.8Z"
-                          fill="#5C5C5C"
-                        />
-                      </svg>
-                    </div>
-                    <div class="ml-2 flex items-center text-neutral-400">
-                      {{ post.totalBedRoom }}
-                    </div>
-                  </div>
-                  <div class="mx-2">·</div>
-
-                  <div class="flex">
-                    <div class="flex items-center justify-center">
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M11.4 7.2V7.8C11.4 8.946 10.758 9.942 9.81 10.446L10.2 12H9L8.7 10.8H3.3L3 12H1.8L2.19 10.446C1.70951 10.1911 1.30758 9.81008 1.02744 9.34387C0.747286 8.87766 0.599511 8.34391 0.6 7.8V7.2H0V6H10.8V1.8C10.8 1.64087 10.7368 1.48826 10.6243 1.37574C10.5117 1.26321 10.3591 1.2 10.2 1.2C9.9 1.2 9.672 1.404 9.6 1.674C9.978 1.998 10.2 2.478 10.2 3H6.6C6.6 2.52261 6.78964 2.06477 7.12721 1.72721C7.46477 1.38964 7.92261 1.2 8.4 1.2H8.502C8.748 0.504 9.414 0 10.2 0C10.6774 0 11.1352 0.189642 11.4728 0.527208C11.8104 0.864773 12 1.32261 12 1.8V7.2H11.4ZM10.2 7.2H1.8V7.8C1.8 8.27739 1.98964 8.73523 2.32721 9.07279C2.66477 9.41036 3.12261 9.6 3.6 9.6H8.4C8.87739 9.6 9.33523 9.41036 9.67279 9.07279C10.0104 8.73523 10.2 8.27739 10.2 7.8V7.2Z"
-                          fill="#4D5056"
-                        />
-                      </svg>
-                    </div>
-                    <div class="ml-2 flex items-center text-neutral-400">
-                      {{ post.totalWC }}
-                    </div>
-                  </div>
-                  <div class="mx-2">·</div>
-
-                  <div class="flex">
-                    <div class="flex items-center justify-center">
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M1.33333 0H0V1.33333H1.33333V0ZM2.66667 0H4V1.33333H2.66667V0ZM6.66667 0H5.33333V1.33333H6.66667V0ZM8 0H9.33333V1.33333H8V0ZM10.6667 0H12V1.33333H10.6667V0ZM0 2.66667H1.33333V4H0V2.66667ZM1.33333 5.33333H0V6.66667H1.33333V5.33333ZM0 8H1.33333V9.33333H0V8ZM1.33333 10.6667H0V12H1.33333V10.6667ZM2.66667 10.6667H4V12H2.66667V10.6667ZM6.66667 10.6667H5.33333V12H6.66667V10.6667ZM10.6667 5.33333H12V6.66667H10.6667V5.33333ZM12 2.66667H10.6667V4H12V2.66667ZM8 9.33333V8H12V9.33333H10.6667V10.6667H9.33333V12H8V9.33333ZM10.6667 10.6667V12H12V10.6667H10.6667Z"
-                          fill="#4D5056"
-                        />
-                      </svg>
-                    </div>
-                    <div class="ml-2 flex items-center text-neutral-400">
-                      {{ post.acreage }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <NuxtLink
-                :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
-                class="
-                  title-mobile
-                  color-black
-                  text-stone-900 text-[12px]
-                  leading-[16px]
-                  mt-1
-                "
-              >
-                {{ post.pageInfor.title }}
-              </NuxtLink>
-            </div>
-            <div
-              class="
-                flex
-                justify-between
-                items-end
-                w-full
-                text-neutral-400 text-[12px]
-              "
-            >
-              <span class="mt-3 truncate w-[75%]">{{ post.address }}</span>
-              <div
-                v-if="post.tags != null"
-                class="inline-flex space-x-1 items-center"
-              >
-                <p
-                  v-for="item in post.tags"
-                  :key="item"
-                  class="
-                    text-xs
-                    font-bold
-                    leading-sm
-                    uppercase
-                    px-3
-                    py-1
-                    bg-red-400
-                    text-white
-                    rounded-full
-                  "
-                >
-                  {{ item }}
-                </p>
-              </div>
-              <div v-else />
-              <p class="">
+              <p class="text-sm text-neutral-400 mr-2 md:ml-0">
                 {{ post.date }}
               </p>
             </div>

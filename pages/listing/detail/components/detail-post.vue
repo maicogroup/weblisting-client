@@ -13,9 +13,6 @@
         </h4>
         <div class="mt-2 md:mt-0 flex space-x-2">
           <client-only>
-            <p class="leading-none color-3f3f3f text-sm font-bold">
-              Chia sẻ qua:
-            </p>
             <div
               class="zalo-share-button"
               :data-href="shareUrl"

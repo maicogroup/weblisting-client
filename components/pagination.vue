@@ -12,7 +12,7 @@
   >
     <li>
       <a
-        class="
+        :class="`
           h-[40px]
           w-[40px]
           flex
@@ -24,6 +24,8 @@
           border border-stone-200
           rounded-l
           hover:cursor-pointer
+          ${isInFirstPage ? 'disabled' : ''}
+          `
         "
         href="#"
         @click="onClickFirstPage"
@@ -48,7 +50,7 @@
 
     <li>
       <a
-        class="
+        :class="`
           h-[40px]
           w-[40px]
           flex
@@ -60,7 +62,8 @@
           hover:bg-gray-300
           border border-stone-200
           hover:cursor-pointer
-        "
+          ${isInFirstPage ? 'disabled' : ''}
+        `"
         href="#"
         @click="onClickPreviousPage"
         :disabled="isInFirstPage"
@@ -129,7 +132,7 @@
 
     <li>
       <a
-        class="
+        :class="`
           h-[40px]
           w-[40px]
           flex
@@ -141,6 +144,8 @@
           hover:bg-gray-300
           border border-stone-200
           hover:cursor-pointer
+          ${isInLastPage ? 'disabled' : ''}
+          `
         "
         @click="onClickNextPage"
         :disabled="isInLastPage"
@@ -165,7 +170,7 @@
 
     <li>
       <a
-        class="
+        :class="`
           h-[40px]
           w-[40px]
           flex
@@ -177,6 +182,8 @@
           rounded-r
           border border-stone-200
           hover:bg-gray-300 hover:cursor-pointer
+          ${isInLastPage ? 'disabled' : ''}
+          `
         "
         @click="onClickLastPage"
         href="#"
@@ -230,7 +237,7 @@ export default {
   data() {
     return {
       itemActiveClass:
-        "h-[40px] w-[40px] flex justify-center items-center bg-green-600 text-white border border-green-600 hover:cursor-pointer text-[14px] md:font-bold",
+        "h-[40px] w-[40px] flex justify-center items-center bg-green-600 text-white border border-green-600 hover:cursor-pointer text-[14px] md:font-bold disabled-number",
       itemClass:
         "h-[40px] w-[40px] flex justify-center items-center bg-white border border-stone-200 hover:cursor-pointer hover:bg-gray-300 text-[14px] md:font-bold",
     };
@@ -316,5 +323,14 @@ export default {
 .active {
   background-color: #4aae9b;
   color: #ffffff;
+}
+
+.disabled{
+  pointer-events: none;
+  opacity: .5;
+}
+
+.disabled-number {
+  pointer-events: none;
 }
 </style>

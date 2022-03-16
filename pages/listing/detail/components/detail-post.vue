@@ -354,9 +354,6 @@ export default ({
   }
 
   .zalo-share-button {
-    z-index: 0;
-  }
-  .zalo-share-button{
-    z-index: 0;
+    z-index: 10;
   }
 </style>

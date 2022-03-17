@@ -227,23 +227,33 @@
 <script>
 import FacebookShareButton from './facebook-share-button.vue';
 
+let zaloScriptLoaded = false;
+
 export default ({
   name: 'DetailPost',
   components: { FacebookShareButton },
   props: ['post'],
-  head: {
-    script: [{
-      hid: 'clipboardJS',
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js',
-      body: true,
-      // eslint-disable-next-line no-new, no-undef
-      callback: () => new ClipboardJS('.copy-link')
-    },
-    {
-      hid: 'zaloShareButton',
-      src: 'https://sp.zalo.me/plugins/sdk.js',
-      body: true
-    }]
+  head () {
+    const skip = zaloScriptLoaded;
+
+    return {
+      script: [{
+        once: true,
+        hid: 'clipboardJS',
+        src: 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js',
+        body: true,
+        // eslint-disable-next-line no-new, no-undef
+        callback: () => new ClipboardJS('.copy-link')
+      },
+      {
+        once: true,
+        skip,
+        hid: 'zaloShareButton',
+        src: 'https://sp.zalo.me/plugins/sdk.js',
+        body: true,
+        callback: () => { zaloScriptLoaded = true; }
+      }]
+    };
   },
 
   computed: {
@@ -255,6 +265,14 @@ export default ({
     },
     shareUrl () {
       return process.client ? window.location.href : null;
+    }
+  },
+
+  mounted () {
+    if (zaloScriptLoaded) {
+      // https://developers.zalo.me/docs/social/share
+      // eslint-disable-next-line no-undef
+      setTimeout(() => ZaloSocialSDK.reload(), 100);
     }
   },
 

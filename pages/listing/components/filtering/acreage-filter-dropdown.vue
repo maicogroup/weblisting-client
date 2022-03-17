@@ -200,20 +200,14 @@ export default {
     },
 
     handleSelectAcreageRange (range) {
-      this.displaySelected = this.formatRange(range);
       this.open = false;
-      if (range.to !== null) {
-        this.customRange = { ...range };
-      } else {
-        this.customRange = { from: 0, to: 0 };
-      }
-      this.$emit('optionchanged', range);
+      this.setCustomRange(range);
+      this.$emit('optionchanged', { ...range });
     },
 
     handleSelectAllSize () {
-      this.displaySelected = 'Tất cả';
       this.open = false;
-      this.customRange = { from: 0, to: 0 };
+      this.customRange = { from: null, to: null };
       this.$emit('optionchanged', null);
     }
   }

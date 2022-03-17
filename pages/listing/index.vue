@@ -52,7 +52,7 @@
         </svg>
       </button>
 
-      <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-red-600 hover:bg-red-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
+      <button class="whitespace-nowrap ml-12 rounded-md px-6 bg-green-600 hover:bg-green-700 font-semibold text-white my-4" @click="handleFilterButtonPressed">
         Tìm kiếm
       </button>
     </div>
@@ -77,8 +77,8 @@
         <input type="button" class="w-full border py-2 pl-10 pr-2 h-full rounded-md" placeholder="Tìm kiếm...">
       </div>
     </div>
-    <div class="filter-bar-blank-space hidden md:block" />
-    <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" />
+    <!-- <div class="filter-bar-blank-space hidden md:block" /> -->
+    <!-- <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" /> -->
     <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
       <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
@@ -186,9 +186,10 @@
       </div>
     </div>
     <div v-if="project && showIfPostsOfOneProject && project.sEOContent" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
-      <div :class="`overflow-hidden text-ellipsis mt-5 mx-2   ${sEOContentClasses}` "
-          v-html="project.sEOContent">
-      </div>
+      <div
+        :class="`overflow-hidden text-ellipsis mt-5 mx-2   ${sEOContentClasses}` "
+        v-html="project.sEOContent"
+      />
       <p class="text-center font-bold read-more my-4" @click="setSEOContentActiveState()">
         {{ readMoreContent }}
       </p>
@@ -593,6 +594,7 @@ import { gql } from 'graphql-tag';
 
 import { marked } from 'marked';
 import ProjectHeader from './components/project-header.vue';
+import ProjectThumbnail from './components/project-thumbnail.vue';
 import ListPost from './components/list-post.vue';
 import ContactInfor from './components/contract-infor.vue';
 import LocationFtilerDropdown from './components/filtering/location-filter-dropdown.vue';
@@ -614,25 +616,27 @@ import Divider from '~/components/Divider.vue';
 
 export default {
   name: 'PostList',
-  components: { ProjectHeader, 
-                ListPost, 
-                ContactInfor, 
-                Divider, 
-                LocationFtilerDropdown, 
-                ProjectFilterDropdown, 
-                DirectionFilterDropdown, 
-                TypeFilterDropdown, 
-                PriceFilterDropdown, 
-                AcreageFilterDropdown, 
-                BedroomFilterDropdown, 
-                QuickFilterButton, 
-                TypeFilterOption, 
-                LocationFilterOption, 
-                PriceFilterOption, 
-                AcreageFilterOption, 
-                ProjectFilterOption, 
-                DirectionFilterOptions, 
-                BedroomFilterOptions },
+  components: {
+    ProjectHeader,
+    ListPost,
+    ContactInfor,
+    Divider,
+    LocationFtilerDropdown,
+    ProjectFilterDropdown,
+    DirectionFilterDropdown,
+    TypeFilterDropdown,
+    PriceFilterDropdown,
+    AcreageFilterDropdown,
+    BedroomFilterDropdown,
+    QuickFilterButton,
+    TypeFilterOption,
+    LocationFilterOption,
+    PriceFilterOption,
+    AcreageFilterOption,
+    ProjectFilterOption,
+    DirectionFilterOptions,
+    BedroomFilterOptions
+  },
   data () {
     return {
       // filter dùng để lọc
@@ -786,6 +790,11 @@ export default {
       },
 
       update (data) {
+        if (data.projects.length === 0) {
+          this.$router.push({ path: '/' }).catch(() => {});
+          return;
+        }
+
         const project = data.projects[0];
 
         this.filter = { ...this.filter, project: { pageInfor: { slug: this.$route.params.slug }, id: project.id, projectName: project.projectName } };
@@ -795,8 +804,8 @@ export default {
       },
 
       skip () {
-        //return this.filter === null || this.$route.params.slug === null;
-        return this.$route.params.slug === undefined
+        // return this.filter === null || this.$route.params.slug === null;
+        return this.$route.params.slug === undefined;
       },
 
       variables () {

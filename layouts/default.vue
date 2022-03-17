@@ -5,6 +5,11 @@
       <Nuxt />
     </div>
     <MainFooter />
+      <div id="fb-root"> </div>
+
+      <!-- Your Plugin chat code -->
+      <div id="fb-customer-chat" class="fb-customerchat">
+    </div>
   </div>
 </template>
 
@@ -18,11 +23,36 @@ export default {
   created(){
     if(process.client){
       window.addEventListener('beforeunload', this.setCookies)
+      
+
+      //Facebook chat configuration
+      var chatbox = document.getElementById('fb-customer-chat');
+      chatbox.setAttribute("page_id", "2352735844786718");
+      chatbox.setAttribute("attribution", "biz_inbox");
+      window.fbAsyncInit = function() {
+        FB.init({
+          xfbml            : true,
+          version          : 'v13.0'
+        });
+      };
+
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+      
     }
   },
   methods: {
     setCookies(e){
       e.preventDefault();
+      const trackingState = this.$cookies.get('trackingState');
+      if(trackingState == 'disabled') return;
+
       const trackingData = this.$cookies.get(this.$route.fullPath);
       const userId = this.$cookies.get('browserId');
       if(trackingData != null) {
@@ -53,7 +83,6 @@ export default {
 
       fetch("http://maicogroup.net:3001/graphql/", requestOptions)
       .then(response => response.text())
-      .then(result => console.log("result: ", result))
       .catch(error => console.log('error', error));
     }
   }

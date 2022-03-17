@@ -1,14 +1,14 @@
 <template>
-  <div v-if="post != null">
+  <div>
     <div class="h-96 w-full">
       <gallery :items="gallery" />
     </div>
-    <div class="mx-5">
-      <h1 class="mt-6 lg:mx-0  font-bold text-2xl">
+    <div class="mx-5 lg:mx-0">
+      <h1 class="mt-6 font-bold text-2xl">
         {{ post.pageInfor.title }}
       </h1>
       <div class="mt-3 flex flex-col md:flex-row md:justify-between">
-        <h4 class="lg:mx-0 font-normal color-3f3f3f text-sm leading-4">
+        <h4 class="font-normal color-3f3f3f text-sm leading-4">
           {{ `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}` }}
         </h4>
         <div class="mt-2 md:mt-0 flex space-x-2">
@@ -38,228 +38,190 @@
           </button>
         </div>
       </div>
-      <div class="lg:mx-0 w-full flex space-x-12  bd-color-858585 mt-3 text-sm leading-4 border-t border-b pb-7 pt-6 border-solid" style="border-color:#E5E5E5;">
-        <div class="">
-          <h4 class="font-normal color-8c8c8c">
-            Mức giá
-          </h4>
-          <p class="font-bold">
-            {{ formatPrice(post.price, post.demand) }}
-          </p>
-        </div>
-        <div class="">
-          <h4 class="font-normal color-8c8c8c">
-            Diện tích
-          </h4>
-          <p class="font-bold">
-            {{ post.acreage }} m²
-          </p>
-        </div>
-        <div class="">
-          <h4 class="font-normal color-8c8c8c">
-            Cơ cấu phòng
-          </h4>
-          <p v-if="post.totalWC != 0" class="font-bold">
-            {{ `${post.totalBedRoom}PN${post.totalWC}WC` }}
-          </p>
-          <p v-else class="font-bold">
-            {{ post.type }}
-          </p>
-        </div>
-        <div>
-          <h4 class="font-normal color-8c8c8c">
-            Hướng
-          </h4>
-          <p class="font-bold">
-            {{ post.direction }}
-          </p>
-        </div>
-      </div>
-      <div class="flex justify-between items-center mt-5">
-        <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-3 mb-3.5">
+
+      <divider class="my-4" />
+
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-lg leading-5">
           Mô tả căn hộ
         </h3>
-        <div class="">
-          <span class="text-gray-400">Mã bất động sản:</span> 
-          <span class="re-properties-content">{{post.pageInfor.slug.slice(-5)}}</span>
+        <div class="text-sm font-medium">
+          <span class="text-gray-400">Mã bất động sản:</span>
+          <span class="re-properties-content">{{ post.pageInfor.slug.slice(-5) }}</span>
         </div>
       </div>
       <div class="grid md:grid-cols-2 grid-cols-1 md:gap-6 h-auto">
-        <div class="p-2 hidden md:block">
+        <div class="hidden md:block">
           <p class="re-properties-frame">
             <span class="re-properties">Giá</span>
-            <span class="re-properties-content"> {{formatPrice(post.price, post.demand)}}</span>
+            <span class="re-properties-content"> {{ formatPrice(post.price, post.demand) }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Phòng tắm</span>
-            <span class="re-properties-content"> {{post.totalWC}}</span>
+            <span class="re-properties-content"> {{ post.totalWC }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Diện tích sử dụng</span>
-            <span class="re-properties-content"> {{post.usageAcreage}}</span>
+            <span class="re-properties-content"> {{ post.usageAcreage }} m<sup>2</sup></span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Block</span>
-            <span class="re-properties-content"> {{post.block}}</span>
+            <span class="re-properties-content"> {{ post.block }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng cửa</span>
-            <span class="re-properties-content"> {{post.doorDirection}}</span>
+            <span class="re-properties-content"> {{ post.doorDirection }}</span>
           </p>
-          <p class="re-properties-frame">
+          <p class="re-properties-frame-last">
             <span class="re-properties">Đặc điểm khác</span>
-            <span class="re-properties-content"> {{post.otherSpecification}}</span>
+            <span class="re-properties-content"> {{ post.otherSpecification }}</span>
           </p>
         </div>
-        <div class="p-2 hidden md:block">
+        <div class="hidden md:block">
           <p class="re-properties-frame">
             <span class="re-properties">Phòng ngủ</span>
-            <span class="re-properties-content"> {{post.totalBedRoom}}</span>
+            <span class="re-properties-content"> {{ post.totalBedRoom }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Diện tích</span>
-            <span class="re-properties-content"> {{post.acreage}} m<sup>2</sup></span>
+            <span class="re-properties-content"> {{ post.acreage }} m<sup>2</sup></span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Tầng</span>
-            <span class="re-properties-content"> {{post.floor}}</span>
+            <span class="re-properties-content"> {{ post.floor }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng nhà</span>
-            <span class="re-properties-content"> {{post.direction}}</span>
+            <span class="re-properties-content"> {{ post.direction }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Pháp lý</span>
-            <span class="re-properties-content"> {{post.project.juridical}}</span>
+            <span class="re-properties-content"> {{ post.project.juridical }}</span>
           </p>
-          <p class="re-properties-frame">
+          <p class="re-properties-frame-last">
             <span class="re-properties">View</span>
-            <span class="re-properties-content"> {{post.view}}</span>
+            <span class="re-properties-content"> {{ post.view }}</span>
           </p>
         </div>
-        <div class="p-2 md:hidden">
+        <div class="md:hidden">
           <p class="re-properties-frame">
             <span class="re-properties">Giá</span>
-            <span class="re-properties-content"> {{formatPrice(post.price, post.demand)}}</span>
+            <span class="re-properties-content"> {{ formatPrice(post.price, post.demand) }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Phòng ngủ</span>
-            <span class="re-properties-content"> {{post.totalBedRoom}}</span>
+            <span class="re-properties-content"> {{ post.totalBedRoom }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Phòng tắm</span>
-            <span class="re-properties-content"> {{post.totalWC}}</span>
+            <span class="re-properties-content"> {{ post.totalWC }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Diện tích</span>
-            <span class="re-properties-content"> {{post.acreage}} m<sup>2</sup></span>
+            <span class="re-properties-content"> {{ post.acreage }} m<sup>2</sup></span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Diện tích sử dụng</span>
-            <span class="re-properties-content"> {{post.usageAcreage}}</span>
+            <span class="re-properties-content"> {{ post.usageAcreage }} m<sup>2</sup></span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Tầng</span>
-            <span class="re-properties-content"> {{post.floor}}</span>
+            <span class="re-properties-content"> {{ post.floor }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Block</span>
-            <span class="re-properties-content"> {{post.block}}</span>
+            <span class="re-properties-content"> {{ post.block }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng nhà</span>
-            <span class="re-properties-content"> {{post.direction}}</span>
+            <span class="re-properties-content"> {{ post.direction }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Hướng cửa</span>
-            <span class="re-properties-content"> {{post.doorDirection}}</span>
+            <span class="re-properties-content"> {{ post.doorDirection }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Pháp lý</span>
-            <span class="re-properties-content"> {{post.project.juridical}}</span>
+            <span class="re-properties-content"> {{ post.project.juridical }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Đặc điểm khác</span>
-            <span class="re-properties-content"> {{post.otherSpecification}}</span>
+            <span class="re-properties-content"> {{ post.otherSpecification }}</span>
           </p>
-          <p class="re-properties-frame">
+          <p class="re-properties-frame-last">
             <span class="re-properties">View</span>
-            <span class="re-properties-content"> {{post.view}}</span>
+            <span class="re-properties-content"> {{ post.view }}</span>
           </p>
         </div>
       </div>
-      <div class="flex justify-start items-center space-x-3 float-left mb-2 w-full h-auto">
-        <h3 class="re-properties pl-2 w-40 md:w-auto">
-          Nội thất:
+
+      <divider />
+
+      <div class="my-3 flex float-left w-full h-auto">
+        <h3 class="re-properties mt-1.5">
+          Nội thất
         </h3>
-        <div class="flex flex-wrap justify-start items-center my-2">
-        <div v-for="item in post.furnitures" :key="item" class="my-auto">
-          <button v-if="item == 'Trống' || item == 'Ko'" class="btn red-furnitures my-1">{{item}}</button>
-          <button v-else-if="item == 'Full'" class="btn green-furnitures my-1">Đầy đủ</button>
-          <button v-else class="btn green-furnitures my-1">{{item}}</button>
-        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <div v-for="item in post.furnitures" :key="item">
+            <div v-if="item == 'Trống' || item == 'Ko'" class="btn red-furnitures ">
+              {{ item }}
+            </div>
+            <div v-else-if="item == 'Full'" class="btn green-furnitures">
+              Đầy đủ
+            </div>
+            <div v-else class="btn green-furnitures">
+              {{ item }}
+            </div>
+          </div>
         </div>
       </div>
       <div>
-        <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-3 mb-3.5">
+        <h3 class="font-bold text-lg leading-5 mt-3 mb-3.5">
           Ưu điểm dự án
         </h3>
-        <div class="grid grid-cols-1 md:grid-cols-5 mb-3">
-          <p class="re-properties pl-2">Tiện ích vị trí</p>
-          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">{{post.project.utilities.locationUtilities}}</p>
+        <div class="grid grid-cols-1 md:grid-cols-5 mb-3 text-sm">
+          <p class="font-bold">
+            Tiện ích vị trí
+          </p>
+          <p class="col-span-4 mt-1 md:mt-0">
+            {{ post.project.utilities.locationUtilities }}
+          </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-5 mb-3">
-          <p class="re-properties pl-2">Tiện ích nội khu</p>
-          <p class="col-span-4 text-justify pl-2 md:pl-0 font-medium" style="color: #5C5C5C;">{{post.project.utilities.internalUtilities}}</p>
+        <div class="grid grid-cols-1 md:grid-cols-5 mb-3 text-sm">
+          <p class="font-bold">
+            Tiện ích nội khu
+          </p>
+          <p class="col-span-4 mt-1 md:mt-0">
+            {{ post.project.utilities.internalUtilities }}
+          </p>
         </div>
       </div>
-      <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-8 mb-4">
+      <h3 class="font-bold text-lg leading-5 mt-8 mb-4">
         Xem trên bản đồ
       </h3>
       <iframe :src="`${post.project.address.googleMapLocation}`" class="w-full h-64 mt-4" loading="lazy" />
       <div class="lg:hidden mx-0 mt-5 mb-3">
-        <h3 class="font-bold text-lg leading-5 mb-4">
+        <h3 class="font-bold text-lg leading-5">
           Liên hệ
         </h3>
-        <div>
-          <div class="items-center flex flex-row mb-4">
-            <img
-              class="h-14 w-14 mr-3.5 rounded-full ring-2 ring-white"
-              src="http://crm.maicogroup.net/assets/images/logo.png"
-              alt=""
-            >
-            <h3 class="text-sm color-707070 leading-4 font-bold">
-              Maico
-            </h3>
-          </div>
-          <button @click="featureNotSupported" class="bd-color-858585 color-707070 rounded w-full h-10 border text-sm font-bold mb-7">
-            Yêu cầu liên hệ lại
-          </button>
-          <div class="w-full border-b bd-color-858585" />
+        <div class="mb-4 flex flex-col items-center">
+          <img
+            class="inline-block object-cover h-14 w-14 rounded-full border border-gray"
+            src="~/static/images/maico-contact-infor.png"
+            alt="maico"
+          >
+          <p class="mt-1 text-sm text-green-600 font-bold leading-4">
+            MAICO
+          </p>
+          <a href="tel:0938140024" class="mt-3 w-full rounded-md h-10 border bg-green-600 hover:bg-green-700 text-white text-sm font-bold flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="mr-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3h5m0 0v5m0-5l-6 6M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.128a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z" />
+            </svg>
+            <p>0938 140 024</p>
+          </a>
         </div>
       </div>
-      <h3 class="lg:mx-0  font-bold text-lg leading-5 mt-5 mb-3">
-        Tìm kiếm theo từ khóa
-      </h3>
-      <div class="mb-10 lg:mx-0 ">
-        <ul class="w-5/6">
-          <li class="inline-block px-3 bcolor-e5e5e5 color-5a5a5a rounded-2xl mb-2.5">
-            Cho thue chung cu quan 2
-          </li>
-          <li class="inline-block px-3 bcolor-e5e5e5 color-5a5a5a rounded-2xl mb-2.5">
-            Cho thue chung cu quan 2 5PN
-          </li>
-          <li class="inline-block px-3 bcolor-e5e5e5 color-5a5a5a rounded-2xl mb-2.5">
-            Cho thue chung cu quan 2 5PN
-          </li>
-          <li class="inline-block px-3 bcolor-e5e5e5 color-5a5a5a rounded-2xl mb-2.5">
-            Cho thue chung cu quan 2
-          </li>
-        </ul>
-      </div>
     </div>
-
-    <script src="" />
   </div>
 </template>
 
@@ -305,12 +267,12 @@ export default ({
         return `${parseFloat((price / 1e9).toFixed(2))} tỷ`;
       }
     },
-    featureNotSupported() {
-      this.$toast.show("Tính năng này đang được hoàn thiện, cảm ơn bạn đã nhấn", {
-        type: "success",
-        theme: "bubble",
+    featureNotSupported () {
+      this.$toast.show('Tính năng này đang được hoàn thiện, cảm ơn bạn đã nhấn', {
+        type: 'success',
+        theme: 'bubble',
         duration: 4000,
-        position: "top-center"
+        position: 'top-center'
       });
     }
   }
@@ -338,24 +300,30 @@ export default ({
   .re-properties-frame {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #E5E5E5;
-    padding-bottom: 7px;
-    margin-bottom:10px;
-
+    align-items: flex-start;
+    border-bottom: 1px solid #E7E5E4;
+    padding-bottom: 15px;
+    margin-top: 15px;
   }
+
+  .re-properties-frame-last {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 15px;
+    margin-top: 15px;
+  }
+
   .re-properties {
-    font-family: Roboto;
+    flex-shrink: 0;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
     line-height: 16px;
     color: #999999;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-right: 8px;
   }
   .re-properties-content {
-    font-family: Roboto;
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -363,26 +331,30 @@ export default ({
     color: #505050;
   }
   .btn {
-  width: 71px;
-  height: 26px;
+  padding: 5px 15px;
   border: 1px solid black;
   background-color: white;
   color: black;
   float:left;
-  font-family: Roboto;
   font-style: normal;
-  line-height: 16px;
+  font-weight: 500;
   font-size: 14px;
-  cursor: pointer;
+  line-height: 16px;
   border-radius: 5px;
-  margin-inline: 5px;
 }
   .green-furnitures {
-    color: green;
-    border-color: #07A35D;
+    color: #16A34A;
+    border-color: #16A34A;
   }
   .red-furnitures {
-    color: red;
-    border-color: #FF375F;
+    color: #EF4444;
+    border-color: #EF4444;
+  }
+
+  .zalo-share-button {
+    z-index: 0;
+  }
+  .zalo-share-button{
+    z-index: 0;
   }
 </style>

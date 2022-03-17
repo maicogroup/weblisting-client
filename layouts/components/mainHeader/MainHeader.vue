@@ -2,12 +2,12 @@
   <div
     class="fixed z-20 top-0 left-0 right-0 bg-white flex justify-between items-center px-5 py-3 border-b"
   >
-    <img class="h-12" src="~/assets/maico.png">
+    <img onclick="void(0)" id="logo" class="h-12" src="~/assets/maico.png">
 
     <div class="hidden md:flex flex justify-between items-center space-x-10">
-      <p class="font-bold hidden xl:block">
-        0903 234 045
-      </p>
+      <a href="tel:0938140024" class="font-bold hidden xl:block">
+        0938 140 024
+      </a>
 
       <Dropdown item-width="200px" title="Thuê">
         <DropdownItem @click="handleSelectAllTypes">
@@ -134,7 +134,13 @@ export default {
         }
     `
   },
+  mounted(){
+    if(process.client){
+      const logoEle = document.getElementById('logo');
 
+      logoEle.addEventListener('click', this.disableCookies);
+    }
+  },
   data () {
     return { showSidebar: false };
   },
@@ -149,7 +155,15 @@ export default {
 
       this.$router.push({ path, query });
     },
-
+    disableCookies(evt){
+      if (evt.detail === 3) {
+            this.$cookies.set('trackingState','disabled',{
+              path: '/',
+              maxAge: 60 * 60 * 24 * 365
+            });
+            alert('Đã tắt tracking');
+          }
+    },
     handleSelectAllTypes (demand) {
       const path = '/danh-sach-can-ho';
       const query = { demand };

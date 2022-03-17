@@ -2,7 +2,10 @@ import http from 'http'
 
 export default function ({ route, from, app }) {
     if(process.client) {
-        const trackingData = app.$cookies.get(from.fullPath);
+        const trackingState = app.$cookies.get('trackingState');
+        if(trackingState == 'disabled') return;
+
+        const trackingData = app.$cookies.get(from.path);
         const userId = app.$cookies.get('browserId');
         if(trackingData != null) {
             let msDiff = new Date() - new Date(trackingData.timeArrival);
@@ -13,10 +16,10 @@ export default function ({ route, from, app }) {
                 timeArrival: trackingData.timeArrival
             }
             sendTrackingData(trackingDataReq);
+            app.$cookies.remove(from.path);
         }
     }
-    
-    app.$cookies.set(route.fullPath, {
+    app.$cookies.set(route.path, {
         site: route.fullPath,
         timeArrival: new Date(),
     })
@@ -39,6 +42,5 @@ function sendTrackingData(data){
 
     fetch("http://maicogroup.net:3001/graphql/", requestOptions)
     .then(response => response.text())
-    .then(result => console.log(result))
     .catch(error => console.log('error', error));
 };

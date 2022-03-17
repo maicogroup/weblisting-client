@@ -1,8 +1,6 @@
 <template>
   <div class="w-full sm:px-36 px-5 color-stone-900">
-    <div>
-      <gallery class="inline h-72 w-full sm:hidden" :items="gallery" />
-    </div>
+    <div class="sm:block hidden">
     <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
       <a href="#">Dự án</a>
       /
@@ -16,8 +14,24 @@
     <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
       Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
     </p>
+    </div>
     <div>
-      <gallery class="h-72 w-full sm:inline hidden" :items="gallery" />
+      <gallery class="inline h-72 w-full" :items="gallery" />
+    </div>
+    <div class="sm:hidden block">
+    <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
+      <a href="#">Dự án</a>
+      /
+      <a href="">TP HCM</a>
+      /
+      <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
+    </div>
+    <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
+      {{ project.projectName }}
+    </h1>
+    <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
+      Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
+    </p>
     </div>
     <div class="mt-1 sm:mt-5 sm:mx-44">
       <div class="flex justify-between sm:justify-start sticky-table-of-content z-10 sm:pt-0 pt-3 color-stone-900">
@@ -244,8 +258,8 @@
       />
     </div>
     <div class="divide-y w-full border-b-2 mt-8 mb-12 hidden sm:block" />
-    <sell-and-rent-recommended v-if="recommendedPosts !== undefined && recommendedPosts.length > 0" class="mb-4" :posts="recommendedPosts" />
-    <near-area-recommended v-if="areaProjects !== undefined && areaProjects.length > 0" class="mb-4" :projects="areaProjects" />
+    <sell-and-rent-recommended v-if="recommendedPosts !== undefined && recommendedPosts.length > 0 && !$apollo.loading" class="mb-4" :posts="recommendedPosts" />
+    <near-area-recommended v-if="areaProjects !== undefined && areaProjects.length > 0 && !$apollo.loading" class="mb-4" :projects="areaProjects" />
   </div>
 </template>
 
@@ -305,38 +319,12 @@ export default {
   name: 'ProjectOverview',
   components: { expandPanel, SellAndRentRecommended, NearAreaRecommended },
   apollo: {
-    recommendedPosts: {
-      query: getRecommendedPosts,
-      update: data => data.postsWithPagination.items,
-      variables () {
-        return {
-          filter: {
-            projectId: { eq: '61c966dd6e47abd592a5c166' }
-          }
-        };
-      }
-    },
-
-    areaProjects: {
-      query: getAreaProjects,
-      update: data => data.projects,
-      variables () {
-        return {
-          condition: {
-            address: {
-              district: { eq: 'Thủ Đức' },
-              city: { eq: 'Hồ Chí Minh' }
-            }
-          }
-        };
-      }
-    },
 
     project: {
       query () {
         return gql`
-              query GetProjectOverview {
-                projects(where: { pageInfors: { some: { slug: { eq: "can-ho-trinh-quoc-phong" }}} }) {
+              query GetProjectOverview($slug: String!) {
+                projects(where: { pageInfors: { some: { slug: { eq: $slug }}} }) {
                   id
                   projectName
                   address {
@@ -388,17 +376,49 @@ export default {
       update (data) {
         const project = data.projects[0];
         return project;
+      },
+      variables () {
+        return {
+          slug: this.$route.params.slug
+        };
+      }
+    },
+
+    recommendedPosts: {
+      query: getRecommendedPosts,
+      update: data => data.postsWithPagination.items,
+      skip () {
+        // return this.filter === null || this.$route.params.slug === null;
+        return this.project === undefined;
+      },
+      variables () {
+        return {
+          filter: {
+            projectId: { eq: this.project.id }
+          }
+        };
+      }
+    },
+    areaProjects: {
+      query: getAreaProjects,
+      update: data => data.projects,
+      variables () {
+        if (this.project) {
+          return {
+            condition: {
+              address: {
+                district: { eq: this.project.address.district },
+                city: { eq: this.project.address.city }
+              }
+            }
+          };
+        };
       }
     }
   },
   data () {
     return {
       // dữ liệt trang tổng quan dự án
-      post: {
-        gallery: [
-          'apartment-resource/4a29f3dc-afa2-4aee-aa91-cbce3bc49ee5/17-02-2022_0924/image/93a3b5f6ae3a62643b2b21.jpg'
-        ]
-      },
       isDroppingContent: false,
       readMoreContent: 'Xem thêm',
       showReadMoreStyles: 'opacity-90 overflow-hidden max-h-6 text-lg',
@@ -412,13 +432,12 @@ export default {
         isTargetingLocation: false,
         isTargetingRentAndSell: false
       },
-      readMoreButtonIsActive: false,
-      tempContent: '<p>Ngoài tin đăng cho thuê căn hộ theo dự án thì tại Thuecanho123.com cũng sở hữu lượng tin đăng&nbsp;<strong>cho thuê chung cư mini</strong>&nbsp;khủng cả về số lượng và chất lượng, tha hồ để các bạn lựa chọn.&nbsp;</p><p>Giá cho thuê căn hộ chung cư mini giao động từ 5 triệu - 7 triệu, diện tích từ 25-40m2, thông thường sẽ được chủ nhà trang bị đầy đủ nội thất cơ bản đến cao cấp, bạn chỉ việc vào ở ngay. Đối tượng phù hợp loại hình này thường là các bạn đã đi làm vài năm có thu nhập ổn định hoặc các&nbsp;cặp vợ chồng trẻ mới cưới chưa có khả năng mua nhà thì việc thuê căn hộ mini này là một giải pháp tốt giúp tiết kiệm vừa đảm bảo cuộc sống tương đối thoải mái.</p><p><br></p><p><img src=\"https://tch123.cdn.static123.com/images/thumbs/900x600/fit/2021/12/01/cho-thue-chung-cu-mini_1638291849.jpg\" alt=\"cho thuê chung cư mini\">'
+      readMoreButtonIsActive: false
     };
   },
   computed: {
     gallery () {
-      const items = this.post.gallery.map(i => 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + i);
+      const items = this.project.images;
       return items.sort(function (x, y) {
         return x.includes('mp4') ? 1 : y.includes('mp4') ? -1 : 0;
       });

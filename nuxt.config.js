@@ -55,11 +55,7 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-<<<<<<< HEAD
         httpEndpoint: 'http://localhost:54261/graphql/'
-=======
-        httpEndpoint: 'https://api-listing.maicogroup.net/graphql/'
->>>>>>> master
       }
     }
   },
@@ -88,6 +84,7 @@ export default {
     ]
   },
 
+  // eslint-disable-next-line no-dupe-keys
   toast: {
     position: 'top-right',
     register: [{

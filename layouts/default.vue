@@ -27,7 +27,7 @@ export default {
 
       //Facebook chat configuration
       var chatbox = document.getElementById('fb-customer-chat');
-      chatbox.setAttribute("page_id", "108272328481613");
+      chatbox.setAttribute("page_id", "2352735844786718");
       chatbox.setAttribute("attribution", "biz_inbox");
       window.fbAsyncInit = function() {
         FB.init({
@@ -83,7 +83,6 @@ export default {
 
       fetch("http://maicogroup.net:3001/graphql/", requestOptions)
       .then(response => response.text())
-      .then(result => console.log("result: ", result))
       .catch(error => console.log('error', error));
     }
   }

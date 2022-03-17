@@ -348,14 +348,10 @@
         <expand-panel title="Tổng quan">
           <div>
             <client-only>
-              <quill-editor
-                ref="myQuillEditor"
-                v-model="project.projectPost.overview"
+              <editor
+                :content="project.projectPost.overview"
                 class="h-52 mb-11"
-                :options="editorOption"
-                @blur="onEditorBlur($event)"
-                @focus="onEditorFocus($event)"
-                @ready="onEditorReady($event)"
+                @text-change="((e) => project.projectPost.overview = e)"
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
@@ -367,14 +363,10 @@
         <expand-panel title="Vị trí">
           <div>
             <client-only>
-              <quill-editor
-                ref="myQuillEditor"
-                v-model="project.projectPost.location"
+              <editor
+                :content="project.projectPost.location"
                 class="h-52 mb-11"
-                :options="editorOption"
-                @blur="onEditorBlur($event)"
-                @focus="onEditorFocus($event)"
-                @ready="onEditorReady($event)"
+                @text-change="((e) => project.projectPost.location = e)"
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
@@ -386,14 +378,10 @@
         <expand-panel title="Thiết kế dự án">
           <div>
             <client-only>
-              <quill-editor
-                ref="myQuillEditor"
-                v-model="project.projectPost.projectDesign"
+              <editor
+                :content="project.projectPost.projectDesign"
                 class="h-52 mb-11"
-                :options="editorOption"
-                @blur="onEditorBlur($event)"
-                @focus="onEditorFocus($event)"
-                @ready="onEditorReady($event)"
+                @text-change="((e) => project.projectPost.projectDesign = e)"
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
@@ -405,14 +393,10 @@
         <expand-panel title="Bài viết tiện ích">
           <div>
             <client-only>
-              <quill-editor
-                ref="myQuillEditor"
-                v-model="project.projectPost.utilitySection"
+              <editor
+                :content="project.projectPost.utilitySection"
                 class="h-52 mb-11"
-                :options="editorOption"
-                @blur="onEditorBlur($event)"
-                @focus="onEditorFocus($event)"
-                @ready="onEditorReady($event)"
+                @text-change="((e) => project.projectPost.utilitySection = e)"
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
@@ -424,14 +408,10 @@
         <expand-panel title="Giá thuê và mua">
           <div>
             <client-only>
-              <quill-editor
-                ref="myQuillEditor"
-                v-model="project.projectPost.rentAndSellPrice"
+              <editor
+                :content="project.projectPost.rentAndSellPrice"
                 class="h-52 mb-11"
-                :options="editorOption"
-                @blur="onEditorBlur($event)"
-                @focus="onEditorFocus($event)"
-                @ready="onEditorReady($event)"
+                @text-change="((e) => project.projectPost.rentAndSellPrice = e)"
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">

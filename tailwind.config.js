@@ -12,6 +12,4 @@ module.exports = {
     },
   },
   // ...
-module.export ={
-    darkMode: false,
 }

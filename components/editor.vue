@@ -3,7 +3,7 @@
     <client-only>
       <quill-editor
         ref="editor"
-        v-model.lazy="editedContent"
+        v-model="content"
         :options="editorOption"
         class="editor--border relative"
         @change="debounceTextChange"
@@ -65,7 +65,7 @@ export default {
   methods: {
     debounceTextChange() {
       //don't use arrow function
-      this.$emit('text-change', this.editedContent);
+      this.$emit('text-change', this.content);
     },
     uploadImage(){
         if (!process.client) {

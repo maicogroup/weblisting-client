@@ -2,7 +2,7 @@
   <div id="post-subinfor" class="max-w-full grow">
     <div class="mt-2 mb-2">
       <h1 class="text-[21px] md:text-[24px] text-stone-900 font-bold">
-        Bán căn hộ chung cư The Sun Avenue
+        {{ this.heading }}
       </h1>
       <div class="flex justify-between md:block">
         <p class="text-[12px] text-neutral-400 flex items-center">
@@ -164,45 +164,47 @@
               >
                 {{ post.pageInfor.title }}
               </NuxtLink>
-
               <div class="flex my-1 md:my-3 text-[14px] absolute top-0 right-1 md:relative">
-                <div class="flex">
-                  <div class="flex items-center justify-center">
-                    <svg
-                      width="18"
-                      height="12"
-                      viewBox="0 0 18 12"
-                      fill=""
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M17.1 4.95429V2.57143C17.1 1.15714 15.885 0 14.4 0H10.8C10.107 0 9.477 0.257143 9 0.668572C8.523 0.257143 7.893 0 7.2 0H3.6C2.115 0 0.9 1.15714 0.9 2.57143V4.95429C0.351 5.42571 0 6.10286 0 6.85714V12H1.8V10.2857H16.2V12H18V6.85714C18 6.10286 17.649 5.42571 17.1 4.95429ZM10.8 1.71429H14.4C14.895 1.71429 15.3 2.1 15.3 2.57143V4.28571H9.9V2.57143C9.9 2.1 10.305 1.71429 10.8 1.71429ZM2.7 2.57143C2.7 2.1 3.105 1.71429 3.6 1.71429H7.2C7.695 1.71429 8.1 2.1 8.1 2.57143V4.28571H2.7V2.57143ZM1.8 8.57143V6.85714C1.8 6.38571 2.205 6 2.7 6H15.3C15.795 6 16.2 6.38571 16.2 6.85714V8.57143H1.8Z"
-                        fill="#5C5C5C"
-                      />
-                    </svg>
+                  <div class="flex" v-if="post.type === 'Căn hộ'">
+                    <div class="flex items-center justify-center">
+                      <svg
+                        width="18"
+                        height="12"
+                        viewBox="0 0 18 12"
+                        fill=""
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M17.1 4.95429V2.57143C17.1 1.15714 15.885 0 14.4 0H10.8C10.107 0 9.477 0.257143 9 0.668572C8.523 0.257143 7.893 0 7.2 0H3.6C2.115 0 0.9 1.15714 0.9 2.57143V4.95429C0.351 5.42571 0 6.10286 0 6.85714V12H1.8V10.2857H16.2V12H18V6.85714C18 6.10286 17.649 5.42571 17.1 4.95429ZM10.8 1.71429H14.4C14.895 1.71429 15.3 2.1 15.3 2.57143V4.28571H9.9V2.57143C9.9 2.1 10.305 1.71429 10.8 1.71429ZM2.7 2.57143C2.7 2.1 3.105 1.71429 3.6 1.71429H7.2C7.695 1.71429 8.1 2.1 8.1 2.57143V4.28571H2.7V2.57143ZM1.8 8.57143V6.85714C1.8 6.38571 2.205 6 2.7 6H15.3C15.795 6 16.2 6.38571 16.2 6.85714V8.57143H1.8Z"
+                          fill="#5C5C5C"
+                        />
+                      </svg>
+                    </div>
+                    <div class="ml-2 text-neutral-400">
+                      {{ post.totalBedRoom }}
+                    </div>
                   </div>
-                  <div class="ml-2 text-neutral-400">
-                    {{ post.totalBedRoom }}
-                  </div>
-                </div>
-                <div class="mx-2">·</div>
+                  <div v-if="post.type === 'Căn hộ'" class="mx-2">·</div>
 
-                <div class="flex">
-                  <div class="flex items-center justify-center">
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M11.4 7.2V7.8C11.4 8.946 10.758 9.942 9.81 10.446L10.2 12H9L8.7 10.8H3.3L3 12H1.8L2.19 10.446C1.70951 10.1911 1.30758 9.81008 1.02744 9.34387C0.747286 8.87766 0.599511 8.34391 0.6 7.8V7.2H0V6H10.8V1.8C10.8 1.64087 10.7368 1.48826 10.6243 1.37574C10.5117 1.26321 10.3591 1.2 10.2 1.2C9.9 1.2 9.672 1.404 9.6 1.674C9.978 1.998 10.2 2.478 10.2 3H6.6C6.6 2.52261 6.78964 2.06477 7.12721 1.72721C7.46477 1.38964 7.92261 1.2 8.4 1.2H8.502C8.748 0.504 9.414 0 10.2 0C10.6774 0 11.1352 0.189642 11.4728 0.527208C11.8104 0.864773 12 1.32261 12 1.8V7.2H11.4ZM10.2 7.2H1.8V7.8C1.8 8.27739 1.98964 8.73523 2.32721 9.07279C2.66477 9.41036 3.12261 9.6 3.6 9.6H8.4C8.87739 9.6 9.33523 9.41036 9.67279 9.07279C10.0104 8.73523 10.2 8.27739 10.2 7.8V7.2Z"
-                        fill="#4D5056"
-                      />
-                    </svg>
+                  <div v-if="post.type === 'Căn hộ'" class="flex">
+                    <div class="flex items-center justify-center">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.4 7.2V7.8C11.4 8.946 10.758 9.942 9.81 10.446L10.2 12H9L8.7 10.8H3.3L3 12H1.8L2.19 10.446C1.70951 10.1911 1.30758 9.81008 1.02744 9.34387C0.747286 8.87766 0.599511 8.34391 0.6 7.8V7.2H0V6H10.8V1.8C10.8 1.64087 10.7368 1.48826 10.6243 1.37574C10.5117 1.26321 10.3591 1.2 10.2 1.2C9.9 1.2 9.672 1.404 9.6 1.674C9.978 1.998 10.2 2.478 10.2 3H6.6C6.6 2.52261 6.78964 2.06477 7.12721 1.72721C7.46477 1.38964 7.92261 1.2 8.4 1.2H8.502C8.748 0.504 9.414 0 10.2 0C10.6774 0 11.1352 0.189642 11.4728 0.527208C11.8104 0.864773 12 1.32261 12 1.8V7.2H11.4ZM10.2 7.2H1.8V7.8C1.8 8.27739 1.98964 8.73523 2.32721 9.07279C2.66477 9.41036 3.12261 9.6 3.6 9.6H8.4C8.87739 9.6 9.33523 9.41036 9.67279 9.07279C10.0104 8.73523 10.2 8.27739 10.2 7.8V7.2Z"
+                          fill="#4D5056"
+                        />
+                      </svg>
+                    </div>
+                    <div class="ml-2 text-neutral-400">{{ post.totalWC }}</div>
                   </div>
-                  <div class="ml-2 text-neutral-400">{{ post.totalWC }}</div>
+                <div v-if="post.type != 'Căn hộ'">
+                  <div class="ml-2 text-neutral-900">{{ post.type }}</div>
                 </div>
                 <div class="mx-2 text-[#838383]">·</div>
 
@@ -323,7 +325,7 @@ const getPostsQuery = gql`
 
 export default {
   name: "ListPost",
-  props: ["filter"],
+  props: ["filter", "heading"],
   data() {
     return {
       pageIndex: 1,
@@ -351,7 +353,6 @@ export default {
   },
   computed: {
     posts() {
-      console.log(this.postsData);
       if (this.postsData == null) {
         return [];
       } else {
@@ -380,6 +381,7 @@ export default {
             date: this.formatDate(item.lastUpdatedAt),
             tags: item.tags,
             id: item.id,
+            type: item.type
           };
         });
       }
@@ -391,6 +393,7 @@ export default {
         return this.postsData.totalCount;
       }
     },
+
   },
   watch: {
     filter(filter) {

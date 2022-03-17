@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <recommended-posts v-if="recommendedPosts !== undefined && recommendedPosts.length > 0" class="mb-4" :posts="recommendedPosts" />
+    <recommended-posts title="Có thể bạn quan tâm" v-if="recommendedPosts !== undefined && recommendedPosts.length > 0" class="mb-4" :posts="recommendedPosts" />
   </div>
 </template>
 
@@ -15,7 +15,7 @@
 import { gql } from 'graphql-tag';
 import DetailPost from './components/detail-post.vue';
 import ContactInfor from './components/contract-infor.vue';
-import RecommendedPosts from './components/recommended-posts.vue';
+// import RecommendedPosts from './components/recommended-posts.vue';
 const getPostQuery = gql`
   query GetPost($condition: PostCollectionFilterInput) {
         post( where: $condition ) {
@@ -54,7 +54,6 @@ const getPostQuery = gql`
               googleMapLocation
             }
             juridical
-            investor
             projectName
             utilities {
               locationUtilities
@@ -95,7 +94,7 @@ const getRecommendedPosts = gql`
 
 export default {
   name: 'DetailApartmentPage',
-  components: { ContactInfor, DetailPost, RecommendedPosts },
+  components: { ContactInfor, DetailPost },
   apollo: {
     post: {
       query: getPostQuery,

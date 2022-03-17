@@ -351,7 +351,6 @@ export default {
   },
   computed: {
     posts() {
-      console.log(this.postsData);
       if (this.postsData == null) {
         return [];
       } else {

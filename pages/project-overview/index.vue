@@ -258,7 +258,7 @@
       />
     </div>
     <div class="divide-y w-full border-b-2 mt-8 mb-12 hidden sm:block" />
-    <sell-and-rent-recommended v-if="recommendedPosts !== undefined && recommendedPosts.length > 0 && !$apollo.loading" class="mb-4" :posts="recommendedPosts" />
+    <recommended-posts v-if="recommendedPosts !== undefined && recommendedPosts.length > 0 && !$apollo.loading" title="Bán và Thuê" class="mb-4" :posts="recommendedPosts" />
     <near-area-recommended v-if="areaProjects !== undefined && areaProjects.length > 0 && !$apollo.loading" class="mb-4" :projects="areaProjects" />
   </div>
 </template>
@@ -267,7 +267,6 @@
 // eslint-disable-next-line vue/component-tags-order
 import { expandPanel } from 'vue-expand-panel';
 import { gql } from 'graphql-tag';
-import SellAndRentRecommended from './components/sell-and-rent-recommended.vue';
 import NearAreaRecommended from './components/near-area-recommended.vue';
 // import styles
 import './css/vue-expander.css';
@@ -317,7 +316,17 @@ const getAreaProjects = gql`
 export default {
 
   name: 'ProjectOverview',
-  components: { expandPanel, SellAndRentRecommended, NearAreaRecommended },
+  components: { expandPanel, NearAreaRecommended },
+  head(){
+    return {
+      title: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title,
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
+      }]
+    };
+  },
   apollo: {
 
     project: {

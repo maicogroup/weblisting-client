@@ -517,7 +517,12 @@ export default {
     },
 
     setFilterDemandOption (option) {
+      if (option === this.inputFilter.demand) {
+        return;
+      }
+
       this.inputFilter.demand = option;
+      this.inputFilter.priceRange = null;
     },
 
     resetFilter () {

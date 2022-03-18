@@ -1,37 +1,37 @@
 <template>
-  <div class="w-full sm:px-36 px-5 color-stone-900">
+  <div v-if="project" class="w-full sm:px-36 px-5 color-stone-900">
     <div class="sm:block hidden">
-    <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
-      <a href="#">Dự án</a>
-      /
-      <a href="">TP HCM</a>
-      /
-      <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
-    </div>
-    <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
-      {{ project.projectName }}
-    </h1>
-    <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
-      Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
-    </p>
+      <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
+        <a href="#">Dự án</a>
+        /
+        <a href="">TP HCM</a>
+        /
+        <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
+      </div>
+      <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
+        {{ project.projectName }}
+      </h1>
+      <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
+        Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
+      </p>
     </div>
     <div>
       <gallery class="inline h-72 w-full" :items="gallery" />
     </div>
     <div class="sm:hidden block">
-    <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
-      <a href="#">Dự án</a>
-      /
-      <a href="">TP HCM</a>
-      /
-      <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
-    </div>
-    <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
-      {{ project.projectName }}
-    </h1>
-    <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
-      Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
-    </p>
+      <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
+        <a href="#">Dự án</a>
+        /
+        <a href="">TP HCM</a>
+        /
+        <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
+      </div>
+      <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
+        {{ project.projectName }}
+      </h1>
+      <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
+        Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
+      </p>
     </div>
     <div class="mt-1 sm:mt-5 sm:mx-44">
       <div class="flex justify-between sm:justify-start sticky-table-of-content z-10 sm:pt-0 pt-3 color-stone-900">
@@ -48,7 +48,7 @@
             Mặt bằng
           </h2>
           <p class="text-sm font-medium sm:block hidden">
-            Ví trí dự án
+            Tổng thể về dự án
           </p>
         </button>
         <button :class="isTargetingTableOfContents.isTargetingLocation ? activeTableContent : tableContentStyles" @click="ScrollToLocation()">
@@ -56,7 +56,7 @@
             Vị trí
           </h2>
           <p class="text-sm font-medium sm:block hidden">
-            Tổng thể về dự án
+            Bản đồ dự án
           </p>
         </button>
         <button :class="isTargetingTableOfContents.isTargetingRentAndSell ? activeTableContent : tableContentStyles" @click="ScrollToSellAndRent()">
@@ -64,7 +64,7 @@
             Bán và cho thuê
           </h2>
           <p class="text-sm font-medium sm:block hidden">
-            Chi tiết dự án
+            Giá bán và cho thuê
           </p>
         </button>
       </div>
@@ -118,7 +118,7 @@
           Tiện ích
         </h1>
         <div class="text-lg" v-html="project.projectPost.utilitySection" />
-        <h1 ref="SellAndRent" class="font-medium text-2xl sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4" style="scroll-margin-top: 135px">
+        <h1 class="font-medium text-2xl sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
           Giá bán và thuê
         </h1>
         <div class="text-lg" v-html="project.projectPost.rentAndSellPrice" />
@@ -257,8 +257,13 @@
         loading="lazy"
       />
     </div>
-    <div class="divide-y w-full border-b-2 mt-8 mb-12 hidden sm:block" />
-    <recommended-posts v-if="recommendedPosts !== undefined && recommendedPosts.length > 0 && !$apollo.loading" title="Bán và Thuê" class="mb-4" :posts="recommendedPosts" />
+    <div ref="SellAndRent" style="scroll-margin-top: 10px" class="divide-y w-full border-b-2 mt-8 mb-12 hidden sm:block" />
+    <recommended-posts
+      v-if="recommendedPosts !== undefined && recommendedPosts.length > 0 && !$apollo.loading"
+      title="Bán và Thuê"
+      class="mb-4"
+      :posts="recommendedPosts"
+    />
     <near-area-recommended v-if="areaProjects !== undefined && areaProjects.length > 0 && !$apollo.loading" class="mb-4" :projects="areaProjects" />
   </div>
 </template>
@@ -317,7 +322,26 @@ export default {
 
   name: 'ProjectOverview',
   components: { expandPanel, NearAreaRecommended },
-  head(){
+  data () {
+    return {
+      // dữ liệt trang tổng quan dự án
+      isDroppingContent: false,
+      readMoreContent: 'Xem thêm',
+      showReadMoreStyles: 'opacity-90 overflow-hidden max-h-6 text-lg',
+      hideReadMoreStyles: 'hidden delay-1000',
+      tableContentStyles: 'text-center sm:mr-6 table-of-content color-A3A3A3 transition-02s-all',
+      activeTableContent: 'active-table-contents text-center sm:mr-6 transition-02s-all',
+      readMoreArrowStyle: 'rotate-arrow-down h-6 w-6',
+      isTargetingTableOfContents: {
+        isTargetingOverview: true,
+        isTargetingGround: false,
+        isTargetingLocation: false,
+        isTargetingRentAndSell: false
+      },
+      readMoreButtonIsActive: false
+    };
+  },
+  head () {
     return {
       title: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title,
       meta: [{
@@ -424,25 +448,6 @@ export default {
         };
       }
     }
-  },
-  data () {
-    return {
-      // dữ liệt trang tổng quan dự án
-      isDroppingContent: false,
-      readMoreContent: 'Xem thêm',
-      showReadMoreStyles: 'opacity-90 overflow-hidden max-h-6 text-lg',
-      hideReadMoreStyles: 'hidden delay-1000',
-      tableContentStyles: 'text-center sm:mr-6 table-of-content color-A3A3A3 transition-02s-all',
-      activeTableContent: 'active-table-contents text-center sm:mr-6 transition-02s-all',
-      readMoreArrowStyle: 'rotate-arrow-down h-6 w-6',
-      isTargetingTableOfContents: {
-        isTargetingOverview: true,
-        isTargetingGround: false,
-        isTargetingLocation: false,
-        isTargetingRentAndSell: false
-      },
-      readMoreButtonIsActive: false
-    };
   },
   computed: {
     gallery () {

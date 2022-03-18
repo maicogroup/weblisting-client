@@ -332,7 +332,7 @@
               <quill-editor
                 ref="myQuillEditor"
                 v-model="project.sEOContent"
-                class="h-52 mb-11"
+                class="h-auto mb-11"
                 :options="editorOption"
                 @blur="onEditorBlur($event)"
                 @focus="onEditorFocus($event)"
@@ -351,7 +351,7 @@
               <quill-editor
                 ref="myQuillEditor"
                 v-model="project.projectPost.overview"
-                class="h-52 mb-11"
+                class="h-auto mb-11"
                 :options="editorOption"
                 @blur="onEditorBlur($event)"
                 @focus="onEditorFocus($event)"
@@ -370,7 +370,7 @@
               <quill-editor
                 ref="myQuillEditor"
                 v-model="project.projectPost.location"
-                class="h-52 mb-11"
+                class="h-auto mb-11"
                 :options="editorOption"
                 @blur="onEditorBlur($event)"
                 @focus="onEditorFocus($event)"
@@ -389,7 +389,7 @@
               <quill-editor
                 ref="myQuillEditor"
                 v-model="project.projectPost.projectDesign"
-                class="h-52 mb-11"
+                class="h-auto mb-11"
                 :options="editorOption"
                 @blur="onEditorBlur($event)"
                 @focus="onEditorFocus($event)"
@@ -408,7 +408,7 @@
               <quill-editor
                 ref="myQuillEditor"
                 v-model="project.projectPost.utilitySection"
-                class="h-52 mb-11"
+                class="h-auto mb-11"
                 :options="editorOption"
                 @blur="onEditorBlur($event)"
                 @focus="onEditorFocus($event)"
@@ -427,7 +427,7 @@
               <quill-editor
                 ref="myQuillEditor"
                 v-model="project.projectPost.rentAndSellPrice"
-                class="h-52 mb-11"
+                class="h-auto mb-11"
                 :options="editorOption"
                 @blur="onEditorBlur($event)"
                 @focus="onEditorFocus($event)"
@@ -1515,5 +1515,8 @@ export default {
     }
     .w-auto {
         width: auto;
+    }
+    .h-auto{
+      height: auto;
     }
 </style>

@@ -1,5 +1,14 @@
 <template>
   <div class="w-full">
+    <post-filter-bar :filter="filter" @search="handleFilterButtonPressed" @filterchanged="handleFilterChanged" />
+    <post-filter-modal
+      :filter="filter"
+      :visible="filterMobileVisible"
+      @close="filterMobileVisible = false"
+      @filterchanged="handleFilterChanged"
+      @search="handleFilterButtonPressed"
+    />
+
     <div class="relative h-80 md:h-[617px]">
       <img class="w-full h-full object-cover absolute" src="~/static/images/home/home-page-bg.jpg">
       <div class="relative w-full h-full flex flex-col items-center pt-40 md:pt-0 md:justify-center">
@@ -113,9 +122,80 @@
 </template>
 
 <script>
+import PostFilterBar from '../components/post-filter-bar.vue';
+import PostFilterModal from '../components/post-filter-modal.vue';
+
 export default {
   name: 'HomePage',
-  layout: 'no-fixed-contact'
+  components: { PostFilterBar, PostFilterModal },
+  layout: 'no-fixed-contact',
+  data () {
+    return {
+      filter: {},
+      filterMobileVisible: false
+    };
+  },
+
+  methods: {
+    handleFilterChanged (newFilter) {
+      this.filter = newFilter;
+    },
+
+    handleFilterButtonPressed () {
+      let path = '/danh-sach-can-ho';
+      if (this.filter.project) {
+        path = path + '/' + this.filter.project.pageInfor.slug;
+      }
+      const query = {};
+      if (this.filter.demand) {
+        query.demand = this.filter.demand;
+      }
+      if (this.filter.type) {
+        query.type = this.filter.type;
+      }
+      if (this.filter.location) {
+        const location = this.filter.location;
+        query.city = location.city;
+        query.district = location.district;
+      }
+      if (this.filter.priceRange) {
+        const { from, to } = this.swapRangeValueIfInvalid(this.filter.priceRange);
+        if (from) {
+          query.priceFrom = from;
+        }
+        if (to) {
+          query.priceTo = to;
+        }
+      }
+      if (this.filter.acreageRange) {
+        const { from, to } = this.swapRangeValueIfInvalid(this.filter.acreageRange);
+        if (from) {
+          query.acreageFrom = from;
+        }
+        if (to) {
+          query.acreageTo = to;
+        }
+      }
+      if (this.filter.directions) {
+        query.directions = this.filter.directions;
+      }
+      if (this.filter.bedroomOptions) {
+        query.bedroomOptions = this.filter.bedroomOptions;
+      }
+      this.$router.push({ path, query });
+    },
+
+    /** trường hợp người dùng bấm tìm kiếm trước khi range được swap bởi filter dropdown */
+    swapRangeValueIfInvalid (range) {
+      const bothAreNumber = range.from !== null && range.to !== null;
+
+      if (bothAreNumber && range.to - range.from < 0) {
+        return { from: range.to, to: range.from };
+      }
+
+      return range;
+    }
+  }
 };
 </script>
 
@@ -124,16 +204,8 @@ export default {
     font-size: 0;
   }
 
-  .text-28px {
-    font-size: 28px;
-  }
-
   .search-bar {
     max-width: 384px;
     width: 100%;
-  }
-
-  .line-height-0 {
-    line-height: 0;
   }
 </style>

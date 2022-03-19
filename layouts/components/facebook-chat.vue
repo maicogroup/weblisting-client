@@ -10,7 +10,7 @@
 <script>
 export default {
   name: 'FacebookChat',
-  created () {
+  mounted () {
     if (process.client) {
       // Facebook chat configuration
       const chatbox = document.getElementById('fb-customer-chat');

@@ -81,7 +81,7 @@
     <!-- <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" /> -->
     <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
     <div class="flex justify-between w-full">
-      <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" :heading="this.heading" />
+      <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" :heading="heading" />
       <div class="ml-9 mt-14 hidden lg:block">
         <ContactInfor />
         <div class="border mt-4 p-4 rounded">
@@ -272,7 +272,6 @@
     </div>
 
     <!-- chon khu vuc mobile -->
-    
   </div>
 </template>
 
@@ -280,25 +279,25 @@
 import { gql } from 'graphql-tag';
 
 import { marked } from 'marked';
+import LocationFtilerDropdown from '../components/filtering/location-filter-dropdown.vue';
+import ProjectFilterDropdown from '../components/filtering/project-filter-dropdown.vue';
+import DirectionFilterDropdown from '../components/filtering/direction-filter-dropdown.vue';
+import TypeFilterDropdown from '../components/filtering/type-filter-dropdown.vue';
+import PriceFilterDropdown from '../components/filtering/price-filter-dropdown.vue';
+import AcreageFilterDropdown from '../components/filtering/acreage-filter-dropdown.vue';
+import BedroomFilterDropdown from '../components/filtering/bedroom-filter-dropdown.vue';
+import TypeFilterOption from '../components/responsive-filtering/type-filter-option.vue';
+import LocationFilterOption from '../components/responsive-filtering/location-filter-option.vue';
+import PriceFilterOption from '../components/responsive-filtering/price-filter-option.vue';
+import AcreageFilterOption from '../components/responsive-filtering/acreage-filter-option.vue';
+import DirectionFilterOptions from '../components/responsive-filtering/direction-filter-options.vue';
+import ProjectFilterOption from '../components/responsive-filtering/project-filter-option.vue';
+import BedroomFilterOptions from '../components/responsive-filtering/bedroom-filter-options.vue';
+import QuickFilterButton from './components/quick-filter-button.vue';
 import ProjectHeader from './components/project-header.vue';
 import ProjectThumbnail from './components/project-thumbnail.vue';
 import ListPost from './components/list-post.vue';
 import ContactInfor from './components/contract-infor.vue';
-import LocationFtilerDropdown from './components/filtering/location-filter-dropdown.vue';
-import ProjectFilterDropdown from './components/filtering/project-filter-dropdown.vue';
-import DirectionFilterDropdown from './components/filtering/direction-filter-dropdown.vue';
-import TypeFilterDropdown from './components/filtering/type-filter-dropdown.vue';
-import PriceFilterDropdown from './components/filtering/price-filter-dropdown.vue';
-import AcreageFilterDropdown from './components/filtering/acreage-filter-dropdown.vue';
-import BedroomFilterDropdown from './components/filtering/bedroom-filter-dropdown.vue';
-import QuickFilterButton from './components/quick-filter-button.vue';
-import TypeFilterOption from './components/responsive-filtering/type-filter-option.vue';
-import LocationFilterOption from './components/responsive-filtering/location-filter-option.vue';
-import PriceFilterOption from './components/responsive-filtering/price-filter-option.vue';
-import AcreageFilterOption from './components/responsive-filtering/acreage-filter-option.vue';
-import DirectionFilterOptions from './components/responsive-filtering/direction-filter-options.vue';
-import ProjectFilterOption from './components/responsive-filtering/project-filter-option.vue';
-import BedroomFilterOptions from './components/responsive-filtering/bedroom-filter-options.vue';
 import Divider from '~/components/Divider.vue';
 
 export default {
@@ -324,6 +323,7 @@ export default {
     DirectionFilterOptions,
     BedroomFilterOptions
   },
+
   data () {
     return {
       // filter dùng để lọc

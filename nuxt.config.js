@@ -55,7 +55,7 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://localhost:55421/graphql/'
+        httpEndpoint: 'https://api-listing.maicogroup.net/graphql/'
       }
     }
   },

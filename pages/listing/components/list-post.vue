@@ -8,7 +8,7 @@
         <p class="text-[12px] text-neutral-400 flex items-center">
           Hiện có {{ totalItem }} bất động sản
         </p>
-        <div class="block md:hidden">
+        <div class="block md:hidden" v-if="posts.length">
           <div class="flex justify-between text-stone-900 z-10">
             <p class="text-[14px] text-stone-900 flex items-center mr-2">
               Sắp xếp:
@@ -25,7 +25,7 @@
           </div>
         </div>
       </div>
-      <div class="hidden md:flex w-full mt-[1rem] text-sm">
+      <div class="hidden md:flex w-full mt-[1rem] text-sm" v-if="posts.length">
         <div class="text-[12px] text-stone-900 py-[0.05rem]">Sắp xếp:</div>
         <div class="flex ml-1">
           <div
@@ -95,8 +95,24 @@
         </div>
       </div>
     </div>
-
-    <div class="flex flex-col">
+    
+    <div v-if="!posts.length">
+      <div>
+          <svg class="mx-auto" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="128" height="128" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#999" d="M31 8h-8v2h8v21h-8v2h10V10a2 2 0 0 0-2-2Z" class="clr-i-outline clr-i-outline-path-1"/><path fill="#999" d="M19.88 3H6.12A2.12 2.12 0 0 0 4 5.12V33h18V5.12A2.12 2.12 0 0 0 19.88 3ZM20 31h-3v-3H9v3H6V5.12A.12.12 0 0 1 6.12 5h13.76a.12.12 0 0 1 .12.12Z" class="clr-i-outline clr-i-outline-path-2"/><path fill="#999" d="M8 8h2v2H8z" class="clr-i-outline clr-i-outline-path-3"/><path fill="#999" d="M12 8h2v2h-2z" class="clr-i-outline clr-i-outline-path-4"/><path fill="#999" d="M16 8h2v2h-2z" class="clr-i-outline clr-i-outline-path-5"/><path fill="#999" d="M8 13h2v2H8z" class="clr-i-outline clr-i-outline-path-6"/><path fill="#999" d="M12 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-7"/><path fill="#999" d="M16 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-8"/><path fill="#999" d="M8 18h2v2H8z" class="clr-i-outline clr-i-outline-path-9"/><path fill="#999" d="M12 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-10"/><path fill="#999" d="M16 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-11"/><path fill="#999" d="M8 23h2v2H8z" class="clr-i-outline clr-i-outline-path-12"/><path fill="#999" d="M12 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-13"/><path fill="#999" d="M16 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-14"/><path fill="#999" d="M23 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-15"/><path fill="#999" d="M27 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-16"/><path fill="#999" d="M23 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-17"/><path fill="#999" d="M27 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-18"/><path fill="#999" d="M23 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-19"/><path fill="#999" d="M27 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-20"/><path fill="none" d="M0 0h36v36H0z"/></svg>
+          <p class="text-lg font-bold text-center">Rất tiếc, hiện không tìm thấy căn hộ nào <br> ở khu vực này.</p>
+          <div class="text-sm flex justify-center mt-3">
+            <p class="leading-6">
+              Vui lòng thử cách:
+              <ul class="ml-2" style="list-style-type: disc; list-style-position: inside;">
+                <li>Thay đổi hoặc làm mới bộ lọc</li>
+                <li>Trở lại trang chủ</li>
+              </ul>
+              <button v-on:click="goToHomePage" class="text-white bg-green-600 text-base font-bold px-10 py-4 rounded-md mt-3">Trở về trang chủ</button>
+            </p>
+          </div>
+       </div>
+    </div>
+    <div class="flex flex-col" v-else>
       <div
         v-for="post in posts"
         :key="post.id"
@@ -231,7 +247,7 @@
               <div class="font-bold text-[20px] text-stone-900 absolute md:relative top-0 left-0 ml-1 md:ml-0">
                 {{ post.price }}
               </div>
-              <div
+              <!-- <div
                 v-if="post.tags != null"
                 class="inline-flex space-x-1 items-center"
               >
@@ -253,7 +269,7 @@
                   {{ item }}
                 </p>
               </div>
-              <div v-else />
+              <div v-else /> -->
               <p class="text-sm text-neutral-400 mr-2 md:ml-0">
                 {{ post.date }}
               </p>
@@ -381,7 +397,7 @@ export default {
             date: this.formatDate(item.lastUpdatedAt),
             tags: item.tags,
             id: item.id,
-            type: item.type
+            type: item.type,
           };
         });
       }
@@ -393,7 +409,6 @@ export default {
         return this.postsData.totalCount;
       }
     },
-
   },
   watch: {
     filter(filter) {
@@ -408,6 +423,9 @@ export default {
     },
   },
   methods: {
+    goToHomePage(){
+       this.$router.push({ path: '/'}).catch(() => {});
+    },
     formatDate(dateStr) {
       const date = new Date(dateStr);
       const diffInDays = Math.floor((Date.now() - date.getTime()) / 86400000);

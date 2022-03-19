@@ -380,7 +380,7 @@ export default {
         }
       }
 
-      title = `${demand} sản phẩm ${type}${price}${acreage}`;
+      title = `${demand} ${type}${price}${acreage}`;
     }
     this.heading = title;
 

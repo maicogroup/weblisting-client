@@ -362,7 +362,8 @@ export default {
       tags: [],
       usageAcreage: this.post.usageAcreage,
       view: this.post.view,
-      doorDirection: this.post.doorDirection
+      doorDirection: this.post.doorDirection,
+      direction: this.post.direction
     };
     if (this.post.tags != null) 
     {
@@ -513,7 +514,8 @@ export default {
         && (this.currentPost.description == this.post.description) && (this.currentPost.tags.length == this.post.tags.length)
         && (this.currentPost.otherSpecification == this.post.otherSpecification) && (this.currentPost.usageAcreage == this.post.usageAcreage) 
         && (this.currentPost.view == this.post.view) && (this.currentPost.doorDirection == this.post.doorDirection)
-        && (this.currentPost.furnitures.length == this.post.furnitures.length) && (this.imageIsChanged == false))
+        && (this.currentPost.furnitures.length == this.post.furnitures.length) && (this.imageIsChanged == false) 
+        && (this.currentPost.direction == this.post.direction))
         {
         
           this.$toast.show("Cập nhật thất bại, dữ liệu chưa có thay đổi gì!", {
@@ -559,7 +561,8 @@ export default {
               tags: this.post.tags,
               usageAcreage: this.post.usageAcreage,
               view: this.post.view,
-              doorDirection: this.post.doorDirection
+              doorDirection: this.post.doorDirection,
+              direction: this.post.direction
             }
           }
         }).then((data) => {

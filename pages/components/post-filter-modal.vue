@@ -192,3 +192,29 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.filter-bar-blank-space {
+  height: 42px;
+}
+
+.filter-search-bar {
+  min-width: 8rem;
+  max-width: 12rem;
+}
+
+.double-button {
+  font-size: 0;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+</style>

@@ -178,3 +178,22 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.filter-bar-blank-space {
+  height: 42px;
+}
+
+.filter-search-bar {
+  min-width: 8rem;
+  max-width: 12rem;
+}
+
+.top-after-header {
+  top: 73px;
+}
+
+.double-button {
+  font-size: 0;
+}
+</style>

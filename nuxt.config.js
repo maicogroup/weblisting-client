@@ -84,6 +84,7 @@ export default {
     ]
   },
 
+  // eslint-disable-next-line no-dupe-keys
   toast: {
     position: 'top-right',
     register: [{

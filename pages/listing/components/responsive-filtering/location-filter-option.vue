@@ -65,7 +65,7 @@
       </div>
       <div
         v-for="city in filteredCities"
-        :key="city"
+        :key="city.name"
         class="flex justify-between h-11 border-b items-center mx-3"
         @click="handleSelectFirstOption(city)"
       >
@@ -168,7 +168,7 @@ export default {
       cities: [
         {
           name: 'Hồ Chí Minh',
-          districts: ['Q9', 'Q2', 'Thủ Đức']
+          districts: ['Quận 9', 'Quận 2', 'Thủ Đức']
         }
       ]
     };

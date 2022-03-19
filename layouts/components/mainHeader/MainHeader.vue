@@ -5,8 +5,8 @@
     <img onclick="void(0)" id="logo" class="h-12" src="~/assets/maico.png">
 
     <div class="hidden md:flex flex justify-between items-center space-x-10">
-      <a href="tel:0938140024" class="font-bold hidden xl:block">
-        0938 140 024
+      <a class="font-bold hidden xl:block" href="tel:0903324045">
+        0903 324 045
       </a>
 
       <Dropdown item-width="200px" title="Thuê">

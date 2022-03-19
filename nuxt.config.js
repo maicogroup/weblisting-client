@@ -37,6 +37,11 @@ export default {
     '~/plugins/editor.client.js'
   ],
 
+  loading: {
+    color: '#16A34A',
+    height: '5px'
+  },
+
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
@@ -55,7 +60,7 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://localhost:54261/graphql/'
+        httpEndpoint: 'https://api-listing.maicogroup.net/graphql/'
       }
     }
   },

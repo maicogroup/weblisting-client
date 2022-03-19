@@ -346,7 +346,7 @@
         </expand-panel>
 
         <expand-panel title="Tổng quan">
-          <div>
+          <div style="">
             <client-only>
               <quill-editor
                 ref="myQuillEditor"

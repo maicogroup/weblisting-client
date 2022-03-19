@@ -1,7 +1,7 @@
 <template>
   <div>
     <MainHeader />
-    <div class="relative mt-20 md:mt-32 flex justify-center max-w-full">
+    <div class="relative flex justify-center max-w-full mt-header">
       <Nuxt />
     </div>
     <MainFooter />
@@ -22,3 +22,9 @@ export default {
   components: { MainHeader, MainFooter, TrackingData, FacebookChat }
 };
 </script>
+
+<style scoped>
+.mt-header {
+  margin-top: 73px;
+}
+</style>

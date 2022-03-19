@@ -2,12 +2,13 @@
   <div class="vue-expand-panel p-2 h-auto">
     <h1 class="text-center font-bold text-lg mb-5">
       CHỈNH SỬA DỰ ÁN
+      <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0k4d5YPDr1r7FX77VdqWez?utm_source=generator" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
     </h1>
     <div class="flex items-center justify-center">
       <project-filter-dropdown :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged" />
     </div>
     <div class="w-auto h-auto p-2 border-2 rounded m-5">
-      <h1 class="font-semidbold text-lg">
+      <h1 class="font-semidbold text-2xl">
         {{ project.projectName }}
       </h1>
       <div class="p-2 h-auto" style="width:1000px;">
@@ -193,7 +194,7 @@
             <div class="flex justify-start items-center">
               <input v-model="tempUtility" type="text" class="w-auto my-2" placeholder="Thêm tiện ích mới">
               <button @click="() => project.utilities.listOfUtilities.push(tempUtility)">
-                <svg
+                <svg @onkeyup="() => project.utitlities.listOfUtilities.push(tempUtility)"
                   xmlns="http://www.w3.org/2000/svg"
                   class="ml-3"
                   width="16"
@@ -209,8 +210,8 @@
             </div>
           </div>
           <ul class="grid grid-cols-3">
-            <li v-for="(utility, index) in project.utilities.listOfUtilities" :key="utility" class="flex">
-              <label class="mr-3 mt-2"> {{ utility }} </label>
+            <li v-for="(utility, index) in project.utilities.listOfUtilities" :key="utility" class="flex justify-start items-center">
+              <label class="mr-3"> {{ utility }} </label>
               <button @click="() => project.utilities.listOfUtilities.splice(index, 1)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -586,36 +587,36 @@
     </modal>
 
     <modal name="show-edit-investor">
-      <div v-if="investorEdit" class="pt-12">
-        <h2 class="mt-2 text-lg font-semibold text-center">
+      <div v-if="investorEdit" class="p-5">
+        <h2 class="my-2 text-lg font-semibold text-center">
           Chỉnh sửa chủ đầu tư
         </h2>
-        <div class="flex justify-between" style="height: 150px;">
+        <div class="flex justify-between" style="height: 170px;">
           <div>
-            <div class="flex">
-              <p>Tên chủ đầu tư</p>
-              <input v-model="investorEdit.investorName" class="w-auto" type="text">
+            <div class="flex justify-between mb-2">
+              <p class="font-bold">Tên chủ đầu tư:</p>
+              <input v-model="investorEdit.investorName" style="width:50%" type="text">
             </div>
-            <div class="flex">
-              <p>Số dự án</p>
-              <input v-model="investorEdit.numberOfProjects" class="w-auto" type="number">
+            <div class="flex justify-between mb-2">
+              <p class="font-bold">Số dự án:</p>
+              <input v-model="investorEdit.numberOfProjects" style="width:50%" type="number">
             </div>
-            <div class="flex">
-              <p>Thời gian thành lập</p>
-              <input v-if="tempFoundedDate" v-model="tempFoundedDate" class="w-auto" type="date">
+            <div class="flex justify-between mb-2">
+              <p class="font-bold break-normal">Thời gian thành lập:</p>
+              <input v-if="tempFoundedDate" v-model="tempFoundedDate" style="width:50%" type="date">
             </div>
-            <div class="flex">
-              <p>Số điện thoại</p>
-              <input v-model="investorEdit.phoneNumber" class="w-auto" type="text">
+            <div class="flex justify-between mb-2">
+              <p class="font-bold">Số điện thoại:</p>
+              <input v-model="investorEdit.phoneNumber" style="width:50%" type="text" max="10">
             </div>
-            <div class="flex">
-              <p>Hình ảnh</p>
-              <input v-model="investorEdit.image" class="w-auto" type="text">
+            <div class="flex justify-between mb-2">
+              <p class="font-bold">Hình ảnh:</p>
+              <input v-model="investorEdit.image" style="width:50%" type="text">
             </div>
           </div>
-          <img :src="investorEdit.image" alt="Girl in a jacket" width="200" height="200">
+          <img :src="investorEdit.image" :alt="project.projectName" width="200" height="200">
         </div>
-        <div class="flex justify-end space-x-3 m-2 my-2">
+        <div class="flex justify-end space-x-3 m-2 mt-4">
           <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('show-edit-investor')">
             Quay lại
           </button>
@@ -677,50 +678,50 @@ const getProject = gql`query GetProjectToEdit($condition: ProjectCollectionFilte
                     id
                     description
                     investorId
-                  projectName
-                  address {
+                    projectName
+                    address {
                     street
                     district
                     city
                     googleMapLocation
-                  }
-                  images
-                  sEOContent
-                  pageInfors{
+                    }
+                    images
+                    sEOContent
+                    pageInfors{
                     title
                     slug
                     metaDescription
-                  }
-                  price
-                  acreage
-                  numberOfApartments
-                  numberOfBuildings
-                  juridical
-                  investor{
+                    }
+                    price
+                    acreage
+                    numberOfApartments
+                    numberOfBuildings
+                    juridical
+                    investor{
                     investorName
                     image
                     numberOfProjects
                     foundedTime
                     phoneNumber
-                  }
-                  projectPost{
+                    }
+                    projectPost{
                     overview
                     location
                     projectDesign
                     utilitySection
                     rentAndSellPrice
-                  }
-                  completionTime
-                  constructionAcreage
-                  masterPlan
-                  distributionUnit
-                  scale
-                  densityOfConstruction
-                  utilities{
+                    }
+                    completionTime
+                    constructionAcreage
+                    masterPlan
+                    distributionUnit
+                    scale
+                    densityOfConstruction
+                    utilities{
                     locationUtilities
                     internalUtilities
                     listOfUtilities
-                  }
+                    }
                 }
             }`;
 
@@ -869,622 +870,640 @@ export default {
     }
   },
   mounted () {
-    this.currentProject = {
-      id: this.project.id,
-      projectName: this.project.projectName,
-      investor: this.project.investor,
-      juridical: this.project.juridical,
-      description: this.project.description,
-      price: this.project.price,
-      numberOfApartments: this.project.numberOfApartments,
-      numberOfBuildings: this.project.numberOfBuildings,
-      acreage: this.project.acreage,
-      scale: this.project.scale,
-      constructionAcreage: this.project.constructionAcreage,
-      densityOfConstruction: this.project.densityOfConstruction,
-      completionTime: this.project.completionTime,
-      address: {
-        street: this.project.address.street,
-        district: this.project.address.district,
-        city: this.project.address.city,
-        googleMapLocation: this.project.address.googleMapLocation
-      },
-      utilities: {
-        internalUtilities: this.project.utilities.internalUtilities,
-        locationUtilities: this.project.utilities.locationUtilities,
-        listOfUtilities: this.project.utilities.listOfUtilities.splice()
-      },
-      projectPost: {
-        overview: this.project.overview,
-        location: this.project.location,
-        projectDesign: this.project.projectDesign,
-        utilitySection: this.project.utilitySection,
-        rentAndSellPrice: this.project.rentAndSellPrice
-      },
-      images: [],
-      sEOContent: this.project.sEOContent,
-      pageInfors: []
-    };
-    this.project.images.forEach(x => this.currentProject.images.push(x));
-    for (let i = 0; i < this.project.pageInfors.length; i++) {
-      const pageInfor = {
-        slug: this.project.pageInfors[i].slug,
-        title: this.project.pageInfors[i].title,
-        metaDescription: this.project.pageInfors[i].metaDescription
-      };
-      this.currentProject.pageInfors.push(pageInfor);
-    }
-  },
-  methods: {
-    handleProjectFilterChanged (project) {
-      this.inputFilter = { ...this.inputFilter, project };
-    },
-    onEditorBlur (editor) {
-      // console.log('editor blur!', editor);
-    },
-    onEditorFocus (editor) {
-      // console.log('editor focus!', editor);
-    },
-    onEditorReady (editor) {
-      // console.log('editor ready!', editor);
-    },
-    addNewUtility () {
-
-    },
-    updateProjectInformation () {
-      if ((this.currentProject.projectName === this.project.projectName) && (this.currentProject.investorId === this.project.investorId) &&
-                (this.currentProject.juridical === this.project.juridical) && (this.currentProject.description === this.project.description) &&
-                (this.currentProject.sEOContent === this.project.sEOContent) &&
-                (this.currentProject.masterPlan === this.project.masterPlan)) {
-        this.$toast.show('Dữ liệu chưa có thay đổi!', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 3000,
-          position: 'top-right'
-        });
-        return;
-      }
-      // eslint-disable-next-line no-unused-expressions
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectInformation($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            projectName: this.project.projectName,
-            investorId: this.project.investorId,
-            juridical: this.project.juridical,
-            description: this.project.description,
-            sEOContent: this.project.sEOContent,
-            masterPlan: this.project.masterPlan
-          }
+        this.currentProject = {
+        id: this.project.id,
+        projectName: this.project.projectName,
+        investor: this.project.investor,
+        juridical: this.project.juridical,
+        description: this.project.description,
+        price: this.project.price,
+        numberOfApartments: this.project.numberOfApartments,
+        numberOfBuildings: this.project.numberOfBuildings,
+        acreage: this.project.acreage,
+        scale: this.project.scale,
+        constructionAcreage: this.project.constructionAcreage,
+        densityOfConstruction: this.project.densityOfConstruction,
+        completionTime: this.project.completionTime,
+        address: {
+            street: this.project.address.street,
+            district: this.project.address.district,
+            city: this.project.address.city,
+            googleMapLocation: this.project.address.googleMapLocation
+        },
+        utilities: {
+            internalUtilities: this.project.utilities.internalUtilities,
+            locationUtilities: this.project.utilities.locationUtilities,
+            listOfUtilities: this.project.utilities.listOfUtilities.splice()
+        },
+        projectPost: {
+            overview: this.project.overview,
+            location: this.project.location,
+            projectDesign: this.project.projectDesign,
+            utilitySection: this.project.utilitySection,
+            rentAndSellPrice: this.project.rentAndSellPrice
+        },
+        images: [],
+        sEOContent: this.project.sEOContent,
+        pageInfors: []
+        };
+        this.project.images.forEach(x => this.currentProject.images.push(x));
+        for (let i = 0; i < this.project.pageInfors.length; i++) {
+        const pageInfor = {
+            slug: this.project.pageInfors[i].slug,
+            title: this.project.pageInfors[i].title,
+            metaDescription: this.project.pageInfors[i].metaDescription
+        };
+        this.currentProject.pageInfors.push(pageInfor);
         }
-
-      });
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        duration: 2000,
-        theme: 'bubble',
-        position: 'top-right'
-      });
-      this.currentProject.projectName = this.project.projectName;
-      this.currentProject.investor = this.project.investor;
-      this.currentProject.juridical = this.project.juridical;
-      this.currentProject.description = this.project.description;
-      this.currentProject.sEOContent = this.project.sEOContent;
     },
-    updateProjectAddress () {
-      if ((this.currentProject.address.street === this.project.address.street) && (this.currentProject.address.district === this.project.address.district) &&
-                (this.currentProject.address.city === this.project.address.city) && (this.currentProject.address.googleMapLocation === this.project.address.googleMapLocation)) {
-        this.$toast.show('Dữ liệu chưa có thay đổi', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 3000,
-          position: 'top-right'
-        });
-        return;
-      }
-      // if (this.project.address.googleMapLocation === "") {
-      //     this.$toast.show("Google map không được để trống, vui lòng thử lại!", {
-      //         type: "error",
-      //         theme: "bubble",
-      //         duration: 2000,
-      //         position: "top-right"
-      //     });
-      //     return;
-      // }
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectAddress($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            address: {
-              street: this.project.address.street,
-              district: this.project.address.district,
-              city: this.project.address.city,
-              googleMapLocation: this.project.address.googleMapLocation
+    methods: {
+        handleProjectFilterChanged (project) {
+        this.inputFilter = { ...this.inputFilter, project };
+        },
+        onEditorBlur (editor) {
+        // console.log('editor blur!', editor);
+        },
+        onEditorFocus (editor) {
+        // console.log('editor focus!', editor);
+        },
+        onEditorReady (editor) {
+        // console.log('editor ready!', editor);
+        },
+        addNewUtility () {
+
+        },
+        updateProjectInformation () {
+        if ((this.currentProject.projectName === this.project.projectName) && (this.currentProject.investorId === this.project.investorId) &&
+                    (this.currentProject.juridical === this.project.juridical) && (this.currentProject.description === this.project.description) &&
+                    (this.currentProject.sEOContent === this.project.sEOContent) &&
+                    (this.currentProject.masterPlan === this.project.masterPlan)) {
+            this.$toast.show('Dữ liệu chưa có thay đổi!', {
+            type: 'error',
+            theme: 'bubble',
+            duration: 3000,
+            position: 'top-right'
+            });
+            return;
+        }
+        // eslint-disable-next-line no-unused-expressions
+        this.$apollo.mutate({
+            mutation: gql`mutation UpdateProjectInformation($input: UpdateProjectInput!) {
+                        updateProject(input: $input) {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                projectName: this.project.projectName,
+                investorId: this.project.investorId,
+                juridical: this.project.juridical,
+                description: this.project.description,
+                sEOContent: this.project.sEOContent,
+                masterPlan: this.project.masterPlan
             }
-          }
-        }
-      });
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        postition: 'top-right'
-      });
-      if (this.currentProject.address.googleMapLocation !== this.project.address.googleMapLocation) {
-        this.$modal.hide('google-map-edit-modal');
-      }
-      this.currentProject.address.street = this.project.address.street;
-      this.currentProject.address.district = this.project.address.district;
-      this.currentProject.address.city = this.project.address.city;
-      this.currentProject.address.googleMapLocation = this.project.address.googleMapLocation;
-    },
-    updateProjectUtilities () {
-      if ((this.currentProject.utilities.locationUtilities === this.project.utilities.locationUtilities) &&
-                (this.currentProject.utilities.internalUtilities === this.project.utilities.internalUtilities) &&
-                (this.currentProject.utilities.listOfUtilities === this.project.utilities.listOfUtilities)) {
-        this.$toast.show('Dữ liệu chưa có thay đổi', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 3000,
-          position: 'top-right'
-        });
-        return;
-      }
-
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectUtilities($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            utilities: {
-              internalUtilities: this.project.utilities.internalUtilities,
-              locationUtilities: this.project.utilities.locationUtilities,
-              listOfUtilities: this.project.utilities.listOfUtilities
             }
-          }
-        }
-      });
-      this.$toast.show('Cập nhật thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        postition: 'top-right'
-      });
-      this.currentProject.utilities.locationUtilities = this.project.utilities.locationUtilities;
-      this.currentProject.utilities.internalUtilities = this.project.utilities.internalUtilities;
-      this.currentProject.utilities.listOfUtilities = this.project.utilities.listOfUtilities.splice();
-    },
-    addNewProjectImage () {
-      if (this.currentProject.images.includes(this.newImage)) {
-        this.$toast.show('Hình ảnh đã tồn tại, vui lòng thử lại!', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
+
         });
-        this.newImage = '';
-        return;
-      }
-      if (this.newImage === '') {
-        this.$toast.show('Chưa có dữ liệu, vui lòng thử lại!', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
+        this.$toast.show('Thay đổi thành công!', {
+            type: 'success',
+            duration: 2000,
+            theme: 'bubble',
+            position: 'top-right'
         });
-        return;
-      }
-      this.project.images.push(this.newImage);
-      this.currentProject.images.push(this.newImage);
-      this.$apollo.mutate({
-        mutation: gql`mutation AddNewProjectImage($input: UpdateProjectInput!)
-                {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            images: this.project.images
-          }
+        this.currentProject.projectName = this.project.projectName;
+        this.currentProject.investor = this.project.investor;
+        this.currentProject.juridical = this.project.juridical;
+        this.currentProject.description = this.project.description;
+        this.currentProject.sEOContent = this.project.sEOContent;
+        },
+        updateProjectAddress () {
+        if ((this.currentProject.address.street === this.project.address.street) && (this.currentProject.address.district === this.project.address.district) &&
+                    (this.currentProject.address.city === this.project.address.city) && (this.currentProject.address.googleMapLocation === this.project.address.googleMapLocation)) {
+            this.$toast.show('Dữ liệu chưa có thay đổi', {
+            type: 'error',
+            theme: 'bubble',
+            duration: 3000,
+            position: 'top-right'
+            });
+            return;
         }
-      });
-      this.newImage = '';
-      this.$toast.show('Thêm thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
-    },
-    updateProjectPost () {
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectPost($input: UpdateProjectInput!)
-                {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            projectPost: {
-              overview: this.project.projectPost.overview,
-              location: this.project.projectPost.location,
-              projectDesign: this.project.projectPost.projectDesign,
-              utilitySection: this.project.projectPost.utilitySection,
-              rentAndSellPrice: this.project.projectPost.rentAndSellPrice
+        // if (this.project.address.googleMapLocation === "") {
+        //     this.$toast.show("Google map không được để trống, vui lòng thử lại!", {
+        //         type: "error",
+        //         theme: "bubble",
+        //         duration: 2000,
+        //         position: "top-right"
+        //     });
+        //     return;
+        // }
+        this.$apollo.mutate({
+            mutation: gql`mutation UpdateProjectAddress($input: UpdateProjectInput!) {
+                        updateProject(input: $input) {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                address: {
+                street: this.project.address.street,
+                district: this.project.address.district,
+                city: this.project.address.city,
+                googleMapLocation: this.project.address.googleMapLocation
+                }
             }
-          }
-        }
-      });
-      this.newImage = '';
-      this.$toast.show('Thêm thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
-      this.currentProject.projectPost.overview = this.project.projectPost.overview;
-      this.currentProject.projectPost.location = this.project.projectPost.location;
-      this.currentProject.projectPost.projectDesign = this.project.projectPost.projectDesign;
-      this.currentProject.projectPost.utilitySection = this.project.projectPost.utilitySection;
-      this.currentProject.projectPost.rentAndSellPrice = this.project.projectPost.rentAndSellPrice;
-    },
-    showUpdateProjectImageModal (index) {
-      this.$modal.show('edit-project-image');
-      this.imageIndex = index;
-    },
-    showProjectPostOverview () {
-      this.$modal.show('design-project-post-overview');
-    },
-    updateProjectDetailInformation () {
-      if ((this.currentProject.price === this.project.price) && (this.currentProject.numberOfApartments === this.project.numberOfApartments) &&
-                (this.currentProject.numberOfBuildings === this.project.numberOfBuildings) && (this.currentProject.acreage === this.project.acreage) &&
-                (this.currentProject.completionTime === this.project.completionTime) &&
-                (this.currentProject.scale === this.project.scale) &&
-                (this.currentProject.constructionAcreage === this.project.constructionAcreage) &&
-                (this.currentProject.densityOfConstruction === this.project.densityOfConstruction)) {
-        this.$toast.show('Dữ liệu chưa có thay đổi!', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 3000,
-          position: 'top-right'
+            }
         });
-        return;
-      }
-      // eslint-disable-next-line no-unused-expressions
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectDetailInformation($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            price: Math.floor(this.project.price),
-            numberOfApartments: Math.floor(this.project.numberOfApartments),
-            numberOfBuildings: Math.floor(this.project.numberOfBuildings),
-            acreage: Math.floor(this.project.acreage),
-            scale: this.project.scale,
-            constructionAcreage: Math.floor(this.project.constructionAcreage),
-            densityOfConstruction: Math.floor(this.project.densityOfConstruction),
-            completionTime: this.project.completionTime
-          }
+        this.$toast.show('Thay đổi thành công!', {
+            type: 'success',
+            theme: 'bubble',
+            duration: 2000,
+            postition: 'top-right'
+        });
+        if (this.currentProject.address.googleMapLocation !== this.project.address.googleMapLocation) {
+            this.$modal.hide('google-map-edit-modal');
+        }
+        this.currentProject.address.street = this.project.address.street;
+        this.currentProject.address.district = this.project.address.district;
+        this.currentProject.address.city = this.project.address.city;
+        this.currentProject.address.googleMapLocation = this.project.address.googleMapLocation;
+        },
+        updateProjectUtilities () {
+        if ((this.currentProject.utilities.locationUtilities === this.project.utilities.locationUtilities) &&
+                    (this.currentProject.utilities.internalUtilities === this.project.utilities.internalUtilities) &&
+                    (this.currentProject.utilities.listOfUtilities === this.project.utilities.listOfUtilities)) {
+            this.$toast.show('Dữ liệu chưa có thay đổi', {
+            type: 'error',
+            theme: 'bubble',
+            duration: 3000,
+            position: 'top-right'
+            });
+            return;
         }
 
-      });
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        duration: 2000,
-        theme: 'bubble',
-        position: 'top-right'
-      });
-      this.currentProject.price = this.project.price;
-      this.currentProject.numberOfApartments = this.project.numberOfApartments;
-      this.currentProject.numberOfBuildings = this.project.numberOfBuildings;
-      this.currentProject.acreage = this.project.acreage;
-      this.currentProject.scale = this.project.scale;
-      this.currentProject.constructionAcreage = this.project.constructionAcreage;
-      this.currentProject.densityOfConstruction = this.project.densityOfConstruction;
-      this.currentProject.completionTime = this.project.completionTime;
-    },
-    updateProjectImage () {
-      if (this.currentProject.images[this.imageIndex] === this.project.images[this.imageIndex]) {
-        this.$toast.show('Dữ liệu chưa có thay đổi gì', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
+        this.$apollo.mutate({
+            mutation: gql`mutation UpdateProjectUtilities($input: UpdateProjectInput!) {
+                        updateProject(input: $input) {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                utilities: {
+                internalUtilities: this.project.utilities.internalUtilities,
+                locationUtilities: this.project.utilities.locationUtilities,
+                listOfUtilities: this.project.utilities.listOfUtilities
+                }
+            }
+            }
         });
-        return;
-      }
-      if (this.project.images[this.imageIndex] === '') {
-        this.$toast.show('Dữ liệu không được để trống, hoặc bạn có thể xóa đi hình ảnh này', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
+        this.$toast.show('Cập nhật thành công!', {
+            type: 'success',
+            theme: 'bubble',
+            duration: 2000,
+            postition: 'top-right'
         });
-        return;
-      }
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectImage($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            images: this.project.images
-          }
-        }
-      });
-      this.currentProject.images[this.imageIndex] = this.project.images[this.imageIndex];
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
-      this.$modal.hide('edit-project-image');
-    },
-    updateProjectMasterPlan () {
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectMasterPlan($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            masterPlan: this.project.masterPlan
-          }
-        }
-      });
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
-      this.$modal.hide('edit-project-master-plan');
-    },
-    showDeleteProjectImageModal (index) {
-      this.imageIndex = index;
-      this.$modal.show('delete-project-image');
-    },
-    ShowModalEditInvestor () {
-      const foundedTime = new Date(this.project.investor.foundedTime);
-      if (foundedTime.getDate() < 10 && foundedTime.getMonth() + 1 > 10) {
-        this.tempFoundedDate = foundedTime.getFullYear() + '-' + (foundedTime.getMonth() + 1).toString() + '-' + '0' + foundedTime.getDate();
-      } else if (foundedTime.getDate() < 10 && foundedTime.getMonth() + 1 < 10) {
-        this.tempFoundedDate = foundedTime.getFullYear() + '-0' + (foundedTime.getMonth() + 1).toString() + '-0' + foundedTime.getDate();
-      } else if (foundedTime.getDate() > 10 && foundedTime.getMonth() + 1 < 10) {
-        this.tempFoundedDate = foundedTime.getFullYear() + '-0' + (foundedTime.getMonth() + 1).toString() + '-' + foundedTime.getDate();
-      } else {
-        this.tempFoundedDate = foundedTime.getFullYear() + '-' + (foundedTime.getMonth() + 1).toString() + '-' + foundedTime.getDate();
-      }
-
-      this.$apollo.queries.investorEdit.refetch({
-        input: {
-          id: { eq: this.project.investorId }
-        }
-      }
-      );
-      this.isShowingEditInvestor = true;
-      this.$modal.show('show-edit-investor');
-    },
-    updateInvestor () {
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateInvestor($input: UpdateInvestorInput!) 
-                {
-                    updateInvestor(input: $input)
-                    {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.investorId,
-            name: this.investorEdit.investorName,
-            image: this.investorEdit.image,
-            numberOfProjects: Math.floor(this.investorEdit.numberOfProjects),
-            phoneNumber: this.investorEdit.phoneNumber,
-            foundedTime: this.tempFoundedDate.substring(5, 7) + '-' + this.tempFoundedDate.substring(8, 10) + '-' + this.tempFoundedDate.substring(0, 4)
-          }
-        }
-      });
-      this.$toast.show('Cập nhật thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
-    },
-    deleteProjectImage () {
-      this.project.images = this.project.images.filter(x => x !== this.project.images[this.imageIndex]);
-      this.currentProject.images = this.currentProject.images.filter(x => x !== this.currentProject.images[this.imageIndex]);
-      console.log(this.currentProject.images.length);
-      this.$apollo.mutate({
-        mutation: gql`mutation DeleteProjectImage($input: UpdateProjectInput!) 
-                {
-                    updateProject(input: $input)
-                    {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            images: this.project.images
-          }
-        }
-      });
-      this.$toast.show('Xóa thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
-      this.$modal.hide('delete-project-image');
-    },
-    addNewPageInfor () {
-      if ((this.newPageInfor.slug === '') || (this.currentProject.pageInfors.some(x => x.slug === this.newPageInfor.slug) === true)) {
-        this.$toast.show('Slug đã tồn tại hoặc chưa có, vui lòng thử lại!', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
-        });
-        this.newPageInfor = {};
-        this.$modal.hide('add-new-page-information');
-        return;
-      }
-      const pageInfor = {
-        title: this.newPageInfor.title,
-        slug: this.newPageInfor.slug,
-        metaDescription: this.newPageInfor.metaDescription
-      };
-      this.project.pageInfors.forEach(x => delete x.__typename);
-      this.project.pageInfors.push(pageInfor);
-      this.$apollo.mutate({
-        mutation: gql`mutation AddNewPageInfor($input: UpdateProjectInput!) 
-                {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            pageInfors: this.project.pageInfors
-          }
-        }
-      });
-      this.newPageInfor = {};
-      this.currentProject.pageInfors.push(pageInfor);
-      console.log(this.currentProject.pageInfors.length);
-      this.$toast.show('Thêm thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
-      this.$modal.hide('add-new-page-information');
-    },
-    showPageInforModal (index) {
-      this.pageInforIndex = index;
-      this.$modal.show('page-information-detail');
-    },
-    updatePageInformation () {
-      const index = this.pageInforIndex;
-      console.log(this.currentProject.pageInfors[index]);
-      console.log(this.project.pageInfors[index]);
-      if ((this.currentProject.pageInfors[index].slug === this.project.pageInfors[index].slug) &&
-                (this.currentProject.pageInfors[index].title === this.project.pageInfors[index].title) &&
-                (this.currentProject.pageInfors[index].metaDescription === this.project.pageInfors[index].metaDescription)) {
-        this.$toast.show('Dữ liệu chưa có thay đổi gì', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
-        });
-        return;
-      }
-      if (this.currentProject.pageInfors[index].slug !== this.project.pageInfors[index].slug) {
-        if ((this.project.pageInfors[index].slug === '') || (this.currentProject.pageInfors.some(x => x.slug === this.project.pageInfors[index].slug))) {
-          this.$toast.show('Slug đã tồn tại hoặc chưa có, vui lòng thử lại!', {
+        this.currentProject.utilities.locationUtilities = this.project.utilities.locationUtilities;
+        this.currentProject.utilities.internalUtilities = this.project.utilities.internalUtilities;
+        this.currentProject.utilities.listOfUtilities = this.project.utilities.listOfUtilities.splice();
+        },
+        addNewProjectImage () {
+        if (this.currentProject.images.includes(this.newImage)) {
+            this.$toast.show('Hình ảnh đã tồn tại, vui lòng thử lại!', {
             type: 'error',
             theme: 'bubble',
             duration: 2000,
             position: 'top-right'
-          });
-          this.project.pageInfors[index].slug = this.currentProject.pageInfors[index].slug;
-          this.project.pageInfors[index].title = this.currentProject.pageInfors[index].title;
-          this.project.pageInfors[index].metaDescription = this.currentProject.pageInfors[index].metaDescription;
-          return;
+            });
+            this.newImage = '';
+            return;
         }
-      }
-      this.project.pageInfors.forEach(x => delete x.__typename);
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdatePageInformation($input: UpdateProjectInput!)
-                {
-                    updateProject(input: $input) 
+        if (this.newImage === '') {
+            this.$toast.show('Chưa có dữ liệu, vui lòng thử lại!', {
+            type: 'error',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+            });
+            return;
+        }
+        this.project.images.push(this.newImage);
+        this.currentProject.images.push(this.newImage);
+        this.$apollo.mutate({
+            mutation: gql`mutation AddNewProjectImage($input: UpdateProjectInput!)
                     {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            pageInfors: this.project.pageInfors
-          }
-        }
-      });
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
-      this.currentProject.pageInfors[index].slug = this.project.pageInfors[index].slug;
-      this.currentProject.pageInfors[index].title = this.project.pageInfors[index].title;
-      this.currentProject.pageInfors[index].metaDescription = this.project.pageInfors[index].metaDescription;
-      this.$modal.hide('page-information-detail');
-    },
-    showDeletePageInforModal (index) {
-      this.pageInforIndex = index;
-      this.$modal.show('delete-page-information');
-    },
-    deletePageInfor () {
-      const index = this.pageInforIndex;
-      this.project.pageInfors = this.project.pageInfors.filter(x => x.slug !== this.project.pageInfors[index].slug);
-      this.currentProject.pageInfors = this.currentProject.pageInfors.filter(x => x.slug !== this.currentProject.pageInfors[index].slug);
-      this.project.pageInfors.forEach(x => delete x.__typename);
-      this.$apollo.mutate({
-        mutation: gql`mutation deleteProjectPageInfor($input: UpdateProjectInput!) 
-                {
-                    updateProject(input: $input)
+                        updateProject(input: $input) {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                images: this.project.images
+            }
+            }
+        });
+        this.newImage = '';
+        this.$toast.show('Thêm thành công!', {
+            type: 'success',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+        });
+        },
+        updateProjectPost () {
+        this.$apollo.mutate({
+            mutation: gql`mutation UpdateProjectPost($input: UpdateProjectInput!)
                     {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            pageInfors: this.project.pageInfors
-          }
+                        updateProject(input: $input) {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                projectPost: {
+                overview: this.project.projectPost.overview,
+                location: this.project.projectPost.location,
+                projectDesign: this.project.projectPost.projectDesign,
+                utilitySection: this.project.projectPost.utilitySection,
+                rentAndSellPrice: this.project.projectPost.rentAndSellPrice
+                }
+            }
+            }
+        });
+        this.newImage = '';
+        this.$toast.show('Thêm thành công!', {
+            type: 'success',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+        });
+        this.currentProject.projectPost.overview = this.project.projectPost.overview;
+        this.currentProject.projectPost.location = this.project.projectPost.location;
+        this.currentProject.projectPost.projectDesign = this.project.projectPost.projectDesign;
+        this.currentProject.projectPost.utilitySection = this.project.projectPost.utilitySection;
+        this.currentProject.projectPost.rentAndSellPrice = this.project.projectPost.rentAndSellPrice;
+        },
+        showUpdateProjectImageModal (index) {
+        this.$modal.show('edit-project-image');
+        this.imageIndex = index;
+        },
+        showProjectPostOverview () {
+        this.$modal.show('design-project-post-overview');
+        },
+        updateProjectDetailInformation () {
+        if ((this.currentProject.price === this.project.price) && (this.currentProject.numberOfApartments === this.project.numberOfApartments) &&
+                    (this.currentProject.numberOfBuildings === this.project.numberOfBuildings) && (this.currentProject.acreage === this.project.acreage) &&
+                    (this.currentProject.completionTime === this.project.completionTime) &&
+                    (this.currentProject.scale === this.project.scale) &&
+                    (this.currentProject.constructionAcreage === this.project.constructionAcreage) &&
+                    (this.currentProject.densityOfConstruction === this.project.densityOfConstruction)) {
+            this.$toast.show('Dữ liệu chưa có thay đổi!', {
+            type: 'error',
+            theme: 'bubble',
+            duration: 3000,
+            position: 'top-right'
+            });
+            return;
         }
-      });
-      this.$toast.show('Xóa thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
-      this.pageInforIndex = 0;
-      this.$modal.hide('delete-page-information');
+        // eslint-disable-next-line no-unused-expressions
+        this.$apollo.mutate({
+            mutation: gql`mutation UpdateProjectDetailInformation($input: UpdateProjectInput!) {
+                        updateProject(input: $input) {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                price: Math.floor(this.project.price),
+                numberOfApartments: Math.floor(this.project.numberOfApartments),
+                numberOfBuildings: Math.floor(this.project.numberOfBuildings),
+                acreage: Math.floor(this.project.acreage),
+                scale: this.project.scale,
+                constructionAcreage: Math.floor(this.project.constructionAcreage),
+                densityOfConstruction: Math.floor(this.project.densityOfConstruction),
+                completionTime: this.project.completionTime
+            }
+            }
+
+        });
+        this.$toast.show('Thay đổi thành công!', {
+            type: 'success',
+            duration: 2000,
+            theme: 'bubble',
+            position: 'top-right'
+        });
+        this.currentProject.price = this.project.price;
+        this.currentProject.numberOfApartments = this.project.numberOfApartments;
+        this.currentProject.numberOfBuildings = this.project.numberOfBuildings;
+        this.currentProject.acreage = this.project.acreage;
+        this.currentProject.scale = this.project.scale;
+        this.currentProject.constructionAcreage = this.project.constructionAcreage;
+        this.currentProject.densityOfConstruction = this.project.densityOfConstruction;
+        this.currentProject.completionTime = this.project.completionTime;
+        },
+        updateProjectImage () {
+        if (this.currentProject.images[this.imageIndex] === this.project.images[this.imageIndex]) {
+            this.$toast.show('Dữ liệu chưa có thay đổi gì', {
+            type: 'error',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+            });
+            return;
+        }
+        if (this.project.images[this.imageIndex] === '') {
+            this.$toast.show('Dữ liệu không được để trống, hoặc bạn có thể xóa đi hình ảnh này', {
+            type: 'error',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+            });
+            return;
+        }
+        this.$apollo.mutate({
+            mutation: gql`mutation UpdateProjectImage($input: UpdateProjectInput!) {
+                        updateProject(input: $input) {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                images: this.project.images
+            }
+            }
+        });
+        this.currentProject.images[this.imageIndex] = this.project.images[this.imageIndex];
+        this.$toast.show('Thay đổi thành công!', {
+            type: 'success',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+        });
+        this.$modal.hide('edit-project-image');
+        },
+        updateProjectMasterPlan () {
+        this.$apollo.mutate({
+            mutation: gql`mutation UpdateProjectMasterPlan($input: UpdateProjectInput!) {
+                        updateProject(input: $input) {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                masterPlan: this.project.masterPlan
+            }
+            }
+        });
+        this.$toast.show('Thay đổi thành công!', {
+            type: 'success',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+        });
+        this.$modal.hide('edit-project-master-plan');
+        },
+        showDeleteProjectImageModal (index) {
+        this.imageIndex = index;
+        this.$modal.show('delete-project-image');
+        },
+        ShowModalEditInvestor () {
+        const foundedTime = new Date(this.project.investor.foundedTime);
+        if (foundedTime.getDate() < 10 && foundedTime.getMonth() + 1 > 10) {
+            this.tempFoundedDate = foundedTime.getFullYear() + '-' + (foundedTime.getMonth() + 1).toString() + '-' + '0' + foundedTime.getDate();
+        } else if (foundedTime.getDate() < 10 && foundedTime.getMonth() + 1 < 10) {
+            this.tempFoundedDate = foundedTime.getFullYear() + '-0' + (foundedTime.getMonth() + 1).toString() + '-0' + foundedTime.getDate();
+        } else if (foundedTime.getDate() > 10 && foundedTime.getMonth() + 1 < 10) {
+            this.tempFoundedDate = foundedTime.getFullYear() + '-0' + (foundedTime.getMonth() + 1).toString() + '-' + foundedTime.getDate();
+        } else {
+            this.tempFoundedDate = foundedTime.getFullYear() + '-' + (foundedTime.getMonth() + 1).toString() + '-' + foundedTime.getDate();
+        }
+
+        this.$apollo.queries.investorEdit.refetch({
+            input: {
+            id: { eq: this.project.investorId }
+            }
+        }
+        );
+        this.isShowingEditInvestor = true;
+        this.$modal.show('show-edit-investor');
+        },
+        updateInvestor () {
+            this.investorEdit.numberOfProjects = Number(this.investorEdit.numberOfProjects);
+            if (this.investorEdit.numberOfProjects < 0) {
+                this.$toast.show("Số lượng dự án phải lớn hơn hoặc bằng 0",
+                {
+                    type: "error",
+                    theme: "bubble",
+                    duration: "3000",
+                    position: "top-right"
+                });
+                return;
+            }
+            this.$apollo.mutate({
+                mutation: gql`mutation UpdateInvestor($input: UpdateInvestorInput!) 
+                        {
+                            updateInvestor(input: $input)
+                            {
+                                string
+                            }
+                        }`,
+                variables: {
+                    input: {
+                        id: this.project.investorId,
+                        name: this.investorEdit.investorName,
+                        image: this.investorEdit.image,
+                        numberOfProjects: Math.floor(this.investorEdit.numberOfProjects),
+                        phoneNumber: this.investorEdit.phoneNumber,
+                        foundedTime: this.tempFoundedDate.substring(5, 7) + '-' + this.tempFoundedDate.substring(8, 10) + '-' + this.tempFoundedDate.substring(0, 4)
+                    }
+                }
+            });
+            if (this.investors.some(x => x.name == this.investorEdit.investorName) == false) {
+                this.$apollo.queries.investors.refetch({
+                    condition: null
+                });
+            }
+            this.$toast.show('Cập nhật thành công!', {
+                type: 'success',
+                theme: 'bubble',
+                duration: 2000,
+                position: 'top-right'
+            });
+
+            this.$modal.hide("show-edit-investor");
+        },
+        deleteProjectImage () {
+        this.project.images = this.project.images.filter(x => x !== this.project.images[this.imageIndex]);
+        this.currentProject.images = this.currentProject.images.filter(x => x !== this.currentProject.images[this.imageIndex]);
+        console.log(this.currentProject.images.length);
+        this.$apollo.mutate({
+            mutation: gql`mutation DeleteProjectImage($input: UpdateProjectInput!) 
+                    {
+                        updateProject(input: $input)
+                        {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                images: this.project.images
+            }
+            }
+        });
+        this.$toast.show('Xóa thành công!', {
+            type: 'success',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+        });
+        this.$modal.hide('delete-project-image');
+        },
+        addNewPageInfor () {
+        if ((this.newPageInfor.slug === '') || (this.currentProject.pageInfors.some(x => x.slug === this.newPageInfor.slug) === true)) {
+            this.$toast.show('Slug đã tồn tại hoặc chưa có, vui lòng thử lại!', {
+            type: 'error',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+            });
+            this.newPageInfor = {};
+            this.$modal.hide('add-new-page-information');
+            return;
+        }
+        const pageInfor = {
+            title: this.newPageInfor.title,
+            slug: this.newPageInfor.slug,
+            metaDescription: this.newPageInfor.metaDescription
+        };
+        this.project.pageInfors.forEach(x => delete x.__typename);
+        this.project.pageInfors.push(pageInfor);
+        this.$apollo.mutate({
+            mutation: gql`mutation AddNewPageInfor($input: UpdateProjectInput!) 
+                    {
+                        updateProject(input: $input) {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                pageInfors: this.project.pageInfors
+            }
+            }
+        });
+        this.newPageInfor = {};
+        this.currentProject.pageInfors.push(pageInfor);
+        console.log(this.currentProject.pageInfors.length);
+        this.$toast.show('Thêm thành công!', {
+            type: 'success',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+        });
+        this.$modal.hide('add-new-page-information');
+        },
+        showPageInforModal (index) {
+        this.pageInforIndex = index;
+        this.$modal.show('page-information-detail');
+        },
+        updatePageInformation () {
+        const index = this.pageInforIndex;
+        console.log(this.currentProject.pageInfors[index]);
+        console.log(this.project.pageInfors[index]);
+        if ((this.currentProject.pageInfors[index].slug === this.project.pageInfors[index].slug) &&
+                    (this.currentProject.pageInfors[index].title === this.project.pageInfors[index].title) &&
+                    (this.currentProject.pageInfors[index].metaDescription === this.project.pageInfors[index].metaDescription)) {
+            this.$toast.show('Dữ liệu chưa có thay đổi gì', {
+            type: 'error',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+            });
+            return;
+        }
+        if (this.currentProject.pageInfors[index].slug !== this.project.pageInfors[index].slug) {
+            if ((this.project.pageInfors[index].slug === '') || (this.currentProject.pageInfors.some(x => x.slug === this.project.pageInfors[index].slug))) {
+            this.$toast.show('Slug đã tồn tại hoặc chưa có, vui lòng thử lại!', {
+                type: 'error',
+                theme: 'bubble',
+                duration: 2000,
+                position: 'top-right'
+            });
+            this.project.pageInfors[index].slug = this.currentProject.pageInfors[index].slug;
+            this.project.pageInfors[index].title = this.currentProject.pageInfors[index].title;
+            this.project.pageInfors[index].metaDescription = this.currentProject.pageInfors[index].metaDescription;
+            return;
+            }
+        }
+        this.project.pageInfors.forEach(x => delete x.__typename);
+        this.$apollo.mutate({
+            mutation: gql`mutation UpdatePageInformation($input: UpdateProjectInput!)
+                    {
+                        updateProject(input: $input) 
+                        {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                pageInfors: this.project.pageInfors
+            }
+            }
+        });
+        this.$toast.show('Thay đổi thành công!', {
+            type: 'success',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+        });
+        this.currentProject.pageInfors[index].slug = this.project.pageInfors[index].slug;
+        this.currentProject.pageInfors[index].title = this.project.pageInfors[index].title;
+        this.currentProject.pageInfors[index].metaDescription = this.project.pageInfors[index].metaDescription;
+        this.$modal.hide('page-information-detail');
+        },
+        showDeletePageInforModal (index) {
+        this.pageInforIndex = index;
+        this.$modal.show('delete-page-information');
+        },
+        deletePageInfor () {
+        const index = this.pageInforIndex;
+        this.project.pageInfors = this.project.pageInfors.filter(x => x.slug !== this.project.pageInfors[index].slug);
+        this.currentProject.pageInfors = this.currentProject.pageInfors.filter(x => x.slug !== this.currentProject.pageInfors[index].slug);
+        this.project.pageInfors.forEach(x => delete x.__typename);
+        this.$apollo.mutate({
+            mutation: gql`mutation deleteProjectPageInfor($input: UpdateProjectInput!) 
+                    {
+                        updateProject(input: $input)
+                        {
+                            string
+                        }
+                    }`,
+            variables: {
+            input: {
+                id: this.project.id,
+                pageInfors: this.project.pageInfors
+            }
+            }
+        });
+        this.$toast.show('Xóa thành công!', {
+            type: 'success',
+            theme: 'bubble',
+            duration: 2000,
+            position: 'top-right'
+        });
+        this.pageInforIndex = 0;
+        this.$modal.hide('delete-page-information');
+        },
     }
-  }
 };
 </script>
 

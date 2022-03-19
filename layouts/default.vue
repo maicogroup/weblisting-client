@@ -81,7 +81,7 @@ export default {
       redirect: 'follow'
       };
 
-      fetch("http://maicogroup.net:3001/graphql/", requestOptions)
+      fetch("http://localhost:54261/graphql/", requestOptions)
       .then(response => response.text())
       .catch(error => console.log('error', error));
     }

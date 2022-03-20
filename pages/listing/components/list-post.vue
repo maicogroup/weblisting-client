@@ -393,7 +393,6 @@ export default {
         return this.postsData.totalCount;
       }
     },
-
   },
   watch: {
     filter(filter) {

@@ -140,10 +140,6 @@ export default {
         }
       },
       immediate: true
-    },
-
-    demand () {
-      this.$emit('optionchanged', null);
     }
   },
 

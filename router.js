@@ -9,24 +9,25 @@ import DetailPost from '~/pages/listing/detail/index';
 import ProductReview from '~/pages/product-preview/index';
 import ProjectOverview from '~/pages/project-overview/index';
 import SpecificProjectReview from '~/pages/product-preview/specific-project/index';
+import HomePage from '~/pages/home/index';
 
 Vue.use(Router);
 
 export function createRouter () {
   return new Router({
     mode: 'history',
-    scrollBehavior(to, from, savedPosition) {
+    scrollBehavior (to, from, savedPosition) {
       // always scroll to top
       if (savedPosition) {
-        return savedPosition
+        return savedPosition;
       } else {
-        return { x: 0, y: 0 }
+        return { x: 0, y: 0 };
       }
     },
     routes: [
       {
         path: '/',
-        redirect: '/danh-sach-can-ho/ban-thue-can-ho-chung-cu-the-sun-avenue'
+        component: HomePage
       },
       {
         path: '/chinh-sua-tin-dang/:slug',

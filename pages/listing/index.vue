@@ -78,75 +78,28 @@
       </div>
     </div>
     <!-- <div class="filter-bar-blank-space hidden md:block" /> -->
-    <div class="w-full">
-      <div class="flex justify-between w-full">
-        <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" />
-        <div class="ml-9 mt-14 hidden lg:block">
-          <ContactInfor />
-          <div class="border mt-4 p-4 rounded">
-            <p class="font-bold mb-2">
-              Xem theo giá
-            </p>
-            <div v-if="filter.demand === 'Cho Thuê'">
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 3})">
-                Dưới 3 triệu
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 3, gtln: 5})">
-                Từ 3 - 5 triệu
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 5, gtln: 7})">
-                Từ 5 - 7 triệu
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 7, gtln: 10})">
-                Từ 7 - 10 triệu
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 10, gtln: 15})">
-                Từ 10 - 15 triệu
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 15, gtln: 20})">
-                Từ 15 - 20 triệu
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 20, gtln: 30})">
-                Từ 20 - 30 triệu
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 30, gtln: undefined})">
-                Trên 30 triệu
-              </quick-filter-button>
-            </div>
-            <div v-else>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: undefined, gtln: 1})">
-                Dưới 1 tỷ
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 1, gtln: 2})">
-                Từ 1 tỷ - đến 2 tỷ
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 2, gtln: 3})">
-                Từ 2 tỷ - đến 3 tỷ
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 3, gtln: 5})">
-                Từ 3 tỷ - đến 5 tỷ
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 5, gtln: 7})">
-                Từ 5 tỷ - đến 7 tỷ
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 7, gtln: 10})">
-                Từ 7 tỷ - đến 10 tỷ
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 10, gtln: 20})">
-                Từ 10 tỷ - đến 20 tỷ
-              </quick-filter-button>
-              <quick-filter-button @click="updateUrlQueryAndNavigate({gtnn: 20, gtln: undefined})">
-                Trên 20 tỷ
-              </quick-filter-button>
-            </div>
-          </div>
-
-          <div class="border mt-4 p-4 rounded">
-            <p class="font-bold mb-2">
-              Xem theo diện tích
-            </p>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({dtnn: undefined, dtln: 30})">
-              Dưới 30 m²
+    <!-- <ProjectHeader v-if="showIfPostsOfOneProject" :project="project" /> -->
+    <Divider v-if="showIfPostsOfOneProject" class="mt-7 mb-1.5" />
+    <div class="flex justify-between w-full">
+      <ListPost v-if="waitTillProjectIsDetermined" class="left-0" :filter="filter" :heading="heading" />
+      <div class="ml-9 mt-14 hidden lg:block">
+        <ContactInfor />
+        <div class="border mt-4 p-4 rounded">
+          <p class="font-bold mb-2">
+            Xem theo giá
+          </p>
+          <div v-if="filter.demand === 'Cho Thuê'">
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: undefined, priceTo: 3})">
+              Dưới 3 triệu
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 3, priceTo: 5})">
+              Từ 3 - 5 triệu
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 5, priceTo: 7})">
+              Từ 5 - 7 triệu
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 7, priceTo: 10})">
+              Từ 7 - 10 triệu
             </quick-filter-button>
             <quick-filter-button @click="updateUrlQueryAndNavigate({dtnn: 30, dtln: 50})">
               Từ 30 - 50 m²
@@ -267,326 +220,6 @@
           Tìm kiếm
         </button>
       </div>
-
-      <!-- <p class="mb-4">
-        Bạn phải chọn <span><p class="text-sky-500">Khu vực</p></span> trước
-      </p> -->
-    </div>
-
-    <!-- chon khu vuc mobile -->
-    <div
-      v-if="isShowArea"
-      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
-    >
-      <div
-        class="flex justify-between"
-      >
-        <h4 class="mr-auto ml-auto">
-          Chọn khu vực
-        </h4>
-        <div
-          @click="isShowArea = false"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#32c82b"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ><path d="M19 12H6M12 5l-7 7 7 7" /></svg>
-        </div>
-      </div>
-      <div class="relative my-4 w-full">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-          <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
-            <svg
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              class="w-6 h-6"
-            >
-              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-        </span>
-        <input type="search" class="w-full border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm Tỉnh/Thành phố">
-      </div>
-      <div
-        class="flex justify-between"
-        @click="isShowDistrict = true"
-      >
-        <p>TP Hồ Chí Minh</p>
-        <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 13L7 7L1 1" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </div>
-    </div>
-
-    <!-- // show district -->
-    <div
-      v-if="isShowDistrict"
-      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
-    >
-      <div
-        class="flex justify-between"
-      >
-        <h4 class="mr-auto ml-auto">
-          TP. Hồ Chí Minh
-        </h4>
-        <div
-          @click="isShowDistrict = false"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 relative"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </div>
-      </div>
-      <div class="relative my-4 w-full">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-          <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
-            <svg
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              class="w-6 h-6"
-            >
-              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-        </span>
-        <input type="search" class="w-full border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm Tỉnh/Thành phố">
-      </div>
-      <div
-        class="flex justify-between"
-      >
-        <p>Quận 9</p>
-        <input type="radio" checked="checked">
-      </div>
-    </div>
-
-    <!-- //chon khoang gia -->
-    <div
-      v-if="isShowPriceRange"
-      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
-    >
-      <div
-        class="flex justify-between"
-      >
-        <h4 class="mr-auto ml-auto">
-          Chọn giá
-        </h4>
-        <div
-          @click="isShowPriceRange = false"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 relative"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </div>
-      </div>
-      <div class="ml-auto mr-auto flex justify-center items-center px-6 mt-3">
-        <label class="flex items-center">
-          <input class="w-14 px-2 py-1 text-center text-sm border rounded-md outline-none">
-          <p>triệu</p>
-        </label>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12H4" />
-        </svg>
-        <label class="flex items-center">
-          <input class="w-14 px-2 py-1 text-center text-sm border rounded-md outline-none">
-          <p>triệu</p>
-        </label>
-      </div>
-      <div
-        class="flex justify-between"
-      >
-        <p>Tất cả</p>
-        <input type="radio" checked="checked">
-      </div>
-    </div>
-
-    <!-- chon khoang dien tich -->
-    <div
-      v-if="isShowAcreage"
-      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
-    >
-      <div
-        class="flex justify-between"
-      >
-        <h4 class="mr-auto ml-auto">
-          Chọn diện tích
-        </h4>
-        <div
-          @click="isShowAcreage = false"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 relative"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </div>
-      </div>
-      <div class="ml-auto mr-auto flex justify-center items-center px-6 mt-3">
-        <label class="flex items-center">
-          <input class="w-14 px-2 py-1 text-center text-sm border rounded-md outline-none">
-          <p>m²</p>
-        </label>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12H4" />
-        </svg>
-        <label class="flex items-center">
-          <input class="w-14 px-2 py-1 text-center text-sm border rounded-md outline-none">
-          <p>m²</p>
-        </label>
-      </div>
-      <div
-        class="flex justify-between"
-      >
-        <p>Tất cả</p>
-        <input type="radio" checked="checked">
-      </div>
-    </div>
-
-    <!-- chon khoang du an -->
-    <div
-      v-if="isShowProject"
-      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
-    >
-      <div
-        class="flex justify-between"
-      >
-        <h4 class="mr-auto ml-auto">
-          Chọn dự án
-        </h4>
-        <div
-          @click="isShowProject = false"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 relative"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </div>
-      </div>
-      <div class="relative my-4 w-full">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-          <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
-            <svg
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              class="w-6 h-6"
-            >
-              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-        </span>
-        <input type="search" class="w-full border py-2 pl-10 pr-2 h-full rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm dự án">
-      </div>
-      <div
-        class="flex justify-between"
-      >
-        <p>Tất cả</p>
-        <input type="radio" checked="checked">
-      </div>
-    </div>
-
-    <!-- chon huong -->
-    <div
-      v-if="isShowDirection"
-      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
-    >
-      <div
-        class="flex justify-between"
-      >
-        <h4 class="mr-auto ml-auto">
-          Chọn hướng
-        </h4>
-        <div
-          @click="isShowDirection = false"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 relative"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="flex justify-between"
-      >
-        <p>Tất cả</p>
-        <input type="radio" checked="checked">
-      </div>
-    </div>
-
-    <!-- chon so phong -->
-    <div
-      v-if="isShowRoomOption"
-      class="fixed inset-0 mt-12 w-full z-30 bg-white opacity-100 overflow-auto"
-    >
-      <div
-        class="flex justify-between"
-      >
-        <h4 class="mr-auto ml-auto">
-          Chọn số phòng ngủ
-        </h4>
-        <div
-          @click="isShowRoomOption = false"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 relative"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="flex justify-between"
-      >
-        <p>Tất cả</p>
-        <input type="radio" checked="checked">
-      </div>
     </div>
   </div>
 </template>
@@ -595,25 +228,25 @@
 import { gql } from 'graphql-tag';
 
 import { marked } from 'marked';
+import LocationFtilerDropdown from '../components/filtering/location-filter-dropdown.vue';
+import ProjectFilterDropdown from '../components/filtering/project-filter-dropdown.vue';
+import DirectionFilterDropdown from '../components/filtering/direction-filter-dropdown.vue';
+import TypeFilterDropdown from '../components/filtering/type-filter-dropdown.vue';
+import PriceFilterDropdown from '../components/filtering/price-filter-dropdown.vue';
+import AcreageFilterDropdown from '../components/filtering/acreage-filter-dropdown.vue';
+import BedroomFilterDropdown from '../components/filtering/bedroom-filter-dropdown.vue';
+import TypeFilterOption from '../components/responsive-filtering/type-filter-option.vue';
+import LocationFilterOption from '../components/responsive-filtering/location-filter-option.vue';
+import PriceFilterOption from '../components/responsive-filtering/price-filter-option.vue';
+import AcreageFilterOption from '../components/responsive-filtering/acreage-filter-option.vue';
+import DirectionFilterOptions from '../components/responsive-filtering/direction-filter-options.vue';
+import ProjectFilterOption from '../components/responsive-filtering/project-filter-option.vue';
+import BedroomFilterOptions from '../components/responsive-filtering/bedroom-filter-options.vue';
+import QuickFilterButton from './components/quick-filter-button.vue';
 import ProjectHeader from './components/project-header.vue';
 import ProjectThumbnail from './components/project-thumbnail.vue';
 import ListPost from './components/list-post.vue';
 import ContactInfor from './components/contract-infor.vue';
-import LocationFtilerDropdown from './components/filtering/location-filter-dropdown.vue';
-import ProjectFilterDropdown from './components/filtering/project-filter-dropdown.vue';
-import DirectionFilterDropdown from './components/filtering/direction-filter-dropdown.vue';
-import TypeFilterDropdown from './components/filtering/type-filter-dropdown.vue';
-import PriceFilterDropdown from './components/filtering/price-filter-dropdown.vue';
-import AcreageFilterDropdown from './components/filtering/acreage-filter-dropdown.vue';
-import BedroomFilterDropdown from './components/filtering/bedroom-filter-dropdown.vue';
-import QuickFilterButton from './components/quick-filter-button.vue';
-import TypeFilterOption from './components/responsive-filtering/type-filter-option.vue';
-import LocationFilterOption from './components/responsive-filtering/location-filter-option.vue';
-import PriceFilterOption from './components/responsive-filtering/price-filter-option.vue';
-import AcreageFilterOption from './components/responsive-filtering/acreage-filter-option.vue';
-import DirectionFilterOptions from './components/responsive-filtering/direction-filter-options.vue';
-import ProjectFilterOption from './components/responsive-filtering/project-filter-option.vue';
-import BedroomFilterOptions from './components/responsive-filtering/bedroom-filter-options.vue';
 import Divider from '~/components/Divider.vue';
 
 export default {
@@ -639,6 +272,7 @@ export default {
     DirectionFilterOptions,
     BedroomFilterOptions
   },
+
   data () {
     return {
       // filter dùng để lọc

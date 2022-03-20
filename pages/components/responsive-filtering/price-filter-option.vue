@@ -128,13 +128,15 @@ export default {
     formatRange (range) {
       const unit = this.demand === 'Bán' ? 'tỷ' : 'triệu';
 
-      if (!range.from || range.from === 0) {
-        return range.to === 0 ? 'Tất cả' : `Dưới ${range.to} ${unit}`;
-      } else if (!range.to) {
-        return `Trên ${range.from} ${unit}`;
-      } else {
-        return `${range.from} - ${range.to} ${unit}`;
+      if (range.from === null || range.from === 0) {
+        return (range.to === null || range.to === 0) ? 'Tất cả' : `Dưới ${range.to} ${unit}`;
       }
+
+      if (range.to === null) {
+        return `Trên ${range.from} ${unit}`;
+      }
+
+      return `${range.from} - ${range.to} ${unit}`;
     },
 
     handleSelectPriceRange (range) {

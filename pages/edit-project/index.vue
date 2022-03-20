@@ -52,7 +52,12 @@
               <label class="font-semibold">Mặt bằng:</label>
             </p>
             <div class="items-start flex">
-              <img class="h-48 sm:h-96 w-full mr-4" :src="project.masterPlan" alt="cay xoai">
+              <img
+                onerror="this.onerror=null; this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQMAAADCCAMAAAB6zFdcAAAAQlBMVEX///+hoaGenp6ampr39/fHx8fOzs7j4+P8/Pyvr6/d3d3FxcX29va6urqYmJjs7OzU1NSlpaW1tbWtra3n5+e/v78TS0zBAAACkUlEQVR4nO3b63KCMBCGYUwUUVEO6v3fagWVY4LYZMbZnff51xaZ5jON7CZNEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQb5tvI8qzX4/nH84XG5Upfj2ir2V2E5fZ/XpIX9saMnhkYLIkiyRJjdgMoiEDMmiQgfwM8rSu77ew2wnPoLTmwdZBs0J2BuXrYckcQm4nOoP+WcmWAbcTnUHZPy9eA24nOoN7n0HI54ToDM5k8PjluwyqgNuJzqDoaugPg8gWZ4noDAYLwuIg75fLeeHHsjNIzrZJwWwW+0DNsmEWPjiEZ5AcD8ZUu8VZ8HyQMifvBdIz+PS33i8adu+7Qn4Gn1Tdupl7rlCfQb9seosK7RkcBy1o30iVZ5CPOtDW3WhQnsF13IV3v0p3BqfJRoSpXVepzmA/24+yqeMyzRm4tqOs44lSUwa3yfgOri25av5CPRnklR33VlPnrqSZV09qMsiqSWV082xOz1uPajJ49pTM/f115k6guWa6JGjJ4N1lt8fXN2rv/vysjFaSQdFXBc/KKF04ptFPliclGVR9Bu27XCyeVOkmy5OODAZN9rYyyip/AIPJ8qIig+PoXbf7YdPdncFoSdCQQT4ZceV+MhiFMBy0hgyu0yGvOLI17KwpyGBaHK5jtt0N5GcwLw7XZdB31sRn8O+ziqYro8Vn4CwOV+k6a9Iz+PwRsKC7h+gMfMXhKu/OmuwM/MXhKq8yWnYG/uJw5Uxoy2jRGZTBZ/jboxuSM1guDtdNhKazJjiDbNMe0AxzKUVnkO+jEJxBxNtJzWCTxlNLzSB8KehJ/H+mJGYAjaDjzj9SnHZRuXZiAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAECXP1XDHv7U4SNFAAAAAElFTkSuQmCC'"
+                class="h-48 sm:h-96 w-full mr-4"
+                :src="project.masterPlan"
+                alt="cay xoai"
+              >
               <button name="edit-button" @click="() => $modal.show('edit-project-master-plan')">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -209,8 +214,8 @@
             </div>
           </div>
           <ul class="grid grid-cols-3">
-            <li v-for="(utility, index) in project.utilities.listOfUtilities" :key="utility" class="flex">
-              <label class="mr-3 mt-2"> {{ utility }} </label>
+            <li v-for="(utility, index) in project.utilities.listOfUtilities" :key="utility" class="flex justify-start items-center">
+              <label class="mr-3"> {{ utility }} </label>
               <button @click="() => project.utilities.listOfUtilities.splice(index, 1)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -253,7 +258,11 @@
           </div>
           <div class="container mt-3" style="float:left;">
             <div v-for="(item, index) in project.images" :key="index" class="w-100 mx-2" style="float:left">
-              <img class="w-40 h-32 mr-2 my-2" :src="item" alt="alternative text">
+              <img
+                onerror="this.onerror=null; this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQMAAADCCAMAAAB6zFdcAAAAQlBMVEX///+hoaGenp6ampr39/fHx8fOzs7j4+P8/Pyvr6/d3d3FxcX29va6urqYmJjs7OzU1NSlpaW1tbWtra3n5+e/v78TS0zBAAACkUlEQVR4nO3b63KCMBCGYUwUUVEO6v3fagWVY4LYZMbZnff51xaZ5jON7CZNEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQb5tvI8qzX4/nH84XG5Upfj2ir2V2E5fZ/XpIX9saMnhkYLIkiyRJjdgMoiEDMmiQgfwM8rSu77ew2wnPoLTmwdZBs0J2BuXrYckcQm4nOoP+WcmWAbcTnUHZPy9eA24nOoN7n0HI54ToDM5k8PjluwyqgNuJzqDoaugPg8gWZ4noDAYLwuIg75fLeeHHsjNIzrZJwWwW+0DNsmEWPjiEZ5AcD8ZUu8VZ8HyQMifvBdIz+PS33i8adu+7Qn4Gn1Tdupl7rlCfQb9seosK7RkcBy1o30iVZ5CPOtDW3WhQnsF13IV3v0p3BqfJRoSpXVepzmA/24+yqeMyzRm4tqOs44lSUwa3yfgOri25av5CPRnklR33VlPnrqSZV09qMsiqSWV082xOz1uPajJ49pTM/f115k6guWa6JGjJ4N1lt8fXN2rv/vysjFaSQdFXBc/KKF04ptFPliclGVR9Bu27XCyeVOkmy5OODAZN9rYyyip/AIPJ8qIig+PoXbf7YdPdncFoSdCQQT4ZceV+MhiFMBy0hgyu0yGvOLI17KwpyGBaHK5jtt0N5GcwLw7XZdB31sRn8O+ziqYro8Vn4CwOV+k6a9Iz+PwRsKC7h+gMfMXhKu/OmuwM/MXhKq8yWnYG/uJw5Uxoy2jRGZTBZ/jboxuSM1guDtdNhKazJjiDbNMe0AxzKUVnkO+jEJxBxNtJzWCTxlNLzSB8KehJ/H+mJGYAjaDjzj9SnHZRuXZiAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAECXP1XDHv7U4SNFAAAAAElFTkSuQmCC'"
+                class="w-40 h-32 mr-2 my-2"
+                :src="item"
+              >
               <div class="flex justify-evenly">
                 <button name="edit-button" @click="showUpdateProjectImageModal(index)">
                   <svg
@@ -346,7 +355,7 @@
         </expand-panel>
 
         <expand-panel title="Tổng quan">
-          <div>
+          <div style="">
             <client-only>
               <quill-editor
                 ref="myQuillEditor"
@@ -586,34 +595,40 @@
     </modal>
 
     <modal name="show-edit-investor">
-      <div v-if="investorEdit" class="pt-12">
-        <h2 class="mt-2 text-lg font-semibold text-center">
+      <div v-if="investorEdit" class="p-5">
+        <h2 class="my-2 text-lg font-semibold text-center">
           Chỉnh sửa chủ đầu tư
         </h2>
-        <div class="flex justify-between" style="height: 150px;">
+        <div class="flex justify-between" style="height: 170px;">
           <div>
-            <div class="flex">
-              <p>Tên chủ đầu tư</p>
-              <input v-model="investorEdit.investorName" class="w-auto" type="text">
+            <div class="flex justify-between mb-2">
+              <p class="font-bold">Tên chủ đầu tư</p>
+              <input v-model="investorEdit.investorName" style="width:50%" type="text">
             </div>
-            <div class="flex">
-              <p>Số dự án</p>
-              <input v-model="investorEdit.numberOfProjects" class="w-auto" type="number">
+            <div class="flex justify-between mb-2">
+              <p class="font-bold">Số dự án</p>
+              <input v-model="investorEdit.numberOfProjects" style="width:50%" type="number">
             </div>
-            <div class="flex">
-              <p>Thời gian thành lập</p>
-              <input v-if="tempFoundedDate" v-model="tempFoundedDate" class="w-auto" type="date">
+            <div class="flex justify-between mb-2">
+              <p class="font-bold">Thời gian thành lập</p>
+              <input v-if="tempFoundedDate" v-model="tempFoundedDate" style="width:50%" type="date">
             </div>
-            <div class="flex">
-              <p>Số điện thoại</p>
-              <input v-model="investorEdit.phoneNumber" class="w-auto" type="text">
+            <div class="flex justify-between mb-2">
+              <p class="font-bold">Số điện thoại</p>
+              <input v-model="investorEdit.phoneNumber" style="width:50%" type="text" max="10">
             </div>
-            <div class="flex">
-              <p>Hình ảnh</p>
-              <input v-model="investorEdit.image" class="w-auto" type="text">
+            <div class="flex justify-between mb-2">
+              <p class="font-bold">Hình ảnh</p>
+              <input v-model="investorEdit.image" style="width:50%" type="text">
             </div>
           </div>
-          <img :src="investorEdit.image" alt="Girl in a jacket" width="200" height="200">
+          <img
+            onerror="this.onerror=null; this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQMAAADCCAMAAAB6zFdcAAAAQlBMVEX///+hoaGenp6ampr39/fHx8fOzs7j4+P8/Pyvr6/d3d3FxcX29va6urqYmJjs7OzU1NSlpaW1tbWtra3n5+e/v78TS0zBAAACkUlEQVR4nO3b63KCMBCGYUwUUVEO6v3fagWVY4LYZMbZnff51xaZ5jON7CZNEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQb5tvI8qzX4/nH84XG5Upfj2ir2V2E5fZ/XpIX9saMnhkYLIkiyRJjdgMoiEDMmiQgfwM8rSu77ew2wnPoLTmwdZBs0J2BuXrYckcQm4nOoP+WcmWAbcTnUHZPy9eA24nOoN7n0HI54ToDM5k8PjluwyqgNuJzqDoaugPg8gWZ4noDAYLwuIg75fLeeHHsjNIzrZJwWwW+0DNsmEWPjiEZ5AcD8ZUu8VZ8HyQMifvBdIz+PS33i8adu+7Qn4Gn1Tdupl7rlCfQb9seosK7RkcBy1o30iVZ5CPOtDW3WhQnsF13IV3v0p3BqfJRoSpXVepzmA/24+yqeMyzRm4tqOs44lSUwa3yfgOri25av5CPRnklR33VlPnrqSZV09qMsiqSWV082xOz1uPajJ49pTM/f115k6guWa6JGjJ4N1lt8fXN2rv/vysjFaSQdFXBc/KKF04ptFPliclGVR9Bu27XCyeVOkmy5OODAZN9rYyyip/AIPJ8qIig+PoXbf7YdPdncFoSdCQQT4ZceV+MhiFMBy0hgyu0yGvOLI17KwpyGBaHK5jtt0N5GcwLw7XZdB31sRn8O+ziqYro8Vn4CwOV+k6a9Iz+PwRsKC7h+gMfMXhKu/OmuwM/MXhKq8yWnYG/uJw5Uxoy2jRGZTBZ/jboxuSM1guDtdNhKazJjiDbNMe0AxzKUVnkO+jEJxBxNtJzWCTxlNLzSB8KehJ/H+mJGYAjaDjzj9SnHZRuXZiAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAECXP1XDHv7U4SNFAAAAAElFTkSuQmCC'"
+            :src="investorEdit.image"
+            :alt="project.projectName"
+            width="200"
+            height="200"
+          >
         </div>
         <div class="flex justify-end space-x-3 m-2 my-2">
           <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('show-edit-investor')">
@@ -931,45 +946,53 @@ export default {
     addNewUtility () {
 
     },
-    updateProjectInformation () {
-      if ((this.currentProject.projectName === this.project.projectName) && (this.currentProject.investorId === this.project.investorId) &&
-                (this.currentProject.juridical === this.project.juridical) && (this.currentProject.description === this.project.description) &&
-                (this.currentProject.sEOContent === this.project.sEOContent) &&
-                (this.currentProject.masterPlan === this.project.masterPlan)) {
-        this.$toast.show('Dữ liệu chưa có thay đổi!', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 3000,
-          position: 'top-right'
-        });
-        return;
-      }
-      // eslint-disable-next-line no-unused-expressions
+    sendWarningNotification (notification) {
+      this.$toast.show(notification, {
+        type: 'error',
+        theme: 'bubble',
+        duration: 3000,
+        position: 'top-right'
+      });
+    },
+    sendDoneNotification (notification) {
+      this.$toast.show(notification, {
+        type: 'success',
+        duration: 2000,
+        theme: 'bubble',
+        position: 'top-right'
+      });
+    },
+    sendUpdateProjectMutation (queryable) {
       this.$apollo.mutate({
         mutation: gql`mutation UpdateProjectInformation($input: UpdateProjectInput!) {
                     updateProject(input: $input) {
                         string
                     }
                 }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            projectName: this.project.projectName,
-            investorId: this.project.investorId,
-            juridical: this.project.juridical,
-            description: this.project.description,
-            sEOContent: this.project.sEOContent,
-            masterPlan: this.project.masterPlan
-          }
+        variables: queryable
+      });
+    },
+    updateProjectInformation () {
+      if ((this.currentProject.projectName === this.project.projectName) && (this.currentProject.investorId === this.project.investorId) &&
+                (this.currentProject.juridical === this.project.juridical) && (this.currentProject.description === this.project.description) &&
+                (this.currentProject.sEOContent === this.project.sEOContent) &&
+                (this.currentProject.masterPlan === this.project.masterPlan)) {
+        this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
+        return;
+      }
+      // eslint-disable-next-line no-unused-expressions
+      this.sendUpdateProjectMutation({
+        input: {
+          id: this.project.id,
+          projectName: this.project.projectName,
+          investorId: this.project.investorId,
+          juridical: this.project.juridical,
+          description: this.project.description,
+          sEOContent: this.project.sEOContent,
+          masterPlan: this.project.masterPlan
         }
-
       });
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        duration: 2000,
-        theme: 'bubble',
-        position: 'top-right'
-      });
+      this.sendDoneNotification('Thay đổi thành công!');
       this.currentProject.projectName = this.project.projectName;
       this.currentProject.investor = this.project.investor;
       this.currentProject.juridical = this.project.juridical;
@@ -979,47 +1002,21 @@ export default {
     updateProjectAddress () {
       if ((this.currentProject.address.street === this.project.address.street) && (this.currentProject.address.district === this.project.address.district) &&
                 (this.currentProject.address.city === this.project.address.city) && (this.currentProject.address.googleMapLocation === this.project.address.googleMapLocation)) {
-        this.$toast.show('Dữ liệu chưa có thay đổi', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 3000,
-          position: 'top-right'
-        });
+        this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
-      // if (this.project.address.googleMapLocation === "") {
-      //     this.$toast.show("Google map không được để trống, vui lòng thử lại!", {
-      //         type: "error",
-      //         theme: "bubble",
-      //         duration: 2000,
-      //         position: "top-right"
-      //     });
-      //     return;
-      // }
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectAddress($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            address: {
-              street: this.project.address.street,
-              district: this.project.address.district,
-              city: this.project.address.city,
-              googleMapLocation: this.project.address.googleMapLocation
-            }
+      this.sendUpdateProjectMutation({
+        input: {
+          id: this.project.id,
+          address: {
+            street: this.project.address.street,
+            district: this.project.address.district,
+            city: this.project.address.city,
+            googleMapLocation: this.project.address.googleMapLocation
           }
         }
       });
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        postition: 'top-right'
-      });
+      this.sendDoneNotification('Thay đổi thành công!');
       if (this.currentProject.address.googleMapLocation !== this.project.address.googleMapLocation) {
         this.$modal.hide('google-map-edit-modal');
       }
@@ -1032,114 +1029,61 @@ export default {
       if ((this.currentProject.utilities.locationUtilities === this.project.utilities.locationUtilities) &&
                 (this.currentProject.utilities.internalUtilities === this.project.utilities.internalUtilities) &&
                 (this.currentProject.utilities.listOfUtilities === this.project.utilities.listOfUtilities)) {
-        this.$toast.show('Dữ liệu chưa có thay đổi', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 3000,
-          position: 'top-right'
-        });
+        this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
 
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectUtilities($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            utilities: {
-              internalUtilities: this.project.utilities.internalUtilities,
-              locationUtilities: this.project.utilities.locationUtilities,
-              listOfUtilities: this.project.utilities.listOfUtilities
-            }
+      this.sendUpdateProjectMutation({
+        input: {
+          id: this.project.id,
+          utilities: {
+            internalUtilities: this.project.utilities.internalUtilities,
+            locationUtilities: this.project.utilities.locationUtilities,
+            listOfUtilities: this.project.utilities.listOfUtilities
           }
         }
       });
-      this.$toast.show('Cập nhật thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        postition: 'top-right'
-      });
+      this.sendDoneNotification('Thay đổi thành công!');
       this.currentProject.utilities.locationUtilities = this.project.utilities.locationUtilities;
       this.currentProject.utilities.internalUtilities = this.project.utilities.internalUtilities;
       this.currentProject.utilities.listOfUtilities = this.project.utilities.listOfUtilities.splice();
     },
     addNewProjectImage () {
       if (this.currentProject.images.includes(this.newImage)) {
-        this.$toast.show('Hình ảnh đã tồn tại, vui lòng thử lại!', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
-        });
+        this.sendWarningNotification('Hình ảnh đã tồn tại, vui lòng thử lại!');
         this.newImage = '';
         return;
       }
       if (this.newImage === '') {
-        this.$toast.show('Chưa có dữ liệu, vui lòng thử lại!', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
-        });
+        this.sendWarningNotification('Chưa có dữ liệu, vui lòng thử lại!');
         return;
       }
       this.project.images.push(this.newImage);
       this.currentProject.images.push(this.newImage);
-      this.$apollo.mutate({
-        mutation: gql`mutation AddNewProjectImage($input: UpdateProjectInput!)
-                {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            images: this.project.images
-          }
+      this.sendUpdateProjectMutation({
+        input: {
+          id: this.project.id,
+          images: this.project.images
         }
       });
       this.newImage = '';
-      this.$toast.show('Thêm thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
+      this.sendDoneNotification('Thêm thành công!');
     },
     updateProjectPost () {
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectPost($input: UpdateProjectInput!)
-                {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            projectPost: {
-              overview: this.project.projectPost.overview,
-              location: this.project.projectPost.location,
-              projectDesign: this.project.projectPost.projectDesign,
-              utilitySection: this.project.projectPost.utilitySection,
-              rentAndSellPrice: this.project.projectPost.rentAndSellPrice
-            }
+      this.sendUpdateProjectMutation({
+        input: {
+          id: this.project.id,
+          projectPost: {
+            overview: this.project.projectPost.overview,
+            location: this.project.projectPost.location,
+            projectDesign: this.project.projectPost.projectDesign,
+            utilitySection: this.project.projectPost.utilitySection,
+            rentAndSellPrice: this.project.projectPost.rentAndSellPrice
           }
         }
       });
       this.newImage = '';
-      this.$toast.show('Thêm thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
+      this.sendDoneNotification('Thêm thành công!');
       this.currentProject.projectPost.overview = this.project.projectPost.overview;
       this.currentProject.projectPost.location = this.project.projectPost.location;
       this.currentProject.projectPost.projectDesign = this.project.projectPost.projectDesign;
@@ -1160,42 +1104,48 @@ export default {
                 (this.currentProject.scale === this.project.scale) &&
                 (this.currentProject.constructionAcreage === this.project.constructionAcreage) &&
                 (this.currentProject.densityOfConstruction === this.project.densityOfConstruction)) {
-        this.$toast.show('Dữ liệu chưa có thay đổi!', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 3000,
-          position: 'top-right'
-        });
+        this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
+        return;
+      }
+      if (Math.floor(this.project.price) < 0) {
+        this.sendWarningNotification("Giá phải lớn hơn hoặc bằng 0!");
+        return;
+      }
+      if (Math.floor(this.project.numberOfApartments) < 0) {
+        this.sendWarningNotification('Số lượng căn hộ phải lớn hơn hoặc bằng 0!');
+        return;
+      }
+      if (Math.floor(this.project.numberOfBuildings) < 0) {
+        this.sendWarningNotification("Số lượng tòa nhà phải lớn hơn hoặc bằng 0!");
+        return;
+      }
+      if (Math.floor(this.project.constructionAcreage) < 0) {
+        this.sendWarningNotification("Diện tích xây dựng phải lớn hơn hoặc bằng 0!");
+        return;
+      }
+      if (Math.floor(this.project.acreage) < 0) {
+        this.sendWarningNotification("Diện tích phải lớn hơn hoặc bằng 0!");
+        return;
+      }
+      if (Math.floor(this.project.densityOfConstruction) < 0) {
+        this.sendWarningNotification("Mật độ xây dựng phải lớn hơn hoặc bằng 0!");
         return;
       }
       // eslint-disable-next-line no-unused-expressions
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectDetailInformation($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            price: Math.floor(this.project.price),
-            numberOfApartments: Math.floor(this.project.numberOfApartments),
-            numberOfBuildings: Math.floor(this.project.numberOfBuildings),
-            acreage: Math.floor(this.project.acreage),
-            scale: this.project.scale,
-            constructionAcreage: Math.floor(this.project.constructionAcreage),
-            densityOfConstruction: Math.floor(this.project.densityOfConstruction),
-            completionTime: this.project.completionTime
-          }
+      this.sendUpdateProjectMutation({
+        input: {
+          id: this.project.id,
+          price: Math.floor(this.project.price),
+          numberOfApartments: Math.floor(this.project.numberOfApartments),
+          numberOfBuildings: Math.floor(this.project.numberOfBuildings),
+          acreage: Math.floor(this.project.acreage),
+          scale: this.project.scale,
+          constructionAcreage: Math.floor(this.project.constructionAcreage),
+          densityOfConstruction: Math.floor(this.project.densityOfConstruction),
+          completionTime: this.project.completionTime
         }
-
       });
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        duration: 2000,
-        theme: 'bubble',
-        position: 'top-right'
-      });
+      this.sendDoneNotification('Thay đổi thành công!');
       this.currentProject.price = this.project.price;
       this.currentProject.numberOfApartments = this.project.numberOfApartments;
       this.currentProject.numberOfBuildings = this.project.numberOfBuildings;
@@ -1207,65 +1157,31 @@ export default {
     },
     updateProjectImage () {
       if (this.currentProject.images[this.imageIndex] === this.project.images[this.imageIndex]) {
-        this.$toast.show('Dữ liệu chưa có thay đổi gì', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
-        });
+        this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
       if (this.project.images[this.imageIndex] === '') {
-        this.$toast.show('Dữ liệu không được để trống, hoặc bạn có thể xóa đi hình ảnh này', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
-        });
+        this.sendWarningNotification('Dữ liệu không được để trống, hoặc bạn có thể xóa đi hình ảnh này!');
         return;
       }
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectImage($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            images: this.project.images
-          }
+      this.sendUpdateProjectMutation({
+        input: {
+          id: this.project.id,
+          images: this.project.images
         }
       });
       this.currentProject.images[this.imageIndex] = this.project.images[this.imageIndex];
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
+      this.sendDoneNotification('Thay đổi thành công!');
       this.$modal.hide('edit-project-image');
     },
     updateProjectMasterPlan () {
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdateProjectMasterPlan($input: UpdateProjectInput!) {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            masterPlan: this.project.masterPlan
-          }
+      this.sendUpdateProjectMutation({
+        input: {
+          id: this.project.id,
+          masterPlan: this.project.masterPlan
         }
       });
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
+      this.sendDoneNotification('Thay đổi thành công!');
       this.$modal.hide('edit-project-master-plan');
     },
     showDeleteProjectImageModal (index) {
@@ -1294,6 +1210,16 @@ export default {
       this.$modal.show('show-edit-investor');
     },
     updateInvestor () {
+      this.investorEdit.numberOfProjects = Number(this.investorEdit.numberOfProjects);
+      if (this.investorEdit.numberOfProjects < 0) {
+        this.$toast.show("Số lượng dự án phải lớn hơn hoặc bằng 0!", {
+          type: "error",
+          theme: "bubble",
+          duration: "3000",
+          position: "top-right"
+        });
+        return;
+      }
       this.$apollo.mutate({
         mutation: gql`mutation UpdateInvestor($input: UpdateInvestorInput!) 
                 {
@@ -1307,23 +1233,26 @@ export default {
             id: this.project.investorId,
             name: this.investorEdit.investorName,
             image: this.investorEdit.image,
-            numberOfProjects: Math.floor(this.investorEdit.numberOfProjects),
+            numberOfProjects: this.investorEdit.numberOfProjects,
             phoneNumber: this.investorEdit.phoneNumber,
             foundedTime: this.tempFoundedDate.substring(5, 7) + '-' + this.tempFoundedDate.substring(8, 10) + '-' + this.tempFoundedDate.substring(0, 4)
           }
         }
       });
-      this.$toast.show('Cập nhật thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
+      if (this.investors.some(x => x.investorName == this.investorEdit.investorName) == false) {
+        setTimeout(() => {
+          this.$apollo.queries.investors.refetch({
+            condition: null
+          });
+        }, 500);
+        console.log("refetch");
+      }
+      this.sendDoneNotification('Cập nhật thành công!');
+      this.$modal.hide("show-edit-investor");
     },
     deleteProjectImage () {
       this.project.images = this.project.images.filter(x => x !== this.project.images[this.imageIndex]);
       this.currentProject.images = this.currentProject.images.filter(x => x !== this.currentProject.images[this.imageIndex]);
-      console.log(this.currentProject.images.length);
       this.$apollo.mutate({
         mutation: gql`mutation DeleteProjectImage($input: UpdateProjectInput!) 
                 {
@@ -1339,22 +1268,12 @@ export default {
           }
         }
       });
-      this.$toast.show('Xóa thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
+      this.sendDoneNotification('Xóa thành công!');
       this.$modal.hide('delete-project-image');
     },
     addNewPageInfor () {
       if ((this.newPageInfor.slug === '') || (this.currentProject.pageInfors.some(x => x.slug === this.newPageInfor.slug) === true)) {
-        this.$toast.show('Slug đã tồn tại hoặc chưa có, vui lòng thử lại!', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
-        });
+        this.sendWarningNotification('Slug đã tồn tại hoặc chưa có, vui lòng thử lại!');
         this.newPageInfor = {};
         this.$modal.hide('add-new-page-information');
         return;
@@ -1366,29 +1285,15 @@ export default {
       };
       this.project.pageInfors.forEach(x => delete x.__typename);
       this.project.pageInfors.push(pageInfor);
-      this.$apollo.mutate({
-        mutation: gql`mutation AddNewPageInfor($input: UpdateProjectInput!) 
-                {
-                    updateProject(input: $input) {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            pageInfors: this.project.pageInfors
-          }
+      this.sendUpdateProjectMutation({
+        input: {
+          id: this.project.id,
+          pageInfors: this.project.pageInfors
         }
       });
       this.newPageInfor = {};
       this.currentProject.pageInfors.push(pageInfor);
-      console.log(this.currentProject.pageInfors.length);
-      this.$toast.show('Thêm thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
+      this.sendDoneNotification('Thêm thành công!');
       this.$modal.hide('add-new-page-information');
     },
     showPageInforModal (index) {
@@ -1397,27 +1302,15 @@ export default {
     },
     updatePageInformation () {
       const index = this.pageInforIndex;
-      console.log(this.currentProject.pageInfors[index]);
-      console.log(this.project.pageInfors[index]);
       if ((this.currentProject.pageInfors[index].slug === this.project.pageInfors[index].slug) &&
                 (this.currentProject.pageInfors[index].title === this.project.pageInfors[index].title) &&
                 (this.currentProject.pageInfors[index].metaDescription === this.project.pageInfors[index].metaDescription)) {
-        this.$toast.show('Dữ liệu chưa có thay đổi gì', {
-          type: 'error',
-          theme: 'bubble',
-          duration: 2000,
-          position: 'top-right'
-        });
+        this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
       if (this.currentProject.pageInfors[index].slug !== this.project.pageInfors[index].slug) {
         if ((this.project.pageInfors[index].slug === '') || (this.currentProject.pageInfors.some(x => x.slug === this.project.pageInfors[index].slug))) {
-          this.$toast.show('Slug đã tồn tại hoặc chưa có, vui lòng thử lại!', {
-            type: 'error',
-            theme: 'bubble',
-            duration: 2000,
-            position: 'top-right'
-          });
+          this.sendWarningNotification('Slug đã tồn tại hoặc chưa có, vui lòng thử lại!');
           this.project.pageInfors[index].slug = this.currentProject.pageInfors[index].slug;
           this.project.pageInfors[index].title = this.currentProject.pageInfors[index].title;
           this.project.pageInfors[index].metaDescription = this.currentProject.pageInfors[index].metaDescription;
@@ -1425,27 +1318,15 @@ export default {
         }
       }
       this.project.pageInfors.forEach(x => delete x.__typename);
-      this.$apollo.mutate({
-        mutation: gql`mutation UpdatePageInformation($input: UpdateProjectInput!)
-                {
-                    updateProject(input: $input) 
-                    {
-                        string
-                    }
-                }`,
-        variables: {
+      this.sendUpdateProjectMutation({
+        input: {
           input: {
             id: this.project.id,
             pageInfors: this.project.pageInfors
           }
         }
       });
-      this.$toast.show('Thay đổi thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
+      this.sendDoneNotification('Thay đổi thành công!');
       this.currentProject.pageInfors[index].slug = this.project.pageInfors[index].slug;
       this.currentProject.pageInfors[index].title = this.project.pageInfors[index].title;
       this.currentProject.pageInfors[index].metaDescription = this.project.pageInfors[index].metaDescription;
@@ -1460,27 +1341,13 @@ export default {
       this.project.pageInfors = this.project.pageInfors.filter(x => x.slug !== this.project.pageInfors[index].slug);
       this.currentProject.pageInfors = this.currentProject.pageInfors.filter(x => x.slug !== this.currentProject.pageInfors[index].slug);
       this.project.pageInfors.forEach(x => delete x.__typename);
-      this.$apollo.mutate({
-        mutation: gql`mutation deleteProjectPageInfor($input: UpdateProjectInput!) 
-                {
-                    updateProject(input: $input)
-                    {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            pageInfors: this.project.pageInfors
-          }
+      this.sendUpdateProjectMutation({
+        input: {
+          id: this.project.id,
+          pageInfors: this.project.pageInfors
         }
       });
-      this.$toast.show('Xóa thành công!', {
-        type: 'success',
-        theme: 'bubble',
-        duration: 2000,
-        position: 'top-right'
-      });
+      this.sendDoneNotification('Xóa thành công!');
       this.pageInforIndex = 0;
       this.$modal.hide('delete-page-information');
     }

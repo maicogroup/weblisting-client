@@ -328,7 +328,7 @@ export default {
         }
       }
 
-      title = `${demand} nhà đất ${type}${price}${acreage}`;
+      title = `${demand} ${type}${price}${acreage}`;
     }
 
     return {

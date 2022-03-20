@@ -118,10 +118,10 @@
     </div>
     <div class="mt-4 rounded-lg border-8 py-3 px-5">
       <ul>
-        <li v-for="item in post.furnitures" :key="item" class="bgc-cornflowerblue rounded-lg inline-flex mr-4 mt-2 mb-3 bg-lime-300 p-2 list-none" title="xóa nội thất">
+        <li v-for="item in post.furnitures" :key="item" class="bgc-cornflowerblue rounded-lg inline-flex mr-4 mt-2 mb-3 p-2 list-none" title="xóa nội thất">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 cursor-pointer mr-2 text-slate-400 hover:text-red-600"
+            class="h-6 w-6 cursor-pointer mr-2 text-zinc-50 hover:text-red-600"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -171,10 +171,10 @@
     </div>
     <div class="mt-4 rounded-lg border-8 py-3 px-5">
       <ul>
-        <li v-for="item in post.tags" :key="item" class="bgc-cornflowerblue rounded-lg inline-flex mr-4 mt-2 mb-3 bg-lime-300 p-2 list-none" title="xóa tag">
+        <li v-for="item in post.tags" :key="item" class="bgc-cornflowerblue rounded-lg inline-flex mr-4 mt-2 mb-3 p-2 list-none" title="xóa tag">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 cursor-pointer mr-2 text-slate-400 hover:text-red-600"
+            class="h-6 w-6 cursor-pointer mr-2 text-zinc-50 hover:text-red-600"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -362,7 +362,8 @@ export default {
       tags: [],
       usageAcreage: this.post.usageAcreage,
       view: this.post.view,
-      doorDirection: this.post.doorDirection
+      doorDirection: this.post.doorDirection,
+      direction: this.post.direction
     };
     if (this.post.tags != null) 
     {
@@ -513,7 +514,8 @@ export default {
         && (this.currentPost.description == this.post.description) && (this.currentPost.tags.length == this.post.tags.length)
         && (this.currentPost.otherSpecification == this.post.otherSpecification) && (this.currentPost.usageAcreage == this.post.usageAcreage) 
         && (this.currentPost.view == this.post.view) && (this.currentPost.doorDirection == this.post.doorDirection)
-        && (this.currentPost.furnitures.length == this.post.furnitures.length) && (this.imageIsChanged == false))
+        && (this.currentPost.furnitures.length == this.post.furnitures.length) && (this.imageIsChanged == false) 
+        && (this.currentPost.direction == this.post.direction))
         {
         
           this.$toast.show("Cập nhật thất bại, dữ liệu chưa có thay đổi gì!", {
@@ -559,7 +561,8 @@ export default {
               tags: this.post.tags,
               usageAcreage: this.post.usageAcreage,
               view: this.post.view,
-              doorDirection: this.post.doorDirection
+              doorDirection: this.post.doorDirection,
+              direction: this.post.direction
             }
           }
         }).then((data) => {

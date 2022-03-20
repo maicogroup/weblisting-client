@@ -56,13 +56,7 @@
       </div>
 
       <div class="max-h-96 overflow-y-auto overflow-x-hidden">
-        <filter-dropdown-item
-          v-if="searchInput.trim() === ''"
-          class="text-dark-red"
-          @click="handleSelectAllProjectOption"
-        >
-          Tất cả dự án
-        </filter-dropdown-item>
+        
 
         <template v-if="projects !== null">
           <filter-dropdown-item v-for="project in filteredProjects" :key="project.id" @click="handleSelectProject(project)">
@@ -106,7 +100,7 @@ export default {
     return {
       open: false,
       entered: false,
-      displaySelected: 'Tất cả',
+      displaySelected: 'CL Park',
       searchInput: ''
     };
   },
@@ -136,7 +130,7 @@ export default {
         if (option) {
           this.displaySelected = option.projectName;
         } else {
-          this.displaySelected = 'Tất cả';
+          this.displaySelected = 'CL Park';
         }
       },
       immediate: true

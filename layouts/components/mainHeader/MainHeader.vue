@@ -135,12 +135,12 @@
     </button>
 
     <div
-      v-if="showSidebar"
-      class="fixed inset-0 h-full w-full z-10 bg-black opacity-20"
+      v-show="showSidebar != null"
+      :class="`fixed inset-0 h-full w-full z-10 bg-black opacity-20 ${(showSidebar)? 'visible' : 'hide-side-bar-parent'}`"
       @click="showSidebar = false"
     />
 
-    <Sidebar v-if="showSidebar" :projects="projects" class="z-20" />
+    <Sidebar v-show="showSidebar != null" :projects="projects" :class="`z-20 ${(showSidebar)? 'show-side-bar' : 'hide-side-bar'}`" />
   </div>
 </template>
 
@@ -173,7 +173,7 @@ export default {
     }
   },
   data() {
-    return { showSidebar: false };
+    return { showSidebar: null };
   },
 
   methods: {
@@ -204,3 +204,38 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.show-side-bar{
+  animation: slide-in 1s ease;
+}
+
+.hide-side-bar-parent{
+  visibility: hidden;
+}
+
+.hide-side-bar{
+  animation: slide-out 1s ease;
+  width: 0;
+}
+
+@keyframes slide-in {
+  from{
+    width: 0;
+  }
+  to{
+    /*width: 0.25 * 64 ~~ w-64 in tailwind */
+    width: calc(0.25rem * 64);
+  }
+}
+
+@keyframes slide-out {
+  from{
+    /*width: 0.25 * 64 ~~ w-64 in tailwind */
+    width: calc(0.25rem * 64);  
+  }
+  to{
+    width: 0;
+  }
+}
+</style>

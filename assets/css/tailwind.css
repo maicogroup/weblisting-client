@@ -9,11 +9,7 @@
 }
 
 @layer utilities {
-  .grow {
-    flex-grow: 1;
-  }
-
-  .shrink-0 {
-    flex-shrink: 0;
+  .font-source-serif-pro {
+    font-family: 'Source Serif Pro', serif;
   }
 }

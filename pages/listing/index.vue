@@ -137,9 +137,9 @@
           </div>
         </div>
       </div>
-      <Divider v-if="showIfPostsOfOneProject" class="border-stone-400 mt-7 mb-8 sm:mb-12" />
-      <ProjectHeader v-if="showIfPostsOfOneProject" class="mb-5" :project="project" />
     </div>
+    <Divider v-if="showIfPostsOfOneProject" class="border-stone-400 mt-7 mb-8 sm:mb-12" />
+    <ProjectHeader v-if="showIfPostsOfOneProject" class="mb-5" :project="project" />
     <div v-if="project && showIfPostsOfOneProject && project.sEOContent" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
       <div
         :class="`overflow-hidden text-ellipsis mt-5 mx-2   ${sEOContentClasses}` "
@@ -278,6 +278,7 @@ export default {
       // filter dùng để lọc
       filter: null,
       readMoreButtonIsActive: false,
+      heading: '',
       // filter đang được người dùng chỉnh sửa, chuẩn bị dùng để lọc
       inputFilter: {},
       searchButtonPressed: false,
@@ -330,14 +331,20 @@ export default {
 
       title = `${demand} ${type}${price}${acreage}`;
     }
-
+    this.heading = title;
     return {
       title,
-      meta: [{
-        hid: 'description',
-        name: 'description',
-        content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
-      }]
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
+        },
+        {
+          property: 'og:image',
+          content: this.project?.images[0]
+        }
+      ]
     };
   },
 

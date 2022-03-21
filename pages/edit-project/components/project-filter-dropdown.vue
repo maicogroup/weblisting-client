@@ -100,7 +100,7 @@ export default {
     return {
       open: false,
       entered: false,
-      displaySelected: 'CL Park',
+      displaySelected: 'Palm Heights',
       searchInput: ''
     };
   },
@@ -130,7 +130,7 @@ export default {
         if (option) {
           this.displaySelected = option.projectName;
         } else {
-          this.displaySelected = 'CL Park';
+          this.displaySelected = 'Palm Heights';
         }
       },
       immediate: true

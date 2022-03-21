@@ -207,7 +207,7 @@ export default {
 
 <style scoped>
 .show-side-bar{
-  animation: slide-in 1s ease;
+  animation: slide-in 0.25s ease;
 }
 
 .hide-side-bar-parent{
@@ -215,7 +215,7 @@ export default {
 }
 
 .hide-side-bar{
-  animation: slide-out 1s ease;
+  animation: slide-out 0.25s ease;
   width: 0;
 }
 

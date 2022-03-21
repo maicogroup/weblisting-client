@@ -229,7 +229,7 @@ export default {
   top: 0;
   right: 0;
   z-index: -9999;
-  animation: transition-up 0.8s ease-in-out;
+  animation: transition-up 0.25s ease-in-out;
 }
 
 .toogle-animation-down{
@@ -237,7 +237,7 @@ export default {
   top: 0;
   right: 0;
   z-index: -9999;
-  animation: transition-down 0.8s ease-in-out;
+  animation: transition-down 0.25s ease-in-out;
   width: 0;
 }
 

@@ -142,10 +142,15 @@ export default {
     return {
       title: this.post?.pageInfor.title,
       meta: [{
-        hid: 'description',
-        name: 'description',
-        content: this.post?.pageInfor.metaDescription
-      }]
+          hid: 'description',
+          name: 'description',
+          content: this.post?.pageInfor.metaDescription
+        },
+        {
+          property: 'og:image',
+          content: 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + this.post?.gallery[0]
+        }
+      ]
     };
   }
 };

@@ -2,7 +2,10 @@
   <div
     class="fixed z-20 top-0 left-0 right-0 bg-white flex justify-between items-center px-5 py-3 border-b"
   >
-    <img onclick="void(0)" id="logo" class="h-12" src="~/assets/maico.png">
+    <NuxtLink to="/">
+      <img onclick="void(0)" id="logo" class="h-12" src="~/assets/maico.png">
+    </NuxtLink>
+    
 
     <div class="hidden md:flex flex justify-between items-center space-x-10">
       <a class="font-bold hidden xl:block" href="tel:0903324045">

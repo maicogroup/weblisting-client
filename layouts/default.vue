@@ -34,6 +34,7 @@ import FacebookChat from './components/facebook-chat.vue';
 
 export default {
   name: 'DefaultLayout',
-  components: { MainHeader, MainFooter, TrackingData, FacebookChat }
+  components: { MainHeader, MainFooter, TrackingData, FacebookChat },
+ 
 };
 </script>

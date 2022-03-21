@@ -135,7 +135,15 @@ export default {
       filterMobileVisible: false
     };
   },
-
+   head () {
+    return{
+      title: 'MaicoGroup - Căn hộ xác thực',
+       meta: [{
+        property: 'og:image',
+        content: "https://weblisting.hn.ss.bfcplatform.vn/og_image.jpg"
+      }]
+    };
+  },
   methods: {
     handleFilterChanged (newFilter) {
       this.filter = newFilter;

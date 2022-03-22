@@ -274,7 +274,7 @@ import { expandPanel } from 'vue-expand-panel';
 import { gql } from 'graphql-tag';
 import NearAreaRecommended from './components/near-area-recommended.vue';
 // import styles
-import './css/vue-expander.css';
+import '~/assets/css/vue-expander.css';
 
 const getRecommendedPosts = gql`
   query GetRecommendedPosts($filter: PostCollectionFilterInput!) {

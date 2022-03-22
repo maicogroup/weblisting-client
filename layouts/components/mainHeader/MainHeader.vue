@@ -16,10 +16,9 @@
     "
   >
     <NuxtLink to="/">
-      <img onclick="void(0)" id="logo" class="h-12" src="~/assets/maico.png"/>
-
-      
+      <img onclick="void(0)" id="logo" class="h-12" src="~/assets/maico.png">
     </NuxtLink>
+   
     <div class="hidden md:flex flex justify-between items-center space-x-10">
       <a class="font-bold hidden xl:block" href="tel:0903324045">
         0903 324 045

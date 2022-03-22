@@ -129,7 +129,7 @@
             overflow-hidden
           "
         >
-          <NuxtLink
+          <a
             class="
               w-full
               h-32
@@ -139,7 +139,7 @@
               project
               overflow-hidden
             "
-            :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
+            :href="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
           >
             <img
               class="w-full h-[200px] object-cover rounded-t-[4px] md:rounded-l-lg md:rounded-tr-none "
@@ -154,22 +154,22 @@
             >
               {{ post.tags[0] }}
             </div>
-          </NuxtLink>
+          </a>
           <div class="flex flex-col justify-between h-[100px] md:h-[140px] w-full relative">
             <div class="p-2 md:p-0">
-              <NuxtLink
-                :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
+              <a
+                :href="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
                 class="hidden md:block mt-3 color-black font-bold"
               >
                 {{ post.pageInfor.title }}
-              </NuxtLink>
+              </a>
 
               <span class="text-neutral-400 mb-2 md:mb-0 md:mt-3 text-sm absolute md:relative bottom-0 max-w-[70%] md:max-w-[100vw] truncate">{{
                 post.address
               }}</span>
 
-              <NuxtLink
-                :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
+              <a
+                :href="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
                 class="
                   title-mobile
                   absolute
@@ -179,7 +179,7 @@
                 "
               >
                 {{ post.pageInfor.title }}
-              </NuxtLink>
+              </a>
               <div class="flex my-1 md:my-3 text-[14px] absolute top-0 right-1 md:relative">
                   <div class="flex" v-if="post.type === 'Căn hộ'">
                     <div class="flex items-center justify-center">
@@ -270,7 +270,7 @@
                 </p>
               </div>
               <div v-else /> -->
-              <p class="text-sm text-neutral-400 mr-2 md:ml-0">
+              <p class="text-sm text-neutral-400 mr-2 md:ml-0 ml-auto">
                 {{ post.date }}
               </p>
             </div>

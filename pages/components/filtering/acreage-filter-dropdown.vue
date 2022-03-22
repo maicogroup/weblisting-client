@@ -17,10 +17,10 @@
       </p>
     </button>
     <div
-      v-if="open"
+      v-show="open"
       ref="dropdownContent"
       tabindex="0"
-      class="text-sm absolute right-0 py-2 bg-white top-16 w-60 rounded-none shadow-xl"
+      :class="`text-sm absolute right-0 py-2 bg-white top-16 w-60 rounded-none shadow-xl ${(open)? 'show-drop-down' : 'hide-drop-down'}`"
 
       @mouseenter="entered = true"
       @mouseleave="entered = false"
@@ -221,5 +221,37 @@ export default {
 
 .text-dark-red {
   color: #961B12;
+}
+
+.show-drop-down{
+  animation: scroll-out-animation 0.1s ease;
+}
+
+.hide-drop-down{
+  overflow: hidden;
+  /* animation: scroll-in-animation 0.2s ease; */
+  height: 0;
+}
+
+@keyframes scroll-out-animation {
+  from{
+    height: 0;
+    opacity: 0;
+  }
+  to{
+    height: 375px;
+    opacity: 1;
+  }
+}
+
+@keyframes scroll-in-animation {
+  from{
+    height: 375px;
+    opacity: 1;
+  }
+  to{
+    height: 0;
+    opacity: 0;
+  }
 }
 </style>

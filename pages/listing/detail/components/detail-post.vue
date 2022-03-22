@@ -7,8 +7,8 @@
       <h1 class="mt-6 font-bold text-2xl">
         {{ post.pageInfor.title }}
       </h1>
-      <div class="mt-3 flex flex-col md:flex-row md:justify-between">
-        <h4 class="font-normal color-3f3f3f text-sm leading-4">
+      <div class="mt-3 flex flex-col md:flex-row md:justify-between max-h-6 overflow-hidden">
+        <h4 class="font-normal color-3f3f3f text-sm leading-4 max-h-4 min-w-[50%]">
           {{ `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}` }}
         </h4>
         <div class="mt-2 md:mt-0 flex space-x-2">
@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <divider class="my-4" />
+      <!-- <divider class="my-4" /> -->
 
       <div class="flex justify-between items-center mb-4">
         <h3 class="font-bold text-lg leading-5">

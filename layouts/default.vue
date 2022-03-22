@@ -37,10 +37,10 @@ export default {
   components: { MainHeader, MainFooter, TrackingData, FacebookChat },
   mounted() {
     //display loading in 4s
-    this.$nextTick(() => {
-      this.$nuxt.$loading.start();
-      setTimeout(() => this.$nuxt.$loading.finish(), 4000);
-    });
+    // this.$nextTick(() => {
+      // this.$nuxt.$loading.start();
+      // setTimeout(() => this.$nuxt.$loading.finish(), 5000);
+    // });
   },
 };
 </script>

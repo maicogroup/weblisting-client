@@ -35,12 +35,6 @@ import FacebookChat from './components/facebook-chat.vue';
 export default {
   name: 'DefaultLayout',
   components: { MainHeader, MainFooter, TrackingData, FacebookChat },
-  mounted() {
-    //display loading in 4s
-    // this.$nextTick(() => {
-      // this.$nuxt.$loading.start();
-      // setTimeout(() => this.$nuxt.$loading.finish(), 5000);
-    // });
-  },
+ 
 };
 </script>

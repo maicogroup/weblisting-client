@@ -7,7 +7,7 @@
       @click="open = !open"
     >
       <div class="inline-flex justify-between items-end">
-        <span class="mr-1">Dự án</span>
+        <span class="mr-1">Loại nhà đất</span>
         <svg class="inline h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
         </svg>
@@ -21,52 +21,33 @@
       ref="dropdownContent"
       tabindex="0"
       class="text-sm absolute right-0 py-2 bg-white top-16 w-60 rounded-none shadow-xl"
-
       @mouseenter="entered = true"
       @mouseleave="entered = false"
     >
       <p class="font-semibold px-6 py-2">
-        Chọn dự án
+        Chọn loại nhà đất
       </p>
 
       <divider />
 
-      <div class="relative m-4">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-          <button class="p-1 text-gray-400 focus:outline-none focus:shadow-outline">
-            <svg
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              class="w-4 h-4"
-            >
-              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-        </span>
-        <input
-          v-model="searchInput"
-          type="search"
-          class="border py-2 pl-10 pr-2 w-full h-full rounded-md bg-white focus:text-gray-900 focus:outline-none"
-          placeholder="Tìm kiếm..."
-        >
-      </div>
-
-      <div class="max-h-96 overflow-y-auto overflow-x-hidden">
-        
-
-        <template v-if="projects !== null">
-          <filter-dropdown-item v-for="project in filteredProjects" :key="project.id" @click="handleSelectProject(project)">
-            {{ project.projectName }}
-          </filter-dropdown-item>
-        </template>
-        <p v-else class="text-gray-600 text-center">
-          Đang tải...
-        </p>
-      </div>
+      <filter-dropdown-item class="text-dark-red" @click="handleSelectAllTypes">
+        Tất cả nhà đất
+      </filter-dropdown-item>
+      <filter-dropdown-item @click="handleSelecType('Căn hộ chung cư')">
+        Căn hộ chung cư
+      </filter-dropdown-item>
+      <filter-dropdown-item @click="handleSelecType('Duplex')">
+        Duplex
+      </filter-dropdown-item>
+      <filter-dropdown-item @click="handleSelecType('Officetel')">
+        Officetel
+      </filter-dropdown-item>
+      <filter-dropdown-item @click="handleSelecType('Penthouse')">
+        Penthouse
+      </filter-dropdown-item>
+      <filter-dropdown-item @click="handleSelecType('ShopHouse')">
+        ShopHouse
+      </filter-dropdown-item>
     </div>
   </div>
 </template>
@@ -84,23 +65,20 @@ export default {
           projects {
             projectName
             id
-            pageInfors {
-              slug
-            }
           }
         }
     `
   },
 
   props: {
-    selectedOption: { type: Object, default: null }
+    selectedOption: { type: String, default: null }
   },
 
   data () {
     return {
       open: false,
       entered: false,
-      displaySelected: 'Palm Heights',
+      displaySelected: 'Tất cả',
       searchInput: ''
     };
   },
@@ -128,9 +106,9 @@ export default {
     selectedOption: {
       handler (option) {
         if (option) {
-          this.displaySelected = option.projectName;
+          this.displaySelected = option;
         } else {
-          this.displaySelected = 'Palm Heights';
+          this.displaySelected = 'Tất cả';
         }
       },
       immediate: true
@@ -142,16 +120,12 @@ export default {
       this.open = this.entered;
     },
 
-    handleSelectProject (project) {
+    handleSelecType (option) {
       this.open = false;
-      this.$emit('optionchanged', {
-        projectName: project.projectName,
-        id: project.id,
-        pageInfor: project.pageInfors[0]
-      });
+      this.$emit('optionchanged', option);
     },
 
-    handleSelectAllProjectOption () {
+    handleSelectAllTypes () {
       this.open = false;
       this.$emit('optionchanged', null);
     }

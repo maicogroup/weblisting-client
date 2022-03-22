@@ -101,40 +101,87 @@
             <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 7, priceTo: 10})">
               Từ 7 - 10 triệu
             </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({dtnn: 30, dtln: 50})">
-              Từ 30 - 50 m²
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 10, priceTo: 15})">
+              Từ 10 - 15 triệu
             </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({dtnn: 50, dtln: 70})">
-              Từ 50 - 70 m²
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 15, priceTo: 20})">
+              Từ 15 - 20 triệu
             </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({dtnn: 70, dtln: 100})">
-              Từ 70 - 100 m²
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 20, priceTo: 30})">
+              Từ 20 - 30 triệu
             </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({dtnn: 100, dtln: undefined})">
-              Trên 100 m²
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 30, priceTo: undefined})">
+              Trên 30 triệu
             </quick-filter-button>
           </div>
+          <div v-else>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: undefined, priceTo: 1})">
+              Dưới 1 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 1, priceTo: 2})">
+              Từ 1 tỷ - đến 2 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 2, priceTo: 3})">
+              Từ 2 tỷ - đến 3 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 3, priceTo: 5})">
+              Từ 3 tỷ - đến 5 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 5, priceTo: 7})">
+              Từ 5 tỷ - đến 7 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 7, priceTo: 10})">
+              Từ 7 tỷ - đến 10 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 10, priceTo: 20})">
+              Từ 10 tỷ - đến 20 tỷ
+            </quick-filter-button>
+            <quick-filter-button @click="updateUrlQueryAndNavigate({priceFrom: 20, priceTo: undefined})">
+              Trên 20 tỷ
+            </quick-filter-button>
+          </div>
+        </div>
 
-          <div class="border mt-4 p-4 rounded">
-            <p class="font-bold mb-2">
-              Xem theo phòng ngủ
-            </p>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({slpn: ['1']})">
-              1 phòng ngủ
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({slpn: ['2']})">
-              2 phòng ngủ
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({slpn: ['3']})">
-              3 phòng ngủ
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({slpn: ['4']})">
-              4 phòng ngủ
-            </quick-filter-button>
-            <quick-filter-button @click="updateUrlQueryAndNavigate({slpn: ['5+']})">
-              5+ phòng ngủ
-            </quick-filter-button>
-          </div>
+        <div class="border mt-4 p-4 rounded">
+          <p class="font-bold mb-2">
+            Xem theo diện tích
+          </p>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({acreageFrom: undefined, acreageTo: 30})">
+            Dưới 30 m²
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({acreageFrom: 30, acreageTo: 50})">
+            Từ 30 - 50 m²
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({acreageFrom: 50, acreageTo: 70})">
+            Từ 50 - 70 m²
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({acreageFrom: 70, acreageTo: 100})">
+            Từ 70 - 100 m²
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({acreageFrom: 100, acreageTo: undefined})">
+            Trên 100 m²
+          </quick-filter-button>
+        </div>
+
+        <div class="border mt-4 p-4 rounded">
+          <p class="font-bold mb-2">
+            Xem theo phòng ngủ
+          </p>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({bedroomOptions: ['1']})">
+            1 phòng ngủ
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({bedroomOptions: ['2']})">
+            2 phòng ngủ
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({bedroomOptions: ['3']})">
+            3 phòng ngủ
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({bedroomOptions: ['4']})">
+            4 phòng ngủ
+          </quick-filter-button>
+          <quick-filter-button @click="updateUrlQueryAndNavigate({bedroomOptions: ['5+']})">
+            5+ phòng ngủ
+          </quick-filter-button>
         </div>
       </div>
     </div>

@@ -235,7 +235,7 @@
       </div>
       <h3 class="font-bold text-lg leading-5 mt-8 mb-4">Thông tin dự án</h3>
 
-      <ProjectHeader v-if="project" :project="project" :projectUrl="post.project.pageInfors[0].slug" />
+      <ProjectHeader2 v-if="project" :project="project" :projectUrl="post.project.pageInfors[0].slug" />
 
       <h3 class="font-bold text-lg leading-5 mt-8 mb-4">Xem trên bản đồ</h3>
       <iframe
@@ -301,13 +301,13 @@
 <script>
 import FacebookShareButton from "./facebook-share-button.vue";
 import { gql } from 'graphql-tag';
-import ProjectHeader from '../../components/project-header.vue'
+import ProjectHeader2 from '../../components/project-header-detail-page.vue'
 
 let zaloScriptLoaded = false;
 
 export default {
   name: "DetailPost",
-  components: { FacebookShareButton, ProjectHeader },
+  components: { FacebookShareButton, ProjectHeader2 },
   props: ["post"],
   head() {
     const skip = zaloScriptLoaded;

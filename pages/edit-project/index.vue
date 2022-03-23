@@ -553,7 +553,10 @@
           <textarea v-model="newPageInfor.metaDescription" type="text" class="w-1/2" rows="4" />
         </p>
         <div class="flex justify-end space-x-3 my-2">
-          <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('add-new-page-information')">
+          <button class="px-3 py-1 bg-gray-300 rounded" @click="() => {
+              $modal.hide('add-new-page-information');
+              newPageInfor = {};
+            }">
             Quay lại
           </button>
           <button class="px-3 py-1 bg-green-400 rounded" @click="addNewPageInfor">
@@ -1254,13 +1257,17 @@ export default {
       this.$modal.show('page-information-detail');
     },
     updatePageInformation () {
-      var slug = this.project.pageInfors[this.pageInforIndex].slug;
+      var slug = this.project.pageInfors[this.pageInforIndex].slug.trim();
       if (this.flags.pageInfor == false) {
         this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
-      if (this.pageInforsSlug.includes(slug) || (slug == '')) {
-        this.sendWarningNotification('Slug đã tồn tại hoặc không được để trống!');
+      if (this.pageInforsSlug.some(x => x == slug && this.pageInforIndex != this.pageInforsSlug.indexOf(slug)) == true) {
+        this.sendWarningNotification('Slug đã tồn tại!');
+        return;
+      }
+      if (slug == '') {
+        this.sendWarningNotification('Nội dung không được để trống!');
         return;
       }
       this.project.pageInfors.forEach(x => delete x.__typename);

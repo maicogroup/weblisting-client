@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div v-if="$apollo.loading || !gallery" class="w-full">
+    <div class="h-96 w-full bg-gray-200 animate-pulse"></div>
+  </div>
+  <div v-else>
+    <div class="w-full h-[1px]"></div>
     <div class="h-96 w-full">
       <gallery :items="gallery" />
     </div>

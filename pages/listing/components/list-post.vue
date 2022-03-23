@@ -1,8 +1,8 @@
 <template>
   <div id="post-subinfor" class="max-w-full grow">
     <div class="mt-2 mb-2">
-      <h1 class="text-[21px] md:text-[24px] text-stone-900 font-bold">
-        {{ this.heading }}
+      <h1 class="h-[36px] text-[21px] md:text-[24px] text-stone-900 font-bold">
+        {{ (this.heading)? this.heading : "Bán thuê căn hộ chung cư" }} 
       </h1>
       <div class="flex justify-between md:block">
         <p class="text-[12px] text-neutral-400 flex items-center">
@@ -96,7 +96,25 @@
       </div>
     </div>
     
-    <div v-if="!posts.length">
+    <div v-if="$apollo.loading" class="mt-4 w-full">
+      <div v-for="index in (1,3)" :key="index" class="border border-stone-100 rounded-[4px] shadow rounded-md w-full mx-auto mb-5">
+        <div class="animate-pulse flex space-x-4">
+          <div class="bg-slate-100 h-[160px] w-64"></div>
+          <div class="flex-1 space-y-2 py-5 relative">
+            <div class="h-2 bg-slate-100 rounded w-[70%]"></div>
+            <div class="h-2 bg-slate-100 rounded w-[50%]"></div>
+            <br>
+            <div class="h-2 bg-slate-100 rounded my-3 w-[30%]"></div>
+            <div class="w-full absolute bottom-0 flex">
+            <div class="h-2 bg-slate-100 rounded my-3 w-[30%]"></div>
+            <div class="h-2 bg-slate-100 rounded my-3 ml-auto mr-2 w-[20%]"></div>
+         </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-else-if="!posts.length">
       <div>
           <svg class="mx-auto" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="128" height="128" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#999" d="M31 8h-8v2h8v21h-8v2h10V10a2 2 0 0 0-2-2Z" class="clr-i-outline clr-i-outline-path-1"/><path fill="#999" d="M19.88 3H6.12A2.12 2.12 0 0 0 4 5.12V33h18V5.12A2.12 2.12 0 0 0 19.88 3ZM20 31h-3v-3H9v3H6V5.12A.12.12 0 0 1 6.12 5h13.76a.12.12 0 0 1 .12.12Z" class="clr-i-outline clr-i-outline-path-2"/><path fill="#999" d="M8 8h2v2H8z" class="clr-i-outline clr-i-outline-path-3"/><path fill="#999" d="M12 8h2v2h-2z" class="clr-i-outline clr-i-outline-path-4"/><path fill="#999" d="M16 8h2v2h-2z" class="clr-i-outline clr-i-outline-path-5"/><path fill="#999" d="M8 13h2v2H8z" class="clr-i-outline clr-i-outline-path-6"/><path fill="#999" d="M12 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-7"/><path fill="#999" d="M16 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-8"/><path fill="#999" d="M8 18h2v2H8z" class="clr-i-outline clr-i-outline-path-9"/><path fill="#999" d="M12 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-10"/><path fill="#999" d="M16 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-11"/><path fill="#999" d="M8 23h2v2H8z" class="clr-i-outline clr-i-outline-path-12"/><path fill="#999" d="M12 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-13"/><path fill="#999" d="M16 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-14"/><path fill="#999" d="M23 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-15"/><path fill="#999" d="M27 13h2v2h-2z" class="clr-i-outline clr-i-outline-path-16"/><path fill="#999" d="M23 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-17"/><path fill="#999" d="M27 18h2v2h-2z" class="clr-i-outline clr-i-outline-path-18"/><path fill="#999" d="M23 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-19"/><path fill="#999" d="M27 23h2v2h-2z" class="clr-i-outline clr-i-outline-path-20"/><path fill="none" d="M0 0h36v36H0z"/></svg>
           <p class="text-lg font-bold text-center">Rất tiếc, hiện không tìm thấy căn hộ nào <br> ở khu vực này.</p>
@@ -112,6 +130,7 @@
           </div>
        </div>
     </div>
+
     <div class="flex flex-col" v-else>
       <div
         v-for="post in posts"
@@ -129,7 +148,7 @@
             overflow-hidden
           "
         >
-          <a
+          <NuxtLink
             class="
               w-full
               h-32
@@ -139,7 +158,7 @@
               project
               overflow-hidden
             "
-            :href="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
+            :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
           >
             <img
               class="w-full h-[200px] object-cover rounded-t-[4px] md:rounded-l-lg md:rounded-tr-none "
@@ -154,22 +173,22 @@
             >
               {{ post.tags[0] }}
             </div>
-          </a>
+          </NuxtLink>
           <div class="flex flex-col justify-between h-[100px] md:h-[140px] w-full relative">
             <div class="p-2 md:p-0">
-              <a
-                :href="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
+              <NuxtLink
+                :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
                 class="hidden md:block mt-3 color-black font-bold"
               >
                 {{ post.pageInfor.title }}
-              </a>
+              </NuxtLink>
 
               <span class="text-neutral-400 mb-2 md:mb-0 md:mt-3 text-sm absolute md:relative bottom-0 max-w-[70%] md:max-w-[100vw] truncate">{{
                 post.address
               }}</span>
 
-              <a
-                :href="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
+              <NuxtLink
+                :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
                 class="
                   title-mobile
                   absolute
@@ -179,7 +198,7 @@
                 "
               >
                 {{ post.pageInfor.title }}
-              </a>
+              </NuxtLink>
               <div class="flex my-1 md:my-3 text-[14px] absolute top-0 right-1 md:relative">
                   <div class="flex" v-if="post.type === 'Căn hộ'">
                     <div class="flex items-center justify-center">
@@ -423,8 +442,8 @@ export default {
     },
   },
   methods: {
-    goToHomePage(){
-       this.$router.push({ path: '/'}).catch(() => {});
+    goToHomePage() {
+      this.$router.push({ path: "/" }).catch(() => {});
     },
     formatDate(dateStr) {
       const date = new Date(dateStr);

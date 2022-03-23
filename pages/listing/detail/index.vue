@@ -17,7 +17,7 @@ import DetailPost from './components/detail-post.vue';
 import ContactInfor from './components/contract-infor.vue';
 // import RecommendedPosts from './components/recommended-posts.vue';
 const getPostQuery = gql`
-  query GetPost($condition: PostCollectionFilterInput) {
+   query GetPost($condition: PostCollectionFilterInput) {
         post( where: $condition ) {
           id
           block
@@ -58,6 +58,9 @@ const getPostQuery = gql`
             utilities {
               locationUtilities
               internalUtilities
+            }
+            pageInfors{
+              slug
             }
           }
         }

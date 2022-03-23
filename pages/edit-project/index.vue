@@ -15,11 +15,11 @@
           <div>
             <p class="mb-2">
               <label class="font-semibold">Tên dự án:</label>
-              <input v-model="project.projectName" type="text" class="w-1/2" @onfocusout="() => flag = true">
+              <input v-model="project.projectName" type="text" class="w-1/2" @change="() => flags.information = true">
             </p>
             <p class="mb-2">
               <label class="font-semibold">Pháp lý:</label>
-              <input v-model="project.juridical" type="text" class="w-1/2">
+              <input v-model="project.juridical" type="text" class="w-1/2" @change="() => flags.information = true">
             </p>
             <div class="flex items-start justify-between">
               <div>
@@ -46,7 +46,7 @@
             </div>
             <p>
               <label class="font-semibold">Mô tả:</label>
-              <textarea v-model="project.description" type="text" class="w-1/2" rows="4" />
+              <textarea v-model="project.description" type="text" class="w-1/2" rows="4" @change="() => flags.information = true" />
             </p>
             <p>
               <label class="font-semibold">Mặt bằng:</label>
@@ -85,49 +85,49 @@
               <p class="font-semibold">
                 Giá
               </p>
-              <input v-model="project.price" class="w-auto" type="number">
+              <input v-model="project.price" class="w-auto" type="number" @change="() => flags.detailInformation = true">
             </div>
             <div>
               <p class="font-semibold">
                 Số căn hộ
               </p>
-              <input v-model="project.numberOfApartments" class="w-auto" type="number">
+              <input v-model="project.numberOfApartments" class="w-auto" type="number" @change="() => flags.detailInformation = true">
             </div>
             <div>
               <p class="font-semibold">
                 Diện tích
               </p>
-              <input v-model="project.acreage" class="w-auto" type="number">
+              <input v-model="project.acreage" class="w-auto" type="number" @change="() => flags.detailInformation = true">
             </div>
             <div>
               <p class="font-semibold">
                 Số tòa
               </p>
-              <input v-model="project.numberOfBuildings" class="w-auto" type="number">
+              <input v-model="project.numberOfBuildings" class="w-auto" type="number" @change="() => flags.detailInformation = true">
             </div>
             <div>
               <p class="font-semibold">
                 Thời điểm hoàn thành
               </p>
-              <input v-model="project.completionTime" class="w-auto" type="text">
+              <input v-model="project.completionTime" class="w-auto" type="text" @change="() => flags.detailInformation = true">
             </div>
             <div>
               <p class="font-semibold">
                 Quy mô
               </p>
-              <input v-model="project.scale" class="w-auto" type="text">
+              <input v-model="project.scale" class="w-auto" type="text" @change="() => flags.detailInformation = true">
             </div>
             <div>
               <p class="font-semibold">
                 Diện tích xây dựng
               </p>
-              <input v-model="project.constructionAcreage" class="w-auto" type="number">
+              <input v-model="project.constructionAcreage" class="w-auto" type="number" @change="() => flags.detailInformation = true">
             </div>
             <div>
               <p class="font-semibold">
                 Mật độ xây dựng
               </p>
-              <input v-model="project.densityOfConstruction" class="w-auto" type="number">
+              <input v-model="project.densityOfConstruction" class="w-auto" type="number" @change="() => flags.detailInformation = true">
             </div>
           </div>
           <div class="flex justify-end my-2">
@@ -140,15 +140,15 @@
           <div>
             <p class="mb-2">
               <label class="font-semibold">Tên đường:</label>
-              <input v-model="project.address.street" type="text" class="w-1/2">
+              <input v-model="project.address.street" type="text" class="w-1/2" @change="() => flags.address = true">
             </p>
             <p class="mb-2">
               <label class="font-semibold">Quận:</label>
-              <input v-model="project.address.district" type="text" class="w-1/2">
+              <input v-model="project.address.district" type="text" class="w-1/2" @change="() => flags.address = true">
             </p>
             <p class="mb-2">
               <label class="font-semibold">Thành phố: </label>
-              <input v-model="project.address.city" type="text" class="w-1/2">
+              <input v-model="project.address.city" type="text" class="w-1/2" @change="() => flags.address = true">
             </p>
           </div>
           <div>
@@ -172,13 +172,13 @@
               <iframe :src="project.address.googleMapLocation" width="100%" height="400px" loading="lazy" />
             </div>
             <div v-else>
-              <em>{{ project.address.googleMapLocation }}<br>
+              <em>
                 chưa có hoặc sai!
               </em>
             </div>
           </div>
           <div class="flex justify-end my-2">
-            <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectAddress(project.id, currentProjectAddress.street, currentProjectAddress.district, currentProjectAddress.city, currentProjectAddress.googleMapLocation)">
+            <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectAddress">
               Cập nhật
             </button>
           </div>
@@ -187,17 +187,17 @@
         <expand-panel title="Tiện ích">
           <p>
             <label for="meta" class="font-semibold">Tiện ích vị trí:</label>
-            <textarea v-model="project.utilities.locationUtilities" type="text" class="w-1/2" rows="4" />
+            <textarea v-model="project.utilities.locationUtilities" type="text" class="w-1/2" rows="4" @change="() => flags.utilities = true" />
           </p>
           <p>
             <label for="meta" class="font-semibold">Tiện ích nội khu:</label>
-            <textarea v-model="project.utilities.internalUtilities" type="text" class="w-1/2" rows="4" />
+            <textarea v-model="project.utilities.internalUtilities" type="text" class="w-1/2" rows="4" @change="() => flags.utilities = true"/>
           </p>
           <div class="flex justify-between items-start">
             <label for="meta" class="font-semibold">Danh sách tiện ích:</label>
             <div class="flex justify-start items-center">
               <input v-model="tempUtility" type="text" class="w-auto my-2" placeholder="Thêm tiện ích mới">
-              <button @click="() => project.utilities.listOfUtilities.push(tempUtility)">
+              <button @click="addNewUtility">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="ml-3"
@@ -216,7 +216,7 @@
           <ul class="grid grid-cols-3">
             <li v-for="(utility, index) in project.utilities.listOfUtilities" :key="utility" class="flex justify-start items-center">
               <label class="mr-3"> {{ utility }} </label>
-              <button @click="() => project.utilities.listOfUtilities.splice(index, 1)">
+              <button @click="deleteUtility(index)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="17"
@@ -317,7 +317,20 @@
                     stroke-linejoin="round"
                   ><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34" /><polygon points="18 2 22 6 12 16 8 16 8 12 18 2" /></svg>
                 </button>
-                <button name="delete" @click="showDeletePageInforModal(index)">
+                <button v-if="index == 0" name="delete" @click="sendWarningNotification('Không được xóa thông tin này!')">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="17"
+                    height="17"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#000000"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
+                </button>
+                <button v-else name="delete" @click="showDeletePageInforModal(index)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="17"
@@ -341,7 +354,13 @@
               <editor
                 :content="project.sEOContent"
                 class="h-auto mb-11"
-                @text-change="((e) => project.sEOContent = e)"
+                @text-change="((e) => {
+                  if (e != project.sEOContent) {
+                    flags.information = true;
+                    project.sEOContent = e;
+                  }
+                })"
+                
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectInformation">
@@ -356,7 +375,13 @@
               <editor
                 :content="project.projectPost.overview"
                 class="h-auto mb-11"
-                @text-change="((e) => project.projectPost.overview = e)"
+                @text-change="((e) => { 
+                  if (e != project.projectPost.overview) 
+                  {
+                    project.projectPost.overview = e;
+                    flags.projectPost = true;
+                  }
+                })"
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
@@ -371,7 +396,13 @@
               <editor
                 :content="project.projectPost.location"
                 class="h-auto mb-11"
-                @text-change="((e) => project.projectPost.location = e)"
+                @text-change="((e) => { 
+                  if (e != project.projectPost.lcoation) 
+                  {
+                    project.projectPost.location = e;
+                    flags.projectPost = true;
+                  }
+                })"
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
@@ -386,7 +417,13 @@
               <editor
                 :content="project.projectPost.projectDesign"
                 class="h-auto mb-11"
-                @text-change="((e) => project.projectPost.projectDesign = e)"
+                @text-change="((e) => { 
+                  if (e != project.projectPost.projectDesign) 
+                  {
+                    project.projectPost.projectDesign = e;
+                    flags.projectPost = true;
+                  }
+                })"
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
@@ -401,7 +438,13 @@
               <editor
                 :content="project.projectPost.utilitySection"
                 class="h-auto mb-11"
-                @text-change="((e) => project.projectPost.utilitySection = e)"
+                @text-change="((e) => { 
+                  if (e != project.projectPost.utilitySection) 
+                  {
+                    project.projectPost.utilitySection = e;
+                    flags.projectPost = true;
+                  }
+                })"
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
@@ -416,7 +459,13 @@
               <editor
                 :content="project.projectPost.rentAndSellPrice"
                 class="h-auto mb-11"
-                @text-change="((e) => project.projectPost.rentAndSellPrice = e)"
+                @text-change="((e) => { 
+                  if (e != project.projectPost.rentAndSellPrice) 
+                  {
+                    project.projectPost.rentAndSellPrice = e;
+                    flags.projectPost = true;
+                  }
+                })"
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
@@ -433,17 +482,17 @@
       <div class="p-2 m-2">
         <p class="mb-3">
           <label for="title" class="font-semibold">Tiêu đề:</label>
-          <input v-model="project.pageInfors[pageInforIndex].title" type="text" class="w-1/2" style="width: 50% !important">
+          <input v-model="project.pageInfors[pageInforIndex].title" type="text" class="w-1/2" style="width: 50% !important" @change="() => flags.pageInfor = true">
         </p>
 
         <p class="mb-3">
           <label for="slug" class="font-semibold">Slug:</label>
-          <input v-model="project.pageInfors[pageInforIndex].slug" type="text" class="w-1/2" style="width: 50% !important">
+          <input v-model="project.pageInfors[pageInforIndex].slug" type="text" class="w-1/2" style="width: 50% !important" @change="() => flags.pageInfor = true">
         </p>
 
         <p>
           <label for="meta" class="font-semibold">Meta description:</label>
-          <textarea v-model="project.pageInfors[pageInforIndex].metaDescription" type="text" class="w-1/2" rows="4" />
+          <textarea v-model="project.pageInfors[pageInforIndex].metaDescription" type="text" class="w-1/2" rows="4"  @change="() => flags.pageInfor = true"/>
         </p>
         <div class="flex justify-end space-x-3 my-2">
           <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('page-information-detail')">
@@ -520,7 +569,8 @@
         </h2>
         <p class="m-10">
           <label for="map" class="font-semibold">Google map:</label>
-          <input v-model="project.address.googleMapLocation" type="text" class="w-1/4" style="width:75% !important">
+          <input v-model="project.address.googleMapLocation" type="text" class="w-1/4" 
+            style="width:75% !important" @change="() => flags.address = true">
         </p>
         <div class="flex justify-end space-x-3 m-2 my-2">
           <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('google-map-edit-modal')">
@@ -557,7 +607,7 @@
         </h2>
         <p class="m-10">
           <label class="font-semibold">Url: </label>
-          <input v-model="project.images[imageIndex]" type="text" style="width:90% !important">
+          <input v-model="project.images[imageIndex]" type="text" style="width:90% !important" @change="() => flags.image = true">
         </p>
         <div class="flex justify-end space-x-3 m-2 my-2">
           <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('edit-project-image')">
@@ -579,23 +629,23 @@
           <div>
             <div class="flex justify-between mb-2">
               <p class="font-bold">Tên chủ đầu tư</p>
-              <input v-model="investorEdit.investorName" style="width:50%" type="text">
+              <input v-model="investorEdit.investorName" style="width:50%" type="text" @change="() => flags.investor = true">
             </div>
             <div class="flex justify-between mb-2">
               <p class="font-bold">Số dự án</p>
-              <input v-model="investorEdit.numberOfProjects" style="width:50%" type="number">
+              <input v-model="investorEdit.numberOfProjects" style="width:50%" type="number" @change="() => flags.investor = true">
             </div>
             <div class="flex justify-between mb-2">
               <p class="font-bold">Thời gian thành lập</p>
-              <input v-if="tempFoundedDate" v-model="tempFoundedDate" style="width:50%" type="date">
+              <input v-if="tempFoundedDate" v-model="tempFoundedDate" style="width:50%" type="date" @change="() => flags.investor = true">
             </div>
             <div class="flex justify-between mb-2">
               <p class="font-bold">Số điện thoại</p>
-              <input v-model="investorEdit.phoneNumber" style="width:50%" type="text" max="10">
+              <input v-model="investorEdit.phoneNumber" style="width:50%" type="text" max="10" @change="() => flags.investor = true">
             </div>
             <div class="flex justify-between mb-2">
               <p class="font-bold">Hình ảnh</p>
-              <input v-model="investorEdit.image" style="width:50%" type="text">
+              <input v-model="investorEdit.image" style="width:50%" type="text" @change="() => flags.investor = true">
             </div>
           </div>
           <img
@@ -623,13 +673,13 @@
         </h2>
         <p class="m-10">
           <label class="font-semibold">Url: </label>
-          <input ref="masterPlan" :value="project.masterPlan" type="text" style="width:90% !important">
+          <input ref="masterPlan" v-model="project.masterPlan" type="text" style="width:90% !important" @change="() => flags.information = true">
         </p>
         <div class="flex justify-end space-x-3 m-2 my-2">
           <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('edit-project-master-plan')">
             Quay lại
           </button>
-          <button class="text-white px-3 py-1 bg-green-400 rounded" @click="() => project.masterPlan = $refs.masterPlan.value">
+          <button class="text-white px-3 py-1 bg-green-400 rounded" @click="updateProjectInformation">
             Đồng ý
           </button>
         </div>
@@ -763,11 +813,21 @@ export default {
   },
   data () {
     return {
-      flag: false,
+      flags: {
+        information: false,
+        investor: false,
+        detailInformation: false,
+        address: false,
+        utilities: false,
+        image: false,
+        pageInfor: false,
+        seoContent: false,
+        projectPost: false
+      },
+      pageInforsSlug: [],
       tempFoundedDate: null,
       tempUtility: '',
       isShowingEditInvestor: false,
-      currentProject: {},
       inputFilter: {},
       newPageInfor: {},
       newImage: '',
@@ -812,47 +872,7 @@ export default {
           }
         });
         setTimeout(() => {
-          this.currentProject = {
-            id: this.project.id,
-            projectName: this.project.projectName,
-            investor: this.project.investor,
-            juridical: this.project.juridical,
-            description: this.project.description,
-            address: {
-              street: this.project.address.street,
-              district: this.project.address.district,
-              city: this.project.address.city,
-              googleMapLocation: this.project.address.googleMapLocation
-            },
-            utilities: {
-              internalUtilities: this.project.utilities.internalUtilities,
-              locationUtilities: this.project.utilities.locationUtilities
-            },
-            masterPlan: this.project.masterPlan,
-            images: [],
-            sEOContent: this.project.sEOContent,
-            pageInfors: {
-              slug: this.project.pageInfors.slug,
-              title: this.project.pageInfors.title,
-              metaDescription: this.project.pageInfors.metaDescription
-            },
-            projectPost: {
-              overview: this.project.overview,
-              location: this.project.location,
-              projectDesign: this.project.projectDesign,
-              utilitySection: this.project.utilitySection,
-              rentAndSellPrice: this.project.rentAndSellPrice
-            }
-          };
-          this.project.images.forEach(x => this.currentProject.images.push(x));
-          for (let i = 0; i < this.project.pageInfors.length; i++) {
-            const pageInfor = {
-              slug: this.project.pageInfors[i].slug,
-              title: this.project.pageInfors[i].title,
-              metaDescription: this.project.pageInfors[i].metaDescription
-            };
-            this.currentProject.pageInfors.push(pageInfor);
-          }
+          this.project.pageInfors.forEach(x => this.pageInforsSlug.push(x.slug));
         }, 1000);
         this.pageInforIndex = 0;
         this.imageIndex = 0;
@@ -860,67 +880,11 @@ export default {
     }
   },
   mounted () {
-    this.currentProject = {
-      id: this.project.id,
-      projectName: this.project.projectName,
-      investor: this.project.investor,
-      juridical: this.project.juridical,
-      description: this.project.description,
-      price: this.project.price,
-      numberOfApartments: this.project.numberOfApartments,
-      numberOfBuildings: this.project.numberOfBuildings,
-      acreage: this.project.acreage,
-      scale: this.project.scale,
-      constructionAcreage: this.project.constructionAcreage,
-      densityOfConstruction: this.project.densityOfConstruction,
-      completionTime: this.project.completionTime,
-      address: {
-        street: this.project.address.street,
-        district: this.project.address.district,
-        city: this.project.address.city,
-        googleMapLocation: this.project.address.googleMapLocation
-      },
-      utilities: {
-        internalUtilities: this.project.utilities.internalUtilities,
-        locationUtilities: this.project.utilities.locationUtilities,
-        listOfUtilities: this.project.utilities.listOfUtilities.splice()
-      },
-      projectPost: {
-        overview: this.project.overview,
-        location: this.project.location,
-        projectDesign: this.project.projectDesign,
-        utilitySection: this.project.utilitySection,
-        rentAndSellPrice: this.project.rentAndSellPrice
-      },
-      images: [],
-      sEOContent: this.project.sEOContent,
-      pageInfors: []
-    };
-    this.project.images.forEach(x => this.currentProject.images.push(x));
-    for (let i = 0; i < this.project.pageInfors.length; i++) {
-      const pageInfor = {
-        slug: this.project.pageInfors[i].slug,
-        title: this.project.pageInfors[i].title,
-        metaDescription: this.project.pageInfors[i].metaDescription
-      };
-      this.currentProject.pageInfors.push(pageInfor);
-    }
+    this.project.pageInfors.forEach(x => this.pageInforsSlug.push(x.slug));
   },
   methods: {
     handleProjectFilterChanged (project) {
       this.inputFilter = { ...this.inputFilter, project };
-    },
-    onEditorBlur (editor) {
-      // console.log('editor blur!', editor);
-    },
-    onEditorFocus (editor) {
-      // console.log('editor focus!', editor);
-    },
-    onEditorReady (editor) {
-      // console.log('editor ready!', editor);
-    },
-    addNewUtility () {
-
     },
     sendWarningNotification (notification) {
       this.$toast.show(notification, {
@@ -949,10 +913,7 @@ export default {
       });
     },
     updateProjectInformation () {
-      if ((this.currentProject.projectName === this.project.projectName) && (this.currentProject.investorId === this.project.investorId) &&
-                (this.currentProject.juridical === this.project.juridical) && (this.currentProject.description === this.project.description) &&
-                (this.currentProject.sEOContent === this.project.sEOContent) &&
-                (this.currentProject.masterPlan === this.project.masterPlan)) {
+      if (this.flags.information == false) {
         this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
@@ -969,15 +930,11 @@ export default {
         }
       });
       this.sendDoneNotification('Thay đổi thành công!');
-      this.currentProject.projectName = this.project.projectName;
-      this.currentProject.investor = this.project.investor;
-      this.currentProject.juridical = this.project.juridical;
-      this.currentProject.description = this.project.description;
-      this.currentProject.sEOContent = this.project.sEOContent;
+      this.flags.information = false;
+      this.$modal.hide('edit-project-master-plan');
     },
     updateProjectAddress () {
-      if ((this.currentProject.address.street === this.project.address.street) && (this.currentProject.address.district === this.project.address.district) &&
-                (this.currentProject.address.city === this.project.address.city) && (this.currentProject.address.googleMapLocation === this.project.address.googleMapLocation)) {
+      if (this.flags.address == false) {
         this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
@@ -993,18 +950,64 @@ export default {
         }
       });
       this.sendDoneNotification('Thay đổi thành công!');
-      if (this.currentProject.address.googleMapLocation !== this.project.address.googleMapLocation) {
-        this.$modal.hide('google-map-edit-modal');
+      this.$modal.hide('google-map-edit-modal');
+      this.flags.address = false;
+    },
+    addNewUtility () {
+      if (this.project.utilities.listOfUtilities.some(x => x.toLowerCase() == this.tempUtility.toLowerCase())) {
+        this.sendWarningNotification('Đã tồn tại tiện ích này!');
+        
+        return;
       }
-      this.currentProject.address.street = this.project.address.street;
-      this.currentProject.address.district = this.project.address.district;
-      this.currentProject.address.city = this.project.address.city;
-      this.currentProject.address.googleMapLocation = this.project.address.googleMapLocation;
+      this.project.utilities.listOfUtilities.push(this.tempUtility);
+      this.$apollo.mutate({
+        mutation: gql`mutation AddNewUtility($input: UpdateProjectInput!)
+        {
+          updateProject(input: $input)
+          {
+            string
+          }
+        }`,
+        variables: {
+          input: {
+            id: this.project.id,
+            utilities: {
+              internalUtilities: this.project.utilities.internalUtilities,
+              locationUtilities: this.project.utilities.locationUtilities,
+              listOfUtilities: this.project.utilities.listOfUtilities
+            }
+          }
+        }
+      });
+      this.sendDoneNotification('Thêm thành công!');
+      this.tempUtility = '';
+
+    },
+    deleteUtility(index) {
+      this.project.utilities.listOfUtilities.splice(index, 1);
+      this.$apollo.mutate({
+        mutation: gql`mutation AddNewUtility($input: UpdateProjectInput!)
+        {
+          updateProject(input: $input)
+          {
+            string
+          }
+        }`,
+        variables: {
+          input: {
+            id: this.project.id,
+            utilities: {
+              internalUtilities: this.project.utilities.internalUtilities,
+              locationUtilities: this.project.utilities.locationUtilities,
+              listOfUtilities: this.project.utilities.listOfUtilities
+            }
+          }
+        }
+      });
+      this.sendDoneNotification('Xóa thành công!');
     },
     updateProjectUtilities () {
-      if ((this.currentProject.utilities.locationUtilities === this.project.utilities.locationUtilities) &&
-                (this.currentProject.utilities.internalUtilities === this.project.utilities.internalUtilities) &&
-                (this.currentProject.utilities.listOfUtilities === this.project.utilities.listOfUtilities)) {
+      if (this.flags.utilities == false) {
         this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
@@ -1020,12 +1023,10 @@ export default {
         }
       });
       this.sendDoneNotification('Thay đổi thành công!');
-      this.currentProject.utilities.locationUtilities = this.project.utilities.locationUtilities;
-      this.currentProject.utilities.internalUtilities = this.project.utilities.internalUtilities;
-      this.currentProject.utilities.listOfUtilities = this.project.utilities.listOfUtilities.splice();
+      this.flags.utilities = false;
     },
     addNewProjectImage () {
-      if (this.currentProject.images.includes(this.newImage)) {
+      if (this.project.images.includes(this.newImage)) {
         this.sendWarningNotification('Hình ảnh đã tồn tại, vui lòng thử lại!');
         this.newImage = '';
         return;
@@ -1035,7 +1036,6 @@ export default {
         return;
       }
       this.project.images.push(this.newImage);
-      this.currentProject.images.push(this.newImage);
       this.sendUpdateProjectMutation({
         input: {
           id: this.project.id,
@@ -1046,6 +1046,10 @@ export default {
       this.sendDoneNotification('Thêm thành công!');
     },
     updateProjectPost () {
+      if (this.flags.projectPost == false) {
+        this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
+        return;
+      }
       this.sendUpdateProjectMutation({
         input: {
           id: this.project.id,
@@ -1058,28 +1062,58 @@ export default {
           }
         }
       });
-      this.newImage = '';
-      this.sendDoneNotification('Thêm thành công!');
-      this.currentProject.projectPost.overview = this.project.projectPost.overview;
-      this.currentProject.projectPost.location = this.project.projectPost.location;
-      this.currentProject.projectPost.projectDesign = this.project.projectPost.projectDesign;
-      this.currentProject.projectPost.utilitySection = this.project.projectPost.utilitySection;
-      this.currentProject.projectPost.rentAndSellPrice = this.project.projectPost.rentAndSellPrice;
+      this.sendDoneNotification('Thay đổi thành công!');
+      this.flags.projectPost = false;
     },
     showUpdateProjectImageModal (index) {
       this.$modal.show('edit-project-image');
       this.imageIndex = index;
     },
-    showProjectPostOverview () {
-      this.$modal.show('design-project-post-overview');
+    updateProjectImage() {
+      if (this.flags.image == false) {
+        this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
+        return;
+      }
+      if (this.project.images[this.imageIndex] === '') {
+        this.sendWarningNotification('Dữ liệu không được để trống, hoặc bạn có thể xóa đi hình ảnh này!');
+        return;
+      }
+      this.sendUpdateProjectMutation({
+        input: {
+          id: this.project.id,
+          images: this.project.images
+        }
+      });
+      this.sendDoneNotification('Thay đổi thành công!');
+      this.$modal.hide('edit-project-image');
+      this.flags.image = false;
+    },
+    showDeleteProjectImageModal (index) {
+      this.imageIndex = index;
+      this.$modal.show('delete-project-image');
+    },
+    deleteProjectImage () {
+      this.project.images = this.project.images.filter(x => x !== this.project.images[this.imageIndex]);
+      this.$apollo.mutate({
+        mutation: gql`mutation DeleteProjectImage($input: UpdateProjectInput!) 
+                {
+                    updateProject(input: $input)
+                    {
+                        string
+                    }
+                }`,
+        variables: {
+          input: {
+            id: this.project.id,
+            images: this.project.images
+          }
+        }
+      });
+      this.sendDoneNotification('Xóa thành công!');
+      this.$modal.hide('delete-project-image');
     },
     updateProjectDetailInformation () {
-      if ((this.currentProject.price === this.project.price) && (this.currentProject.numberOfApartments === this.project.numberOfApartments) &&
-                (this.currentProject.numberOfBuildings === this.project.numberOfBuildings) && (this.currentProject.acreage === this.project.acreage) &&
-                (this.currentProject.completionTime === this.project.completionTime) &&
-                (this.currentProject.scale === this.project.scale) &&
-                (this.currentProject.constructionAcreage === this.project.constructionAcreage) &&
-                (this.currentProject.densityOfConstruction === this.project.densityOfConstruction)) {
+      if (this.flags.detailInformation == false) {
         this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
@@ -1122,47 +1156,7 @@ export default {
         }
       });
       this.sendDoneNotification('Thay đổi thành công!');
-      this.currentProject.price = this.project.price;
-      this.currentProject.numberOfApartments = this.project.numberOfApartments;
-      this.currentProject.numberOfBuildings = this.project.numberOfBuildings;
-      this.currentProject.acreage = this.project.acreage;
-      this.currentProject.scale = this.project.scale;
-      this.currentProject.constructionAcreage = this.project.constructionAcreage;
-      this.currentProject.densityOfConstruction = this.project.densityOfConstruction;
-      this.currentProject.completionTime = this.project.completionTime;
-    },
-    updateProjectImage () {
-      if (this.currentProject.images[this.imageIndex] === this.project.images[this.imageIndex]) {
-        this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
-        return;
-      }
-      if (this.project.images[this.imageIndex] === '') {
-        this.sendWarningNotification('Dữ liệu không được để trống, hoặc bạn có thể xóa đi hình ảnh này!');
-        return;
-      }
-      this.sendUpdateProjectMutation({
-        input: {
-          id: this.project.id,
-          images: this.project.images
-        }
-      });
-      this.currentProject.images[this.imageIndex] = this.project.images[this.imageIndex];
-      this.sendDoneNotification('Thay đổi thành công!');
-      this.$modal.hide('edit-project-image');
-    },
-    updateProjectMasterPlan () {
-      this.sendUpdateProjectMutation({
-        input: {
-          id: this.project.id,
-          masterPlan: this.project.masterPlan
-        }
-      });
-      this.sendDoneNotification('Thay đổi thành công!');
-      this.$modal.hide('edit-project-master-plan');
-    },
-    showDeleteProjectImageModal (index) {
-      this.imageIndex = index;
-      this.$modal.show('delete-project-image');
+      this.flags.detailInformation = false;
     },
     ShowModalEditInvestor () {
       const foundedTime = new Date(this.project.investor.foundedTime);
@@ -1186,6 +1180,10 @@ export default {
       this.$modal.show('show-edit-investor');
     },
     updateInvestor () {
+      if (this.flags.investor == false) {
+        this.sendWarningNotification("Dữ liệu chưa có thay đổi!");
+        return;
+      }
       this.investorEdit.numberOfProjects = Number(this.investorEdit.numberOfProjects);
       if (this.investorEdit.numberOfProjects < 0) {
         this.$toast.show("Số lượng dự án phải lớn hơn hoặc bằng 0!", {
@@ -1224,34 +1222,12 @@ export default {
         console.log("refetch");
       }
       this.sendDoneNotification('Cập nhật thành công!');
+      this.flags.investor = false;
       this.$modal.hide("show-edit-investor");
     },
-    deleteProjectImage () {
-      this.project.images = this.project.images.filter(x => x !== this.project.images[this.imageIndex]);
-      this.currentProject.images = this.currentProject.images.filter(x => x !== this.currentProject.images[this.imageIndex]);
-      this.$apollo.mutate({
-        mutation: gql`mutation DeleteProjectImage($input: UpdateProjectInput!) 
-                {
-                    updateProject(input: $input)
-                    {
-                        string
-                    }
-                }`,
-        variables: {
-          input: {
-            id: this.project.id,
-            images: this.project.images
-          }
-        }
-      });
-      this.sendDoneNotification('Xóa thành công!');
-      this.$modal.hide('delete-project-image');
-    },
     addNewPageInfor () {
-      if ((this.newPageInfor.slug === '') || (this.currentProject.pageInfors.some(x => x.slug === this.newPageInfor.slug) === true)) {
+      if ((this.newPageInfor.slug === '') || (this.project.pageInfors.some(x => x.slug == this.newPageInfor.slug))) {
         this.sendWarningNotification('Slug đã tồn tại hoặc chưa có, vui lòng thử lại!');
-        this.newPageInfor = {};
-        this.$modal.hide('add-new-page-information');
         return;
       }
       const pageInfor = {
@@ -1267,45 +1243,35 @@ export default {
           pageInfors: this.project.pageInfors
         }
       });
+      this.pageInforsSlug.push(this.newPageInfor.slug);
       this.newPageInfor = {};
-      this.currentProject.pageInfors.push(pageInfor);
       this.sendDoneNotification('Thêm thành công!');
       this.$modal.hide('add-new-page-information');
     },
     showPageInforModal (index) {
       this.pageInforIndex = index;
+      console.log(index);
       this.$modal.show('page-information-detail');
     },
     updatePageInformation () {
-      const index = this.pageInforIndex;
-      if ((this.currentProject.pageInfors[index].slug === this.project.pageInfors[index].slug) &&
-                (this.currentProject.pageInfors[index].title === this.project.pageInfors[index].title) &&
-                (this.currentProject.pageInfors[index].metaDescription === this.project.pageInfors[index].metaDescription)) {
+      var slug = this.project.pageInfors[this.pageInforIndex].slug;
+      if (this.flags.pageInfor == false) {
         this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
-      if (this.currentProject.pageInfors[index].slug !== this.project.pageInfors[index].slug) {
-        if ((this.project.pageInfors[index].slug === '') || (this.currentProject.pageInfors.some(x => x.slug === this.project.pageInfors[index].slug))) {
-          this.sendWarningNotification('Slug đã tồn tại hoặc chưa có, vui lòng thử lại!');
-          this.project.pageInfors[index].slug = this.currentProject.pageInfors[index].slug;
-          this.project.pageInfors[index].title = this.currentProject.pageInfors[index].title;
-          this.project.pageInfors[index].metaDescription = this.currentProject.pageInfors[index].metaDescription;
-          return;
-        }
+      if (this.pageInforsSlug.includes(slug) || (slug == '')) {
+        this.sendWarningNotification('Slug đã tồn tại hoặc không được để trống!');
+        return;
       }
       this.project.pageInfors.forEach(x => delete x.__typename);
       this.sendUpdateProjectMutation({
-        input: {
           input: {
             id: this.project.id,
             pageInfors: this.project.pageInfors
           }
-        }
       });
       this.sendDoneNotification('Thay đổi thành công!');
-      this.currentProject.pageInfors[index].slug = this.project.pageInfors[index].slug;
-      this.currentProject.pageInfors[index].title = this.project.pageInfors[index].title;
-      this.currentProject.pageInfors[index].metaDescription = this.project.pageInfors[index].metaDescription;
+      this.pageInforsSlug[this.pageInforIndex] = slug;
       this.$modal.hide('page-information-detail');
     },
     showDeletePageInforModal (index) {
@@ -1314,8 +1280,8 @@ export default {
     },
     deletePageInfor () {
       const index = this.pageInforIndex;
-      this.project.pageInfors = this.project.pageInfors.filter(x => x.slug !== this.project.pageInfors[index].slug);
-      this.currentProject.pageInfors = this.currentProject.pageInfors.filter(x => x.slug !== this.currentProject.pageInfors[index].slug);
+      this.project.pageInfors.splice(index, 1);
+      this.pageInforsSlug.splice(index, 1);
       this.project.pageInfors.forEach(x => delete x.__typename);
       this.sendUpdateProjectMutation({
         input: {

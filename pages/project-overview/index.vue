@@ -582,9 +582,6 @@ export default {
     line-height: 16px;
     color: #1C1917;
   }
-  .drop-down-content{
-
-  }
   .color-505050{
     color: #505050;
   }

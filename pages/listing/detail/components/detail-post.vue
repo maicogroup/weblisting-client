@@ -1,9 +1,5 @@
 <template>
-  <div v-if="$apollo.loading || !gallery" class="w-full">
-    <div class="h-96 w-full bg-gray-200 animate-pulse"></div>
-  </div>
-  <div v-else>
-    <div class="w-full h-[1px]"></div>
+  <div>
     <div class="h-96 w-full">
       <gallery :items="gallery" />
     </div>
@@ -15,13 +11,19 @@
         class="
           mt-3
           flex flex-col
-          md:flex-row md:justify-between
-          md:max-h-6
+          md:flex-row md:justify-between md:max-h-6
           overflow-hidden
         "
       >
         <h4
-          class="font-normal color-3f3f3f text-sm leading-4 md:max-h-4 min-w-[50%]"
+          class="
+            font-normal
+            color-3f3f3f
+            text-sm
+            leading-4
+            md:max-h-4
+            min-w-[50%]
+          "
         >
           {{
             `${post.project.address.street}, ${post.project.address.district}, ${post.project.address.city}`
@@ -239,7 +241,11 @@
       </div>
       <h3 class="font-bold text-lg leading-5 mt-8 mb-4">Thông tin dự án</h3>
 
-      <ProjectHeader2 v-if="project" :project="project" :projectUrl="post.project.pageInfors[0].slug" />
+      <ProjectHeader2
+        v-if="project"
+        :project="project"
+        :projectUrl="post.project.pageInfors[0].slug"
+      />
 
       <h3 class="font-bold text-lg leading-5 mt-8 mb-4">Xem trên bản đồ</h3>
       <iframe
@@ -304,8 +310,8 @@
 
 <script>
 import FacebookShareButton from "./facebook-share-button.vue";
-import { gql } from 'graphql-tag';
-import ProjectHeader2 from '../../components/project-header-detail-page.vue'
+import { gql } from "graphql-tag";
+import ProjectHeader2 from "../../components/project-header-detail-page.vue";
 
 let zaloScriptLoaded = false;
 
@@ -390,7 +396,10 @@ export default {
 
       skip() {
         // return this.filter === null || this.$route.params.slug === null;
-        return this.post.project.pageInfors.length == 0 || this.post.project.pageInfors[0].slug === undefined;
+        return (
+          this.post.project.pageInfors.length == 0 ||
+          this.post.project.pageInfors[0].slug === undefined
+        );
       },
 
       variables() {

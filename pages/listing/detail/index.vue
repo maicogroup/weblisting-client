@@ -1,7 +1,10 @@
 <template>
   <div class="lg:px-5 w-full max-w-screen-xl">
-    <div class="relative flex justify-between">
+    <div class="relative flex justify-between w-full">
       <detail-post v-if="post !== undefined" :post="post" class="lg:w-9/12 lg:mr-9 w-full" />
+      <div v-else class="lg:w-9/12 lg:mr-9 w-full">
+        <div class="lg:w-[930px] lg:h-[400px] bg-slate-100 animate-pulse"></div>
+      </div>
       <div class="lg:block hidden">
         <contact-infor class="sticky-contact-infor" />
       </div>
@@ -163,5 +166,6 @@ export default {
   .sticky-contact-infor {
     position: sticky;
     top: 128px;
+    left: 75%;
   }
 </style>

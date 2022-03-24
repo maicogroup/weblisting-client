@@ -205,7 +205,7 @@
 
       <divider />
 
-      <div class="my-3 flex float-left w-full h-auto">
+      <div class="my-5 flex float-left w-full h-auto">
         <h3 class="re-properties mt-1.5">Nội thất</h3>
         <div class="flex flex-wrap items-center gap-2">
           <div v-for="item in post.furnitures" :key="item">
@@ -225,7 +225,7 @@
         </div>
       </div>
       <div>
-        <h3 class="font-bold text-lg leading-5 mt-3 mb-3.5">Ưu điểm dự án</h3>
+        <h3 class="font-bold text-lg leading-5 my-5">Ưu điểm dự án</h3>
         <div class="grid grid-cols-1 md:grid-cols-5 mb-3 text-sm">
           <p class="font-bold">Tiện ích vị trí</p>
           <p class="col-span-4 mt-1 md:mt-0">

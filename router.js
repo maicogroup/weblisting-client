@@ -10,7 +10,7 @@ import ProductReview from '~/pages/product-preview/index';
 import ProjectOverview from '~/pages/project-overview/index';
 import SpecificProjectReview from '~/pages/product-preview/specific-project/index';
 import HomePage from '~/pages/home/index';
-
+import ProjectReview from '~/pages/project-review/index';
 Vue.use(Router);
 
 export function createRouter () {
@@ -66,7 +66,11 @@ export function createRouter () {
       {
         path: '/review-san-pham/:slug',
         component: SpecificProjectReview
-      }
+      },
+      {
+        path: '/review-du-an',
+        component: ProjectReview
+      },
     ]
   });
 }

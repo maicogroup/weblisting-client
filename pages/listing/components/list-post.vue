@@ -97,7 +97,7 @@
     </div>
     
     <div v-if="$apollo.loading" class="mt-4 w-full">
-      <div v-for="index in (1,3)" :key="index" class="border border-stone-100 rounded-[4px] shadow rounded-md w-full mx-auto mb-5">
+      <div v-for="index in (1,3)" :key="index" class="hidden md:block border border-stone-100 rounded-[4px] shadow rounded-md w-full mx-auto mb-5">
         <div class="animate-pulse flex space-x-4">
           <div class="bg-slate-100 h-[160px] w-64"></div>
           <div class="flex-1 space-y-2 py-5 relative">
@@ -111,6 +111,9 @@
          </div>
         </div>
         </div>
+      </div>
+      <div class="block md:hidden">
+        <div v-for="index in (1,3)" :key="index" class="bg-slate-300 animate-pulse w-full h-[300px] mb-4"></div>
       </div>
     </div>
 

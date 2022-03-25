@@ -102,27 +102,8 @@
             </p>
           </div>
         </div>
-        <div class="mt-1.5 text-lg" v-html="project.projectPost.overview" />
+        <div :class="showReadMoreStyles" v-html="project.projectPost" />
       </div>
-      <h1 class="font-medium text-lg sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
-        Vị trí
-      </h1>
-      <div :class="showReadMoreStyles" v-html="project.projectPost.location" />
-      <span :class="hideReadMoreStyles">
-        <div class="text-lg" v-html="project.projectPost.location" />
-        <h1 class="font-medium text-lg sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
-          Thiết kế dự án
-        </h1>
-        <div class="text-sm" v-html="project.projectPost.projectDesign" />
-        <h1 class="font-medium text-2xl sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
-          Tiện ích
-        </h1>
-        <div class="text-lg" v-html="project.projectPost.utilitySection" />
-        <h1 class="font-medium text-2xl sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
-          Giá bán và thuê
-        </h1>
-        <div class="text-lg" v-html="project.projectPost.rentAndSellPrice" />
-      </span>
       <button class="flex items-center ml-auto mr-auto mt-6 mb-8" @click="setReadMoreActiveState()">
         <p class="text-center text-lg read-more mr-2">
           {{ readMoreContent }}
@@ -139,55 +120,11 @@
         </svg>
       </button>
       <expand-panel title="Thông tin chi tiết" class="mt-2.5 sm:mt-9">
-        <div class="grid md:grid-cols-2 grid-cols-1 md:gap-6 h-auto">
-          <div class="block">
-            <p class="re-properties-frame-panel">
-              <span class="re-properties-panel flex w-1/2">Giá</span>
-              <span class="re-properties-content max-w-50 "> {{ project.price }} triệu/m² </span>
-            </p>
-            <p class="re-properties-frame-panel">
-              <span class="re-properties-panel flex w-1/2">Diện tích</span>
-              <span class="re-properties-content max-w-50 "> {{ project.acreage }} ha </span>
-            </p>
-            <p class="re-properties-frame-panel">
-              <span class="re-properties-panel flex w-1/2">Chủ đầu tư</span>
-              <span class="re-properties-content max-w-50 "> {{ project.investor.investorName }}</span>
-            </p>
-            <p class="re-properties-frame-panel">
-              <span class="re-properties-panel flex w-1/2">Thời điểm hoàn thành</span>
-              <span class="re-properties-content max-w-50 "> {{ project.completionTime }}</span>
-            </p>
-            <p class="re-properties-frame-panel">
-              <span class="re-properties-panel flex w-1/2">Diện tích xây dựng</span>
-              <span class="re-properties-content max-w-50 "> {{ project.constructionAcreage }}m²</span>
-            </p>
-            <p class="re-properties-frame-panel">
-              <span class="re-properties-panel flex w-1/2">Đơn vị phân phối</span>
-              <span class="re-properties-content max-w-50"> {{ project.distributionUnit }}</span>
-            </p>
-          </div>
-          <div class="block">
-            <p class="re-properties-frame-panel">
-              <span class="re-properties-panel flex w-1/2">Số căn hộ</span>
-              <span class="re-properties-content max-w-50 "> {{ project.numberOfApartments }} căn </span>
-            </p>
-            <p class="re-properties-frame-panel">
-              <span class="re-properties-panel flex w-1/2">Số tòa</span>
-              <span class="re-properties-content max-w-50 max-w-50 "> {{ project.numberOfBuildings }}</span>
-            </p>
-            <p class="re-properties-frame-panel">
-              <span class="re-properties-panel flex w-1/2">Pháp lý</span>
-              <span class="re-properties-content max-w-50 "> {{ project.juridical }}</span>
-            </p>
-            <p class="re-properties-frame-panel">
-              <span class="re-properties-panel flex w-1/2">Quy mô</span>
-              <span class="re-properties-content max-w-50 "> {{ project.scale }}</span>
-            </p>
-            <p class="re-properties-frame-panel">
-              <span class="re-properties-panel flex w-1/2">Mật độ xây dựng</span>
-              <span class="re-properties-content max-w-50"> {{ project.densityOfConstruction }}% </span>
-            </p>
-          </div>
+        <div class="grid md:grid-cols-2 grid-cols-1 md:gap-6 h-auto" style="column-gap: 20px">
+          <p v-for="(item, index) in detailInfors" :key="index" class="re-properties-frame-panel">
+            <span class="re-properties-panel flex w-1/2">{{ item.name }}</span>
+            <span class="re-properties-content max-w-50 ">{{ item.content }}</span>
+          </p>
         </div>
       </expand-panel>
       <expand-panel title="Tiện ích nội khu" class="sm:mt-9 mt-3.5">
@@ -327,7 +264,7 @@ export default {
       // dữ liệt trang tổng quan dự án
       isDroppingContent: false,
       readMoreContent: 'Xem thêm',
-      showReadMoreStyles: 'opacity-90 overflow-hidden max-h-6 text-lg',
+      showReadMoreStyles: 'mt-1.5 text-lg overflow-hidden max-h-6',
       hideReadMoreStyles: 'hidden delay-1000',
       tableContentStyles: 'text-center sm:mr-6 table-of-content color-A3A3A3 transition-02s-all',
       activeTableContent: 'active-table-contents text-center sm:mr-6 transition-02s-all',
@@ -367,7 +304,6 @@ export default {
                     googleMapLocation
                   }
                   images
-                  sEOContent
                   pageInfors{
                     title
                     slug
@@ -385,23 +321,16 @@ export default {
                     foundedTime
                     phoneNumber
                   }
-                  projectPost{
-                    overview
-                    location
-                    projectDesign
-                    utilitySection
-                    rentAndSellPrice
-                  }
-                  completionTime
-                  constructionAcreage
+                  projectPost
                   masterPlan
-                  distributionUnit
-                  scale
-                  densityOfConstruction
                   utilities{
                     locationUtilities
                     internalUtilities
                     listOfUtilities
+                  }
+                  tempProjectInfors{
+                    inforName
+                    inforContent
                   }
                 }
             }`;
@@ -455,6 +384,15 @@ export default {
       return items.sort(function (x, y) {
         return x.includes('mp4') ? 1 : y.includes('mp4') ? -1 : 0;
       });
+    },
+    detailInfors () {
+      const items = [{ name: 'Giá', content: (this.project.price + ' triệu/m²') }, { name: 'Diện tích', content: (this.project.acreage + ' m²') }, { name: 'Chủ đầu tư', content: this.project.investor.investorName },
+        { name: 'Số căn hộ', content: this.project.numberOfApartments }, { name: 'Số tòa', content: this.project.numberOfBuildings }, { name: 'Pháp lý', content: this.project.juridical }];
+      this.project.tempProjectInfors.forEach((element) => {
+        const tempInfor = { name: element.inforName, content: element.inforContent };
+        items.push(tempInfor);
+      });
+      return items;
     },
     readMoreClasses () {
       return this.readMoreButtonIsActive ? 'h-fit opacity-100 ql-editor' : 'h-60 opacity-60';
@@ -521,12 +459,12 @@ export default {
       if (this.readMoreButtonIsActive === true) {
         this.readMoreContent = 'Thu gọn';
         this.readMoreArrowStyle = 'rotate-arrow-up h-6 w-6';
-        this.showReadMoreStyles = 'hidden';
+        this.showReadMoreStyles = 'mt-1.5 text-lg';
         this.hideReadMoreStyles = 'delay-1000';
       } else {
         this.readMoreContent = 'Xem thêm';
         this.readMoreArrowStyle = 'rotate-arrow-down h-6 w-6';
-        this.showReadMoreStyles = 'opacity-90 overflow-hidden max-h-6 text-lg';
+        this.showReadMoreStyles = 'max-h-80 overflow-hidden mt-1.5 text-lg';
         this.hideReadMoreStyles = 'hidden delay-1000';
       }
     }
@@ -546,10 +484,9 @@ export default {
 .re-properties-frame-panel {
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     border-bottom: 1px solid #E5E5E5;
     padding-bottom: 7px;
-    margin-bottom:10px;
   }
   .re-properties {
     font-family: Roboto;
@@ -568,8 +505,6 @@ export default {
     font-size: 14px;
     line-height: 16px;
     color: #A3A3A3;
-    margin-top: 5px;
-    margin-bottom: 5px;
   }
   .max-w-50 {
     max-width: 50%;

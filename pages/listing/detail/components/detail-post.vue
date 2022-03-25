@@ -88,7 +88,7 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Phòng tắm</span>
-            <span class="re-properties-content"> {{ post.totalWC }}</span>
+            <span class="re-properties-content"> {{ post.totalWC ? post.totalWC : '-'}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Diện tích sử dụng</span>
@@ -114,7 +114,7 @@
         <div class="hidden md:block">
           <p class="re-properties-frame">
             <span class="re-properties">Phòng ngủ</span>
-            <span class="re-properties-content"> {{ post.totalBedRoom }}</span>
+            <span class="re-properties-content"> {{ post.totalBedRoom ? post.totalBedRoom : '-'  }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Diện tích</span>
@@ -122,10 +122,10 @@
               {{ post.acreage }} m<sup>2</sup></span
             >
           </p>
-          <p class="re-properties-frame">
+          <!-- <p class="re-properties-frame">
             <span class="re-properties">Tầng</span>
             <span class="re-properties-content"> {{ post.floor }}</span>
-          </p>
+          </p> -->
           <p class="re-properties-frame">
             <span class="re-properties">Hướng nhà</span>
             <span class="re-properties-content"> {{ post.direction }}</span>
@@ -150,11 +150,11 @@
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Phòng ngủ</span>
-            <span class="re-properties-content"> {{ post.totalBedRoom }}</span>
+            <span class="re-properties-content"> {{ post.totalBedRoom ? post.totalBedRoom : '-' }}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Phòng tắm</span>
-            <span class="re-properties-content"> {{ post.totalWC }}</span>
+            <span class="re-properties-content"> {{ post.totalWC ? post.totalWC : '-'}}</span>
           </p>
           <p class="re-properties-frame">
             <span class="re-properties">Diện tích</span>
@@ -168,10 +168,10 @@
               {{ post.usageAcreage }} m<sup>2</sup></span
             >
           </p>
-          <p class="re-properties-frame">
+          <!-- <p class="re-properties-frame">
             <span class="re-properties">Tầng</span>
             <span class="re-properties-content"> {{ post.floor }}</span>
-          </p>
+          </p> -->
           <p class="re-properties-frame">
             <span class="re-properties">Block</span>
             <span class="re-properties-content"> {{ post.block }}</span>
@@ -505,6 +505,8 @@ export default {
   font-size: 14px;
   line-height: 16px;
   color: #505050;
+      margin-top: 5px;
+    margin-bottom: 5px;
 }
 .btn {
   padding: 5px 15px;

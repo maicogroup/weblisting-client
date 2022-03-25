@@ -102,26 +102,26 @@
             </p>
           </div>
         </div>
-        <div class="mt-1.5 text-lg" v-html="project.projectPost.overview" />
+        <div class="mt-1.5 text-lg ql-editor" v-html="project.projectPost.overview" />
       </div>
       <h1 class="font-medium text-lg sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
         Vị trí
       </h1>
       <div :class="showReadMoreStyles" v-html="project.projectPost.location" />
       <span :class="hideReadMoreStyles">
-        <div class="text-lg" v-html="project.projectPost.location" />
+        <div class="text-lg ql-editor" v-html="project.projectPost.location" />
         <h1 class="font-medium text-lg sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
           Thiết kế dự án
         </h1>
-        <div class="text-sm" v-html="project.projectPost.projectDesign" />
+        <div class="text-sm ql-editor" v-html="project.projectPost.projectDesign" />
         <h1 class="font-medium text-2xl sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
           Tiện ích
         </h1>
-        <div class="text-lg" v-html="project.projectPost.utilitySection" />
+        <div class="text-lg ql-editor" v-html="project.projectPost.utilitySection" />
         <h1 class="font-medium text-2xl sm:text-2xl mt-5 sm:mt-6 mb-1 sm:mb-4">
           Giá bán và thuê
         </h1>
-        <div class="text-lg" v-html="project.projectPost.rentAndSellPrice" />
+        <div class="text-lg ql-editor" v-html="project.projectPost.rentAndSellPrice" />
       </span>
       <button class="flex items-center ml-auto mr-auto mt-6 mb-8" @click="setReadMoreActiveState()">
         <p class="text-center text-lg read-more mr-2">

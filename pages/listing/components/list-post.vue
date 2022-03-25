@@ -504,6 +504,7 @@ export default {
       // if(!filter.isPreview){
       //   conditions.status = { eq: "Publish"}
       // }
+      conditions.apartmentState = {eq: "Đang Rao"}
       if (filter.demand) {
         conditions.demand = { eq: filter.demand };
       }

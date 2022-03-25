@@ -31,16 +31,14 @@ export default (_, inject) => {
                * @param {File} file - file selected from the device or pasted by drag-n-drop
                * @return {Promise.<{success, file: {url}}>}
                */
-              async uploadByFile(file) {
-                return MyAjax.upload(file).then(() => {
-                  return {
-                    success: 1,
-                    file: {
-                      url: "https://codex.so/upload/redactor_images/o_80beea670e49f04931ce9e3b2122ac70.jpg",
-                      // any other image data you want to store, such as width, height, color, extension, etc
-                    },
-                  };
-                });
+              uploadByFile(file) {
+                return {
+                  success: 1,
+                  file: {
+                    url: URL.createObjectURL(file),
+                    // any other image data you want to store, such as width, height, color, extension, etc
+                  },
+                };
               },
             },
           },

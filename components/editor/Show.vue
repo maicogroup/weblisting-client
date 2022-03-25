@@ -18,6 +18,12 @@
       <p v-if="block.type === 'paragraph'" :key="block.id">
         {{ block.data.text }}
       </p>
+      <img
+        v-if="block.type === 'image'"
+        :src="block.data.file.url"
+        :alt="block.data.caption"
+        :key="block.id"
+      />
     </template>
   </div>
 </template>

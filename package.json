@@ -12,6 +12,8 @@
     "lintfix": "npm run lint:js -- --fix"
   },
   "dependencies": {
+    "@editorjs/editorjs": "^2.23.2",
+    "@editorjs/header": "^2.6.2",
     "@glidejs/glide": "^3.5.2",
     "@nuxt/components": "^2.2.1",
     "@nuxtjs/apollo": "^4.0.1-rc.5",
@@ -39,6 +41,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
+    "@editorjs/image": "^2.6.2",
     "@nuxtjs/eslint-config": "^8.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/tailwindcss": "^4.2.1",

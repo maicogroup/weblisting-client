@@ -39,14 +39,18 @@
       </span>
       <input type="search" class="w-full border py-2 pl-10 pr-2 h-11 rounded-md bg-white focus:text-gray-900 focus:outline-none" placeholder="Tìm kiếm...">
     </div>
+
     <div class="double-button my-4 flex mx-2.5">
-      <button :class="`w-1/2 grow text-base py-2 px-4 border rounded-l-md ${sellButtonClasses}`" @click="setFilterDemandOption('Bán')">
-        Bán
+      <button :class="`relative w-1/2 grow text-base py-2 px-4 border rounded-l-md`" @click="setFilterDemandOption('Bán')">
+        <div :class="`absolute top-0 w-full h-full z-10 ${sellButtonClasses}`"></div>
+        <div :class="`text-black z-20`">Bán</div>
       </button>
-      <button :class="`w-1/2 grow text-base whitespace-nowrap py-2 px-4 border rounded-r-md ${rentButtonClasses}`" @click="setFilterDemandOption('Cho Thuê')">
-        Cho thuê
+      <button :class="`relative w-1/2 grow text-base whitespace-nowrap py-2 px-4 border rounded-r-md`" @click="setFilterDemandOption('Cho Thuê')">
+        <div :class="`absolute top-0 w-full h-full z-10 ${rentButtonClasses}`"></div>
+        <div :class="`text-black z-20`">Cho thuê</div>
       </button>
     </div>
+
     <div class="mx-2.5">
       <type-filter-option :selected-option="filter.type" @optionchanged="handleTypeFilterChanged" />
 
@@ -109,11 +113,13 @@ export default {
 
   computed: {
     sellButtonClasses () {
-      return this.filter.demand === 'Bán' ? 'bg-gray-200' : 'hover:bg-gray-100';
+      if (this.filter.demand == null) return;
+      return this.filter.demand === 'Bán' ? 'toogle-animation-up right-0' : 'toogle-animation-down right-0';
     },
 
     rentButtonClasses () {
-      return this.filter.demand !== 'Bán' ? 'bg-gray-200' : 'hover:bg-gray-100';
+      if (this.filter.demand == null) return 'toogle-animation-up left-0';
+      return this.filter.demand !== 'Bán' ? 'toogle-animation-up left-0' : 'toogle-animation-down left-0';
     }
   },
 
@@ -216,5 +222,40 @@ export default {
 .no-scrollbar {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+}
+
+.toogle-animation-up{
+  background: #e5e7eb;
+  top: 0;
+  right: 0;
+  z-index: -9999;
+  animation: transition-up 0.25s ease-in-out;
+}
+
+.toogle-animation-down{
+  background: #e5e7eb;
+  top: 0;
+  right: 0;
+  z-index: -9999;
+  animation: transition-down 0.25s ease-in-out;
+  width: 0;
+}
+
+@keyframes transition-up {
+  from{
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes transition-down {
+  from{
+    width: 100%;
+  }
+  to {
+    width: 0;
+  }
 }
 </style>

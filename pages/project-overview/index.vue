@@ -102,7 +102,7 @@
             </p>
           </div>
         </div>
-        <div :class="showReadMoreStyles" v-html="project.projectPost" />
+        <div :class="`${showReadMoreStyles} ql-editor`" v-html="project.projectPost" />
       </div>
       <button class="flex items-center ml-auto mr-auto mt-6 mb-8" @click="setReadMoreActiveState()">
         <p class="text-center text-lg read-more mr-2">

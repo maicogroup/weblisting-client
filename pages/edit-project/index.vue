@@ -24,7 +24,7 @@
             <div class="flex items-start justify-between">
               <div>
                 <label class="font-semibold">Chủ đầu tư:</label>
-                <select v-model="project.investorId">
+                <select v-model="project.investorId" @change="() => flags.information = true">
                   <option v-for="investor in investors" :key="investor.id" :value="investor.id">
                     {{ investor.investorName }}
                   </option>
@@ -1167,7 +1167,7 @@ export default {
         variables: {
           input: {
             id: this.project.investorId,
-            name: this.investorEdit.investorName,
+            investorName: this.investorEdit.investorName,
             image: this.investorEdit.image,
             numberOfProjects: this.investorEdit.numberOfProjects,
             phoneNumber: this.investorEdit.phoneNumber,

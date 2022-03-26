@@ -11,8 +11,8 @@
 
     <div class="relative h-80 md:h-[617px]">
       <img class="w-full h-full object-cover absolute" src="~/static/images/home/home-page-bg.jpg">
-      <div class="relative w-full h-full flex flex-col items-center pt-40 md:pt-0 md:justify-center">
-        <h1 class="text-[28px] md:text-5xl font-bold font-source-serif-pro text-slate-50">
+      <div class="relative w-full h-full flex flex-col items-center  top-[75px] md:pt-0 md:justify-center">
+        <h1 class="text-[28px]  md:text-5xl font-bold font-source-serif-pro text-slate-50">
           Lựa chọn tổ ấm ưng ý của bạn
         </h1>
         <p class="text-sm md:text-2xl md:mt-1 font-bold text-slate-50">
@@ -135,12 +135,12 @@ export default {
       filterMobileVisible: false
     };
   },
-   head () {
-    return{
+  head () {
+    return {
       title: 'MaicoGroup - Căn hộ xác thực',
-       meta: [{
+      meta: [{
         property: 'og:image',
-        content: "https://weblisting.hn.ss.bfcplatform.vn/og_image.jpg"
+        content: 'https://weblisting.hn.ss.bfcplatform.vn/og_image.jpg'
       }]
     };
   },

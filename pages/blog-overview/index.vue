@@ -115,8 +115,8 @@
             <div class=" title font-bold text-[24px] font-source-serif-pro">
               Bài viết nổi bật
             </div>
-            <div class="top-blog-content pl-[5px] pr-[23px]">
-              <div class="top-blog-card grid grid-cols-[112px_233px] gap-[15px] h-[95px]  drop-shadow-md mb-[10px] border-[1px] md:w-[380px]" v-for="(top,index) in ['Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật']" :key="top" v-show="index<5" style="grid-template-areas:'image content'">
+            <div class="top-blog-content pl-[4.5%] pr-[23px]">
+              <div class="top-blog-card grid grid-cols-[112px_254px] w-[366px] gap-[15px] h-[95px]  drop-shadow-md mb-[10px] border-[1px] md:w-[380px]" v-for="(top,index) in ['Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật']" :key="top" v-show="index<5" style="grid-template-areas:'image content'">
                 <div class="top-blog-cover h-[75px] w-[103px] rounded-md mt-[10px] ml-[10px] mb-[10px]" style="grid-area:image">
                   <img src="~/static/images/home/home-page-bg.jpg" class=" h-[75px] w-[103px] rounded-md" />
                 </div>

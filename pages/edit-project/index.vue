@@ -80,6 +80,23 @@
           </div>
         </expand-panel>
         <expand-panel title="Thông tin chi tiết">
+          <div class="flex justify-end items-center">
+            <input v-model="tempInfor" type="text" class="w-auto my-2" placeholder="Thêm thông tin">
+            <button @click="addNewTempInfor">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="ml-3"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000000"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" /></svg>
+            </button>
+          </div>
           <div class="grid grid-cols-4">
             <div>
               <p class="font-semibold">
@@ -105,29 +122,26 @@
               </p>
               <input v-model="project.numberOfBuildings" class="w-auto" type="number" @change="() => flags.detailInformation = true">
             </div>
-            <div>
-              <p class="font-semibold">
-                Thời điểm hoàn thành
-              </p>
-              <input v-model="project.completionTime" class="w-auto" type="text" @change="() => flags.detailInformation = true">
-            </div>
-            <div>
-              <p class="font-semibold">
-                Quy mô
-              </p>
-              <input v-model="project.scale" class="w-auto" type="text" @change="() => flags.detailInformation = true">
-            </div>
-            <div>
-              <p class="font-semibold">
-                Diện tích xây dựng
-              </p>
-              <input v-model="project.constructionAcreage" class="w-auto" type="number" @change="() => flags.detailInformation = true">
-            </div>
-            <div>
-              <p class="font-semibold">
-                Mật độ xây dựng
-              </p>
-              <input v-model="project.densityOfConstruction" class="w-auto" type="number" @change="() => flags.detailInformation = true">
+            <div v-for="(item, index) in project.tempProjectInfors" :key="index">
+              <div class="flex justify-between items-center">
+                <p class="font-semibold mr-4">
+                  {{ item.inforName }}
+                </p>
+                <button class="pr-9" @click="deleteTempInfor(index)">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="17"
+                    height="17"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#000000"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
+                </button>
+              </div>
+              <input v-model="item.inforContent" class="w-auto" type="text" @change="() => flags.detailInformation = true">
             </div>
           </div>
           <div class="flex justify-end my-2">
@@ -191,7 +205,7 @@
           </p>
           <p>
             <label for="meta" class="font-semibold">Tiện ích nội khu:</label>
-            <textarea v-model="project.utilities.internalUtilities" type="text" class="w-1/2" rows="4" @change="() => flags.utilities = true"/>
+            <textarea v-model="project.utilities.internalUtilities" type="text" class="w-1/2" rows="4" @change="() => flags.utilities = true" />
           </p>
           <div class="flex justify-between items-start">
             <label for="meta" class="font-semibold">Danh sách tiện ích:</label>
@@ -360,7 +374,6 @@
                     project.sEOContent = e;
                   }
                 })"
-                
               />
             </client-only>
             <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectInformation">
@@ -373,96 +386,12 @@
           <div style="">
             <client-only>
               <editor
-                :content="project.projectPost.overview"
+                :content="project.projectPost"
                 class="h-auto mb-11"
-                @text-change="((e) => { 
-                  if (e != project.projectPost.overview) 
+                @text-change="((e) => {
+                  if (e != project.projectPost)
                   {
-                    project.projectPost.overview = e;
-                    flags.projectPost = true;
-                  }
-                })"
-              />
-            </client-only>
-            <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
-              Cập nhật
-            </button>
-          </div>
-        </expand-panel>
-
-        <expand-panel title="Vị trí">
-          <div>
-            <client-only>
-              <editor
-                :content="project.projectPost.location"
-                class="h-auto mb-11"
-                @text-change="((e) => { 
-                  if (e != project.projectPost.lcoation) 
-                  {
-                    project.projectPost.location = e;
-                    flags.projectPost = true;
-                  }
-                })"
-              />
-            </client-only>
-            <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
-              Cập nhật
-            </button>
-          </div>
-        </expand-panel>
-
-        <expand-panel title="Thiết kế dự án">
-          <div>
-            <client-only>
-              <editor
-                :content="project.projectPost.projectDesign"
-                class="h-auto mb-11"
-                @text-change="((e) => { 
-                  if (e != project.projectPost.projectDesign) 
-                  {
-                    project.projectPost.projectDesign = e;
-                    flags.projectPost = true;
-                  }
-                })"
-              />
-            </client-only>
-            <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
-              Cập nhật
-            </button>
-          </div>
-        </expand-panel>
-
-        <expand-panel title="Bài viết tiện ích">
-          <div>
-            <client-only>
-              <editor
-                :content="project.projectPost.utilitySection"
-                class="h-auto mb-11"
-                @text-change="((e) => { 
-                  if (e != project.projectPost.utilitySection) 
-                  {
-                    project.projectPost.utilitySection = e;
-                    flags.projectPost = true;
-                  }
-                })"
-              />
-            </client-only>
-            <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectPost">
-              Cập nhật
-            </button>
-          </div>
-        </expand-panel>
-
-        <expand-panel title="Giá thuê và mua">
-          <div>
-            <client-only>
-              <editor
-                :content="project.projectPost.rentAndSellPrice"
-                class="h-auto mb-11"
-                @text-change="((e) => { 
-                  if (e != project.projectPost.rentAndSellPrice) 
-                  {
-                    project.projectPost.rentAndSellPrice = e;
+                    project.projectPost = e;
                     flags.projectPost = true;
                   }
                 })"
@@ -492,7 +421,7 @@
 
         <p>
           <label for="meta" class="font-semibold">Meta description:</label>
-          <textarea v-model="project.pageInfors[pageInforIndex].metaDescription" type="text" class="w-1/2" rows="4"  @change="() => flags.pageInfor = true"/>
+          <textarea v-model="project.pageInfors[pageInforIndex].metaDescription" type="text" class="w-1/2" rows="4" @change="() => flags.pageInfor = true" />
         </p>
         <div class="flex justify-end space-x-3 my-2">
           <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('page-information-detail')">
@@ -553,10 +482,13 @@
           <textarea v-model="newPageInfor.metaDescription" type="text" class="w-1/2" rows="4" />
         </p>
         <div class="flex justify-end space-x-3 my-2">
-          <button class="px-3 py-1 bg-gray-300 rounded" @click="() => {
+          <button
+            class="px-3 py-1 bg-gray-300 rounded"
+            @click="() => {
               $modal.hide('add-new-page-information');
               newPageInfor = {};
-            }">
+            }"
+          >
             Quay lại
           </button>
           <button class="px-3 py-1 bg-green-400 rounded" @click="addNewPageInfor">
@@ -572,8 +504,13 @@
         </h2>
         <p class="m-10">
           <label for="map" class="font-semibold">Google map:</label>
-          <input v-model="project.address.googleMapLocation" type="text" class="w-1/4" 
-            style="width:75% !important" @change="() => flags.address = true">
+          <input
+            v-model="project.address.googleMapLocation"
+            type="text"
+            class="w-1/4"
+            style="width:75% !important"
+            @change="() => flags.address = true"
+          >
         </p>
         <div class="flex justify-end space-x-3 m-2 my-2">
           <button class="px-3 py-1 bg-gray-300 rounded" @click="$modal.hide('google-map-edit-modal')">
@@ -631,23 +568,33 @@
         <div class="flex justify-between" style="height: 170px;">
           <div>
             <div class="flex justify-between mb-2">
-              <p class="font-bold">Tên chủ đầu tư</p>
+              <p class="font-bold">
+                Tên chủ đầu tư
+              </p>
               <input v-model="investorEdit.investorName" style="width:50%" type="text" @change="() => flags.investor = true">
             </div>
             <div class="flex justify-between mb-2">
-              <p class="font-bold">Số dự án</p>
+              <p class="font-bold">
+                Số dự án
+              </p>
               <input v-model="investorEdit.numberOfProjects" style="width:50%" type="number" @change="() => flags.investor = true">
             </div>
             <div class="flex justify-between mb-2">
-              <p class="font-bold">Thời gian thành lập</p>
+              <p class="font-bold">
+                Thời gian thành lập
+              </p>
               <input v-if="tempFoundedDate" v-model="tempFoundedDate" style="width:50%" type="date" @change="() => flags.investor = true">
             </div>
             <div class="flex justify-between mb-2">
-              <p class="font-bold">Số điện thoại</p>
+              <p class="font-bold">
+                Số điện thoại
+              </p>
               <input v-model="investorEdit.phoneNumber" style="width:50%" type="text" max="10" @change="() => flags.investor = true">
             </div>
             <div class="flex justify-between mb-2">
-              <p class="font-bold">Hình ảnh</p>
+              <p class="font-bold">
+                Hình ảnh
+              </p>
               <input v-model="investorEdit.image" style="width:50%" type="text" @change="() => flags.investor = true">
             </div>
           </div>
@@ -747,19 +694,11 @@ const getProject = gql`query GetProjectToEdit($condition: ProjectCollectionFilte
                     foundedTime
                     phoneNumber
                   }
-                  projectPost{
-                    overview
-                    location
-                    projectDesign
-                    utilitySection
-                    rentAndSellPrice
+                  projectPost
+                  tempProjectInfors{
+                    inforName
+                    inforContent
                   }
-                  completionTime
-                  constructionAcreage
-                  masterPlan
-                  distributionUnit
-                  scale
-                  densityOfConstruction
                   utilities{
                     locationUtilities
                     internalUtilities
@@ -830,6 +769,7 @@ export default {
       pageInforsSlug: [],
       tempFoundedDate: null,
       tempUtility: '',
+      tempInfor: '',
       isShowingEditInvestor: false,
       inputFilter: {},
       newPageInfor: {},
@@ -854,6 +794,16 @@ export default {
         }
       }
     };
+  },
+  computed: {
+    tempDetailInfors () {
+      const items = [];
+      this.project.tempProjectInfors.forEach((element) => {
+        const tempInfor = { name: element.inforName, content: element.inforContent };
+        items.push(tempInfor);
+      });
+      return items;
+    }
   },
   watch: {
     // project: {
@@ -959,7 +909,7 @@ export default {
     addNewUtility () {
       if (this.project.utilities.listOfUtilities.some(x => x.toLowerCase() == this.tempUtility.toLowerCase())) {
         this.sendWarningNotification('Đã tồn tại tiện ích này!');
-        
+
         return;
       }
       this.project.utilities.listOfUtilities.push(this.tempUtility);
@@ -984,9 +934,24 @@ export default {
       });
       this.sendDoneNotification('Thêm thành công!');
       this.tempUtility = '';
-
     },
-    deleteUtility(index) {
+    addNewTempInfor () {
+      if (this.project.tempProjectInfors.some(x => x.inforName.toLowerCase() === this.tempInfor.toLowerCase())) {
+        this.sendWarningNotification('Đã tồn tại tiện ích này!');
+
+        return;
+      }
+      this.project.tempProjectInfors.push({ inforName: this.tempInfor, inforContent: '' });
+      this.sendDoneNotification('Thêm thành công!');
+      this.flags.detailInformation = true;
+      this.tempInfor = '';
+    },
+    deleteTempInfor (index) {
+      this.project.tempProjectInfors.splice(index, 1);
+      this.sendDoneNotification('Xóa thành công!');
+      this.flags.detailInformation = true;
+    },
+    deleteUtility (index) {
       this.project.utilities.listOfUtilities.splice(index, 1);
       this.$apollo.mutate({
         mutation: gql`mutation AddNewUtility($input: UpdateProjectInput!)
@@ -1056,13 +1021,7 @@ export default {
       this.sendUpdateProjectMutation({
         input: {
           id: this.project.id,
-          projectPost: {
-            overview: this.project.projectPost.overview,
-            location: this.project.projectPost.location,
-            projectDesign: this.project.projectPost.projectDesign,
-            utilitySection: this.project.projectPost.utilitySection,
-            rentAndSellPrice: this.project.projectPost.rentAndSellPrice
-          }
+          projectPost: this.project.projectPost
         }
       });
       this.sendDoneNotification('Thay đổi thành công!');
@@ -1072,7 +1031,7 @@ export default {
       this.$modal.show('edit-project-image');
       this.imageIndex = index;
     },
-    updateProjectImage() {
+    updateProjectImage () {
       if (this.flags.image == false) {
         this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
@@ -1116,12 +1075,12 @@ export default {
       this.$modal.hide('delete-project-image');
     },
     updateProjectDetailInformation () {
-      if (this.flags.detailInformation == false) {
+      if (this.flags.detailInformation === false) {
         this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
       if (Math.floor(this.project.price) < 0) {
-        this.sendWarningNotification("Giá phải lớn hơn hoặc bằng 0!");
+        this.sendWarningNotification('Giá phải lớn hơn hoặc bằng 0!');
         return;
       }
       if (Math.floor(this.project.numberOfApartments) < 0) {
@@ -1129,21 +1088,24 @@ export default {
         return;
       }
       if (Math.floor(this.project.numberOfBuildings) < 0) {
-        this.sendWarningNotification("Số lượng tòa nhà phải lớn hơn hoặc bằng 0!");
-        return;
-      }
-      if (Math.floor(this.project.constructionAcreage) < 0) {
-        this.sendWarningNotification("Diện tích xây dựng phải lớn hơn hoặc bằng 0!");
+        this.sendWarningNotification('Số lượng tòa nhà phải lớn hơn hoặc bằng 0!');
         return;
       }
       if (Math.floor(this.project.acreage) < 0) {
-        this.sendWarningNotification("Diện tích phải lớn hơn hoặc bằng 0!");
+        this.sendWarningNotification('Diện tích phải lớn hơn hoặc bằng 0!');
         return;
       }
-      if (Math.floor(this.project.densityOfConstruction) < 0) {
-        this.sendWarningNotification("Mật độ xây dựng phải lớn hơn hoặc bằng 0!");
-        return;
-      }
+      const tempProjectInfors = new Array();
+      this.project.tempProjectInfors.forEach(
+        (x) => {
+          const tempProjectInfor = {
+            inforName: x.inforName,
+            inforContent: x.inforContent
+          };
+          tempProjectInfors.push(tempProjectInfor);
+        }
+      );
+      tempProjectInfors.forEach(x => delete x.__typename);
       // eslint-disable-next-line no-unused-expressions
       this.sendUpdateProjectMutation({
         input: {
@@ -1152,10 +1114,7 @@ export default {
           numberOfApartments: Math.floor(this.project.numberOfApartments),
           numberOfBuildings: Math.floor(this.project.numberOfBuildings),
           acreage: Math.floor(this.project.acreage),
-          scale: this.project.scale,
-          constructionAcreage: Math.floor(this.project.constructionAcreage),
-          densityOfConstruction: Math.floor(this.project.densityOfConstruction),
-          completionTime: this.project.completionTime
+          tempProjectInfors: tempProjectInfors
         }
       });
       this.sendDoneNotification('Thay đổi thành công!');
@@ -1184,16 +1143,16 @@ export default {
     },
     updateInvestor () {
       if (this.flags.investor == false) {
-        this.sendWarningNotification("Dữ liệu chưa có thay đổi!");
+        this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
       this.investorEdit.numberOfProjects = Number(this.investorEdit.numberOfProjects);
       if (this.investorEdit.numberOfProjects < 0) {
-        this.$toast.show("Số lượng dự án phải lớn hơn hoặc bằng 0!", {
-          type: "error",
-          theme: "bubble",
-          duration: "3000",
-          position: "top-right"
+        this.$toast.show('Số lượng dự án phải lớn hơn hoặc bằng 0!', {
+          type: 'error',
+          theme: 'bubble',
+          duration: '3000',
+          position: 'top-right'
         });
         return;
       }
@@ -1222,11 +1181,11 @@ export default {
             condition: null
           });
         }, 500);
-        console.log("refetch");
+        console.log('refetch');
       }
       this.sendDoneNotification('Cập nhật thành công!');
       this.flags.investor = false;
-      this.$modal.hide("show-edit-investor");
+      this.$modal.hide('show-edit-investor');
     },
     addNewPageInfor () {
       if ((this.newPageInfor.slug === '') || (this.project.pageInfors.some(x => x.slug == this.newPageInfor.slug))) {
@@ -1257,7 +1216,7 @@ export default {
       this.$modal.show('page-information-detail');
     },
     updatePageInformation () {
-      var slug = this.project.pageInfors[this.pageInforIndex].slug.trim();
+      const slug = this.project.pageInfors[this.pageInforIndex].slug.trim();
       if (this.flags.pageInfor == false) {
         this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
@@ -1272,10 +1231,10 @@ export default {
       }
       this.project.pageInfors.forEach(x => delete x.__typename);
       this.sendUpdateProjectMutation({
-          input: {
-            id: this.project.id,
-            pageInfors: this.project.pageInfors
-          }
+        input: {
+          id: this.project.id,
+          pageInfors: this.project.pageInfors
+        }
       });
       this.sendDoneNotification('Thay đổi thành công!');
       this.pageInforsSlug[this.pageInforIndex] = slug;

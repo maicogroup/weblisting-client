@@ -102,7 +102,7 @@
             </p>
           </div>
         </div>
-        <div :class="showReadMoreStyles" v-html="project.projectPost" />
+        <div :class="`${showReadMoreStyles} ql-editor`" style="overflow: hidden;" v-html="project.projectPost" />
       </div>
       <button class="flex items-center ml-auto mr-auto mt-6 mb-8" @click="setReadMoreActiveState()">
         <p class="text-center text-lg read-more mr-2">
@@ -264,7 +264,7 @@ export default {
       // dữ liệt trang tổng quan dự án
       isDroppingContent: false,
       readMoreContent: 'Xem thêm',
-      showReadMoreStyles: 'mt-1.5 text-lg overflow-hidden max-h-6',
+      showReadMoreStyles: 'mt-1.5 text-lg overflow-hidden max-h-80',
       hideReadMoreStyles: 'hidden delay-1000',
       tableContentStyles: 'text-center sm:mr-6 table-of-content color-A3A3A3 transition-02s-all',
       activeTableContent: 'active-table-contents text-center sm:mr-6 transition-02s-all',

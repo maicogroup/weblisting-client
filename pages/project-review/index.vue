@@ -24,327 +24,8 @@
         />
       </div>
     </div>
-    <div class="">
-      <div
-        v-for="review in reviews"
-        :key="review"
-        class="border rounded-md px-3 lg:px-8 py-3 lg:py-5 my-2"
-      >
-        <div class="">
-          <div class="flex items-center">
-            <img
-              :src="review.authorAvatarSource"
-              class="w-10 h-10 rounded-full cursor-pointer"
-            />
-            <div class="ml-2">
-              <a href="#" class="text-base font-bold">
-                {{ review.authorName }}
-              </a>
-              <div class="text-sm text-neutral-400">
-                {{ formatReviewDateCreated(review.dateCreated) }}
-              </div>
-            </div>
-          </div>
-
-          <p
-            id="review-content"
-            class="
-              short-content
-              text-sm text-stone-900
-              font-normal
-              mt-1
-              leading-4
-              lg:leading-5
-            "
-            ref="reviewContent"
-          >
-            {{ review.content }}
-          </p>
-          <span
-            v-if="contentOverflowing"
-            id="show-more"
-            class="text-sm cursor-pointer text-gray-500"
-            @click="toggleContent"
-            >Xem thêm</span
-          >
-          <div @click="handleGallery">
-            <div class="hidden md:grid grid-cols-4 gap-1 mt-2">
-              <template v-if="review.imageSources.length <= 4">
-                <img
-                  v-for="index in review.imageSources.length"
-                  :key="index"
-                  class="object-cover w-full h-16 lg:h-40 cursor-pointer"
-                  :src="review.imageSources[index - 1]"
-                  @click="handleGallery(index - 1)"
-                />
-              </template>
-              <template v-else>
-                <img
-                  v-for="index in 3"
-                  :key="review.imageSources[index - 1]"
-                  class="object-cover w-full h-16 lg:h-40 cursor-pointer"
-                  :src="review.imageSources[index - 1]"
-                  @click="handleGallery(index - 1)"
-                />
-                <div class="relative">
-                  <img
-                    class="object-cover w-full h-16 lg:h-40"
-                    :src="review.imageSources[3]"
-                  />
-                  <div
-                    class="
-                      absolute
-                      top-0
-                      left-0
-                      w-full
-                      h-full
-                      bg-black
-                      opacity-40
-                    "
-                  />
-                  <button
-                    @click="handleGallery(2)"
-                    class="
-                      absolute
-                      top-0
-                      left-0
-                      w-full
-                      h-full
-                      text-white
-                      font-semibold
-                      text-4xl
-                    "
-                  >
-                    {{ `${review.imageSources.length - 4}+` }}
-                  </button>
-                </div>
-              </template>
-            </div>
-
-            <div class="md:hidden grid grid-cols-3 gap-1 mt-2">
-              <template v-if="review.imageSources.length <= 3">
-                <img
-                  v-for="index in review.imageSources.length"
-                  :key="index"
-                  class="object-cover w-full h-20 sm:h-40 cursor-pointer"
-                  :src="review.imageSources[index]"
-                  @click="handleGallery(index - 1)"
-                />
-              </template>
-              <template v-else>
-                <img
-                  v-for="index in 2"
-                  :key="review.imageSources[index - 1]"
-                  class="object-cover w-full h-20 sm:h-40 cursor-pointer"
-                  :src="review.imageSources[index - 1]"
-                  @click="handleGallery(index - 1)"
-                />
-                <div class="relative">
-                  <img
-                    class="object-cover w-full h-20 sm:h-40"
-                    :src="review.imageSources[2]"
-                  />
-                  <div
-                    class="
-                      absolute
-                      top-0
-                      left-0
-                      w-full
-                      h-full
-                      bg-black
-                      opacity-40
-                    "
-                  />
-                  <button
-                    @click="handleGallery(1)"
-                    class="
-                      absolute
-                      top-0
-                      left-0
-                      w-full
-                      h-full
-                      text-white
-                      font-semibold
-                      text-4xl
-                    "
-                  >
-                    {{ `${review.imageSources.length - 3}+` }}
-                  </button>
-                </div>
-              </template>
-            </div>
-          </div>
-        </div>
-
-        <gallery class="hidden" :items="review.imageSources" ref="childref" />
-        <div class="grid grid-cols-2 border-y my-3 text-sm">
-          <button class="py-1.5 px-3 items-center hover:bg-gray-100 border-r">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="mr-1 h-5 w-5 inline"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-            <span class="font-normal">Thích</span>
-          </button>
-          <button
-            class="py-1.5 px-3 items-center hover:bg-gray-100"
-            id="discussBtn"
-            @click="setFocus"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="mr-1 h-5 w-5 inline"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-              />
-            </svg>
-            <span class="font-normal">Thảo luận</span>
-          </button>
-        </div>
-
-        <div class="mt-4">
-          <div class="flex items-start">
-            <img :src="user.avatarSource" class="w-10 h-10 rounded-full" />
-            <div class="grow px-3">
-              <!-- todo: style placeholder -->
-              <textarea
-                id="discussArea"
-                style="overflow: auto"
-                placeholder="Thảo luận"
-                class="
-                  resize-none
-                  no-scrollbar
-                  w-full
-                  px-2
-                  py-1
-                  text-gray-800
-                  border
-                  rounded-md
-                  h-9
-                "
-              />
-            </div>
-            <div class="">
-              <button
-                class="
-                  text-sm
-                  font-semibold
-                  text-white
-                  bg-green-600
-                  rounded-md
-                  px-4
-                  py-1.5
-                  h-9
-                "
-              >
-                Đăng
-              </button>
-            </div>
-          </div>
-          <div v-if="showAllComment == false">
-            <div
-              v-for="comment in first3Comments(review)"
-              :key="comment"
-              class="flex mt-3 lg:mt-4"
-            >
-              <img
-                :src="comment.authorAvatarSource"
-                class="mt-1 w-10 h-10 rounded-full cursor-pointer"
-              />
-              <div
-                class="
-                  ml-2
-                  border
-                  rounded-xl
-                  py-0.5
-                  pl-2
-                  pr-3
-                  bg-slate-50
-                  leading-4
-                "
-              >
-                <a href="#" class="font-bold text-sm">
-                  {{ comment.authorName }}
-                </a>
-                <span class="text-sm text-[#858585]">
-                  {{ formatReviewDateCreated(comment.dateCreated) }}
-                </span>
-                <p class="text-sm font-normal leading-4">
-                  {{ comment.content }}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div
-            v-else
-            v-for="comment in review.comments"
-            :key="comment"
-            class="flex mt-3 lg:mt-4"
-          >
-            <img
-              :src="comment.authorAvatarSource"
-              class="mt-1 w-10 h-10 rounded-full cursor-pointer"
-            />
-            <div
-              class="
-                ml-2
-                border
-                rounded-xl
-                py-0.5
-                pl-2
-                pr-3
-                bg-slate-50
-                leading-4
-              "
-            >
-              <a href="#" class="font-bold text-sm">
-                {{ comment.authorName }}
-              </a>
-              <span class="text-sm text-[#858585]">
-                {{ formatReviewDateCreated(comment.dateCreated) }}
-              </span>
-              <p class="text-sm font-normal leading-4">
-                {{ comment.content }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div
-          v-if="showAllComment == false"
-          @click="showAllComment = true"
-          class="
-            bg-stone-200
-            border border-neutral-400
-            h-8
-            mt-4
-            rounded
-            flex
-            items-center
-            justify-center
-            cursor-pointer
-            hover:bg-stone-300
-            text-sm text-stone-900
-          "
-        >
-          Hiển thị thêm bình luận
-        </div>
-      </div>
+    <div v-for="review in reviews" :key="review">
+      <review-post :review="review"/>
     </div>
   </div>
 </template>
@@ -352,75 +33,23 @@
 <script>
 import Divider from "~/components/Divider.vue";
 import Gallery from "~/components/gallery.vue";
+import ReviewComment from './components/review-comment.vue';
+import ReviewPost from './components/review-post.vue';
 export default {
   name: "ProjectReview",
-  components: { Divider, Gallery },
+  components: { Divider, Gallery, ReviewComment, ReviewPost },
   data() {
     return {
       currentPage: 1,
-      reviews: [createMockReview(), createMockReview(), createMockReview()],
+      reviews: [createMockReview(), createMockReview2(), createMockReview2()],
       user: {
         avatarSource: "https://pbgdpl.daklak.gov.vn/uploads/avatar.png",
       },
-      showAllComment: false,
-      showFullContent: false,
-      contentOverflowing: false,
     };
-  },
-  mounted() {
-    var e = document.getElementById("review-content");
-    if (0 > e.clientHeight - e.scrollHeight) {
-      this.contentOverflowing = true;
-    }
-    else this.contentOverflowing = false;
-    window.addEventListener('resize', this.getOverflow);
-  },
-  computed: {
   },
 
   methods: {
-    getOverflow() {
-      var e = document.getElementById("review-content");
-      this.contentOverflowing = (0 > e.clientHeight - e.scrollHeight);
-    },
-    toggleContent() {
-      if (this.showFullContent) {
-        document
-          .getElementById("review-content")
-          .classList.add("short-content");
-        document.getElementById("show-more").innerHTML = "Xem thêm";
-      } else {
-        document
-          .getElementById("review-content")
-          .classList.remove("short-content");
-        document.getElementById("show-more").innerHTML = "Rút gọn";
-      }
-      this.showFullContent = !this.showFullContent;
-    },
-    setFocus() {
-      setTimeout(function () {
-        document.getElementById("discussArea").focus();
-      }, 0);
-    },
-    handleGallery(index) {
-      if (this.$refs.childref[index])
-        this.$refs.childref[index].openGallery(index);
-    },
-    formatReviewDateCreated(dateCreated) {
-      const day = dateCreated.getDate();
-      // getMonth trả về tháng bắt đầu từ 0 đến 11
-      const month = dateCreated.getMonth() + 1;
-      const year = dateCreated.getFullYear();
-
-      return `${padZero(day)}/${padZero(month)}/${year}`;
-
-      function padZero(num) {
-        return num.toString().padStart(2, "0");
-      }
-    },
-    first3Comments(review) {
-      return review.comments.slice(0, 2);
-    },
+    
   },
 };
 
@@ -470,18 +99,53 @@ function createMockReview() {
     ],
   };
 }
+function createMockReview2() {
+  return {
+    authorName: "Chí Linh",
+    authorAvatarSource:
+      "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg",
+    dateCreated: new Date(),
+    project: {
+      name: "Chung cư Saigon Gateway",
+      slug: "ban-thue-can-ho-chung-cu-the-sun-avenue",
+    },
+    title: "Tên đề của bài đánh giá",
+    content:
+      "Hôm qua mình có chuyển nhà, ",
+    imageSources: [
+      "https://www3.nhk.or.jp/nhkworld/en/radio/cooking/update/meal_200228_l.jpg",
+      "https://pogogi.com/sites/default/files/japanesefoodimages/2015/2/134%20Furai.jpg",
+      "https://kenh14cdn.com/thumb_w/660/2019/1/25/3cbbd3ec62d085e2372585f56ccc8c69-15484114508781292670329.jpg",
+      "https://img.tinxe.vn/resize/1000x-/2020/10/08/vwnbOqjE/mazda-furai-concept-front-studio-20a5.jpg",
+      "https://i.ytimg.com/vi/K_7lPqLZrE8/maxresdefault.jpg",
+    ],
+    comments: [
+      {
+        authorName: "Linh Chí",
+        authorAvatarSource:
+          "https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
+        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
+        content: "Đúng vậy hết sức bất mãn với cái vụ cơm chó này, vote 1 sao",
+      },
+      {
+        authorName: "Linh Chí",
+        authorAvatarSource:
+          "https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png",
+        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
+        content:
+          "Gì, mình thấy quán này ok mà, hôm bữa dẫn người iu đi ăn ở đây thấy vui và ngon mà, 5 sao nha",
+      },
+      {
+        authorName: "Dr Strange",
+        authorAvatarSource:
+          "https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png",
+        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
+        content: "Chào đồng môn!",
+      },
+    ],
+  };
+}
 </script>
 
 <style>
-.short-content {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-@media only screen and (max-width: 769px) {
-  .short-content {
-    -webkit-line-clamp: 6;
-  }
-}
 </style>

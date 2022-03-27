@@ -1,6 +1,9 @@
 <template>
-  <div class="editorWrapper">
-    <div id="editorjs" />
+  <div class="editorWrapper w-full">
+    <p class="mb-2 text-zinc-800 font-medium">{{ title }}</p>
+    <div class="rounded-md border border-neutral-300 pt-8 min-h-[500px]">
+      <div id="editorjs" class="w-full" />
+    </div>
   </div>
 </template>
 
@@ -8,6 +11,7 @@
 export default {
   name: "Editor",
   props: {
+    title: { type: String, default: "" },
     existingContent: { type: Object, default: () => {} },
   },
   data() {

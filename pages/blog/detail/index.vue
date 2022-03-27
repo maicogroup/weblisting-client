@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <h1>Hello from detail</h>
+  <div class="">
     <show-editor :editorContent="editorContent" />
   </div>
 </template>

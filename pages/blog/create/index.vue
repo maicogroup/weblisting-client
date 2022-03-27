@@ -2,7 +2,8 @@
   <div class="flex flex-row w-full justify-center mb-72">
     <div class="flex flex-col items-center w-[52.25rem] mr-2">
       <h1 class="text-3xl font-bold mb-10">Thêm bài viết</h1>
-      <textbox class="mb-6" title="Tiêu đề" :value="values.PageInfor.Title" />
+      <textbox class="mb-6" title="Tiêu đề" v-model="values.PageInfor.Title" />
+      {{ values.PageInfor.Title }}
       <h2 class="mb-2 text-zinc-800 font-medium"></h2>
       <Editor
         :blog-content="editorContent"
@@ -36,7 +37,7 @@ export default {
         CreatedAt: "2022-03-26T12:22:30.529Z",
         PageInfor: {
           Slug: "",
-          Title: "",
+          Title: "Oke",
           MetaDescription: "",
         },
         Content: "",
@@ -52,3 +53,18 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.ce-block {
+  & h1 {
+    font-weight: 700;
+    font-size: 41px;
+    line-height: 51px;
+  }
+  & h2 {
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 40px;
+  }
+}
+</style>

@@ -4,8 +4,9 @@
     <input
       class="w-full border border-neutral-200 rounded-md p-2 text-zinc-700 text-base"
       :type="type"
-      v-model="value"
+      :value="value"
       :pattern="pattern"
+      @input="$emit('input', $event.target.value)"
     />
     <p v-if="error">{{ errorMessage }}</p>
   </div>
@@ -16,11 +17,12 @@ export default {
   props: {
     title: { type: String, default: "" },
     value: { type: String, default: "" },
-    parent: { type: String, default: "" },
+    pattern: { type: String, default: "" },
     errorMessage: { type: String, default: "" },
-    handleChange: { type: Object, default: () => {} },
+    handleChange: { type: Function, default: () => {} },
     type: { type: String, default: "text" },
     error: { type: Boolean, default: false },
+    name: { type: String, default: "" },
   },
 };
 </script>

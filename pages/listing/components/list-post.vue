@@ -1,7 +1,7 @@
 <template>
   <div id="post-subinfor" class="max-w-full grow">
     <div class="mt-2 mb-2">
-      <h1 class="h-[36px] text-[21px] md:text-[24px] text-stone-900 font-bold">
+      <h1 class="min-h-[36px] text-[21px] md:text-[24px] text-stone-900 font-bold">
         {{ (this.heading)? this.heading : "Bán thuê căn hộ chung cư" }} 
       </h1>
       <div class="flex justify-between md:block">
@@ -504,6 +504,7 @@ export default {
       // if(!filter.isPreview){
       //   conditions.status = { eq: "Publish"}
       // }
+      conditions.apartmentState = {eq: "Đang Rao"}
       if (filter.demand) {
         conditions.demand = { eq: filter.demand };
       }

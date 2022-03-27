@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import CreateBlog from "~/pages/blog/create";
 import EditPost from "~/pages/post-queue/edit-post/index";
 import PostQueuePage from "~/pages/post-queue/index";
 import PostList from "~/pages/listing/index";
@@ -11,6 +10,8 @@ import ProductReview from "~/pages/product-preview/index";
 import ProjectOverview from "~/pages/project-overview/index";
 import SpecificProjectReview from "~/pages/product-preview/specific-project/index";
 import HomePage from "~/pages/home/index";
+import CreateBlog from "~/pages/blog/create/index";
+import DetailBlog from "~/pages/blog/detail/index";
 
 Vue.use(Router);
 
@@ -69,6 +70,10 @@ export function createRouter() {
       {
         path: "/blog/khoi-tao",
         component: CreateBlog,
+      },
+      {
+        path: "/blog/:slug",
+        component: DetailBlog,
       },
     ],
   });

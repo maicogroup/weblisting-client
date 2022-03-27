@@ -1,5 +1,7 @@
 <template>
-  <div id="editorjs" />
+  <div class="editorWrapper">
+    <div id="editorjs" />
+  </div>
 </template>
 
 <script>
@@ -47,3 +49,19 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.ce-block {
+  background-color: black !important;
+}
+.ce-block__content > p {
+  color: red;
+}
+.image-tool__image > img {
+  height: 100px;
+}
+
+.editorWrapper h1.ce-header:first-of-type {
+  font-size: 50px !important;
+}
+</style>

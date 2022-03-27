@@ -48,7 +48,9 @@
         </div>
       </div>
     </div>
-
+       <button>
+         <NuxtLink to="blog/chu-ky-lan-nay-co-gi">KAKAKAKA</NuxtLink>
+       </button>
     <div
       class="mt-10 md:mt-16 grid grid-cols-2 md:grid-cols-4 max-w-[1000px] mx-auto"
     >

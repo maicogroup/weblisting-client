@@ -68,4 +68,5 @@ export default {
 .editorWrapper h1.ce-header:first-of-type {
   font-size: 50px !important;
 }
+
 </style>

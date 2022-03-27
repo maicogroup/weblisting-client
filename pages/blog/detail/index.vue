@@ -1,10 +1,15 @@
 <template>
-  <div class="">
-    <show-editor :editorContent="editorContent" />
+  <div style="">
+    <div class="wrapper m-auto border border-zinc-500 w-1/2 p-2">
+      <show-editor :editorContent="editorContent" />
+      <div class="share" :class="{ stick: !isStick }">oke oke</div>
+      <!-- {{blog}} -->
+    </div>
   </div>
 </template>
 
 <script>
+import gql from "graphql-tag";
 import ShowEditor from "~/components/editor/Show.vue";
 const editorContent = {
   time: 1648348627510,
@@ -14,7 +19,7 @@ const editorContent = {
       type: "header",
       data: {
         text: "Editor.js",
-        level: 2,
+        level: 1,
       },
     },
     {
@@ -123,13 +128,99 @@ const editorContent = {
   ],
   version: "2.23.1",
 };
+const getBlog = gql`
+  query GetBlog($condition: BlogCollectionFilterInput) {
+    blog(where: $condition) {
+      id
+      content
+      createdAt
+      pageInfor {
+        title
+        slug
+        metaDescription
+      }
+      status
+      authorId
+      author {
+        name
+        phoneNumber
+        email
+      }
+    }
+  }
+`;
 
 export default {
+  mounted() {
+    //console.log(this.$route.params.slug);
+    //this.c = JSON.parse(this.blog.content);
+    //console.log(this.c);
+
+    //hadnle scroll\
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll);
+  },
+  //apollo: {
+    //blog: {
+      //query: getBlog,
+      //variables() {
+        //return {
+          //condition: {
+            //pageInfor: {
+              //slug: {
+                //eq: this.$route.params.slug,
+              //},
+            //},
+          //},
+        //};
+      //},
+    //},
+  //},
   data() {
     return {
+      isStick: true,
       editorContent,
+      a,
+      b: "",
+      c: {},
     };
+  },
+  methods: {
+    handleScroll(event) {
+      const scrollCheck = window.innerHeight - window.scrollY;
+      console.log(scrollCheck);
+      if (scrollCheck <= 160) {
+        this.isStick = false;
+        console.log("set false");
+      } else {
+        console.log("set true");
+        this.isStick = true;
+      }
+    },
   },
   components: { ShowEditor },
 };
 </script>
+
+<style lang="scss" scoped>
+.share {
+  position: fixed;
+  top: 50%;
+  left: 75%;
+  transform: translateX(100%) translateY(-50%);
+  height: 250px;
+  width: 50px;
+  background-color: #000;
+}
+html {
+  position: relative;
+}
+.stick {
+  position: absolute;
+  left: 75%;
+  transform: translateX(100%) translateY(-50%);
+  top: calc(100% - 360px);
+}
+</style>

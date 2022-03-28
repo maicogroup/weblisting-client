@@ -158,7 +158,6 @@ export default {
 
     handleSelectProject (project) {
       this.open = false;
-      console.log(project.pageInfors);
       this.$emit('optionchanged', {
         projectName: project.projectName,
         id: project.id,

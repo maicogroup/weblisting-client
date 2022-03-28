@@ -187,10 +187,10 @@
     </div>
     <Divider v-if="showIfPostsOfOneProject" class="border-stone-400 mt-7 mb-8 sm:mb-12" />
     <ProjectHeader v-if="showIfPostsOfOneProject" class="mb-5" :project="project" />
-    <div v-if="project && showIfPostsOfOneProject && project.forSellSEOContent" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
+    <div v-if="project && showIfPostsOfOneProject && project.seoContent" class="rounded-lg border mr-auto md:w-4/5 ml-auto mt-9 mb-5 md:px-6 h-fit delay-3000">
       <div
         :class="`overflow-hidden text-ellipsis mt-5 mx-2   ${sEOContentClasses}` "
-        v-html="project.forSellSEOContent"
+        v-html="project.seoContent"
       />
       <p class="text-center font-bold read-more my-4" @click="setSEOContentActiveState()">
         {{ readMoreContent }}
@@ -435,7 +435,7 @@ export default {
       this.filter = { ...this.createFilterFromUrl(), ...this.filter };
       this.inputFilter = { ...this.filter };
     }
-    //this.filter.demand = this.$route.params.slug.includes("ban") ? "Bán" : "Cho Thuê";
+    this.filter.demand = this.$route.params.slug.includes("ban") ? "Bán" : "Cho Thuê";
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
@@ -470,8 +470,7 @@ export default {
                     googleMapLocation
                   }
                   images
-                  forRentSEOContent
-                  forSellSEOContent
+                  ${this.$route.params.slug.includes("ban") ?  "forSellSEOContent" : "forRentSEOContent"}
                   pageInfors{
                     title
                     slug
@@ -488,6 +487,7 @@ export default {
         }
 
         const project = data.projects[0];
+        project.seoContent = project.forSellSEOContent ? project.forSellSEOContent : project.forRentSEOContent
 
         this.filter = { ...this.filter, project: { pageInfor: { slug: this.$route.params.slug }, id: project.id, projectName: project.projectName } };
         this.inputFilter = { ...this.filter };
@@ -604,9 +604,9 @@ export default {
         path = path + '/' + this.filter.project.pageInfor.slug;
       }
       const query = {};
-      if (this.filter.demand) {
-        query.demand = this.filter.demand;
-      }
+      // if (this.filter.demand) {
+      //   query.demand = this.filter.demand;
+      // }
       if (this.filter.type) {
         query.type = this.filter.type;
       }

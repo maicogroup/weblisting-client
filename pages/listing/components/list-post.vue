@@ -200,7 +200,7 @@
                   text-stone-900
                 "
               >
-                {{ post.pageInfor.title }}
+                <h3> {{ post.pageInfor.title }} </h3>
               </NuxtLink>
               <div class="flex my-1 md:my-3 text-[14px] absolute top-0 right-1 md:relative">
                   <div class="flex" v-if="post.type === 'Căn hộ'">

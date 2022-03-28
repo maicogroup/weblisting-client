@@ -5,7 +5,7 @@ export default {
   head: {
     title: 'client',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'vi'
     },
     meta: [
       { charset: 'utf-8' },
@@ -48,7 +48,8 @@ export default {
     // '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/apollo'
+    '@nuxtjs/apollo',
+    '@nuxtjs/google-analytics'
   ],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: [
@@ -112,5 +113,9 @@ export default {
         config.devtool = isClient ? 'source-map' : 'inline-source-map';
       }
     }
+  },
+  googleAnalytics: {
+    // Options
+    id: 'G-ES9KCCENYC'
   }
 };

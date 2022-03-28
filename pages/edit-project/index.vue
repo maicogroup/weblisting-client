@@ -56,7 +56,7 @@
                 onerror="this.onerror=null; this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQMAAADCCAMAAAB6zFdcAAAAQlBMVEX///+hoaGenp6ampr39/fHx8fOzs7j4+P8/Pyvr6/d3d3FxcX29va6urqYmJjs7OzU1NSlpaW1tbWtra3n5+e/v78TS0zBAAACkUlEQVR4nO3b63KCMBCGYUwUUVEO6v3fagWVY4LYZMbZnff51xaZ5jON7CZNEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQb5tvI8qzX4/nH84XG5Upfj2ir2V2E5fZ/XpIX9saMnhkYLIkiyRJjdgMoiEDMmiQgfwM8rSu77ew2wnPoLTmwdZBs0J2BuXrYckcQm4nOoP+WcmWAbcTnUHZPy9eA24nOoN7n0HI54ToDM5k8PjluwyqgNuJzqDoaugPg8gWZ4noDAYLwuIg75fLeeHHsjNIzrZJwWwW+0DNsmEWPjiEZ5AcD8ZUu8VZ8HyQMifvBdIz+PS33i8adu+7Qn4Gn1Tdupl7rlCfQb9seosK7RkcBy1o30iVZ5CPOtDW3WhQnsF13IV3v0p3BqfJRoSpXVepzmA/24+yqeMyzRm4tqOs44lSUwa3yfgOri25av5CPRnklR33VlPnrqSZV09qMsiqSWV082xOz1uPajJ49pTM/f115k6guWa6JGjJ4N1lt8fXN2rv/vysjFaSQdFXBc/KKF04ptFPliclGVR9Bu27XCyeVOkmy5OODAZN9rYyyip/AIPJ8qIig+PoXbf7YdPdncFoSdCQQT4ZceV+MhiFMBy0hgyu0yGvOLI17KwpyGBaHK5jtt0N5GcwLw7XZdB31sRn8O+ziqYro8Vn4CwOV+k6a9Iz+PwRsKC7h+gMfMXhKu/OmuwM/MXhKq8yWnYG/uJw5Uxoy2jRGZTBZ/jboxuSM1guDtdNhKazJjiDbNMe0AxzKUVnkO+jEJxBxNtJzWCTxlNLzSB8KehJ/H+mJGYAjaDjzj9SnHZRuXZiAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAECXP1XDHv7U4SNFAAAAAElFTkSuQmCC'"
                 class="h-48 sm:h-96 w-full mr-4"
                 :src="project.masterPlan"
-                alt="cay xoai"
+                :alt="`Mặt bằng dự án ${project.projectName}`"
               >
               <button name="edit-button" @click="() => $modal.show('edit-project-master-plan')">
                 <svg
@@ -362,16 +362,35 @@
           </div>
         </expand-panel>
 
-        <expand-panel title="Nội dung SEO">
+        <expand-panel title="Nội dung SEO thuê">
           <div>
             <client-only>
               <editor
-                :content="project.sEOContent"
+                :content="project.forRentSEOContent"
                 class="h-auto mb-11"
                 @text-change="((e) => {
-                  if (e != project.sEOContent) {
+                  if (e != project.forRentSEOContent) {
                     flags.information = true;
-                    project.sEOContent = e;
+                    project.forRentSEOContent = e;
+                  }
+                })"
+              />
+            </client-only>
+            <button class="text-white px-3 py-1 bg-green-400 rounded relative float-right mt-3.5" @click="updateProjectInformation">
+              Cập nhật
+            </button>
+          </div>
+        </expand-panel>
+        <expand-panel title="Nội dung SEO bán">
+          <div>
+            <client-only>
+              <editor
+                :content="project.forSellSEOContent"
+                class="h-auto mb-11"
+                @text-change="((e) => {
+                  if (e != project.forSellSEOContent) {
+                    flags.information = true;
+                    project.forSellSEOContent = e;
                   }
                 })"
               />
@@ -676,7 +695,8 @@ const getProject = gql`query GetProjectToEdit($condition: ProjectCollectionFilte
                     googleMapLocation
                   }
                   images
-                  sEOContent
+                  forSellSEOContent
+                  forRentSEOContent
                   pageInfors{
                     title
                     slug
@@ -763,7 +783,8 @@ export default {
         utilities: false,
         image: false,
         pageInfor: false,
-        seoContent: false,
+        forSellSEOContent: false,
+        forRentSEOContent: false,
         projectPost: false
       },
       pageInforsSlug: [],
@@ -878,7 +899,8 @@ export default {
           investorId: this.project.investorId,
           juridical: this.project.juridical,
           description: this.project.description,
-          sEOContent: this.project.sEOContent,
+          forSellSEOContent: this.project.forSellSEOContent,
+          forRentSEOContent: this.project.forRentSEOContent,
           masterPlan: this.project.masterPlan
         }
       });

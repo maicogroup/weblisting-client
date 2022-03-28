@@ -266,7 +266,7 @@
               border border-gray
             "
             src="~/static/images/maico-contact-infor.png"
-            alt="maico"
+            alt="avatar"
           />
           <p class="mt-1 text-sm text-green-600 font-bold leading-4">MAICO</p>
           <a

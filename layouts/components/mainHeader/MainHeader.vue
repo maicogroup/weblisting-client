@@ -16,7 +16,7 @@
     "
   >
     <NuxtLink to="/">
-      <img onclick="void(0)" id="logo" class="h-12" src="~/assets/maico.png">
+      <img onclick="void(0)" alt="Maicogroup" id="logo" class="h-12" src="~/assets/maico.png">
     </NuxtLink>
    
     <div class="hidden md:flex flex justify-between items-center space-x-10">

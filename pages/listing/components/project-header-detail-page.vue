@@ -2,7 +2,7 @@
   <div v-if="project != null" class="w-full border border-[#C4C4C4] rounded-[5px]">
     <div class="w-full md:min-h-[158px] md:max-h-[158px] min-h-[387px] block md:flex overflow-hidden">
       <div class="md:min-w-[223px] md:max-w-[223px] w-full">
-        <img class="w-full md:min-h-[158px] md:max-h-[158px] h-[186px] object-cover" :src="project.images[0]">
+        <img class="w-full md:min-h-[158px] md:max-h-[158px] h-[186px] object-cover" :alt="`Căn hộ chung cư ${project.projectName}`" :src="project.images[0]">
       </div>
       <div class="w-full md:px-10 md:py-2">
       <div class="flex">

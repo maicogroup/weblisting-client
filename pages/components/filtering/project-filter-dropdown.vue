@@ -92,6 +92,7 @@ export default {
             id
             pageInfors {
               slug
+              title
             }
           }
         }
@@ -99,7 +100,8 @@ export default {
   },
 
   props: {
-    selectedOption: { type: Object, default: null }
+    selectedOption: { type: Object, default: null },
+    demand: {type: String, default: null}
   },
 
   data () {
@@ -107,7 +109,8 @@ export default {
       open: false,
       entered: false,
       displaySelected: 'Tất cả',
-      searchInput: ''
+      searchInput: '',
+      count: 0
     };
   },
 
@@ -115,6 +118,9 @@ export default {
     filteredProjects () {
       const query = this.searchInput.trim().toLowerCase();
       return this.projects.filter(p => p.projectName.toLowerCase().includes(query));
+    },
+    project(){
+      return this.projects.filter(p => p.projectName.toLowerCase().includes(this.selectedOption.projectName.toLowerCase()))[0];
     }
   },
 
@@ -130,7 +136,6 @@ export default {
         document.removeEventListener('click', this.closeIfOutsideOfDropdown);
       }
     },
-
     selectedOption: {
       handler (option) {
         if (option) {
@@ -140,6 +145,9 @@ export default {
         }
       },
       immediate: true
+    },
+    demand: function(val){
+      this.handleSelectProject(this.project);
     }
   },
 
@@ -150,10 +158,11 @@ export default {
 
     handleSelectProject (project) {
       this.open = false;
+      console.log(project.pageInfors);
       this.$emit('optionchanged', {
         projectName: project.projectName,
         id: project.id,
-        pageInfor: project.pageInfors[0]
+        pageInfor: project.pageInfors.filter(c => c.title.toLowerCase().includes(this.demand.toLowerCase()))[0]
       });
     },
 
@@ -161,7 +170,7 @@ export default {
       this.open = false;
       this.$emit('optionchanged', null);
     }
-  }
+  },
 };
 </script>
 

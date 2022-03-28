@@ -166,7 +166,7 @@
             <img
               class="w-full h-[200px] object-cover rounded-t-[4px] md:rounded-l-lg md:rounded-tr-none "
               :src="post.srcimage"
-              alt="Bonnie image"
+              :alt="post.pageInfor.title"
             />
              <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS -->
              <!-- <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div>  -->
@@ -183,12 +183,12 @@
                 :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
                 class="hidden md:block mt-3 color-black font-bold"
               >
-                {{ post.pageInfor.title }}
+                <h3>{{ post.pageInfor.title }}</h3>
               </NuxtLink>
 
-              <span class="text-neutral-400 mb-2 md:mb-0 md:mt-3 text-sm absolute md:relative bottom-0 max-w-[70%] md:max-w-[100vw] truncate">{{
+              <h4 class="text-neutral-400 mb-2 md:mb-0 md:mt-3 text-sm absolute md:relative bottom-0 max-w-[70%] md:max-w-[100vw] truncate">{{
                 post.address
-              }}</span>
+              }}</h4>
 
               <NuxtLink
                 :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"

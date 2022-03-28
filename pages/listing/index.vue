@@ -32,7 +32,7 @@
       <div class="flex justify-between grow">
         <type-filter-dropdown :selected-option="inputFilter.type" @optionchanged="handleTypeFilterChanged" />
         <location-ftiler-dropdown :selected-option="inputFilter.location" @optionchanged="handleLocationFilterChanged" />
-        <project-filter-dropdown :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged" />
+        <project-filter-dropdown :selected-option="inputFilter.project" :demand="inputFilter.demand" @optionchanged="handleProjectFilterChanged" />
         <price-filter-dropdown :selected-option="inputFilter.priceRange" :demand="inputFilter.demand" @optionchanged="handlePriceFilterChanged" />
         <acreage-filter-dropdown :selected-option="inputFilter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
         <direction-filter-dropdown :selected-option="inputFilter.directions" @optionchanged="handleDirectionFilterChanged" />
@@ -187,10 +187,10 @@
     </div>
     <Divider v-if="showIfPostsOfOneProject" class="border-stone-400 mt-7 mb-8 sm:mb-12" />
     <ProjectHeader v-if="showIfPostsOfOneProject" class="mb-5" :project="project" />
-    <div v-if="project && showIfPostsOfOneProject && project.sEOContent" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
+    <div v-if="project && showIfPostsOfOneProject && project.forSellSEOContent" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
       <div
         :class="`overflow-hidden text-ellipsis mt-5 mx-2   ${sEOContentClasses}` "
-        v-html="project.sEOContent"
+        v-html="project.forSellSEOContent"
       />
       <p class="text-center font-bold read-more my-4" @click="setSEOContentActiveState()">
         {{ readMoreContent }}
@@ -420,6 +420,7 @@ export default {
     },
 
     sEOContentClasses () {
+      
       return this.readMoreButtonIsActive ? 'h-fit opacity-100 ql-editor' : 'h-60 opacity-60';
     }
   },
@@ -434,7 +435,7 @@ export default {
       this.filter = { ...this.createFilterFromUrl(), ...this.filter };
       this.inputFilter = { ...this.filter };
     }
-
+    //this.filter.demand = this.$route.params.slug.includes("ban") ? "Bán" : "Cho Thuê";
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
@@ -469,7 +470,8 @@ export default {
                     googleMapLocation
                   }
                   images
-                  sEOContent
+                  forRentSEOContent
+                  forSellSEOContent
                   pageInfors{
                     title
                     slug

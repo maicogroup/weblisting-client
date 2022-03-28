@@ -108,7 +108,7 @@
               justify-self-end
               mt-3
             "
-            @click="CreateNewReview"
+            @click="createNewReview"
           >
             Đăng bài
           </button>
@@ -145,14 +145,13 @@
 </template>
 
 <script>
-import ReviewComment from './components/review-comment.vue';
+import gql from 'graphql-tag';
 import ReviewPost from './components/review-post.vue';
 import Divider from '~/components/Divider.vue';
-import Gallery from '~/components/gallery.vue';
 
 export default {
   name: 'ProjectReview',
-  components: { Divider, Gallery, ReviewComment, ReviewPost },
+  components: { Divider, ReviewPost },
   data () {
     return {
       currentPage: 1,
@@ -198,7 +197,7 @@ export default {
   },
 
   methods: {
-    sendImagesToSever () {
+    sendImagesToSever (id) {
       AWS.config.update({
         accessKeyId: '8EL21GNHMRNZYW8488OV',
         secretAccessKey: 'xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD',
@@ -209,38 +208,75 @@ export default {
         }
       });
       const s3 = new AWS.S3();
-          const uploadParams = {
-            Bucket: 'weblisting',
-            Key: 'review/' + '812374628sdfsdf3' + '/' + this.tempFile[0].name,
-            Body: this.tempFile[0],
-            ACL: 'public-read',
-            ContentType: this.tempFile[0].type
-          };
+      const uploadParams = {
+        Bucket: 'weblisting',
+        Key: 'review/' + id.toString() + '/' + this.tempFile[0].name,
+        Body: this.tempFile[0],
+        ACL: 'public-read',
+        ContentType: this.tempFile[0].type
+      };
 
-          const uploadOptions = {
-            partSize: 10 * 1024 * 1024,
-            queueSize: 1
-          };
+      const uploadOptions = {
+        partSize: 10 * 1024 * 1024,
+        queueSize: 1
+      };
 
-          const upload = s3.upload(uploadParams, uploadOptions);
+      const upload = s3.upload(uploadParams, uploadOptions);
 
-          upload.send((err, data) => {
-            if (err) {
-              console.error('Upload lỗi:', err);
-            } else if (data) {
-              console.log('Upload thành công:', data);
-            }
-          });
+      upload.send((err, data) => {
+        if (err) {
+          console.error('Upload lỗi:', err);
+        } else if (data) {
+          console.log('Upload thành công:', data);
+        }
+      });
 
-          upload.on('httpUploadProgress', function (evt) {
-            const progress = parseInt((evt.loaded * 100) / evt.total);
-            console.log(progress + '%');
-          });
+      upload.on('httpUploadProgress', function (evt) {
+        const progress = parseInt((evt.loaded * 100) / evt.total);
+        console.log(progress + '%');
+      });
     },
-    CreateNewReview () {
+    sendMutationCreateReview (createReviewInput) {
+      this.$apollo.mutate({
+        mutation: gql`mutation AddNewReviewfff{
+  createReview(input: {
+    authorId: "623f0440bf28618e8d3eb0d8"
+    content: "hom nay troi dep qu uoc gi Hong se nhan tin cho minhssdf"
+    projectId: "61c966dd6e47abd592a5c156"
+    galleries:
+    {
+      contentType: "img/jpg"
+      path: "https://topaz.vn/wp-content/uploads/2021/01/top-9-tiem-lam-nail-dep-uy-tin-gia-tot-tai-ha-noi-1.jpg"
+    }
+    liked: [
+      "623f0408bf28618e8d3eb0d7"
+    ]
+  })
+  {
+    string
+  }
+}`
+      });
+    },
+
+    createNewReview () {
       if (this.tempSrc) {
         const id = generateNewId();
-        this.sendImagesToSever();
+        this.sendImagesToSever(id);
+        const createReviewInput = {
+          authorId: '623f0440bf28618e8d3eb0d8',
+          content: 'hom nay troi dep qu uoc gi Hong se nhan tin cho minh',
+          projectId: '61c966dd6e47abd592a5c156',
+          galleries:
+          {
+            contentType: this.tempFile[0].type,
+            path: this.tempFile[0].name
+          },
+          liked: [
+            '623f0408bf28618e8d3eb0d7'
+          ]
+        };
+        this.sendMutationCreateReview(createReviewInput);
       }
 
       function generateNewId () {

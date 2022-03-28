@@ -76,7 +76,7 @@
         <DropdownItem>Page MaicoGroup</DropdownItem>
       </Dropdown>
 
-      <div v-if="!guestUser" class="text-sm flex items-center">
+      <div v-if="!guestUser" class="flex items-center">
         <button @click="openAuthenModal(false)">
           Đăng nhập
         </button>
@@ -87,10 +87,12 @@
           Đăng ký
         </button>
       </div>
-      <div v-else class="text-sm flex items-center">
+      <div v-else class="flex items-center">
         <nuxt-link class="flex space-x-2 items-center" to="#">
           <guest-user-avatar :name="guestUser.name" />
-          <p>{{ guestUser.name }}</p>
+          <p class="text-sm">
+            {{ guestUser.name }}
+          </p>
         </nuxt-link>
 
         <Divider class="ml-6 h-5" :vertical="true" />
@@ -100,7 +102,7 @@
         </button>
       </div>
 
-      <button class="text-sm ml-10 border rounded-md py-2 px-8 hover:text-white hover:bg-gray-700">
+      <button class="ml-10 border rounded-md py-2 px-8 hover:text-white hover:bg-gray-700">
         Ký gửi
       </button>
     </div>
@@ -174,7 +176,6 @@ export default {
 
   created () {
     this.guestUser = this.$cookies.get('GuestUser') ?? null;
-    console.log(this.guestUser);
   },
 
   mounted () {

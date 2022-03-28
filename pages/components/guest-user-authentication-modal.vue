@@ -47,6 +47,7 @@ export default {
           maxAge: 60 * 60 * 24 * 365
         });
 
+      this.alreadyHasAccount = !this.signUp;
       this.$emit('close');
       this.$emit('success');
     },

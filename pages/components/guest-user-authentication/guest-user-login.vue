@@ -48,6 +48,9 @@ export default {
             id
           },
       }`,
+
+      fetchPolicy: 'no-cache',
+
       update (data) {
         this.showError = true;
 

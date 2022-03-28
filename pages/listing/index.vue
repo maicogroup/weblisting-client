@@ -469,7 +469,8 @@ export default {
                     googleMapLocation
                   }
                   images
-                  sEOContent
+                  forSellSEOContent
+                  forRentSEOContent
                   pageInfors{
                     title
                     slug

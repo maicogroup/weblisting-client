@@ -36,3 +36,19 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+h1 {
+  font-weight: 700;
+  font-size: 41px;
+  line-height: 51px;
+}
+h2 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+}
+img {
+  margin: auto;
+}
+</style>

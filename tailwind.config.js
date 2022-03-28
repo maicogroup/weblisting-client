@@ -1,7 +1,7 @@
-const colors = require('tailwindcss/colors')
+const colors = require("tailwindcss/colors");
 // ...
-module.export ={
-    darkMode: false,
+module.export = {
+  darkMode: false,
 };
 module.exports = {
   theme: {
@@ -10,9 +10,9 @@ module.exports = {
         green: colors.emerald,
         yellow: colors.amber,
         purple: colors.violet,
-        gray: colors.neutral
-      }
+        gray: colors.neutral,
+      },
     },
   },
   // ...
-}
+};

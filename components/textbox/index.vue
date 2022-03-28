@@ -6,9 +6,10 @@
       :type="type"
       :value="value"
       :pattern="pattern"
+      :name="name"
       @input="$emit('input', $event.target.value)"
     />
-    <p v-if="error">{{ errorMessage }}</p>
+    <p class="errorMessage" v-if="error">{{ errorMessage }}</p>
   </div>
 </template>
 
@@ -26,3 +27,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+input:invalid .errorMessage {
+  display: inline-block;
+}
+.errorMessage {
+  color: red;
+  margin-top: 0.5rem;
+}
+</style>

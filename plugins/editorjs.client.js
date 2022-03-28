@@ -1,6 +1,8 @@
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import ImageTool from "@editorjs/image";
+import List from "@editorjs/list";
+import Hyperlink from "editorjs-hyperlink";
 
 export default (_, inject) => {
   const defaultOptions = {
@@ -22,6 +24,24 @@ export default (_, inject) => {
        */
       tools: {
         header: Header,
+        list: {
+          class: List,
+          inlineToolbar: true,
+          config: {
+            defaultStyle: "unordered",
+          },
+        },
+        hyperlink: {
+          class: Hyperlink,
+          config: {
+            shortcut: "CMD+L",
+            target: "_blank",
+            rel: "nofollow",
+            availableTargets: ["_blank", "_self"],
+            availableRels: ["author", "noreferrer"],
+            validate: false,
+          },
+        },
         image: {
           class: ImageTool,
           config: {
@@ -36,6 +56,7 @@ export default (_, inject) => {
                   success: 1,
                   file: {
                     url: URL.createObjectURL(file),
+                    file,
                     // any other image data you want to store, such as width, height, color, extension, etc
                   },
                 };
@@ -51,6 +72,18 @@ export default (_, inject) => {
       onChange(data) {
         // pass in function from component to run on change
         options.onChange(data);
+      },
+      i18n: {
+        toolNames: {
+          Hyperlink: "Link",
+        },
+        tools: {
+          hyperlink: {
+            Save: "Salvar",
+            "Select target": "Seleziona destinazione",
+            "Select rel": "Wählen rel",
+          },
+        },
       },
     });
   };

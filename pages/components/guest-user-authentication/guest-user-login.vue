@@ -15,7 +15,7 @@
 
     <label class="block">
       <p class="font-semibold">Số điện thoại:</p>
-      <input v-model="phoneNumber" class="w-full px-2 py-1 text-sm border rounded-md outline-none" @blur="findNameOfPhoneNumber">
+      <input v-model="phoneNumber" :maxlength="PHONE_NUMBER_LIMIT" class="w-full px-2 py-1 text-sm border rounded-md outline-none" @blur="findNameOfPhoneNumber">
       <p v-if="showError" class="text-red-600 text-xs">
         {{ errorMsg }}
       </p>
@@ -26,7 +26,7 @@
       <input :disabled="true" :placeholder="$apollo.queries.user.loading ? 'Đang tìm...' : ''" :value="loginName" class="bg-gray-100 w-full px-2 py-1 text-sm text-green-600 text-opacity-70 border rounded-md outline-none">
     </label>
 
-    <button class="w-full mt-6 p-2 rounded-md text-slate-50 bg-green-500 hover:bg-green-600" @click="signIn">
+    <button :aria-disabled="!user" :class="`w-full mt-6 p-2 rounded-md text-slate-50 ${loginButtonClasses}`" @click="signIn">
       Đăng nhập
     </button>
 
@@ -49,6 +49,8 @@ export default {
           },
       }`,
       update (data) {
+        this.showError = true;
+
         if (data.user) {
           this.loginName = data.user.name;
         } else {
@@ -65,11 +67,17 @@ export default {
     return {
       loginName: '',
       phoneNumber: '',
-      showError: false
+      showError: false,
+
+      PHONE_NUMBER_LIMIT: 10
     };
   },
 
   computed: {
+    loginButtonClasses () {
+      return this.user ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-500 cursor-not-allowed';
+    },
+
     errorMsg () {
       return this.user ? '' : '*Tài khoản không tồn tại, hãy kiểm tra lại số điện thoại';
     }
@@ -77,8 +85,6 @@ export default {
 
   methods: {
     findNameOfPhoneNumber () {
-      this.showError = true;
-
       this.$apollo.queries.user.setVariables({
         phoneNumber: this.phoneNumber
       });

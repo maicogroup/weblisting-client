@@ -1,7 +1,7 @@
 <template>
-  <div v-if="open" class="fixed inset-0 h-full w-full z-30 bg-black bg-opacity-60" @click.self="closeModal">
-    <guest-user-login v-if="alreadyHasAccount" @signup="moveToSignUpForm" @success="setCookiesAndCloseModal" @cancel="closeModal" />
-    <guest-user-signup v-else @login="moveToLoginForm" @success="setCookiesAndCloseModal" @cancel="closeModal" />
+  <div v-if="open" class="fixed inset-0 h-full w-full z-30 bg-black bg-opacity-60" @click.self="cancelModal">
+    <guest-user-login v-if="alreadyHasAccount" @signup="moveToSignUpForm" @success="setCookiesAndCloseModal" @cancel="cancelModal" />
+    <guest-user-signup v-else @login="moveToLoginForm" @success="setCookiesAndCloseModal" @cancel="cancelModal" />
   </div>
 </template>
 
@@ -14,13 +14,22 @@ export default {
   props: {
     open: {
       type: Boolean, required: true, default: false
+    },
+    signUp: {
+      type: Boolean, default: false
     }
   },
 
   data () {
     return {
-      alreadyHasAccount: true
+      alreadyHasAccount: !this.signUp
     };
+  },
+
+  watch: {
+    signUp (newVal) {
+      this.alreadyHasAccount = !newVal;
+    }
   },
 
   methods: {
@@ -38,12 +47,14 @@ export default {
           maxAge: 60 * 60 * 24 * 365
         });
 
-      this.closeModal();
+      this.$emit('close');
+      this.$emit('success');
     },
 
-    closeModal () {
-      this.alreadyHasAccount = true;
+    cancelModal () {
+      this.alreadyHasAccount = !this.signUp;
       this.$emit('close');
+      this.$emit('cancel');
     }
   }
 };

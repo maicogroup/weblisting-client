@@ -43,7 +43,7 @@
         @click="showFullContent = !showFullContent"
         >Rút gọn</span
       >
-      <div @click="handleGallery">
+      <div>
         <div class="hidden md:grid grid-cols-4 gap-1 mt-2">
           <template v-if="review.imageSources.length <= 4">
             <img
@@ -71,7 +71,7 @@
                 class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
               />
               <button
-                @click="handleGallery(2)"
+                @click="handleGallery(3)"
                 class="
                   absolute
                   top-0
@@ -116,7 +116,7 @@
                 class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
               />
               <button
-                @click="handleGallery(1)"
+                @click="handleGallery(2)"
                 class="
                   absolute
                   top-0
@@ -135,7 +135,7 @@
         </div>
       </div>
 
-      <gallery class="hidden" :items="review.imageSources" ref="childref" />
+      <gallery class="hidden" :items="review.imageSources" ref="galleryref" />
       <div class="grid grid-cols-2 border-y my-3 text-sm">
         <button class="py-1.5 px-3 items-center hover:bg-gray-100 border-r">
           <svg
@@ -227,7 +227,7 @@
         </div>
       </div>
       <div
-        v-if="showAllComment == false"
+        v-if="showAllComment == false && review.comments.length>3"
         @click="showAllComment = true"
         class="
           bg-stone-200
@@ -290,8 +290,8 @@ export default {
       }, 0);
     },
     handleGallery(index) {
-      if (this.$refs.childref[index])
-        this.$refs.childref[index].openGallery(index);
+      if (this.$refs.galleryref)
+        this.$refs.galleryref.openGallery(index);
     },
     formatReviewDateCreated(dateCreated) {
       const day = dateCreated.getDate();

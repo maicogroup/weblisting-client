@@ -1,13 +1,21 @@
 <template>
-  <div class="w-full max-w-screen-lg lg:px-4">
+  <div class="w-full max-w-4xl md:px-4">
     <div
       v-if="showCreatePostForm"
-      class="fixed top-0 left-0 h-full w-full z-10 bg-black bg-opacity-60"
+      class="fixed top-0 left-0 h-full w-full z-30 bg-black bg-opacity-60"
     >
       <div
-        class="relative top-[14%] left-[30%] w-2/5 bg-white rounded-md border"
+        class="
+          relative
+          left-0
+          lg:left-[30%] lg:w-2/5
+          w-full
+          h-full
+          md:h-auto md:w-2/3 md:top-[10%] md:left-[16%] md:rounded-md md:border
+          bg-white
+        "
       >
-        <div class="p-3 flex flex-row">
+        <div class="px-3 py-5 flex flex-row max-h-screen">
           <div class="grow text-center text-xl font-bold">Tạo bài đánh giá</div>
           <svg
             @click="showCreatePostForm = false"
@@ -23,29 +31,41 @@
             />
           </svg>
         </div>
-        <divider />
+        <divider class="border-[#858585]" />
 
-        <div class="px-8 py-3 grid overflow-scroll max-h-[520px]">
-          <div class="flex items-center mb-5">
-            <img class="w-11 h-11 rounded-full cursor-pointer bg-gray-400" />
-            <div class="ml-2">
-              <a href="#" class="text-sm font-bold"> Chí Linh </a>
-              <div class="text-sm font-bold text-[#0F9AFF]">Saigon GateWay</div>
+        <div class="px-3 lg:px-8 py-3 grid overflow-scroll max-h-[90%] md:max-h-[520px]">
+          <div class="flex items-center mb-3 md:mb-5">
+            <img
+              class="
+                w-10
+                h-10
+                lg:w-11 lg:h-11
+                rounded-full
+                cursor-pointer
+                bg-gray-400
+              "
+            />
+            <div class="ml-2 text-sm">
+              <a href="#" class="font-bold"> Chí Linh </a>
+              <div class="font-bold text-[#0F9AFF]">Saigon GateWay</div>
             </div>
           </div>
-          <quill-editor :options="editorOption" class="" />
-          <div class="border-x border-b border-[#C4C4C4] p-3">
+          <quill-editor :options="editorOption" class="rounded" />
+          <div class="border-x border-b border-[#C4C4C4] p-3 rounded-b-[5px] grid-wrap-image">
             <button
               class="
                 h-20
                 w-20
-                border border-[#C4C4C4]
+                inline
+                hover:bg-gray-100
+                border border-[#C4C4C4] border-dashed
                 bg-white
                 grid
                 justify-center
                 content-center
-                text-[10px]
+                text-[10px] text-neutral-400
               "
+              @click="uploadNewImage"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -59,15 +79,24 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              <div>Thêm ảnh</div>
+              <div class="w-14 leading-3 mt-1">Thêm ảnh hoặc video</div>
             </button>
+            <img
+              v-for="item in tempSrc"
+              :key="item"
+              :src="item"
+              alt="they might be my crew"
+              class="h-20 w-20 object-cover"
+            />
           </div>
           <button
             class="
               bg-green-600
               text-sm text-slate-50
-              h-12
-              px-12
+              h-8
+              md:h-12
+              w-full
+              md:w-1/3
               rounded-md
               font-bold
               justify-self-end
@@ -79,30 +108,25 @@
         </div>
       </div>
     </div>
-    <div class="flex items-start p-2 lg:p-0">
+    <div class="flex items-start p-2 md:p-0 mb-3 md:mb-7">
       <img :src="user.avatarSource" class="w-10 h-10 rounded-full" />
-      <div class="grow ml-3">
-        <!-- todo: style placeholder -->
-        <textarea
-          style="overflow: auto"
-          placeholder="Viết bài review"
-          @click="showCreatePostForm = true"
-          class="
-            flex
-            content-center
-            resize-none
-            no-scrollbar
-            w-full
-            px-2
-            py-1
-            text-gray-800
-            border
-            rounded-md
-            focus:outline-none
-            h-11
-            cursor-pointer
-          "
-        />
+      <div
+        @click="showCreatePostForm = true"
+        class="
+          grow
+          ml-3
+          text-sm text-[#C4C4C4]
+          border
+          rounded-[5px]
+          h-11
+          cursor-pointer
+          hover:bg-gray-100
+          px-4
+          py-1
+          flex
+        "
+      >
+        <div class="self-center">Viết bài review</div>
       </div>
     </div>
     <div v-for="review in reviews" :key="review">
@@ -127,6 +151,7 @@ export default {
         avatarSource: "https://pbgdpl.daklak.gov.vn/uploads/avatar.png",
       },
       showCreatePostForm: false,
+      tempSrc: [],
       editorOption: {
         theme: "snow", // 可換
         modules: {
@@ -150,7 +175,25 @@ export default {
     };
   },
 
-  methods: {},
+  methods: {
+    uploadNewImage() {
+      const fileInput = document.createElement("input");
+      fileInput.setAttribute("type", "file");
+      fileInput.setAttribute(
+        "accept",
+        "image/png, image/gif, image/jpeg, image/bmp, image/x-icon"
+      );
+      fileInput.click();
+      fileInput.addEventListener("change", () => {
+        if (fileInput.files != null && fileInput.files[0] != null) {
+          const [file] = fileInput.files;
+          if (file) {
+            this.tempSrc.push(URL.createObjectURL(file));
+          }
+        }
+      });
+    },
+  },
 };
 
 function createMockReview() {
@@ -195,6 +238,13 @@ function createMockReview() {
           "https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png",
         dateCreated: new Date(2069, 3, 19, 9, 4, 23),
         content: "Chào đồng môn!",
+      },
+      {
+        authorName: "Dr Strange",
+        authorAvatarSource:
+          "https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png",
+        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
+        content: "hôm bữa dẫn người iu đi ăn ở đây thấy vui và ngon",
       },
     ],
   };
@@ -252,5 +302,13 @@ function createMockReview2() {
 }
 .ql-container.ql-snow {
   height: auto;
+}
+.ql-toolbar {
+  border-radius: 5px 5px 0 0;
+}
+.grid-wrap-image{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, 80px);
+  gap: 16px;
 }
 </style>

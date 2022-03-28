@@ -9,20 +9,20 @@
       @search="handleFilterButtonPressed"
     />
     <div class="Page-content mt-10 ">
-      <div class="page-container">
-        <div class="relative banner items-center w-full  h-[239px] md:h-[366px] ">
+      <div class="page-container ">
+        <div class="relative banner items-center w-full  h-[239px] md:h-[366px] object-center">
           <img class="w-full h-full object-cover absolute" src="~/static/images/home/home-page-bg.jpg">
-          <div class="absolute  w-[343px] h-[80px] top-[75px] left-[10%] md:left-[30%] md:top-[40%]  md:center md:h-[150px] md:w-[643px]">
-            <h1 class="text-[32px] leading-[40px] md:text-[60px] md:h-[150px] md:leading-[75px] font-bold font-source-serif-pro text-slate-50"> Thông tin nhanh về thị trường bất động sản </h1>
+          <div class="relative  w-[343px] h-[80px] mx-auto top-[75px]  md:top-[40%]  md:center md:h-[150px] md:w-[643px] flex flex-col items-center md:justify-center">
+            <h1 class="text-[32px] leading-[40px] md:text-[60px] md:h-[150px] md:leading-[75px] font-bold font-source-serif-pro text-slate-50 text-center"> Thông tin nhanh về thị trường bất động sản </h1>
           </div>
         </div>
-        <div class=" left-[10%] blog-wrap md:ml-[13%]">
+        <div class=" blog-wrap md:ml-[7%] object-cover center relative flex flex-col items-center md:justify-center">
           <div class="trending-blog pt-5 pb-8 pl-[21px] pr-[23px] h-[940px] overflow-hidden">
             <div class="title font-bold text-[24px] font-source-serif-pro">
               Bài viết mới nhất
             </div>
-            <div class="blog-card mb-[15px] bg-white rounded-md md:w-[740px] w-[370px] drop-shadow-lg border-[2px]" v-for="t in ['Hai thanh niên réc sìn boi ở vạn phúc','Chuyện tình Khiêm và anh Leader','Hell Team Production','Minh Nhật on the Mic','Khiêm: kẻ thu thập đá quý']" :key="t">
-              <img src="~/static/images/home/home-page-bg.jpg" class=" h-[220px] w-[370px] rounded-md md:w-[180px] md:h-[153px] blog-card-image" />
+            <div class="blog-card mb-[15px] bg-white rounded-md md:w-[745px] w-[370px] border-[2px]" v-for="t in ['Hai thanh niên réc sìn boi ở vạn phúc','Chuyện tình Khiêm và anh Leader','Hell Team Production','Minh Nhật on the Mic','Khiêm: kẻ thu thập đá quý']" :key="t">
+              <img src="~/static/images/home/home-page-bg.jpg" class=" h-[220px] w-[370px] md:w-[180px] md:h-[153px] blog-card-image" />
               <div class="blog-card-content">
                 <div class="blog-title mr-[9px] ml-[10px] font-source-serif-pro font-bold text-[24px] md:w-[560px] md:h-[60px]">
                   {{t}}
@@ -44,7 +44,7 @@
               </div>
             </div>
           </div>
-          <div class="blog-pagination w-[310px] h-[39px] ml-[12%] mr-[28px] drop-shadow-md bottom-[100px] rounded-md flex md:ml-[30%]">
+          <div class="blog-pagination w-[310px] h-[39px] ml-[12%] mr-[28px] bottom-[100px] rounded-md flex md:ml-[30%] ">
             <div class="back-to-first flex justify-start border-[1px]  w-[37px] h-[39px] items-center ">
               <svg
                 width="5"
@@ -111,14 +111,14 @@
               </svg>
             </div>
           </div>
-          <div class="top-blog  pb-[5px]  pr-[23px] md:h-[580px] ml-[5px] h-[340px] overflow-hidden">
-            <div class=" title font-bold text-[24px] font-source-serif-pro">
+          <div class="top-blog md:absolute md:mt-[11%] pb-[5px]  pr-[23px] md:h-[580px] ml-[5px] h-[340px] overflow-hidden top-0">
+            <div class=" title font-bold text-[24px] ml-[16px] font-source-serif-pro">
               Bài viết nổi bật
             </div>
-            <div class="top-blog-content pl-[4.5%] pr-[23px]">
-              <div class="top-blog-card grid grid-cols-[112px_254px] w-[366px] gap-[15px] h-[95px]  drop-shadow-md mb-[10px] border-[1px] md:w-[380px]" v-for="(top,index) in ['Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật']" :key="top" v-show="index<5" style="grid-template-areas:'image content'">
-                <div class="top-blog-cover h-[75px] w-[103px] rounded-md mt-[10px] ml-[10px] mb-[10px]" style="grid-area:image">
-                  <img src="~/static/images/home/home-page-bg.jpg" class=" h-[75px] w-[103px] rounded-md" />
+            <div class="top-blog-content pl-[3%] pr-[23px]">
+              <div class="top-blog-card grid grid-cols-[112px_254px] w-[371px] gap-[15px] h-[95px]   mb-[10px] border-[1px] md:w-[400px]" v-for="(top,index) in ['Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật','Bỗng nhiên thành linh vật']" :key="top" v-show="index<5" style="grid-template-areas:'image content'">
+                <div class="top-blog-cover h-[75px] w-[103px] md:w[115px] md:h-[80px] rounded-md mt-[10px] ml-[10px] mb-[10px]" style="grid-area:image">
+                  <img src="~/static/images/home/home-page-bg.jpg" class=" h-[75px] w-[103px] md:w[115px] md:h-[80px]" />
                 </div>
                 <div class="top-blog-content w-[233px] h-[40px] mt-[10px] mb-[10px]" style="grid-area:content">
                   <div class="top-blog-title font-bold text-[16px] font-source-serif-pro">
@@ -239,7 +239,7 @@ export default {
   .blog-wrap
   {
     display: grid;
-    grid-template-columns: 780px 400px;
+    grid-template-columns: 780px 420px;
     grid-template-areas: "trend high";
   }
   .trending-blog

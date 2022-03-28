@@ -10,7 +10,7 @@ import ProductReview from '~/pages/product-preview/index';
 import ProjectOverview from '~/pages/project-overview/index';
 import SpecificProjectReview from '~/pages/product-preview/specific-project/index';
 import HomePage from '~/pages/home/index';
-import BlogPage from '~/Pages/blog-overview/index';
+import BlogPage from '~/Pages/blog/index';
 
 Vue.use(Router);
 
@@ -69,7 +69,7 @@ export function createRouter () {
         component: SpecificProjectReview
       },
       {
-        path: '/blog-overview',
+        path: '/blog',
         component: BlogPage
       }
     ]

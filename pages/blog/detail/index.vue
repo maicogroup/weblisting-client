@@ -35,7 +35,6 @@
             type="text"
             placeholder="Mời bạn để lại bình luận"
             v-model="newComment"
-            @onkeyup.enter="createComment"
           />
           <button
             id="createComment"
@@ -171,7 +170,7 @@ export default {
     this.content = JSON.parse(this.blog.content);
     if (this.blog.id != null) {
       console.log("haha");
-      this.$apollo.queries.commentsData.refetch({
+      this.$apollo.queries.commentsWithPagination.refetch({
         condition: {
           discussionId: {
             eq: this.blog.id,
@@ -205,7 +204,7 @@ export default {
         };
       },
     },
-    commentsData: {
+    commentsWithPagination: {
       query: getComment,
       variales() {
         return {
@@ -234,16 +233,18 @@ export default {
   },
   computed: {
     totalItem() {
-      if (this.commentsData == null) {
+      if (this.commentsWithPagination == null) {
         return 0;
       }
-      return this.commentsData.totalCount;
+      return this.commentsWithPagination.totalCount;
     },
     comments() {
-      if (this.commentsData == null) {
+      console.log("a");
+      if (this.commentsWithPagination == null) {
         return [];
       } else {
-        return this.commentsData.items.map((item) => {
+        console.log(this.commentsWithPagination.items);
+        return this.commentsWithPagination.items.map((item) => {
           return {
             id: item.id,
             commentParentId: item.commentParentId,
@@ -289,7 +290,6 @@ export default {
           },
           
           update: (store, {data: { createComment }}) => {
-            console.log(store);
             const query = { 
               query: getComment,
               variables: {
@@ -309,7 +309,7 @@ export default {
             const {commentsWithPagination} = store.readQuery(query);
           
             var comment = {
-              id: createComment.string,=  
+              id: createComment.string,
               discussionId: this.blog.id,
               content: cmt,
               type: "Blog",
@@ -327,7 +327,6 @@ export default {
             commentsWithPagination.totalCount += 1;
 
             store.writeQuery({...query, data: {commentsWithPagination: commentsWithPagination}})
-
           }
           
         });
@@ -337,7 +336,7 @@ export default {
           duration: 3000,
           position: "top-right",
         });
-        // this.$apollo.queries.commentsData.refetch({
+        // this.$apollo.queries.commentsWithPagination.refetch({
         //   condition: {
         //     discussionId: { 
         //       eq: this.blog.id
@@ -348,6 +347,8 @@ export default {
         //   }
         // })
         this.newComment = "";
+        console.log(this.totalItem);
+        console.log(this.comments);
       }
     },
     createReply(commentParentId) {
@@ -376,7 +377,7 @@ export default {
         });
         this.replyIsShow = false;
         this.newReply = "";
-        this.$apollo.queries.commentsData.refetch({
+        this.$apollo.queries.commentsWithPagination.refetch({
           condition: {
             discussionId: {
               eq: this.blog.id,

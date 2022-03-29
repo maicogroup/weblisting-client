@@ -6,7 +6,7 @@
       <img id="logo" onclick="void(0)" class="h-12" src="~/assets/maico.png">
     </NuxtLink>
 
-    <div class="hidden md:flex flex justify-between items-center space-x-10">
+    <div class="hidden md:flex justify-between items-center space-x-10">
       <a class="font-bold hidden xl:block" href="tel:0903324045">
         0903 324 045
       </a>

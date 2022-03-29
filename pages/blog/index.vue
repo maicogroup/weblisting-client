@@ -19,40 +19,40 @@
         <div class="flex space-x-6">
           <div class="min-w-0 md:max-w-[745px] max-w-[370px]">
             <div
-              v-for="t in ['Hai thanh niên réc sìn boi ở vạn phúc phúc phúc phúc phúc phúc','Chuyện tình Khiêm và anh Leader','Hell Team Production','Minh Nhật on the Mic','Khiêm: kẻ thu thập đá quý']"
-              :key="t"
+              v-for="blog in blogs"
+              :key="blog.id"
               class="flex flex-col md:flex-row mb-[15px] bg-white rounded-md border border-stone-200 overflow-hidden"
             >
               <img src="~/static/images/home/home-page-bg.jpg" class=" h-[220px] w-[370px] md:w-[180px] md:h-[160px] blog-card-image">
               <div class="py-2 pr-2 pl-3">
                 <div class="font-source-serif-pro font-bold text-xl leading-[30px]">
-                  {{ t }}
+                  {{ blog.title }}
                 </div>
                 <div class="text-sm text-neutral-400 flex justify-start">
                   <div>
-                    Chí Linh
+                    {{ blog.authorName }}
                   </div>
                   <div class="ml-2 mr-2">
                     ·
                   </div>
                   <div>
-                    03/24/2022
+                    {{ blog.createdAt }}
                   </div>
                 </div>
                 <div class="mt-1 line-clamp-3 text-sm">
-                  Theo thống kê của các nhà sinh vật học, gần 90% dân công nghệ ở đây toàn mấy đứa lầy với dơ. Tuy nhiên, các nhà khoa học vẫn không hiểu tại sao tụi nó có thể tồn tại lâu và lây lan một cách nhanh chóng và mất kiểm soát...
+                  {{ blog.description }}
                 </div>
               </div>
             </div>
             <pagination
-              :total="20"
-              :per-page="10"
-              :current-page="1"
+              :total="blogPagination.totalCount"
+              :per-page="15"
+              :current-page="currentPage"
               @pagechanged="handlePageChanged"
             />
-            <featured-posts class="mt-7 lg:hidden" />
+            <featured-blogs :blogs="FeaturedBlogs" class="mt-7 lg:hidden" />
           </div>
-          <featured-posts class="hidden lg:block" />
+          <featured-blogs :blogs="FeaturedBlogs" class="hidden lg:block" />
         </div>
       </div>
     </div>
@@ -60,17 +60,79 @@
 </template>
 
 <script>
-import FeaturedPosts from './components/featured-posts.vue';
+import gql from 'graphql-tag';
+import FeaturedBlogs from './components/featured-blogs.vue';
 import Pagination from '~/components/pagination.vue';
 
 export default {
   name: 'HomePage',
-  components: { Pagination, FeaturedPosts },
+  components: { Pagination, FeaturedBlogs },
   layout: 'no-fixed-contact',
+
+  apollo: {
+    blogPagination: {
+      query: gql`query GetBlogs($skip: Int) {
+        blogsWithPagination(take: 15, skip: $skip, order: {createdAt: DESC}) {
+          totalCount
+          items {
+            id
+            author {
+              name
+            },
+            pageInfor {
+              title
+              slug
+              metaDescription
+            }
+            createdAt
+          }
+        }
+      }`,
+      update: data => data.blogsWithPagination,
+      variables () {
+        return {
+          skip: this.skip
+        };
+      }
+    },
+
+    FeaturedBlogs: {
+      query: gql`
+        query GetBlogs {
+          blogsWithPagination(take: 5) {
+            totalCount
+            items {
+              content
+              id
+              author {
+                name
+              },
+              pageInfor {
+                title
+                slug
+              }
+              createdAt
+            }
+          }
+        }`,
+      update (data) {
+        return data.blogsWithPagination.items.map(b => ({
+          id: b.id,
+          authorName: b.author.name,
+          title: b.pageInfor.title,
+          createdAt: this.formatDate(new Date(b.createdAt))
+        }));
+      }
+    }
+  },
+
   data () {
     return {
+      skip: 0,
+      currentPage: 1
     };
   },
+
   head () {
     return {
       title: 'MaicoGroup - Căn hộ xác thực',
@@ -80,9 +142,32 @@ export default {
       }]
     };
   },
-  methods: {
-    handlePageChanged () {
 
+  computed: {
+    blogs () {
+      return this.blogPagination.items.map((b) => {
+        const date = new Date(b.createdAt);
+        const createdAt = this.formatDate(date);
+
+        return {
+          id: b.id,
+          authorName: b.author.name,
+          title: b.pageInfor.title,
+          description: b.pageInfor.metaDescription,
+          createdAt
+        };
+      });
+    }
+  },
+
+  methods: {
+    formatDate (date) {
+      return `${date.getDay()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    },
+
+    handlePageChanged (index) {
+      this.skip = 15 * (index - 1);
+      this.currentPage = index;
     }
   }
 };

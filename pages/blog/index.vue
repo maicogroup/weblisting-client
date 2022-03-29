@@ -23,11 +23,13 @@
               :key="blog.id"
               class="flex flex-col md:flex-row mb-[15px] bg-white rounded-md border border-stone-200 overflow-hidden"
             >
-              <img src="~/static/images/home/home-page-bg.jpg" class=" h-[220px] w-[370px] md:w-[180px] md:h-[160px] blog-card-image">
+              <nuxt-link class="shrink-0" :to="blog.slug">
+                <img src="~/static/images/home/home-page-bg.jpg" class="h-[220px] w-[370px] md:w-[180px] md:h-[160px] blog-card-image">
+              </nuxt-link>
               <div class="py-2 pr-2 pl-3">
-                <div class="font-source-serif-pro font-bold text-xl leading-[30px]">
+                <nuxt-link :to="blog.slug" class="font-source-serif-pro font-bold text-xl leading-[30px]">
                   {{ blog.title }}
-                </div>
+                </nuxt-link>
                 <div class="text-sm text-neutral-400 flex justify-start">
                   <div>
                     {{ blog.authorName }}
@@ -52,7 +54,7 @@
             />
             <featured-blogs :blogs="FeaturedBlogs" class="mt-7 lg:hidden" />
           </div>
-          <featured-blogs :blogs="FeaturedBlogs" class="hidden lg:block" />
+          <featured-blogs :blogs="FeaturedBlogs" class="flex-shrink-[99] hidden lg:block" />
         </div>
       </div>
     </div>
@@ -120,7 +122,8 @@ export default {
           id: b.id,
           authorName: b.author.name,
           title: b.pageInfor.title,
-          createdAt: this.formatDate(new Date(b.createdAt))
+          createdAt: this.formatDate(new Date(b.createdAt)),
+          slug: b.pageInfor.slug
         }));
       }
     }
@@ -153,6 +156,7 @@ export default {
           id: b.id,
           authorName: b.author.name,
           title: b.pageInfor.title,
+          slug: b.pageInfor.slug,
           description: b.pageInfor.metaDescription,
           createdAt
         };

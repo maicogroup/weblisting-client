@@ -8,11 +8,13 @@
       :key="blog.id"
       class="mt-1 md:mt-0 flex space-x-2.5 rounded-md overflow-hidden mb-[10px] border-[1px] pr-2"
     >
-      <img src="~/static/images/home/home-page-bg.jpg" class="shrink-0 h-[75px] w-[103px] md:w[115px] md:h-[80px]">
+      <nuxt-link class="shrink-0" :to="blog.slug">
+        <img src="~/static/images/home/home-page-bg.jpg" class="h-[75px] w-[103px] md:w[115px] md:h-[80px]">
+      </nuxt-link>
       <div class="flex flex-col justify-evenly py-1.5">
-        <div class="line-clamp-2 leading-5 font-bold font-source-serif-pro">
+        <nuxt-link :to="blog.slug" class="line-clamp-2 leading-5 font-bold font-source-serif-pro">
           {{ blog.title }}
-        </div>
+        </nuxt-link>
         <div class="text-sm text-neutral-400">
           <span>
             {{ blog.authorName }}

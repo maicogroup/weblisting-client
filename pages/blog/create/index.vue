@@ -27,6 +27,7 @@
 import Editor from "~/components/editor/Editor.vue";
 import Textbox from "~/components/textbox/index.vue";
 import ButtonBasic from "~/components/button-basic/index.vue";
+import gql from "graphql-tag";
 
 export default {
   components: { Editor, Textbox, ButtonBasic },
@@ -45,6 +46,9 @@ export default {
         Status: "",
       },
     };
+  },
+  mounted() {
+    
   },
   methods: {
     onChange(data) {

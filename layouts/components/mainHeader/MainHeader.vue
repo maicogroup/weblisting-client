@@ -1,14 +1,27 @@
 <template>
   <div
-    class="fixed z-20 top-0 left-0 right-0 bg-white flex justify-between items-center px-5 py-3 border-b"
+    class="
+      fixed
+      z-20
+      top-0
+      left-0
+      right-0
+      bg-white
+      flex
+      justify-between
+      items-center
+      px-5
+      py-3
+      border-b
+    "
   >
     <NuxtLink to="/">
       <img id="logo" onclick="void(0)" class="h-12" src="~/assets/maico.png">
     </NuxtLink>
 
     <div class="hidden md:flex justify-between items-center space-x-10">
-      <a class="font-bold hidden xl:block" href="tel:0903324045">
-        0903 324 045
+      <a class="font-bold hidden xl:block" href="tel:0938140024">
+        0938 140 024
       </a>
 
       <Dropdown item-width="200px" title="Thuê">
@@ -54,12 +67,20 @@
       </Dropdown>
 
       <Dropdown class="hidden lg:inline" item-width="220px" title="Dự án">
-        <div class=" max-h-96 overflow-y-auto overflow-x-hidden">
+        <div class="max-h-96 overflow-y-auto overflow-x-hidden">
           <DropdownItem> Tất cả dự án </DropdownItem>
           <nuxt-link
             v-for="project in projects"
             :key="project.id"
-            class="block px-4 py-2 capitalize text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer"
+            class="
+              block
+              px-4
+              py-2
+              capitalize
+              text-gray-700
+              hover:bg-blue-500 hover:text-white
+              cursor-pointer
+            "
             :to="`/danh-sach-can-ho/${project.pageInfors[0].slug}`"
           >
             {{ project.projectName }}
@@ -124,16 +145,16 @@
     </button>
 
     <div
-      v-if="showSidebar"
-      class="fixed inset-0 h-full w-full z-10 bg-black opacity-20"
+      v-show="showSidebar != null"
+      :class="`fixed inset-0 h-full w-full z-10 bg-black opacity-20 ${(showSidebar)? 'visible' : 'hide-side-bar-parent'}`"
       @click="showSidebar = false"
     />
 
     <Sidebar
-      v-if="showSidebar"
+      v-show="showSidebar != null"
       :projects="projects"
-      class="z-20"
       :guest-user="guestUser"
+      :class="`z-20 ${(showSidebar)? 'show-side-bar' : 'hide-side-bar'}`"
       @open-authen="openAuthenModal"
       @log-out="logout"
     />
@@ -155,14 +176,14 @@ export default {
 
   apollo: {
     projects: gql`
-        query GetProjects {
-          projects {
-            projectName
-            pageInfors {
-              slug
-            }
+      query GetProjects {
+        projects {
+          projectName
+          pageInfors {
+            slug
           }
         }
+      }
     `
   },
   data () {
@@ -230,3 +251,38 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.show-side-bar{
+  animation: slide-in 0.25s ease;
+}
+
+.hide-side-bar-parent{
+  visibility: hidden;
+}
+
+.hide-side-bar{
+  animation: slide-out 0.25s ease;
+  width: 0;
+}
+
+@keyframes slide-in {
+  from{
+    width: 0;
+  }
+  to{
+    /*width: 0.25 * 64 ~~ w-64 in tailwind */
+    width: calc(0.25rem * 64);
+  }
+}
+
+@keyframes slide-out {
+  from{
+    /*width: 0.25 * 64 ~~ w-64 in tailwind */
+    width: calc(0.25rem * 64);
+  }
+  to{
+    width: 0;
+  }
+}
+</style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <MainHeader />
-    <div class="relative mt-20 md:mt-32 flex justify-center max-w-full">
+    <div class="relative mt-20 md:mt-32 flex justify-center max-w-full min-h-screen">
       <Nuxt />
     </div>
     <MainFooter />

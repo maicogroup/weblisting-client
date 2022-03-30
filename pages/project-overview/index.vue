@@ -16,7 +16,7 @@
       </p>
     </div>
     <div>
-      <gallery class="inline h-72 w-full" :items="gallery" />
+      <gallery class="inline h-72 w-full" :items="gallery" :alt="`Dự án ${project.projectName}`" />
     </div>
     <div class="sm:hidden block">
       <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
@@ -36,42 +36,42 @@
     <div class="mt-1 sm:mt-5 sm:mx-44">
       <div class="flex justify-between sm:justify-start sticky-table-of-content z-10 sm:pt-0 pt-3 color-stone-900">
         <button :class="isTargetingTableOfContents.isTargetingOverview ? activeTableContent : tableContentStyles" @click="ScrollToOverview()">
-          <h2 class="font-size-table-of-contents font-bold">
+          <p class="font-size-table-of-contents font-bold">
             Tổng quan
-          </h2>
+          </p>
           <p class="text-sm font-medium sm:block hidden">
             Tổng quan dự án
           </p>
         </button>
         <button :class="isTargetingTableOfContents.isTargetingGround ? activeTableContent : tableContentStyles" @click="ScrollToGround()">
-          <h2 class="font-size-table-of-contents font-bold ">
+          <p class="font-size-table-of-contents font-bold ">
             Mặt bằng
-          </h2>
+          </p>
           <p class="text-sm font-medium sm:block hidden">
             Tổng thể về dự án
           </p>
         </button>
         <button :class="isTargetingTableOfContents.isTargetingLocation ? activeTableContent : tableContentStyles" @click="ScrollToLocation()">
-          <h2 class="font-size-table-of-contents font-bold">
+          <p class="font-size-table-of-contents font-bold">
             Vị trí
-          </h2>
+          </p>
           <p class="text-sm font-medium sm:block hidden">
             Bản đồ dự án
           </p>
         </button>
         <button :class="isTargetingTableOfContents.isTargetingRentAndSell ? activeTableContent : tableContentStyles" @click="ScrollToSellAndRent()">
-          <h2 class="font-size-table-of-contents font-bold">
+          <p class="font-size-table-of-contents font-bold">
             Bán và cho thuê
-          </h2>
+          </p>
           <p class="text-sm font-medium sm:block hidden">
             Giá bán và cho thuê
           </p>
         </button>
       </div>
       <div ref="Overview" class="color-stone-900" style="scroll-margin-top: 135px" v-on:="ScrollToOverviewHandle()">
-        <h1 class="font-medium font-size-overview sm:my-6 my-2.5">
+        <h2 class="font-medium font-size-overview sm:my-6 my-2.5">
           Tổng quan
-        </h1>
+        </h2>
         <div class="grid sm:grid-cols-2 grid-cols-1 sm:gap-6 h-auto">
           <div class="block">
             <p class="re-properties-frame">
@@ -140,7 +140,7 @@
         <div class="flex sm:flex-row flex-col">
           <div class="flex justify-start">
             <div class="sm:w-full w-2/5">
-              <img class="sm:w-40 sm:h-40 w-24 h-24" :src="project.investor.image" alt="hinh anh chu dau tu">
+              <img class="sm:w-40 sm:h-40 w-24 h-24" :src="project.investor.image" :alt="`Chủ đầu tư ${project.investor.investorName}`">
             </div>
             <h3 class="text-lg font-bold sm:hidden block max-w-60">
               {{ project.investor.investorName }}
@@ -179,13 +179,13 @@
           </div>
         </div>
       </expand-panel>
-      <h1 ref="Ground" class="font-size-project-ground mt-12 sm:mt-6 mb-1.5 sm:mb-4" style="scroll-margin-top: 135px">
+      <h2 ref="Ground" class="font-size-project-ground mt-12 sm:mt-6 mb-1.5 sm:mb-4" style="scroll-margin-top: 135px">
         Mặt bằng dự án
-      </h1>
-      <img class="h-48 sm:h-96 w-full" :src="project.masterPlan" alt="cay xoai">
-      <h1 ref="Location" style="scroll-margin-top: 135px" class="font-medium text-2xl sm:text-3xl mt-6 mb-1.5 sm:mb-4">
+      </h2>
+      <img class="h-48 sm:h-96 w-full" :src="project.masterPlan" :alt="`Mặt bằng dự án ${project.projectName}`">
+      <h2 ref="Location" style="scroll-margin-top: 135px" class="font-medium text-2xl sm:text-3xl mt-6 mb-1.5 sm:mb-4">
         Vị trí dự án The Sun Avenue
-      </h1>
+      </h2>
       <iframe
         :src="project.address.googleMapLocation"
         style="border:0;"

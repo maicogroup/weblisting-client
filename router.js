@@ -35,7 +35,7 @@ export function createRouter () {
 
       },
       {
-        path: '/tong-quan-du-an/:slug',
+        path: '/du-an/:slug',
         component: ProjectOverview
 
       },
@@ -44,7 +44,7 @@ export function createRouter () {
         component: PostQueuePage
       },
       {
-        path: '/danh-sach-can-ho/:slug',
+        path: '*',
         component: PostList
       },
       {

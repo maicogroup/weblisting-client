@@ -16,7 +16,7 @@
     "
   >
     <NuxtLink to="/">
-      <img onclick="void(0)" id="logo" class="h-12" src="~/assets/maico.png">
+      <img onclick="void(0)" alt="Maicogroup" id="logo" class="h-12" src="~/assets/maico.png">
     </NuxtLink>
    
     <div class="hidden md:flex flex justify-between items-center space-x-10">
@@ -81,7 +81,7 @@
               hover:bg-blue-500 hover:text-white
               cursor-pointer
             "
-            :to="`/danh-sach-can-ho/${project.pageInfors[0].slug}`"
+            :to="`/du-an/${project.pageInfors[0].slug}`"
           >
             {{ project.projectName }}
           </nuxt-link>
@@ -155,16 +155,26 @@ export default {
   components: { Sidebar, DropdownItem },
 
   apollo: {
-    projects: gql`
-      query GetProjects {
-        projects {
-          projectName
-          pageInfors {
-            slug
+    projects: {
+      query () {
+        return gql`
+          query GetProjects {
+            projects {
+              projectName
+              pageInfors {
+                slug
+              }
+            }
           }
-        }
+        `;
+      },
+      update (data) {
+        data.projects.forEach(element => {
+          element.pageInfors = element.pageInfors.filter(c => !c.slug.includes('ban') && !c.slug.includes('cho-thue'));
+        });
+        return data.projects;
       }
-    `,
+    }
   },
   mounted() {
     if (process.client) {

@@ -131,17 +131,23 @@ export default {
   layout: 'no-fixed-contact',
   data () {
     return {
-      filter: {},
+      filter: {demand: "Cho Thuê"},
       filterMobileVisible: false
     };
   },
    head () {
     return{
       title: 'MaicoGroup - Căn hộ xác thực',
-       meta: [{
-        property: 'og:image',
-        content: "https://weblisting.hn.ss.bfcplatform.vn/og_image.jpg"
-      }]
+       meta: [
+        {
+          property: 'og:image',
+          content: "https://weblisting.hn.ss.bfcplatform.vn/og_image.jpg"
+        },
+        {
+          name: 'robots',
+          content: 'noindex'
+        }
+      ]
     };
   },
   methods: {
@@ -150,14 +156,14 @@ export default {
     },
 
     handleFilterButtonPressed () {
-      let path = '/danh-sach-can-ho';
+      let path = '';
       if (this.filter.project) {
         path = path + '/' + this.filter.project.pageInfor.slug;
       }
       const query = {};
-      if (this.filter.demand) {
-        query.demand = this.filter.demand;
-      }
+      // if (this.filter.demand) {
+      //   query.demand = this.filter.demand;
+      // }
       if (this.filter.type) {
         query.type = this.filter.type;
       }

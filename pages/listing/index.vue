@@ -253,7 +253,7 @@
 
         <acreage-filter-option :selected-option="inputFilter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
 
-        <project-filter-option :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged" />
+        <project-filter-option :selected-option="inputFilter.project" :demand="inputFilter.demand" @optionchanged="handleProjectFilterChanged" />
 
         <direction-filter-options :selected-option="inputFilter.directions" @optionchanged="handleDirectionFilterChanged" />
 
@@ -339,14 +339,14 @@ export default {
       isShowAcreage: false,
       isShowProject: false,
       isShowDirection: false,
-      isShowRoomOption: false
+      isShowRoomOption: false,
     };
   },
-
+  
   head () {
     let title;
-    if (this.$route.params.slug) {
-      title = this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title;
+    if (this.$route.params.pathMatch.replace('/','')) {
+      title = this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.pathMatch.replace('/',''))).title;
     } else {
       const type = this.filter.type ?? 'căn hộ';
       const demand = this.filter.demand;
@@ -385,7 +385,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
+          content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.pathMatch.replace('/',''))).metaDescription
         },
         {
           property: 'og:image',
@@ -397,7 +397,7 @@ export default {
 
   computed: {
     waitTillProjectIsDetermined () {
-      if (this.$route.params.slug) {
+      if (this.$route.params.pathMatch.replace('/','')) {
         return this.filter?.project?.id !== null;
       }
 
@@ -408,7 +408,7 @@ export default {
       return marked(this.tempSEOContent);
     },
     showIfPostsOfOneProject () {
-      return this.$route.params.slug !== undefined;
+      return this.$route.params.pathMatch.replace('/','') !== undefined;
     },
 
     sellButtonClasses () {
@@ -435,16 +435,18 @@ export default {
       this.filter = { ...this.createFilterFromUrl(), ...this.filter };
       this.inputFilter = { ...this.filter };
     }
-    this.filter.demand = this.$route.params.slug.includes("ban") ? "Bán" : "Cho Thuê";
+    if(this.$route.params.pathMatch.replace('/','')){
+      this.filter.demand = this.$route.params.pathMatch.replace('/','').includes("ban") ? "Bán" : "Cho Thuê";
+    }
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
-        if (param.slug !== prevParam.slug && param.slug !== null) {
-          this.$apollo.queries.project.refetch({ slug: param.slug });
+        if (param.pathMatch !== prevParam.pathMatch && param.pathMatch !== null) {
+          this.$apollo.queries.project.refetch({ slug: param.pathMatch.replace('/','') });
         }
 
         const newFilter = this.createFilterFromUrl();
-        if (param.slug === prevParam.slug && param.slug !== null) {
+        if (param.pathMatch === prevParam.pathMatch && param.pathMatch !== null) {
           // do thông tin project sẽ không bị load lại nên lấy thông tin project cũ
           newFilter.project = this.filter.project;
         }
@@ -470,7 +472,7 @@ export default {
                     googleMapLocation
                   }
                   images
-                  ${this.$route.params.slug.includes("ban") ?  "forSellSEOContent" : "forRentSEOContent"}
+                  ${this.$route.params.pathMatch.replace('/','').includes("ban") ?  "forSellSEOContent" : "forRentSEOContent"}
                   pageInfors{
                     title
                     slug
@@ -486,23 +488,23 @@ export default {
           return;
         }
 
-        const project = data.projects[0];
+         const project = data.projects[0];
         project.seoContent = project.forSellSEOContent ? project.forSellSEOContent : project.forRentSEOContent
 
-        this.filter = { ...this.filter, project: { pageInfor: { slug: this.$route.params.slug }, id: project.id, projectName: project.projectName } };
+        this.filter = { ...this.filter, project: { pageInfor: { slug: this.$route.params.pathMatch.replace('/','') }, id: project.id, projectName: project.projectName } };
         this.inputFilter = { ...this.filter };
 
         return project;
       },
 
       skip () {
-        // return this.filter === null || this.$route.params.slug === null;
-        return this.$route.params.slug === undefined;
+        // return this.filter === null || this.$route.params.pathMatch.replace('/','') === null;
+        return this.$route.params.pathMatch.replace('/','') === undefined;
       },
 
       variables () {
         return {
-          slug: this.$route.params.slug
+          slug: this.$route.params.pathMatch.replace('/','')
         };
       }
     }
@@ -599,7 +601,7 @@ export default {
       this.searchButtonPressed = true;
       this.filter = { ...this.inputFilter };
       this.filterResponsive = false;
-      let path = '/danh-sach-can-ho';
+      let path = '';
       if (this.filter.project) {
         path = path + '/' + this.filter.project.pageInfor.slug;
       }

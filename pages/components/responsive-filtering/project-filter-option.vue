@@ -66,6 +66,7 @@ export default {
               id
               pageInfors {
                 slug
+                title
               }
             }
           }
@@ -73,7 +74,8 @@ export default {
   },
 
   props: {
-    selectedOption: { type: Object, default: null }
+    selectedOption: { type: Object, default: null },
+    demand:{ type: String}
   },
 
   data () {
@@ -91,7 +93,10 @@ export default {
       return this.projects.filter(p => p.projectName.toLowerCase().includes(query));
     },
     project(){
-      return this.projects.filter(p => p.projectName.toLowerCase().includes(this.selectedOption.projectName.toLowerCase()))[0];
+      if(this.selectedOption)
+        return this.projects.filter(p => p.projectName.toLowerCase().includes(this.selectedOption.projectName.toLowerCase()))[0];
+      else
+        return null;
     }
   },
 
@@ -107,7 +112,8 @@ export default {
       immediate: true
     },
      demand: function(val){
-      this.handleSelectProject(this.project);
+      if(this.project)
+        this.handleSelectProject(this.project);
     }
   },
 

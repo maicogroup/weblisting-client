@@ -186,9 +186,9 @@
                 <h3>{{ post.pageInfor.title }}</h3>
               </NuxtLink>
 
-              <h4 class="text-neutral-400 mb-2 md:mb-0 md:mt-3 text-sm absolute md:relative bottom-0 max-w-[70%] md:max-w-[100vw] truncate">{{
+              <div class="text-neutral-400 mb-2 md:mb-0 md:mt-3 text-sm absolute md:relative bottom-0 max-w-[70%] md:max-w-[100vw] truncate">{{
                 post.address
-              }}</h4>
+              }}</div>
 
               <NuxtLink
                 :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"

@@ -703,6 +703,7 @@ const getProject = gql`query GetProjectToEdit($condition: ProjectCollectionFilte
                     metaDescription
                   }
                   price
+                  masterPlan
                   acreage
                   numberOfApartments
                   numberOfBuildings
@@ -752,7 +753,7 @@ export default {
       variables: {
         condition: {
           id: {
-            eq: '61c966dd6e47abd592a5c169'
+            eq: '61c966dd6e47abd592a5c160'
           }
         }
       },
@@ -1243,10 +1244,10 @@ export default {
         this.sendWarningNotification('Dữ liệu chưa có thay đổi!');
         return;
       }
-      if (this.pageInforsSlug.some(x => x == slug && this.pageInforIndex != this.pageInforsSlug.indexOf(slug)) == true) {
-        this.sendWarningNotification('Slug đã tồn tại!');
-        return;
-      }
+      // if (this.pageInforsSlug.some(x => x == slug && this.pageInforIndex != this.pageInforsSlug.indexOf(slug)) == true) {
+      //   this.sendWarningNotification('Slug đã tồn tại!');
+      //   return;
+      // }
       if (slug == '') {
         this.sendWarningNotification('Nội dung không được để trống!');
         return;

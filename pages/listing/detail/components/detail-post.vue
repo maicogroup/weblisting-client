@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="h-96 w-full">
-      <gallery :items="gallery" />
+      <gallery :items="gallery" :alt="post.pageInfor.title" />
     </div>
     <div class="mx-5 lg:mx-0">
       <h1 class="mt-6 font-bold text-2xl">
@@ -244,7 +244,6 @@
       <ProjectHeader2
         v-if="project"
         :project="project"
-        :projectUrl="post.project.pageInfors[0].slug"
       />
 
       <h3 class="font-bold text-lg leading-5 mt-8 mb-4">Xem trên bản đồ</h3>
@@ -362,7 +361,6 @@ export default {
               }
               description
               images
-              sEOContent
               pageInfors {
                 title
                 slug
@@ -381,15 +379,15 @@ export default {
 
         const project = data.projects[0];
 
-        this.filter = {
-          ...this.filter,
-          project: {
-            pageInfor: { slug: this.post.project.pageInfors[0].slug },
-            id: project.id,
-            projectName: project.projectName,
-          },
-        };
-        this.inputFilter = { ...this.filter };
+        // this.filter = {
+        //   ...this.filter,
+        //   project: {
+        //     pageInfor: { slug: this.post.project.pageInfors[0].slug },
+        //     id: project.id,
+        //     projectName: project.projectName,
+        //   },
+        // };
+        // this.inputFilter = { ...this.filter };
 
         return project;
       },

@@ -34,7 +34,9 @@ export default {
   plugins: [
     '~/plugins/lightGallery.client.js',
     '~/plugins/vue-js-modal.js',
-    '~/plugins/editor.client.js'
+    '~/plugins/editor.client.js',
+    '~/plugins/jsonld',
+    '~/plugins/gtag'
   ],
 
   loading: {
@@ -49,7 +51,6 @@ export default {
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
     '@nuxtjs/apollo',
-    '@nuxtjs/google-analytics'
   ],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: [
@@ -70,7 +71,8 @@ export default {
   modules: [
     '@nuxtjs/router',
     'cookie-universal-nuxt',
-    '@nuxtjs/toast'
+    '@nuxtjs/toast',
+    '@nuxtjs/sitemap'
   ],
   router: {
     middleware: ['cookies', 'userBehaviorTracking']
@@ -114,8 +116,49 @@ export default {
       }
     }
   },
-  googleAnalytics: {
-    // Options
-    id: 'G-ES9KCCENYC'
+  sitemap:{
+    hostname: 'https://maico.vn',
+    gzip: true,
+    exclude: [
+      '/**',
+    ],
+    routes: [
+      'cho-thue-can-ho-chung-cu-lavita-charm-thu-duc',
+      'ban-can-ho-chung-cu-lavita-charm-thu-duc',
+      '/du-an/chung-cu-lavita-charm',
+      'ban-can-ho-chung-cu-sunview-town-thu-duc',
+      'cho-thue-can-ho-chung-cu-sunview-town-thu-duc',
+      '/du-an/chung-cu-sunview-town',
+      'ban-can-ho-chung-cu-the-art-quan-9',
+      'cho-thue-can-ho-chung-cu-the-art-quan-9',
+      '/du-an/chung-cu-the-art-gia-hoa',
+      'ban-can-ho-chung-cu-him-lam-phu-an',
+      'cho-thue-can-ho-chung-cu-him-lam-phu-an-quan-9',
+      '/du-an/chung-cu-him-lam-phu-an',
+      'ban-can-ho-chung-cu-the-sun-avenue-quan-2',
+      'cho-thue-can-ho-the-sun-avenue-quan-2',
+      '/du-an/chung-cu-the-sun-avenue',
+      'ban-can-ho-chung-cu-sai-gon-gateway-quan-9',
+      'cho-thue-can-ho-chung-cu-sai-gon-gateway-quan-9',
+      '/du-an/chung-cu-sai-gon-gateway',
+      'cho-thue-can-ho-chung-cu-opal-boulevard',
+      '/du-an/chung-cu-opal-boulevard',
+      'ban-can-ho-chung-cu-opal-boulevard',
+      'ban-can-ho-chung-cu-dat-gia-thu-duc',
+      'cho-thue-can-ho-chung-cu-dat-gia-thu-duc',
+      '/du-an/chung-cu-dat-gia-residence',
+      'ban-can-ho-chung-cu-4s-linh-dong-thu-duc',
+      'cho-thue-can-ho-chung-cu-4s-linh-dong-thu-duc',
+      '/du-an/chung-cu-4s-linh-dong',
+      'cho-thue-can-ho-chung-cu-marina-tower-thuan-an',
+      'ban-can-ho-chung-cu-marina-tower-thuan-an',
+      '/du-an/chung-cu-marian-tower',
+      'cho-thue-can-ho-chung-cu-vinhomes-central-park',
+      'ban-can-ho-chung-cu-vinhomes-central-park',
+      '/du-an/chung-cu-vinhomes-central-park',
+      'ban-can-ho-chung-cu-sai-gon-avenue-thu-duc',
+      'cho-thue-can-ho-chung-cu-sai-gon-avenue-thu-duc',
+      '/du-an/chung-cu-sai-gon-avenue'
+    ]
   }
 };

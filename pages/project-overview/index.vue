@@ -16,7 +16,7 @@
       </p>
     </div>
     <div>
-      <gallery class="inline h-72 w-full" :items="gallery" />
+      <gallery class="inline h-72 w-full" :items="gallery" :alt="`Dự án ${project.projectName}`" />
     </div>
     <div class="sm:hidden block">
       <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">

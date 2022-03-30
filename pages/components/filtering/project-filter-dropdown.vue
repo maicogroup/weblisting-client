@@ -120,7 +120,10 @@ export default {
       return this.projects.filter(p => p.projectName.toLowerCase().includes(query));
     },
     project(){
-      return this.projects.filter(p => p.projectName.toLowerCase().includes(this.selectedOption.projectName.toLowerCase()))[0];
+      if(this.selectedOption)
+        return this.projects.filter(p => p.projectName.toLowerCase().includes(this.selectedOption.projectName.toLowerCase()))[0];
+      else
+        return null;
     }
   },
 
@@ -147,7 +150,8 @@ export default {
       immediate: true
     },
     demand: function(val){
-      this.handleSelectProject(this.project);
+      if(this.project)
+        this.handleSelectProject(this.project);
     }
   },
 
@@ -158,10 +162,11 @@ export default {
 
     handleSelectProject (project) {
       this.open = false;
+      const condition = this.demand.replace('Cho', '');
       this.$emit('optionchanged', {
         projectName: project.projectName,
         id: project.id,
-        pageInfor: project.pageInfors.filter(c => c.title.toLowerCase().includes(this.demand.toLowerCase()))[0]
+        pageInfor: project.pageInfors.filter(c => c.title.toLowerCase().includes(condition.toLowerCase()))[0]
       });
     },
 

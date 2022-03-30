@@ -347,6 +347,7 @@ const getPostsQuery = gql`
         apartmentState
         tags
         project {
+          id
           address {
             street
             city
@@ -704,7 +705,7 @@ export default {
   min-width: 200px;
   transform: rotate(-45deg) translate(-33%, -50px);
   color: white;
-  text-align: center;
+  text-align: center; 
   text-transform: uppercase;
   font-size: 10px;
   top: 0px;

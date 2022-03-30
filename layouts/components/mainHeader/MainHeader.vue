@@ -16,10 +16,10 @@
     "
   >
     <NuxtLink to="/">
-      <img onclick="void(0)" id="logo" class="h-12" src="~/assets/maico.png">
+      <img id="logo" onclick="void(0)" class="h-12" src="~/assets/maico.png">
     </NuxtLink>
-   
-    <div class="hidden md:flex flex justify-between items-center space-x-10">
+
+    <div class="hidden md:flex justify-between items-center space-x-10">
       <a class="font-bold hidden xl:block" href="tel:0938140024">
         0938 140 024
       </a>
@@ -97,26 +97,35 @@
         <DropdownItem>Page MaicoGroup</DropdownItem>
       </Dropdown>
 
-      <div class="flex items-center">
-        <a href="#"> Đăng nhập </a>
+      <div v-if="!guestUser" class="flex items-center">
+        <button @click="openAuthenModal(false)">
+          Đăng nhập
+        </button>
 
         <Divider class="ml-6 h-5" :vertical="true" />
 
-        <a href="#" class="ml-6"> Đăng ký </a>
-
-        <button
-          class="
-            ml-10
-            border
-            rounded-md
-            py-2
-            px-8
-            hover:text-white hover:bg-gray-700
-          "
-        >
-          Ký gửi
+        <button class="ml-6" @click="openAuthenModal(true)">
+          Đăng ký
         </button>
       </div>
+      <div v-else class="flex items-center">
+        <nuxt-link class="flex space-x-2 items-center" to="#">
+          <guest-user-avatar :name="guestUser.name" />
+          <p class="text-sm">
+            {{ guestUser.name }}
+          </p>
+        </nuxt-link>
+
+        <Divider class="ml-6 h-5" :vertical="true" />
+
+        <button class="ml-6" @click="logout">
+          Đăng xuất
+        </button>
+      </div>
+
+      <button class="ml-10 border rounded-md py-2 px-8 hover:text-white hover:bg-gray-700">
+        Ký gửi
+      </button>
     </div>
     <button class="md:hidden" @click="showSidebar = true">
       <svg
@@ -141,18 +150,29 @@
       @click="showSidebar = false"
     />
 
-    <Sidebar v-show="showSidebar != null" :projects="projects" :class="`z-20 ${(showSidebar)? 'show-side-bar' : 'hide-side-bar'}`" />
+    <Sidebar
+      v-show="showSidebar != null"
+      :projects="projects"
+      :guest-user="guestUser"
+      :class="`z-20 ${(showSidebar)? 'show-side-bar' : 'hide-side-bar'}`"
+      @open-authen="openAuthenModal"
+      @log-out="logout"
+    />
+
+    <guest-user-authentication-modal :open="showAuthenModal" :sign-up="signUp" @success="checkUser" @close="showAuthenModal = false" />
   </div>
 </template>
 
 <script>
-import { gql } from "graphql-tag";
-import Sidebar from "./Sidebar.vue";
-import DropdownItem from "~/components/dropdown/DropdownItem.vue";
+import { gql } from 'graphql-tag';
+import Sidebar from './Sidebar.vue';
+import DropdownItem from '~/components/dropdown/DropdownItem.vue';
+import GuestUserAuthenticationModal from '~/pages/components/guest-user-authentication-modal.vue';
+import GuestUserAvatar from '~/pages/components/guest-user-avatar.vue';
 
 export default {
-  name: "MainHeader",
-  components: { Sidebar, DropdownItem },
+  name: 'MainHeader',
+  components: { Sidebar, DropdownItem, GuestUserAuthenticationModal, GuestUserAvatar },
 
   apollo: {
     projects: gql`
@@ -164,45 +184,71 @@ export default {
           }
         }
       }
-    `,
+    `
   },
-  mounted() {
-    if (process.client) {
-      const logoEle = document.getElementById("logo");
+  data () {
+    return {
+      showSidebar: false,
+      showAuthenModal: false,
+      signUp: false,
+      guestUser: null
+    };
+  },
 
-      logoEle.addEventListener("click", this.disableCookies);
-    }
+  created () {
+    this.guestUser = this.$cookies.get('GuestUser') ?? null;
   },
-  data() {
-    return { showSidebar: null };
+
+  mounted () {
+    // eslint-disable-next-line nuxt/no-env-in-hooks
+    if (process.client) {
+      const logoEle = document.getElementById('logo');
+
+      logoEle.addEventListener('click', this.disableCookies);
+    }
   },
 
   methods: {
-    handleSelecType(type, demand) {
-      const path = "/danh-sach-can-ho";
+    checkUser () {
+      this.guestUser = this.$cookies.get('GuestUser') ?? null;
+      this.showAuthenModal = false;
+    },
+
+    logout () {
+      this.$cookies.remove('GuestUser');
+      this.guestUser = null;
+    },
+
+    openAuthenModal (signUp) {
+      this.showAuthenModal = true;
+      this.signUp = signUp;
+    },
+
+    handleSelecType (type, demand) {
+      const path = '/danh-sach-can-ho';
       const query = {
         loai: type,
-        demand,
+        demand
       };
 
       this.$router.push({ path, query });
     },
-    disableCookies(evt) {
+    disableCookies (evt) {
       if (evt.detail === 3) {
-        this.$cookies.set("trackingState", "disabled", {
-          path: "/",
-          maxAge: 60 * 60 * 24 * 365,
+        this.$cookies.set('trackingState', 'disabled', {
+          path: '/',
+          maxAge: 60 * 60 * 24 * 365
         });
-        alert("Đã tắt tracking");
+        alert('Đã tắt tracking');
       }
     },
-    handleSelectAllTypes(demand) {
-      const path = "/danh-sach-can-ho";
+    handleSelectAllTypes (demand) {
+      const path = '/danh-sach-can-ho';
       const query = { demand };
 
       this.$router.push({ path, query });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -233,7 +279,7 @@ export default {
 @keyframes slide-out {
   from{
     /*width: 0.25 * 64 ~~ w-64 in tailwind */
-    width: calc(0.25rem * 64);  
+    width: calc(0.25rem * 64);
   }
   to{
     width: 0;

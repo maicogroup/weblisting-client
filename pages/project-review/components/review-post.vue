@@ -27,9 +27,8 @@
           leading-4
           lg:leading-5
         "
-      >
-        {{ review.content }}
-      </p>
+        v-html="review.content"
+      />
       <span
         v-if="contentOverflowing && !showFullContent"
         id="show-more"
@@ -42,12 +41,12 @@
         @click="showFullContent = !showFullContent"
       >Rút gọn</span>
       <div>
-        <div v-bind:class="[review.imageSources.length==2 ? 'grid-cols-2' : (review.imageSources.length==3 ? 'grid-cols-3' : (review.imageSources.length>=4 ? 'grid-cols-4' : ''))]" class="hidden md:grid gap-1 mt-2">
+        <div :class="[review.imageSources.length==2 ? 'grid-cols-2' : (review.imageSources.length==3 ? 'grid-cols-3' : (review.imageSources.length>=4 ? 'grid-cols-4' : ''))]" class="hidden md:grid gap-1 mt-2">
           <template v-if="review.imageSources.length <= 4">
             <img
               v-for="index in review.imageSources.length"
               :key="index"
-              v-bind:class="[review.imageSources.length==1 ? 'aspect-auto': (review.imageSources.length<=3 ? 'aspect-square':'h-40')]"
+              :class="[review.imageSources.length==1 ? 'aspect-auto': (review.imageSources.length<=3 ? 'aspect-square':'h-40')]"
               class="object-cover w-full cursor-pointer"
               :src="review.imageSources[index - 1]"
               @click="handleGallery(index - 1)"
@@ -88,12 +87,12 @@
           </template>
         </div>
 
-        <div v-bind:class="[review.imageSources.length==2 ? gridForTwoImages : (review.imageSources.length>=3 ? gridForThreeImages : '')]" class="md:hidden grid gap-1 mt-2">
+        <div :class="[review.imageSources.length==2 ? gridForTwoImages : (review.imageSources.length>=3 ? gridForThreeImages : '')]" class="md:hidden grid gap-1 mt-2">
           <template v-if="review.imageSources.length <= 3">
             <img
               v-for="index in review.imageSources.length"
               :key="index"
-              v-bind:class="[review.imageSources.length<3 ? 'aspect-square':'']"
+              :class="[review.imageSources.length<3 ? 'aspect-square':'']"
               class="object-cover w-full sm:h-40 cursor-pointer"
               :src="review.imageSources[index-1]"
               @click="handleGallery(index - 1)"
@@ -135,9 +134,9 @@
         </div>
       </div>
 
-      <gallery ref="galleryref" class="hidden" :items="review.imageSources" />
+      <gallery v-if="tempGallery !== []" ref="galleryref" class="hidden" :items="tempGallery" />
       <div class="grid grid-cols-2 border-y my-3 text-sm">
-        <button @click="liked = !liked" v-bind:class="[liked ? 'text-[#F33E58]':'text-black']" class="py-1.5 px-3 items-center hover:bg-gray-100 border-r">
+        <button :class="[liked ? 'text-[#F33E58]':'text-black']" class="py-1.5 px-3 items-center hover:bg-gray-100 border-r" @click="liked = !liked">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="mr-1 h-5 w-5 inline"
@@ -264,6 +263,7 @@ export default {
     //   review: createReview(),
       content: '',
       showFullContent: false,
+      tempGallery: this.review.imageSources,
       showAllComment: this.isGather3Comments(),
       contentOverflowing: false,
       user: {
@@ -272,7 +272,7 @@ export default {
       liked: false,
       shortContentClass: 'shortcontent',
       gridForTwoImages: 'grid-cols-2',
-      gridForThreeImages: 'grid-cols-3',
+      gridForThreeImages: 'grid-cols-3'
 
     };
   },
@@ -342,7 +342,12 @@ export default {
       }, 0);
     },
     handleGallery (index) {
-      if (this.$refs.galleryref) { this.$refs.galleryref.openGallery(index); }
+      this.tempGallery = this.review.imageSources;
+      if (this.$refs.galleryref) {
+        this.$refs.galleryref.items = this.tempGallery;
+        this.tempGallery = this.review.imageSources;
+        this.$refs.galleryref.openGallery(index);
+      }
     },
     formatReviewDateCreated (dateCreated) {
       const day = dateCreated.getDate();

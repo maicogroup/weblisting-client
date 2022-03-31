@@ -164,7 +164,7 @@
                   Thành lập
                 </p>
                 <P class="max-w-60">
-                  {{ project.investor.foundedTime }}
+                  {{ formatDate(new Date(project.investor.foundedTime)) }}
                 </P>
               </div>
               <div class="text-lg flex justify-start mt-3">
@@ -184,7 +184,7 @@
       </h2>
       <img class="h-48 sm:h-96 w-full" :src="project.masterPlan" :alt="`Mặt bằng dự án ${project.projectName}`">
       <h2 ref="Location" style="scroll-margin-top: 135px" class="font-medium text-2xl sm:text-3xl mt-6 mb-1.5 sm:mb-4">
-        Vị trí dự án The Sun Avenue
+        Vị trí dự án  {{ project.projectName }}
       </h2>
       <iframe
         :src="project.address.googleMapLocation"
@@ -194,13 +194,15 @@
         loading="lazy"
       />
     </div>
-    <div ref="SellAndRent" style="scroll-margin-top: 10px" class="divide-y w-full border-b-2 mt-8 mb-12 hidden sm:block" />
-    <recommended-posts
-      v-if="recommendedPosts !== undefined && recommendedPosts.length > 0 && !$apollo.loading"
-      title="Bán và Thuê"
-      class="mb-4"
-      :posts="recommendedPosts"
-    />
+    <div class="divide-y w-full border-b-2 mt-8 mb-12 hidden sm:block" />
+    <div ref="SellAndRent" style="scroll-margin-top: 54px">
+      <recommended-posts
+        v-if="recommendedPosts !== undefined && recommendedPosts.length > 0 && !$apollo.loading"
+        title="Bán và Thuê"
+        class="mb-4 recommend-posts"
+        :posts="recommendedPosts"
+      />
+    </div>
     <near-area-recommended v-if="areaProjects !== undefined && areaProjects.length > 0 && !$apollo.loading" class="mb-4" :projects="areaProjects" />
   </div>
 </template>
@@ -402,6 +404,17 @@ export default {
     window.addEventListener('scroll', this.HandleScroll);
   },
   methods: {
+    formatDate (time) {
+      const day = time.getDate();
+      // getMonth trả về tháng bắt đầu từ 0 đến 11
+      const month = time.getMonth() + 1;
+      const year = time.getFullYear();
+      return `${padZero(day)}/${padZero(month)}/${year}`;
+
+      function padZero (num) {
+        return num.toString().padStart(2, '0');
+      }
+    },
     HandleScroll () {
       if (this.$refs.Overview.getBoundingClientRect().y >= 120 && this.$refs.Overview.getBoundingClientRect().y <= 500) {
         this.setFalseTableOfContents();
@@ -473,6 +486,10 @@ export default {
 </script>
 
 <style>
+.recommend-posts div{
+  margin-left: 0px;
+  margin-right: 0px;
+}
 .re-properties-frame {
     display: flex;
     justify-content: flex-start;

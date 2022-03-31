@@ -154,7 +154,7 @@ export default {
         },
         {
           property: 'og:image',
-          content: 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + this.post?.gallery[0]
+          content: 'https://weblisting.ss-hn-1.bizflycloud.vn/' + this.post?.gallery[0]
         }
       ]
     };

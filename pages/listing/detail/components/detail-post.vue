@@ -413,7 +413,7 @@ export default {
   computed: {
     gallery() {
       const items = this.post.gallery.map(
-        (i) => "https://maico-hub-record.ss-hn-1.bizflycloud.vn/" + i
+        (i) => "https://weblisting.ss-hn-1.bizflycloud.vn/" + i
       );
       return items.sort(function (x, y) {
         return x.includes("mp4") ? 1 : y.includes("mp4") ? -1 : 0;

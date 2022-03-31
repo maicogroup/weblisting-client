@@ -35,6 +35,24 @@ import FacebookChat from './components/facebook-chat.vue';
 export default {
   name: 'DefaultLayout',
   components: { MainHeader, MainFooter, TrackingData, FacebookChat },
- 
+ jsonld() {
+    return {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "url": "https://maico.vn",
+      "logo": "https://maico.vn/images/logo.png",
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "0938 140 024",
+          "contactType": "customer service"
+        }
+      ],
+      "sameAs": [
+        "https://www.facebook.com/maicogroup",
+        "https://www.linkedin.com/company/maicogroup/",
+      ]
+    };
+  }
 };
 </script>

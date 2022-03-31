@@ -48,13 +48,13 @@
               "
             >
             <div class="ml-2 text-sm">
-              <a href="#" class="font-bold"> Chí Linh </a>
+              <a href="#" class="font-bold"> Phong QUocc </a>
               <div class="font-bold text-[#0F9AFF]">
-                Saigon GateWay
+                {{ project.projectName }}
               </div>
             </div>
           </div>
-          <quill-editor :options="editorOption" class="rounded" />
+          <quill-editor v-model="content" :options="editorOption" class="rounded" />
           <div class="border-x border-b border-[#C4C4C4] p-3 rounded-b-[5px] grid-wrap-image">
             <button
               class="
@@ -88,8 +88,8 @@
               </div>
             </button>
             <img
-              v-for="item in tempSrc"
-              :key="item"
+              v-for="(item, index) in tempSrc"
+              :key="index"
               :src="item"
               alt="they might be my crew"
               class="h-20 w-20 object-cover"
@@ -138,8 +138,10 @@
         </div>
       </div>
     </div>
-    <div v-for="review in reviews" :key="review">
-      <review-post :review="review" />
+    <div v-if="reviews.length > 0">
+      <div v-for="(review, index) in reviews.slice().reverse()" :key="index">
+        <review-post :review="review" />
+      </div>
     </div>
   </div>
 </template>
@@ -152,16 +154,84 @@ import Divider from '~/components/Divider.vue';
 export default {
   name: 'ProjectReview',
   components: { Divider, ReviewPost },
+
+  apollo: {
+    project: {
+      query () {
+        return gql`
+        query GetReviewingProject($slug: String!) {
+          projects(where: { pageInfors: { some: { slug: { eq: $slug }}} }) {
+            id
+            projectName
+          }
+        }
+    `;
+      },
+      // skip () {
+      //   // return this.filter === null || this.$route.params.slug === null;
+      //   return this.$route.params.slug === undefined;
+      // },
+      update (data) {
+        if (data.projects.length === 0) {
+          return;
+        }
+
+        const project = data.projects[0];
+        return project;
+      },
+      variables () {
+        return {
+          slug: 'cho-thue-can-ho-chung-cu-lavita-charm-thu-duc'
+        };
+      }
+    },
+
+    reviewsWithPagination: {
+      query () {
+        return gql`query GetListReview{
+    reviewsWithPagination{
+      items{
+        id
+        content
+        createdAt
+        projectId
+        galleries{
+          path
+        }
+        author{
+      name
+      id
+    }
+        comments{
+      author{
+        authorName
+      }
+      createdAt
+      content
+    }
+      }
+      totalCount
+      pageInfo{
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }`;
+      },
+      update: data => data.reviewsWithPagination
+    }
+  },
+
   data () {
     return {
       currentPage: 1,
-      reviews: [createMockReview(), createMockReview2(), createMockReview2()],
       user: {
         avatarSource: 'https://pbgdpl.daklak.gov.vn/uploads/avatar.png'
       },
       showCreatePostForm: false,
       tempSrc: [],
       tempFile: [],
+      content: '',
       editorOption: {
         theme: 'snow', // 可換
         modules: {
@@ -196,6 +266,21 @@ export default {
     };
   },
 
+  computed: {
+    reviews () {
+      const tempReviews = [];
+      if (this.reviewsWithPagination !== null && this.project !== null) {
+        this.reviewsWithPagination.items.forEach((x) => {
+          const tempReview = createMockReview(x);
+          tempReviews.push(tempReview);
+        }
+        );
+        return tempReviews;
+      }
+      return null;
+    }
+  },
+
   methods: {
     sendImagesToSever (id) {
       AWS.config.update({
@@ -208,75 +293,78 @@ export default {
         }
       });
       const s3 = new AWS.S3();
-      const uploadParams = {
-        Bucket: 'weblisting',
-        Key: 'review/' + id.toString() + '/' + this.tempFile[0].name,
-        Body: this.tempFile[0],
-        ACL: 'public-read',
-        ContentType: this.tempFile[0].type
-      };
 
       const uploadOptions = {
         partSize: 10 * 1024 * 1024,
         queueSize: 1
       };
 
-      const upload = s3.upload(uploadParams, uploadOptions);
+      this.tempFile.forEach((x) => {
+        const uploadParams = {
+          Bucket: 'weblisting',
+          Key: 'review/' + id.toString() + '/' + x.name,
+          Body: x,
+          ACL: 'public-read',
+          ContentType: x.type
+        };
 
-      upload.send((err, data) => {
-        if (err) {
-          console.error('Upload lỗi:', err);
-        } else if (data) {
-          console.log('Upload thành công:', data);
-        }
-      });
+        const upload = s3.upload(uploadParams, uploadOptions);
 
-      upload.on('httpUploadProgress', function (evt) {
-        const progress = parseInt((evt.loaded * 100) / evt.total);
-        console.log(progress + '%');
+        upload.send((err, data) => {
+          if (err) {
+            console.error('Upload lỗi:', err);
+          } else if (data) {
+            console.log('Upload thành công:', data);
+          }
+        });
       });
     },
     sendMutationCreateReview (createReviewInput) {
       this.$apollo.mutate({
-        mutation: gql`mutation AddNewReviewfff{
-  createReview(input: {
-    authorId: "623f0440bf28618e8d3eb0d8"
-    content: "hom nay troi dep qu uoc gi Hong se nhan tin cho minhssdf"
-    projectId: "61c966dd6e47abd592a5c156"
-    galleries:
-    {
-      contentType: "img/jpg"
-      path: "https://topaz.vn/wp-content/uploads/2021/01/top-9-tiem-lam-nail-dep-uy-tin-gia-tot-tai-ha-noi-1.jpg"
-    }
-    liked: [
-      "623f0408bf28618e8d3eb0d7"
-    ]
-  })
+        mutation: gql`mutation CreateReviewPost($input: CreateReviewInput!){
+  createReview(input: $input)
   {
     string
   }
-}`
+}`,
+        variables: {
+          input: {
+            reviewId: createReviewInput.id,
+            authorId: createReviewInput.authorId,
+            content: createReviewInput.content,
+            projectId: createReviewInput.projectId,
+            galleries: createReviewInput.galleries,
+            liked: []
+          }
+        }
       });
+      console.log('Phong dep trai');
     },
 
     createNewReview () {
       if (this.tempSrc) {
         const id = generateNewId();
-        this.sendImagesToSever(id);
+        this.uploadNewImage();
         const createReviewInput = {
+          id: id.toString(),
           authorId: '623f0440bf28618e8d3eb0d8',
-          content: 'hom nay troi dep qu uoc gi Hong se nhan tin cho minh',
-          projectId: '61c966dd6e47abd592a5c156',
+          content: this.content,
+          projectId: this.project.id,
           galleries:
-          {
-            contentType: this.tempFile[0].type,
-            path: this.tempFile[0].name
-          },
-          liked: [
-            '623f0408bf28618e8d3eb0d7'
-          ]
+          [],
+          liked: []
         };
+        this.tempFile.forEach((x) => {
+          this.sendImagesToSever(createReviewInput.id);
+          const tempObject = {};
+          tempObject.path = 'https://weblisting.hn.ss.bfcplatform.vn/' + 'review/' + id + '/' + x.name;
+          tempObject.contentType = x.type;
+          createReviewInput.galleries.push(tempObject);
+        });
+
         this.sendMutationCreateReview(createReviewInput);
+
+        this.showCreatePostForm = false;
       }
 
       function generateNewId () {
@@ -306,102 +394,35 @@ export default {
   }
 };
 
-function createMockReview () {
-  return {
-    authorName: 'Chí Linh',
-    authorAvatarSource:
-      'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
-    dateCreated: new Date(),
-    project: {
-      name: 'Chung cư Saigon Gateway',
-      slug: 'ban-thue-can-ho-chung-cu-the-sun-avenue'
-    },
-    title: 'Tên đề của bài đánh giá',
-    content:
-      'Hôm qua mình có chuyển nhà, mình thấy quá mệt mỏi nên đã quyết định lên núi ở Tây Tạng và học được Phép thuật ở đây. Giờ đây mình đã có khả năng điều khiển không thời gian, đi xuyên qua các đa vũ trụ, có khả năng nhìn thấu tương lai, vượt qua tam giới, hiểu được nhân sinh, hiểu được tiếng mèo kêu. Ngày mai mình sẽ qua thiên hà Tiên Nữ chơi, bay Milky Way ^^',
-    imageSources: [
-      'https://www3.nhk.or.jp/nhkworld/en/radio/cooking/update/meal_200228_l.jpg',
-      'https://pogogi.com/sites/default/files/japanesefoodimages/2015/2/134%20Furai.jpg',
-      'https://kenh14cdn.com/thumb_w/660/2019/1/25/3cbbd3ec62d085e2372585f56ccc8c69-15484114508781292670329.jpg',
-      'https://img.tinxe.vn/resize/1000x-/2020/10/08/vwnbOqjE/mazda-furai-concept-front-studio-20a5.jpg',
-      'https://i.ytimg.com/vi/K_7lPqLZrE8/maxresdefault.jpg'
-    ],
-    comments: [
-      {
-        authorName: 'Linh Chí',
+function createMockReview (item) {
+  const tempImageSources = [];
+  item.galleries.forEach(x => tempImageSources.push(x.path));
+  const tempComments = [];
+  if (item.comments.length > 0) {
+    item.comments.forEach((x) => {
+      const tempComment = {
+        authorName: x.author.authorName,
         authorAvatarSource:
           'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
-        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content: 'Đúng vậy hết sức bất mãn với cái vụ cơm chó này, vote 1 sao'
-      },
-      {
-        authorName: 'Linh Chí',
-        authorAvatarSource:
-          'https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png',
-        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content:
-          'Gì, mình thấy quán này ok mà, hôm bữa dẫn người iu đi ăn ở đây thấy vui và ngon mà, 5 sao nha'
-      },
-      {
-        authorName: 'Dr Strange',
-        authorAvatarSource:
-          'https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png',
-        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content: 'Chào đồng môn!'
-      },
-      {
-        authorName: 'Dr Strange',
-        authorAvatarSource:
-          'https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png',
-        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content: 'hôm bữa dẫn người iu đi ăn ở đây thấy vui và ngon'
-      }
-    ]
-  };
-}
-function createMockReview2 () {
+        dateCreated: new Date(x.createdAt),
+        content: x.content
+      };
+      tempComments.push(tempComment);
+    });
+  }
   return {
-    authorName: 'Chí Linh',
+    id: item.id,
+    authorName: item.author.name,
     authorAvatarSource:
       'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
-    dateCreated: new Date(),
+    dateCreated: new Date(item.createdAt),
     project: {
-      name: 'Chung cư Saigon Gateway',
-      slug: 'ban-thue-can-ho-chung-cu-the-sun-avenue'
+      name: 'The sun avenue',
+      slug: 'cho-thue-can-ho-chung-cu-lavita-charm-thu-duc'
     },
-    title: 'Tên đề của bài đánh giá',
-    content: 'Hôm qua mình có chuyển nhà, ',
-    imageSources: [
-      'https://www3.nhk.or.jp/nhkworld/en/radio/cooking/update/meal_200228_l.jpg',
-      'https://pogogi.com/sites/default/files/japanesefoodimages/2015/2/134%20Furai.jpg',
-      'https://kenh14cdn.com/thumb_w/660/2019/1/25/3cbbd3ec62d085e2372585f56ccc8c69-15484114508781292670329.jpg',
-      'https://img.tinxe.vn/resize/1000x-/2020/10/08/vwnbOqjE/mazda-furai-concept-front-studio-20a5.jpg',
-      'https://i.ytimg.com/vi/K_7lPqLZrE8/maxresdefault.jpg'
-    ],
-    comments: [
-      {
-        authorName: 'Linh Chí',
-        authorAvatarSource:
-          'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
-        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content: 'Đúng vậy hết sức bất mãn với cái vụ cơm chó này, vote 1 sao'
-      },
-      {
-        authorName: 'Linh Chí',
-        authorAvatarSource:
-          'https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png',
-        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content:
-          'Gì, mình thấy quán này ok mà, hôm bữa dẫn người iu đi ăn ở đây thấy vui và ngon mà, 5 sao nha'
-      },
-      {
-        authorName: 'Dr Strange',
-        authorAvatarSource:
-          'https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png',
-        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content: 'Chào đồng môn!'
-      }
-    ]
+    content: item.content,
+    imageSources: tempImageSources,
+    comments: tempComments
   };
 }
 </script>

@@ -11,6 +11,7 @@ import ProjectOverview from "~/pages/project-overview/index";
 import SpecificProjectReview from "~/pages/product-preview/specific-project/index";
 import HomePage from "~/pages/home/index";
 import CreateBlog from "~/pages/blog/create/index";
+import UpdateBlog from "~/pages/blog/update/index";
 import DetailBlog from "~/pages/blog/detail/index";
 
 Vue.use(Router);
@@ -72,9 +73,13 @@ export function createRouter() {
         component: CreateBlog,
       },
       {
+        path: "/blog/khoi-tao/:slug",
+        component: UpdateBlog
+      },
+      {
         path: "/blog/:slug",
         component: DetailBlog,
-      },
+      }
     ],
   });
 }

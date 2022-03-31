@@ -1,8 +1,10 @@
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import ImageTool from "@editorjs/image";
-import List from "@editorjs/list";
+import NestedList from "@editorjs/nested-list";
 import Hyperlink from "editorjs-hyperlink";
+import AlignmentBlockTune from "editorjs-text-alignment-blocktune";
+
 
 export default (_, inject) => {
   const defaultOptions = {
@@ -10,7 +12,7 @@ export default (_, inject) => {
     data: {},
     onChange: () => {},
   };
-
+  const AlignmentTuneTool = require('editorjs-text-alignment-blocktune');
   const editor = (options = defaultOptions) => {
     return new EditorJS({
       placeholder: "Let`s write an awesome story!",
@@ -25,10 +27,20 @@ export default (_, inject) => {
       tools: {
         header: Header,
         list: {
-          class: List,
+          class: NestedList,
           inlineToolbar: true,
           config: {
             defaultStyle: "unordered",
+          },
+        },
+        alignmentSetting: {
+          class: AlignmentTuneTool,
+          config: {
+            default: "right",
+            blocks: {
+              header: "center",
+              list: "right",
+            },
           },
         },
         hyperlink: {

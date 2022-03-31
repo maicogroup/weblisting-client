@@ -2,7 +2,7 @@
   <div class="flex flex-row w-full justify-center mb-72">
     <div class="flex flex-col items-center w-[52.25rem] mr-2">
       <h1 class="text-3xl font-bold mb-10">Thêm bài viết</h1>
-      <textbox class="mb-6" title="Tiêu đề" v-model="values.PageInfor.Title" />
+      <textbox class="mb-6" title="Tiêu đề" v-model="values.pageInfor.title" />
       <h2 class="mb-2 text-zinc-800 font-medium"></h2>
       <Editor
         :blog-content="editorContent"
@@ -15,13 +15,22 @@
       >
     </div>
     <div
-      class="flex flex-col w-[22rem] mt-[214px] items-center rounded-md border border-neutral-300 h-fit p-5"
+      class="
+        flex flex-col
+        w-[22rem]
+        mt-[214px]
+        items-center
+        rounded-md
+        border border-neutral-300
+        h-fit
+        p-5
+      "
     >
       <h2 class="mb-7 text-stone-900 font-bold text-lg">Thiết lập bài viết</h2>
       <textbox class="mb-7" title="Slug" v-model="slug" />
       <textbox
         title="Meta description"
-        v-model="values.PageInfor.MetaDescription"
+        v-model="values.pageInfor.metaDescription"
       />
     </div>
   </div>
@@ -31,6 +40,7 @@
 import Editor from "~/components/editor/Editor.vue";
 import Textbox from "~/components/textbox/index.vue";
 import ButtonBasic from "~/components/button-basic/index.vue";
+import gql from "graphql-tag";
 
 export default {
   components: { Editor, Textbox, ButtonBasic },
@@ -38,15 +48,14 @@ export default {
     return {
       editorContent: { time: "", blocks: [], version: "2.22.2" },
       values: {
-        CreatedAt: "2022-03-26T12:22:30.529Z",
-        PageInfor: {
-          Slug: "",
-          Title: "",
-          MetaDescription: "",
+        pageInfor: {
+          slug: "",
+          title: "",
+          metaDescription: "",
         },
-        Content: "",
-        AuthorId: "",
-        Status: "",
+        content: "",
+        authorId: "61c52c3102484fd0faf91b50",
+        blogId: "",
       },
     };
   },
@@ -64,9 +73,11 @@ export default {
   },
   computed: {
     slug: function () {
-      return `${this.values.PageInfor.Title.toLowerCase()
+      return `${this.values.pageInfor.title
+        .toLowerCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
+        .replaceAll("đ", "d")
+        .replace(/[\u0300-\u036f]|[^\w\s]/g, "")
         .split(" ")
         .join("-")}`;
     },
@@ -162,13 +173,43 @@ export default {
       // FIXME: Data ở đây nha <3
       const submitData = {
         ...this.values,
-        PageInfor: {
-          ...this.values.PageInfor,
-          Slug: this.slug,
+        blogId: ObjectId,
+        pageInfor: {
+          ...this.values.pageInfor,
+          slug: this.slug,
         },
-        Content: JSON.stringify(contentData),
+        content: JSON.stringify({ ...this.editorContent, blocks: contentData }),
       };
       console.log(submitData);
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation CreateBlog($input: CreateBlogInput!) {
+              createBlog(input: $input) {
+                string
+              }
+            }
+          `,
+          variables: {
+            input: submitData,
+          },
+        })
+        .then((data) => {
+          this.$toast.show("Đăng thành công!", {
+            type: "success",
+            theme: "bubble",
+            duration: 3000,
+            position: "top-right",
+          });
+        })
+        .catch((error) => {
+          this.$toast.show("Slug đã tồn tại", {
+            type: "error",
+            theme: "bubble",
+            duration: 3000,
+            position: "top-right",
+          });
+        });
     },
   },
 };
@@ -238,6 +279,11 @@ export default {
 
   & img {
     margin: auto;
+  }
+
+  p > a {
+    color: blue;
+    text-decoration: underline;
   }
 }
 </style>

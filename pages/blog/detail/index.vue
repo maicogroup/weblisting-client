@@ -3,7 +3,7 @@
     <div class="wrapper m-auto h-500 border border-zinc-200 w-1/2 p-2">
       <div class="mb-5">
         {{ blog.id }}
-        {{comments.length}}
+        {{ comments.length }}
         <h1>{{ blog.pageInfor.title }}</h1>
         <span class="font-bold text-sm leading-4 text-stone-900">{{
           blog.author.name
@@ -13,10 +13,12 @@
           blog.createdAt.substring(0, 10)
         }}</span>
       </div>
-      <show-editor :editorContent="content" />
+      <show-editor :editor-content="content" />
       <divider class="my-5" />
       <div class="font-medium text-lg leading-6">
-        <p class="mt-7 mb-5">Có thể bạn quan tâm:</p>
+        <p class="mt-7 mb-5">
+          Có thể bạn quan tâm:
+        </p>
         <ul class="">
           <li>Hơn 90% team Công nghệ toàn mấy thằng lầy.</li>
           <li>Phát hiện chấn động: ăn cơm nhiều có thể khiến bạn no!</li>
@@ -32,10 +34,10 @@
         <div class="flex items-start justify-between space-x-2">
           <input
             id="myInput"
+            v-model="newComment"
             type="text"
             placeholder="Mời bạn để lại bình luận"
-            v-model="newComment"
-          />
+          >
           <button
             id="createComment"
             class="bg-green-600 px-5 py-2 text-white"
@@ -55,16 +57,15 @@
               <div class="flex items-start justify-start space-x-2">
                 <span class="text-sky-500" @click="replyIsShow = true">Trả lời</span>
                 <p>·</p>
-                <span>{{ comment.createdAt.substring(0, 10)}}</span>
+                <span>{{ comment.createdAt.substring(0, 10) }}</span>
               </div>
               <div v-if="replyIsShow" class="flex items-start justify-between space-x-2">
                 <input
                   id="myInput"
+                  v-model="newReply"
                   type="text"
                   placeholder="Mời bạn để lại bình luận"
-                  v-model="newReply"
-
-                />
+                >
                 <button
                   id="createComment"
                   class="bg-green-600 px-5 py-2 text-white"
@@ -75,8 +76,8 @@
                 </button>
               </div>
               <div
-                class="p-2 ml-5 my-3 border rounded bg-slate-50"
                 v-if="comment.replies.length > 0"
+                class="p-2 ml-5 my-3 border rounded bg-slate-50"
               >
                 <div v-for="reply in comment.replies" :key="reply.id">
                   <div class="flex items-start justify-start space-x-2">
@@ -84,7 +85,7 @@
                       {{ reply.author.authorName }}
                     </p>
                     <p>·</p>
-                    <span>{{ reply.createdAt.substring(0, 10)}}</span>
+                    <span>{{ reply.createdAt.substring(0, 10) }}</span>
                   </div>
                   <p>{{ reply.content }}</p>
                   <divider class="mb-2" />
@@ -103,8 +104,8 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
-import ShowEditor from "~/components/editor/Show.vue";
+import gql from 'graphql-tag';
+import ShowEditor from '~/components/editor/Show.vue';
 const getBlog = gql`
   query GetBlog($condition: BlogCollectionFilterInput) {
     blog(where: $condition) {
@@ -165,81 +166,26 @@ const createComment = gql`
   }
 `;
 export default {
-  mounted() {
-    //console.log(this.$route.params.slug);
-    this.content = JSON.parse(this.blog.content);
-    if (this.blog.id != null) {
-      console.log("haha");
-      this.$apollo.queries.commentsWithPagination.refetch({
-        condition: {
-          discussionId: {
-            eq: this.blog.id,
-          },
-        },
-        order: {
-          createdAt: "DESC",
-        },
-        take: 10,
-        skip: 0
-      });
-      this.hasId = true;
-    }
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  destroyed() {
-    window.removeEventListener("scroll", this.handleScroll);
-  },
-  apollo: {
-    blog: {
-      query: getBlog,
-      variables() {
-        return {
-          condition: {
-            pageInfor: {
-              slug: {
-                eq: this.$route.params.slug,
-              },
-            },
-          },
-        };
-      },
-    },
-    commentsWithPagination: {
-      query: getComment,
-      variales() {
-        return {
-          condition: {
-            discussionId: {
-              eq: this.blog.id,
-            },
-          },
-        };
-      },
-      skip() {
-        return !this.hasId;
-      },
-      update: (data) => data.commentsWithPagination,
-    },
-  },
-  data() {
+  components: { ShowEditor },
+  data () {
     return {
       content: {},
-      newComment: "",
-      newReply: "",
+      newComment: '',
+      newReply: '',
       isStick: true,
       hasId: false,
       replyIsShow: false
     };
   },
   computed: {
-    totalItem() {
+    totalItem () {
       if (this.commentsWithPagination == null) {
         return 0;
       }
       return this.commentsWithPagination.totalCount;
     },
-    comments() {
-      console.log("a");
+    comments () {
+      console.log('a');
       if (this.commentsWithPagination == null) {
         return [];
       } else {
@@ -252,28 +198,84 @@ export default {
             content: item.content,
             createdAt: item.createdAt,
             author: {
-              authorName: item.author.authorName,
+              authorName: item.author.authorName
             },
-            replies: item.replies,
+            replies: item.replies
           };
         });
       }
+    }
+  },
+  mounted () {
+    // console.log(this.$route.params.slug);
+    this.content = JSON.parse(this.blog.content);
+    if (this.blog.id != null) {
+      console.log('haha');
+      this.$apollo.queries.commentsWithPagination.refetch({
+        condition: {
+          discussionId: {
+            eq: this.blog.id
+          }
+        },
+        order: {
+          createdAt: 'DESC'
+        },
+        take: 10,
+        skip: 0
+      });
+      this.hasId = true;
+    }
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+  apollo: {
+    blog: {
+      query: getBlog,
+      variables () {
+        return {
+          condition: {
+            pageInfor: {
+              slug: {
+                eq: this.$route.params.slug
+              }
+            }
+          }
+        };
+      }
     },
+    commentsWithPagination: {
+      query: getComment,
+      variales () {
+        return {
+          condition: {
+            discussionId: {
+              eq: this.blog.id
+            }
+          }
+        };
+      },
+      skip () {
+        return !this.hasId;
+      },
+      update: data => data.commentsWithPagination
+    }
   },
   methods: {
-    handleScroll(event) {
+    handleScroll (event) {
       const scrollCheck = window.innerHeight - window.scrollY;
-      //console.log(scrollCheck);
+      // console.log(scrollCheck);
       if (scrollCheck <= 160) {
         this.isStick = false;
-        //console.log("set false");
+        // console.log("set false");
       } else {
-        //console.log("set true");
+        // console.log("set true");
         this.isStick = true;
       }
     },
-    createComment: function() {
-      if (this.newComment != "") {
+    createComment () {
+      if (this.newComment != '') {
         const cmt = this.newComment;
         this.$apollo.mutate({
           mutation: createComment,
@@ -281,16 +283,16 @@ export default {
             input: {
               discussionId: this.blog.id,
               content: this.newComment,
-              type: "Blog",
+              type: 'Blog',
               author: {
-                authorId: "623f0408bf28618e8d3eb0d7",
-                authorName: "Đỗ Minh Nhật",
-              },
-            },
+                authorId: '623f0408bf28618e8d3eb0d7',
+                authorName: 'Đỗ Minh Nhật'
+              }
+            }
           },
-          
-          update: (store, {data: { createComment }}) => {
-            const query = { 
+
+          update: (store, { data: { createComment } }) => {
+            const query = {
               query: getComment,
               variables: {
                 condition: {
@@ -299,59 +301,59 @@ export default {
                   }
                 },
                 order: {
-                  createdAt: "DESC"
+                  createdAt: 'DESC'
                 },
                 take: 10,
                 skip: 0
               }
             };
 
-            const {commentsWithPagination} = store.readQuery(query);
-          
-            var comment = {
+            const { commentsWithPagination } = store.readQuery(query);
+
+            const comment = {
               id: createComment.string,
               discussionId: this.blog.id,
               content: cmt,
-              type: "Blog",
-              commentParentId: "",
+              type: 'Blog',
+              commentParentId: '',
               author: {
-                authorId: "623f0408bf28618e8d3eb0d7",
-                authorName: "Đỗ Minh Nhật",
-                __typename: "Author"
+                authorId: '623f0408bf28618e8d3eb0d7',
+                authorName: 'Đỗ Minh Nhật',
+                __typename: 'Author'
               },
               createdAt: Date.now().toString(),
               replies: [],
-              __typename: "CommentCollection"
+              __typename: 'CommentCollection'
             };
             commentsWithPagination.items.unshift(comment);
             commentsWithPagination.totalCount += 1;
 
-            store.writeQuery({...query, data: {commentsWithPagination: commentsWithPagination}})
+            store.writeQuery({ ...query, data: { commentsWithPagination } });
           }
-          
+
         });
-        this.$toast.show("Thêm thành công!", {
-          type: "success",
-          theme: "bubble",
+        this.$toast.show('Thêm thành công!', {
+          type: 'success',
+          theme: 'bubble',
           duration: 3000,
-          position: "top-right",
+          position: 'top-right'
         });
         // this.$apollo.queries.commentsWithPagination.refetch({
         //   condition: {
-        //     discussionId: { 
+        //     discussionId: {
         //       eq: this.blog.id
         //     }
         //   },
-        //   order: { 
+        //   order: {
         //     createdAt: "DESC"
         //   }
         // })
-        this.newComment = "";
+        this.newComment = '';
         console.log(this.totalItem);
         console.log(this.comments);
       }
     },
-    createReply(commentParentId) {
+    createReply (commentParentId) {
       console.log(commentParentId);
       if (this.newReply != null) {
         this.$apollo.mutate({
@@ -360,37 +362,36 @@ export default {
             input: {
               discussionId: this.blog.id,
               content: this.newReply,
-              commentParentId: commentParentId,
-              type: "Blog",
+              commentParentId,
+              type: 'Blog',
               author: {
-                authorId: "623f0440bf28618e8d3eb0d8",
-                authorName: "Cーちゃん",
-              },
-            },
+                authorId: '623f0440bf28618e8d3eb0d8',
+                authorName: 'Cーちゃん'
+              }
+            }
           }
         });
-        this.$toast.show("Thêm thành công!", {
-          type: "success",
-          theme: "bubble",
+        this.$toast.show('Thêm thành công!', {
+          type: 'success',
+          theme: 'bubble',
           duration: 3000,
-          position: "top-right",
+          position: 'top-right'
         });
         this.replyIsShow = false;
-        this.newReply = "";
+        this.newReply = '';
         this.$apollo.queries.commentsWithPagination.refetch({
           condition: {
             discussionId: {
-              eq: this.blog.id,
-            },
+              eq: this.blog.id
+            }
           },
           order: {
-            createdAt: "DESC",
-          },
+            createdAt: 'DESC'
+          }
         });
       }
-    },
-  },
-  components: { ShowEditor },
+    }
+  }
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="relative items-center w-full h-[239px] md:h-[366px] object-cover">
-      <img class="w-full h-full object-cover absolute" src="~/static/images/home/home-page-bg.jpg">
+      <img class="w-full h-full object-cover absolute" src="~/static/images/home/unsplash_WYd_PkCa1BY.png">
       <div class="relative mx-auto h-full text-[32px] md:text-[60px] md:leading-[75px] flex flex-col items-center justify-center font-bold font-source-serif-pro">
         <h1 class="text-slate-50 text-center">
           Thông tin nhanh về

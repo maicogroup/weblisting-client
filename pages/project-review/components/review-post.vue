@@ -47,7 +47,7 @@
             <img
               v-for="index in review.imageSources.length"
               :key="index"
-              v-bind:class="[review.imageSources.length==1 ? 'aspect-auto': (review.imageSources.length<=3 ? 'aspect-square':'')]"
+              v-bind:class="[review.imageSources.length==1 ? 'aspect-auto': (review.imageSources.length<=3 ? 'aspect-square':'h-40')]"
               class="object-cover w-full cursor-pointer"
               :src="review.imageSources[index - 1]"
               @click="handleGallery(index - 1)"

@@ -64,7 +64,7 @@
               </div>
             </div>
           </div>
-          <quill-editor :options="editorOption" class="rounded" />
+          <quill-editor :options="editorOption" v-model="content" class="rounded" />
           <div
             class="
               border-x border-b border-[#C4C4C4]

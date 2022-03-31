@@ -1,6 +1,6 @@
 <template>
   <div style="">
-    <div class="wrapper m-auto h-500 border border-zinc-200 w-1/2 p-2">
+    <div class="max-w-[773px] wrapper h-500 p-2">
       <div class="mb-5">
         {{ blog.id }}
         {{ comments.length }}

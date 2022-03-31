@@ -344,7 +344,6 @@ export default {
     createNewReview () {
       if (this.tempSrc) {
         const id = generateNewId();
-        this.uploadNewImage();
         const createReviewInput = {
           id: id.toString(),
           authorId: '623f0440bf28618e8d3eb0d8',

@@ -42,12 +42,13 @@
         @click="showFullContent = !showFullContent"
       >Rút gọn</span>
       <div>
-        <div class="hidden md:grid grid-cols-4 gap-1 mt-2">
+        <div v-bind:class="[review.imageSources.length==2 ? 'grid-cols-2' : (review.imageSources.length==3 ? 'grid-cols-3' : (review.imageSources.length>=4 ? 'grid-cols-4' : ''))]" class="hidden md:grid gap-1 mt-2">
           <template v-if="review.imageSources.length <= 4">
             <img
               v-for="index in review.imageSources.length"
               :key="index"
-              class="object-cover w-full h-16 lg:h-40 cursor-pointer"
+              v-bind:class="[review.imageSources.length==1 ? 'aspect-auto': (review.imageSources.length<=3 ? 'aspect-square':'h-40')]"
+              class="object-cover w-full cursor-pointer"
               :src="review.imageSources[index - 1]"
               @click="handleGallery(index - 1)"
             >
@@ -87,13 +88,14 @@
           </template>
         </div>
 
-        <div class="md:hidden grid grid-cols-3 gap-1 mt-2">
+        <div v-bind:class="[review.imageSources.length==2 ? gridForTwoImages : (review.imageSources.length>=3 ? gridForThreeImages : '')]" class="md:hidden grid gap-1 mt-2">
           <template v-if="review.imageSources.length <= 3">
             <img
               v-for="index in review.imageSources.length"
               :key="index"
-              class="object-cover w-full h-20 sm:h-40 cursor-pointer"
-              :src="review.imageSources[index]"
+              v-bind:class="[review.imageSources.length<3 ? 'aspect-square':'']"
+              class="object-cover w-full sm:h-40 cursor-pointer"
+              :src="review.imageSources[index-1]"
               @click="handleGallery(index - 1)"
             >
           </template>
@@ -135,7 +137,7 @@
 
       <gallery ref="galleryref" class="hidden" :items="review.imageSources" />
       <div class="grid grid-cols-2 border-y my-3 text-sm">
-        <button class="py-1.5 px-3 items-center hover:bg-gray-100 border-r">
+        <button @click="liked = !liked" v-bind:class="[liked ? 'text-[#F33E58]':'text-black']" class="py-1.5 px-3 items-center hover:bg-gray-100 border-r">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="mr-1 h-5 w-5 inline"
@@ -267,7 +269,11 @@ export default {
       user: {
         avatarSource: 'https://pbgdpl.daklak.gov.vn/uploads/avatar.png'
       },
-      shortContentClass: 'shortcontent'
+      liked: false,
+      shortContentClass: 'shortcontent',
+      gridForTwoImages: 'grid-cols-2',
+      gridForThreeImages: 'grid-cols-3',
+
     };
   },
   computed: {

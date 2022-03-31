@@ -1,7 +1,7 @@
 <template>
   <div class="w-full max-w-4xl md:px-4">
     <div
-      v-if="showCreatePostForm"
+      v-if="isFormShown"
       class="fixed top-0 left-0 h-full w-full z-30 bg-black bg-opacity-60"
     >
       <div
@@ -20,11 +20,11 @@
             Tạo bài đánh giá
           </div>
           <svg
+            @click="toggleCreatePost"
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5 basic-4 text-[#656565] cursor-pointer"
             viewBox="0 0 20 20"
             fill="currentColor"
-            @click="showCreatePostForm = false"
           >
             <path
               fill-rule="evenodd"
@@ -35,7 +35,17 @@
         </div>
         <divider class="border-[#858585]" />
 
-        <div class="px-3 lg:px-8 py-3 grid overflow-scroll max-h-[90%] md:max-h-[520px]">
+        <div
+          class="
+            px-3
+            lg:px-8
+            py-3
+            grid
+            overflow-scroll
+            max-h-[90%]
+            md:max-h-[520px]
+          "
+        >
           <div class="flex items-center mb-3 md:mb-5">
             <img
               class="
@@ -54,8 +64,15 @@
               </div>
             </div>
           </div>
-          <quill-editor v-model="content" :options="editorOption" class="rounded" />
-          <div class="border-x border-b border-[#C4C4C4] p-3 rounded-b-[5px] grid-wrap-image">
+          <quill-editor :options="editorOption" v-model="content" class="rounded" />
+          <div
+            class="
+              border-x border-b border-[#C4C4C4]
+              p-3
+              rounded-b-[5px]
+              grid-wrap-image
+            "
+          >
             <button
               class="
                 h-20
@@ -87,13 +104,30 @@
                 Thêm ảnh hoặc video
               </div>
             </button>
-            <img
-              v-for="(item, index) in tempSrc"
-              :key="index"
-              :src="item"
-              alt="they might be my crew"
-              class="h-20 w-20 object-cover"
-            >
+            <div v-for="(item, index) in tempSrc" :key="item" class="relative">
+              <button
+                @click="removeUploadedImage(index)"
+                class="absolute top-1 right-1 bg-black bg-opacity-50"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 text-white"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+              <img
+                :src="item"
+                alt="they might be my crew"
+                class="h-20 w-20 object-cover"
+              />
+            </div>
           </div>
           <button
             class="
@@ -118,6 +152,7 @@
     <div class="flex items-start p-2 md:p-0 mb-3 md:mb-7">
       <img :src="user.avatarSource" class="w-10 h-10 rounded-full">
       <div
+        @click="toggleCreatePost"
         class="
           grow
           ml-3
@@ -131,7 +166,6 @@
           py-1
           flex
         "
-        @click="showCreatePostForm = true"
       >
         <div class="self-center">
           Viết bài review
@@ -228,7 +262,7 @@ export default {
       user: {
         avatarSource: 'https://pbgdpl.daklak.gov.vn/uploads/avatar.png'
       },
-      showCreatePostForm: false,
+      isFormShown: false,
       tempSrc: [],
       tempFile: [],
       content: '',
@@ -282,6 +316,33 @@ export default {
   },
 
   methods: {
+    uploadNewImage () {
+      const fileInput = document.createElement('input');
+      fileInput.setAttribute('type', 'file');
+      fileInput.setAttribute(
+        'accept',
+        'image/png, image/gif, image/jpeg, image/bmp, image/x-icon'
+      );
+      fileInput.click();
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files != null && fileInput.files[0] != null) {
+          const [file] = fileInput.files;
+          if (file) {
+            this.tempSrc.push(URL.createObjectURL(file));
+            this.tempFile.push(file);
+          }
+        }
+      });
+    },
+    toggleCreatePost() {
+      var element = document.body;
+      element.classList.toggle("overflow-hidden");
+      this.isFormShown = !this.isFormShown;
+    },
+    removeUploadedImage(index) {
+      this.tempSrc.splice(index, 1);
+    },
+      
     sendImagesToSever (id) {
       AWS.config.update({
         accessKeyId: '8EL21GNHMRNZYW8488OV',
@@ -371,24 +432,6 @@ export default {
           s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h));
         return ObjectIddd();
       }
-    },
-    uploadNewImage () {
-      const fileInput = document.createElement('input');
-      fileInput.setAttribute('type', 'file');
-      fileInput.setAttribute(
-        'accept',
-        'image/png, image/gif, image/jpeg, image/bmp, image/x-icon'
-      );
-      fileInput.click();
-      fileInput.addEventListener('change', () => {
-        if (fileInput.files != null && fileInput.files[0] != null) {
-          const [file] = fileInput.files;
-          if (file) {
-            this.tempSrc.push(URL.createObjectURL(file));
-            this.tempFile.push(file);
-          }
-        }
-      });
     }
   }
 };
@@ -436,8 +479,8 @@ function createMockReview (item) {
 .ql-toolbar {
   border-radius: 5px 5px 0 0;
 }
-.grid-wrap-image{
-  display:grid;
+.grid-wrap-image {
+  display: grid;
   grid-template-columns: repeat(auto-fill, 80px);
   gap: 16px;
 }

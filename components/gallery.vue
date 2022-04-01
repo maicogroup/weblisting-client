@@ -7,7 +7,7 @@
                     <ul class="glide__slides">
                         <li
                             v-for="(item, index) in items"
-                            :key="item"
+                            :key="index"
                             class="glide__slide media_container"
                             v-on:click="openGallery(index)"
                         >
@@ -26,7 +26,7 @@
                     </button>
                 </div>
                 <div class="glide__bullets" data-glide-el="controls[nav]">
-                    <button v-for="(item, index) in items" :key="item" class="glide__bullet" :data-glide-dir="`=${index}`"></button>
+                    <button v-for="(item, index) in items" :key="index" class="glide__bullet" :data-glide-dir="`=${index}`"></button>
                 </div>
             </div>
         </div>

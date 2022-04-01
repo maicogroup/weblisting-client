@@ -16,15 +16,13 @@
         "
       >
         <div class="px-3 py-5 flex flex-row max-h-screen">
-          <div class="grow text-center text-xl font-bold">
-            Tạo bài đánh giá
-          </div>
+          <div class="grow text-center text-xl font-bold">Tạo bài đánh giá</div>
           <svg
-            @click="toggleCreatePost"
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5 basic-4 text-[#656565] cursor-pointer"
             viewBox="0 0 20 20"
             fill="currentColor"
+            @click="toggleCreatePost"
           >
             <path
               fill-rule="evenodd"
@@ -56,7 +54,7 @@
                 cursor-pointer
                 bg-gray-400
               "
-            >
+            />
             <div class="ml-2 text-sm">
               <a href="#" class="font-bold"> Phong QUocc </a>
               <div class="font-bold text-[#0F9AFF]">
@@ -64,7 +62,11 @@
               </div>
             </div>
           </div>
-          <quill-editor :options="editorOption" v-model="content" class="rounded" />
+          <quill-editor
+            v-model="content"
+            :options="editorOption"
+            class="rounded"
+          />
           <div
             class="
               border-x border-b border-[#C4C4C4]
@@ -100,14 +102,12 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              <div class="w-14 leading-3 mt-1">
-                Thêm ảnh hoặc video
-              </div>
+              <div class="w-14 leading-3 mt-1">Thêm ảnh hoặc video</div>
             </button>
-            <div v-for="(item, index) in tempSrc" :key="item" class="relative">
+            <div v-for="(item, index) in tempSrc" :key="index" class="relative">
               <button
-                @click="removeUploadedImage(index)"
                 class="absolute top-1 right-1 bg-black bg-opacity-50"
+                @click="removeUploadedImage(index)"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -149,10 +149,14 @@
         </div>
       </div>
     </div>
-    <div class="flex items-start p-2 md:p-0 mb-3 md:mb-7">
-      <img :src="user.avatarSource" class="w-10 h-10 rounded-full">
+    <!-- skeleton -->
+
+    <div
+      v-if="reviews.length > 0"
+      class="flex items-start p-2 md:p-0 mb-3 md:mb-7"
+    >
+      <img :src="user.avatarSource" class="w-10 h-10 rounded-full" />
       <div
-        @click="toggleCreatePost"
         class="
           grow
           ml-3
@@ -166,46 +170,101 @@
           py-1
           flex
         "
+        @click="toggleCreatePost"
       >
-        <div class="self-center">
-          Viết bài review
-        </div>
+        <div class="self-center">Viết bài review</div>
       </div>
     </div>
     <div v-if="reviews.length > 0">
-      <div v-for="(review, index) in reviews.slice().reverse()" :key="index">
+      <div v-for="(review, index) in reviews" :key="index">
         <review-post :review="review" />
+      </div>
+    </div>
+    <div
+      v-if="isLoading"
+      class="border rounded-md px-3 lg:px-8 py-3 lg:py-5 my-2"
+    >
+      <div class="animate-pulse">
+        <div class="flex items-center">
+          <div class="w-10 h-10 rounded-full cursor-pointer bg-gray-300" />
+          <div class="ml-2">
+            <div class="h-2 bg-gray-300 w-20" />
+            <div class="h-2 bg-gray-300 w-16 mt-2" />
+          </div>
+        </div>
+
+        <div class="h-3 bg-gray-300 w-5/6 mt-3" />
+        <div class="h-3 bg-gray-300 w-full mt-1" />
+        <div class="h-3 bg-gray-300 w-full mt-1" />
+        <div class="h-3 bg-gray-300 w-2/3 mt-1" />
+        <div class="grid grid-cols-3 mt-3 gap-3">
+          <div class="bg-gray-300 h-28" />
+          <div class="bg-gray-300 h-28" />
+          <div class="bg-gray-300 h-28" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import gql from 'graphql-tag';
-import ReviewPost from './components/review-post.vue';
-import Divider from '~/components/Divider.vue';
+import gql from "graphql-tag";
+import ReviewPost from "./components/review-post.vue";
+import Divider from "~/components/Divider.vue";
+
+const getReviewsQuery = gql`
+  query GetListReview($take: Int, $skip: Int) {
+    reviewsWithPagination(take: $take, skip: $skip) {
+      items {
+        id
+        content
+        createdAt
+        projectId
+        galleries {
+          path
+        }
+        author {
+          name
+          id
+        }
+        comments {
+          author {
+            authorName
+          }
+          createdAt
+          content
+        }
+      }
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
+`;
 
 export default {
-  name: 'ProjectReview',
+  name: "ProjectReview",
   components: { Divider, ReviewPost },
 
   apollo: {
     project: {
-      query () {
+      query() {
         return gql`
-        query GetReviewingProject($slug: String!) {
-          projects(where: { pageInfors: { some: { slug: { eq: $slug }}} }) {
-            id
-            projectName
+          query GetReviewingProject($slug: String!) {
+            projects(where: { pageInfors: { some: { slug: { eq: $slug } } } }) {
+              id
+              projectName
+            }
           }
-        }
-    `;
+        `;
       },
       // skip () {
       //   // return this.filter === null || this.$route.params.slug === null;
       //   return this.$route.params.slug === undefined;
       // },
-      update (data) {
+      update(data) {
         if (data.projects.length === 0) {
           return;
         }
@@ -213,118 +272,150 @@ export default {
         const project = data.projects[0];
         return project;
       },
-      variables () {
+      variables() {
         return {
-          slug: 'cho-thue-can-ho-chung-cu-lavita-charm-thu-duc'
+          slug: "cho-thue-can-ho-chung-cu-lavita-charm-thu-duc",
         };
-      }
+      },
     },
 
     reviewsWithPagination: {
-      query () {
-        return gql`query GetListReview{
-    reviewsWithPagination{
-      items{
-        id
-        content
-        createdAt
-        projectId
-        galleries{
-          path
-        }
-        author{
-      name
-      id
-    }
-        comments{
-      author{
-        authorName
-      }
-      createdAt
-      content
-    }
-      }
-      totalCount
-      pageInfo{
-        hasNextPage
-        hasPreviousPage
-      }
-    }
-  }`;
+      query() {
+        return gql`
+          query GetListReview($take: Int, $skip: Int) {
+            reviewsWithPagination(
+              take: $take
+              skip: $skip
+              order: { createdAt: DESC }
+            ) {
+              items {
+                id
+                content
+                createdAt
+                projectId
+                galleries {
+                  path
+                }
+                author {
+                  name
+                  id
+                }
+                comments {
+                  author {
+                    authorName
+                  }
+                  createdAt
+                  content
+                }
+              }
+              totalCount
+            }
+          }
+        `;
       },
-      update: data => data.reviewsWithPagination
-    }
+      update: (data) => data.reviewsWithPagination,
+      variables() {
+        return {
+          take: 5,
+          skip: 0,
+        };
+      },
+    },
   },
-
-  data () {
+  data() {
     return {
       currentPage: 1,
       user: {
-        avatarSource: 'https://pbgdpl.daklak.gov.vn/uploads/avatar.png'
+        avatarSource: "https://pbgdpl.daklak.gov.vn/uploads/avatar.png",
       },
       isFormShown: false,
       tempSrc: [],
       tempFile: [],
-      content: '',
+      isLoading: false,
+      tempReviews: [],
+      take: 5,
+      skip: 0,
+      content: "",
       editorOption: {
-        theme: 'snow', // 可換
+        theme: "snow", // 可換
         modules: {
           toolbar: {
             // container這裡是個大坑，[]表分群
             container: [
-              ['bold', 'italic', 'underline', 'strike', 'code'],
+              ["bold", "italic", "underline", "strike", "code"],
               [{ header: [1, 2, 3, 4, 5, 6, false] }],
-              [{ list: 'ordered' }, { list: 'bullet' }],
-              [{ size: ['small', false, 'large', 'huge'] }],
+              [{ list: "ordered" }, { list: "bullet" }],
+              [{ size: ["small", false, "large", "huge"] }],
               [{ align: [] }],
-              ['link']
+              ["link"],
             ],
             // 客製化圖片上傳功能用的
             handlers: {
-              image: this.uploadImage
-            }
-          }
-        }
-      }
+              image: this.uploadImage,
+            },
+          },
+        },
+      },
     };
   },
 
-  head () {
+  head() {
     return {
-      script: [{
-        once: true,
-        hid: 's3-sdk',
-        src: 'https://sdk.amazonaws.com/js/aws-sdk-2.1095.0.min.js',
-        body: true
-      }]
+      script: [
+        {
+          once: true,
+          hid: "s3-sdk",
+          src: "https://sdk.amazonaws.com/js/aws-sdk-2.1095.0.min.js",
+          body: true,
+        },
+      ],
     };
   },
 
   computed: {
-    reviews () {
-      const tempReviews = [];
+    reviews() {
       if (this.reviewsWithPagination !== null && this.project !== null) {
+        const tempReviewArray = [];
         this.reviewsWithPagination.items.forEach((x) => {
-          const tempReview = createMockReview(x);
-          tempReviews.push(tempReview);
+          const tempReview = createMockReview(x, this.project);
+          if (this.tempReviews.length < this.take) {
+            this.tempReviews.push(tempReview);
+          } else {
+            tempReviewArray.push(tempReview);
+          }
+        });
+        if (tempReviewArray.length === 0) {
+          return this.tempReviews;
+        } else {
+          const oldReviews = tempReviewArray;
+          return oldReviews;
         }
-        );
-        return tempReviews;
       }
-      return null;
-    }
+      return [];
+    },
+  },
+
+  mounted() {
+    window.addEventListener("scroll", this.HandleScroll);
   },
 
   methods: {
-    uploadNewImage () {
-      const fileInput = document.createElement('input');
-      fileInput.setAttribute('type', 'file');
+    HandleScroll() {
+      console.log(window.top.scrollY / document.body.offsetHeight);
+      if (window.top.scrollY / document.body.offsetHeight > 0.75) {
+        this.LoadNewReviews();
+      }
+    },
+
+    uploadNewImage() {
+      const fileInput = document.createElement("input");
+      fileInput.setAttribute("type", "file");
       fileInput.setAttribute(
-        'accept',
-        'image/png, image/gif, image/jpeg, image/bmp, image/x-icon'
+        "accept",
+        "image/png, image/gif, image/jpeg, image/bmp, image/x-icon"
       );
       fileInput.click();
-      fileInput.addEventListener('change', () => {
+      fileInput.addEventListener("change", () => {
         if (fileInput.files != null && fileInput.files[0] != null) {
           const [file] = fileInput.files;
           if (file) {
@@ -335,59 +426,61 @@ export default {
       });
     },
     toggleCreatePost() {
-      var element = document.body;
+      const element = document.body;
       element.classList.toggle("overflow-hidden");
       this.isFormShown = !this.isFormShown;
     },
     removeUploadedImage(index) {
       this.tempSrc.splice(index, 1);
+      this.tempFile.splice(index, 1);
     },
-      
-    sendImagesToSever (id) {
+
+    sendImagesToSever(id) {
       AWS.config.update({
-        accessKeyId: '8EL21GNHMRNZYW8488OV',
-        secretAccessKey: 'xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD',
-        region: 'hn',
-        endpoint: 'https://hn.ss.bfcplatform.vn',
+        accessKeyId: "8EL21GNHMRNZYW8488OV",
+        secretAccessKey: "xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD",
+        region: "hn",
+        endpoint: "https://hn.ss.bfcplatform.vn",
         apiVersions: {
-          s3: '2006-03-01'
-        }
+          s3: "2006-03-01",
+        },
       });
       const s3 = new AWS.S3();
 
       const uploadOptions = {
         partSize: 10 * 1024 * 1024,
-        queueSize: 1
+        queueSize: 1,
       };
 
       this.tempFile.forEach((x) => {
         const uploadParams = {
-          Bucket: 'weblisting',
-          Key: 'review/' + id.toString() + '/' + x.name,
+          Bucket: "weblisting",
+          Key: "review/" + id.toString() + "/" + x.name,
           Body: x,
-          ACL: 'public-read',
-          ContentType: x.type
+          ACL: "public-read",
+          ContentType: x.type,
         };
 
         const upload = s3.upload(uploadParams, uploadOptions);
 
         upload.send((err, data) => {
           if (err) {
-            console.error('Upload lỗi:', err);
+            console.error("Upload lỗi:", err);
           } else if (data) {
-            console.log('Upload thành công:', data);
+            console.log("Upload thành công:", data);
           }
         });
       });
     },
-    sendMutationCreateReview (createReviewInput) {
+    sendMutationCreateReview(createReviewInput) {
       this.$apollo.mutate({
-        mutation: gql`mutation CreateReviewPost($input: CreateReviewInput!){
-  createReview(input: $input)
-  {
-    string
-  }
-}`,
+        mutation: gql`
+          mutation CreateReviewPost($input: CreateReviewInput!) {
+            createReview(input: $input) {
+              string
+            }
+          }
+        `,
         variables: {
           input: {
             reviewId: createReviewInput.id,
@@ -395,59 +488,118 @@ export default {
             content: createReviewInput.content,
             projectId: createReviewInput.projectId,
             galleries: createReviewInput.galleries,
-            liked: []
-          }
-        }
+            liked: [],
+          },
+        },
       });
-      console.log('Phong dep trai');
     },
 
-    createNewReview () {
-      if (this.tempSrc) {
-        const id = generateNewId();
+    sendWarningNotification(notification) {
+      this.$toast.show(notification, {
+        type: "error",
+        theme: "bubble",
+        duration: 3000,
+        position: "top-right",
+      });
+    },
+
+    createNewReview() {
+      const id = generateNewId();
+      if (this.content !== "" || this.tempSrc.length !== 0) {
         const createReviewInput = {
           id: id.toString(),
-          authorId: '623f0440bf28618e8d3eb0d8',
+          authorId: "623f0440bf28618e8d3eb0d8",
           content: this.content,
           projectId: this.project.id,
-          galleries:
-          [],
-          liked: []
+          galleries: [],
+          liked: [],
         };
         this.tempFile.forEach((x) => {
           this.sendImagesToSever(createReviewInput.id);
           const tempObject = {};
-          tempObject.path = 'https://weblisting.hn.ss.bfcplatform.vn/' + 'review/' + id + '/' + x.name;
+          tempObject.path =
+            "https://weblisting.hn.ss.bfcplatform.vn/" +
+            "review/" +
+            id +
+            "/" +
+            x.name;
           tempObject.contentType = x.type;
           createReviewInput.galleries.push(tempObject);
         });
 
         this.sendMutationCreateReview(createReviewInput);
-
-        this.showCreatePostForm = false;
+        this.isFormShown = !this.isFormShown;
+        this.content = "";
+        this.tempFile = [];
+        this.tempSrc = [];
+      } else {
+        this.sendWarningNotification("Bài viết chưa có thông tin");
       }
 
-      function generateNewId () {
-        const ObjectIddd = (m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) =>
-          s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h));
+      function generateNewId() {
+        const ObjectIddd = (
+          m = Math,
+          d = Date,
+          h = 16,
+          s = (s) => m.floor(s).toString(h)
+        ) =>
+          s(d.now() / 1000) +
+          " ".repeat(h).replace(/./g, () => s(m.random() * h));
         return ObjectIddd();
       }
-    }
-  }
+    },
+
+    LoadNewReviews() {
+      if (this.isLoading === true) {
+        return;
+      }
+      this.isLoading = true;
+
+      if (this.skip + 5 <= this.reviewsWithPagination.totalCount) {
+        this.skip += 5;
+      } else {
+        this.take = this.reviewsWithPagination.totalCount - this.skip;
+      }
+      if (this.skip !== this.reviewsWithPagination.totalCount) {
+        this.$apollo.queries.reviewsWithPagination.fetchMore({
+          variables: {
+            skip: this.skip,
+            take: this.take,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            this.isLoading = false;
+            return {
+              reviewsWithPagination: {
+                __typename: previousResult.reviewsWithPagination.__typename,
+                items: [
+                  ...previousResult.reviewsWithPagination.items,
+                  ...fetchMoreResult.reviewsWithPagination.items,
+                ],
+                totalCount: fetchMoreResult.reviewsWithPagination.totalCount,
+              },
+            };
+          },
+        });
+      }
+      if (this.take === this.reviewsWithPagination.totalCount - this.skip) {
+        this.skip = this.reviewsWithPagination.totalCount;
+      }
+    },
+  },
 };
 
-function createMockReview (item) {
+function createMockReview(item, project) {
   const tempImageSources = [];
-  item.galleries.forEach(x => tempImageSources.push(x.path));
+  item.galleries.forEach((x) => tempImageSources.push(x.path));
   const tempComments = [];
   if (item.comments.length > 0) {
     item.comments.forEach((x) => {
       const tempComment = {
         authorName: x.author.authorName,
         authorAvatarSource:
-          'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
+          "https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
         dateCreated: new Date(x.createdAt),
-        content: x.content
+        content: x.content,
       };
       tempComments.push(tempComment);
     });
@@ -456,15 +608,15 @@ function createMockReview (item) {
     id: item.id,
     authorName: item.author.name,
     authorAvatarSource:
-      'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
+      "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg",
     dateCreated: new Date(item.createdAt),
     project: {
-      name: 'The sun avenue',
-      slug: 'cho-thue-can-ho-chung-cu-lavita-charm-thu-duc'
+      name: project.projectName,
+      slug: "cho-thue-can-ho-chung-cu-lavita-charm-thu-duc",
     },
     content: item.content,
     imageSources: tempImageSources,
-    comments: tempComments
+    comments: tempComments,
   };
 }
 </script>

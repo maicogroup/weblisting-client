@@ -119,7 +119,6 @@ export default {
         const zaloPanelRect = zaloPanel.getBoundingClientRect();
         zaloPanel.style.top = zaloButtonRect.top - zaloPanelRect.height + 25 + 'px';
         zaloPanel.style.left = zaloButtonRect.left - zaloPanelRect.width - 10 + 'px';
-        console.log('UNMOUNTED');
       };
 
       window.addEventListener('scroll', handleZaloPanelPosition);

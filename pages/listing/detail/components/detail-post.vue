@@ -362,7 +362,6 @@ export default {
               }
               description
               images
-              sEOContent
               pageInfors {
                 title
                 slug

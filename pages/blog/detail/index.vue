@@ -66,13 +66,18 @@
       </div>
     </div>
     <div class="sticky hidden sm:inline-flex flex-col top-1/2 p-3 h-fit">
-      <p>Chia sẻ</p>
+      <client-only>
+        <div class="w-0 hidden lg:block">
+          <share-blog-section class="ml-[52px] top-[250px] sticky" />
+        </div>
+      </client-only>
     </div>
   </div>
 </template>
 
 <script>
 import gql from "graphql-tag";
+import ShareBlogSection from "./components/share-blog-section.vue";
 import ShowEditor from "~/components/editor/Show.vue";
 import NewComment from "~/components/comment/new-comment.vue";
 const getBlog = gql`
@@ -140,7 +145,48 @@ const createComment = gql`
   }
 `;
 export default {
+  components: { ShowEditor, NewComment, ShareBlogSection },
+  data() {
+    return {
+      content: {},
+      newComment: "",
+      newReply: "",
+      isStick: true,
+      hasId: false,
+      replyIsShow: false,
+    };
+  },
+  computed: {
+    totalItem() {
+      if (this.commentsWithPagination == null) {
+        return 0;
+      }
+      return this.commentsWithPagination.totalCount;
+    },
+    comments() {
+      console.log("a");
+      if (this.commentsWithPagination == null) {
+        return [];
+      } else {
+        console.log(this.commentsWithPagination.items);
+        return this.commentsWithPagination.items.map((item) => {
+          return {
+            id: item.id,
+            commentParentId: item.commentParentId,
+            dicussionId: item.discussionId,
+            content: item.content,
+            createdAt: item.createdAt,
+            author: {
+              authorName: item.author.authorName,
+            },
+            replies: item.replies,
+          };
+        });
+      }
+    },
+  },
   mounted() {
+    // console.log(this.$route.params.slug);
     this.content = JSON.parse(this.blog.content);
     if (this.blog.id != null) {
       console.log("haha");
@@ -350,7 +396,6 @@ export default {
       }
     },
   },
-  components: { ShowEditor, NewComment },
 };
 </script>
 

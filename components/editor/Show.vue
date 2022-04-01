@@ -1,12 +1,12 @@
 <template>
   <div>
     <template v-for="(block, index) in editorContent.blocks">
-      <h1
+      <h2
         v-if="block.type === 'header' && block.data.level === 1"
         :key="block.id"
       >
         {{ block.data.text }}
-      </h1>
+      </h2>
 
       <h2
         v-if="block.type === 'header' && block.data.level === 2"
@@ -43,27 +43,38 @@
         {{ block.data.text }}
       </h6>
 
-      <p v-if="block.type === 'paragraph'" :key="block.id" v-html="block.data.text">
-      </p>
+      <p
+        v-if="block.type === 'paragraph'"
+        :key="block.id"
+        v-html="block.data.text"
+        class="pineditor"
+      ></p>
 
-      <div v-if="block.type === 'list' && block.data.style === 'unordered'" :key="index">
+      <div
+        v-if="block.type === 'list' && block.data.style === 'unordered'"
+        :key="index"
+      >
         <ul>
-          <li v-for="item in block.data.items" :key="item">{{item}}</li>
+          <li v-for="item in block.data.items" :key="item">{{ item }}</li>
         </ul>
       </div>
 
-      <div v-if="block.type === 'list' && block.data.style === 'ordered'" :key="index">
+      <div
+        v-if="block.type === 'list' && block.data.style === 'ordered'"
+        :key="index"
+      >
         <ol>
-          <li v-for="item in block.data.items" :key="item">{{item}}</li>
+          <li v-for="item in block.data.items" :key="item">{{ item }}</li>
         </ol>
       </div>
 
-      <img
-        v-if="block.type === 'image'"
-        :src="block.data.file.url"
-        :alt="block.data.caption"
-        :key="block.id"
-      />
+      <div :key="block.id">
+        <img
+          v-if="block.type === 'image'"
+          :src="block.data.file.url"
+          :alt="block.data.caption"
+        />
+      </div>
     </template>
   </div>
 </template>
@@ -78,7 +89,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h1 {
+* {
+  color: #1c1917;
+}
+
+h2 {
   display: block;
   font-size: 2em;
   margin-top: 0.67em;
@@ -88,7 +103,7 @@ h1 {
   font-weight: bold;
 }
 
-h2 {
+h3 {
   display: block;
   font-size: 1.5em;
   margin-top: 0.83em;
@@ -98,7 +113,7 @@ h2 {
   font-weight: bold;
 }
 
-h3 {
+h4 {
   display: block;
   font-size: 1.17em;
   margin-top: 1em;
@@ -108,7 +123,7 @@ h3 {
   font-weight: bold;
 }
 
-h4 {
+h5 {
   display: block;
   font-size: 1em;
   margin-top: 1.33em;
@@ -118,9 +133,9 @@ h4 {
   font-weight: bold;
 }
 
-h5 {
+h6 {
   display: block;
-  font-size: .83em;
+  font-size: 0.83em;
   margin-top: 1.67em;
   margin-bottom: 1.67em;
   margin-left: 0;
@@ -128,21 +143,21 @@ h5 {
   font-weight: bold;
 }
 
-h6 {
-  display: block;
-  font-size: .67em;
-  margin-top: 2.33em;
-  margin-bottom: 2.33em;
-  margin-left: 0;
-  margin-right: 0;
-  font-weight: bold;
-}
+// h6 {
+//   display: block;
+//   font-size: .67em;
+//   margin-top: 2.33em;
+//   margin-bottom: 2.33em;
+//   margin-left: 0;
+//   margin-right: 0;
+//   font-weight: bold;
+//}
 
 img {
   margin: auto;
 }
 
-ul { 
+ul {
   list-style-type: disc;
   list-style-position: inside;
 }
@@ -150,5 +165,12 @@ ul {
 ol {
   list-style-type: decimal;
   list-style-position: inside;
+}
+</style>
+
+<style>
+p.pineditor > a {
+  color: blue;
+  text-decoration: underline;
 }
 </style>

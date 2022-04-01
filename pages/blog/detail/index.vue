@@ -1,106 +1,42 @@
 <template>
   <div class="flex px-[22px]">
-    <div style="">
-      <div class="max-w-[773px] wrapper h-500 p-2">
-        <div class="mb-5">
-          {{ blog.id }}
-          {{ comments.length }}
-          <h1>{{ blog.pageInfor.title }}</h1>
-          <span class="font-bold text-sm leading-4 text-stone-900">{{
-            blog.author.name
-          }}</span>
-          ·
-          <span class="font-normal text-sm leading-4 text-neutral-400">{{
-            blog.createdAt.substring(0, 10)
-          }}</span>
-        </div>
-        <show-editor :editor-content="content" />
-        <divider class="my-5" />
-        <div class="font-medium text-lg leading-6">
-          <p class="mt-7 mb-5">
-            Có thể bạn quan tâm:
-          </p>
-          <ul class="">
-            <li>Hơn 90% team Công nghệ toàn mấy thằng lầy.</li>
-            <li>Phát hiện chấn động: ăn cơm nhiều có thể khiến bạn no!</li>
-            <li>
-              Nếu lấy 50% dân số trái đất cộng 50% dân số trên trái đất sẽ ra toàn
-              bộ dân số thế giới.
-            </li>
-            <li>Nhắm mắt lại thì thấy tối thui - dấu hiệu của bệnh trầm cảm?</li>
-          </ul>
-        </div>
-        <div class="space-y-3 mt-5">
-          <p>{{ totalItem }} bình luận</p>
-          <div class="flex items-start justify-between space-x-2">
-            <input
-              id="myInput"
-              v-model="newComment"
-              type="text"
-              placeholder="Mời bạn để lại bình luận"
-            >
-            <button
-              id="createComment"
-              class="bg-green-600 px-5 py-2 text-white"
-              style="border-radius: 5px"
-              @click="createComment"
-            >
-              Bình luận
-            </button>
-          </div>
-          <div class="p-5 border rounded border-stone-200">
-            <div v-for="comment in comments" :key="comment.id">
-              <template v-if="comment.commentParentId == null">
-                <p class="text-base font-bold leading-4">
-                  {{ comment.author.authorName }}
-                </p>
-                <span>{{ comment.content }}</span>
-                <div class="flex items-start justify-start space-x-2">
-                  <span class="text-sky-500" @click="replyIsShow = true">Trả lời</span>
-                  <p>·</p>
-                  <span>{{ comment.createdAt.substring(0, 10) }}</span>
-                </div>
-                <div v-if="replyIsShow" class="flex items-start justify-between space-x-2">
-                  <input
-                    id="myInput"
-                    v-model="newReply"
-                    type="text"
-                    placeholder="Mời bạn để lại bình luận"
-                  >
-                  <button
-                    id="createComment"
-                    class="bg-green-600 px-5 py-2 text-white"
-                    style="border-radius: 5px"
-                    @click="createReply(comment.id)"
-                  >
-                    Bình luận
-                  </button>
-                </div>
-                <div
-                  v-if="comment.replies.length > 0"
-                  class="p-2 ml-5 my-3 border rounded bg-slate-50"
-                >
-                  <div v-for="reply in comment.replies" :key="reply.id">
-                    <div class="flex items-start justify-start space-x-2">
-                      <p class="text-base font-bold">
-                        {{ reply.author.authorName }}
-                      </p>
-                      <p>·</p>
-                      <span>{{ reply.createdAt.substring(0, 10) }}</span>
-                    </div>
-                    <p>{{ reply.content }}</p>
-                    <divider class="mb-2" />
-                  </div>
-                </div>
-
-                <divider class="my-3" />
-              </template>
-            </div>
-          </div>
+  <div class="m-auto h-500 p-2 w-full px-5 max-w-[773px] px-[22px]">
+    <div class="mb-5">
+      <!--        {{ blog.id }} -->
+      <!-- {{ comments.length }} -->
+      <h1>{{ blog.pageInfor.title }}</h1>
+      <span class="font-bold text-sm leading-4 text-stone-900"
+        >{{ blog.author.name }}
+        <span class="font-normal text-neutral-400">{{
+          `· ${blog.createdAt.substring(0, 10)}`
+        }}</span>
+      </span>
+    </div>
+    <show-editor :editorContent="content" />
+    <divider class="my-5" />
+    <div class="font-medium text-lg leading-6">
+      <p class="mt-7 mb-5">Có thể bạn quan tâm:</p>
+      <ul class="">
+        <li>Hơn 90% team Công nghệ toàn mấy thằng lầy.</li>
+        <li>Phát hiện chấn động: ăn cơm nhiều có thể khiến bạn no!</li>
+        <li>
+          Nếu lấy 50% dân số trái đất cộng 50% dân số trên trái đất sẽ ra toàn
+          bộ dân số thế giới.
+        </li>
+        <li>Nhắm mắt lại thì thấy tối thui - dấu hiệu của bệnh trầm cảm?</li>
+      </ul>
+    </div>
+    <div class="space-y-3 mt-5">
+      <p>{{ totalItem }} bình luận</p>
+      <new-comment v-model="newComment" :handleSubmit="createComment" />
+      <div class="p-5 border rounded border-stone-200">
+        <div v-for="comment in comments" :key="comment.id">
+          <comment-component :comment="comment" :createReply="createReply" />
         </div>
       </div>
     </div>
-    <client-only>
+  </div>
+      <client-only>
       <div class="w-0 hidden lg:block">
         <share-blog-section class="ml-[52px] top-[250px] sticky" />
       </div>
@@ -109,9 +45,10 @@
 </template>
 
 <script>
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 import ShareBlogSection from './components/share-blog-section.vue';
-import ShowEditor from '~/components/editor/Show.vue';
+import ShowEditor from "~/components/editor/Show.vue";
+import NewComment from "~/components/comment/new-comment.vue";
 const getBlog = gql`
   query GetBlog($condition: BlogCollectionFilterInput) {
     blog(where: $condition) {
@@ -141,7 +78,12 @@ const getComment = gql`
     $take: Int
     $skip: Int
   ) {
-    commentsWithPagination(where: $condition, order: $order, take: $take, skip: $skip) {
+    commentsWithPagination(
+      where: $condition
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
       totalCount
       items {
         id
@@ -172,7 +114,7 @@ const createComment = gql`
   }
 `;
 export default {
-  components: { ShowEditor, ShareBlogSection },
+  components: { ShowEditor, NewComment, ShareBlogSection },
   data () {
     return {
       content: {},
@@ -227,14 +169,10 @@ export default {
           createdAt: 'DESC'
         },
         take: 10,
-        skip: 0
+        skip: 0,
       });
       this.hasId = true;
     }
-    window.addEventListener('scroll', this.handleScroll);
-  },
-  destroyed () {
-    window.removeEventListener('scroll', this.handleScroll);
   },
   apollo: {
     blog: {
@@ -265,23 +203,51 @@ export default {
       skip () {
         return !this.hasId;
       },
-      update: data => data.commentsWithPagination
-    }
+      update: (data) => data.commentsWithPagination,
+    },
   },
-  methods: {
-    handleScroll (event) {
-      const scrollCheck = window.innerHeight - window.scrollY;
-      // console.log(scrollCheck);
-      if (scrollCheck <= 160) {
-        this.isStick = false;
-        // console.log("set false");
+  data() {
+    return {
+      content: {},
+      newComment: "",
+      newReply: "",
+      isStick: true,
+      hasId: false,
+      replyIsShow: false,
+    };
+  },
+  computed: {
+    totalItem() {
+      if (this.commentsWithPagination == null) {
+        return 0;
+      }
+      return this.commentsWithPagination.totalCount;
+    },
+    comments() {
+      console.log("a");
+      if (this.commentsWithPagination == null) {
+        return [];
       } else {
-        // console.log("set true");
-        this.isStick = true;
+        console.log(this.commentsWithPagination.items);
+        return this.commentsWithPagination.items.map((item) => {
+          return {
+            id: item.id,
+            commentParentId: item.commentParentId,
+            dicussionId: item.discussionId,
+            content: item.content,
+            createdAt: item.createdAt,
+            author: {
+              authorName: item.author.authorName,
+            },
+            replies: item.replies,
+          };
+        });
       }
     },
-    createComment () {
-      if (this.newComment != '') {
+  },
+  methods: {
+    createComment: function () {
+      if (this.newComment != "") {
         const cmt = this.newComment;
         this.$apollo.mutate({
           mutation: createComment,
@@ -303,40 +269,42 @@ export default {
               variables: {
                 condition: {
                   discussionId: {
-                    eq: this.blog.id
-                  }
+                    eq: this.blog.id,
+                  },
                 },
                 order: {
-                  createdAt: 'DESC'
+                  createdAt: "DESC",
                 },
                 take: 10,
-                skip: 0
-              }
+                skip: 0,
+              },
             };
 
             const { commentsWithPagination } = store.readQuery(query);
 
-            const comment = {
+            var comment = {
               id: createComment.string,
               discussionId: this.blog.id,
               content: cmt,
               type: 'Blog',
               commentParentId: '',
               author: {
-                authorId: '623f0408bf28618e8d3eb0d7',
-                authorName: 'Đỗ Minh Nhật',
-                __typename: 'Author'
+                authorId: "623f0408bf28618e8d3eb0d7",
+                authorName: "Đỗ Minh Nhật",
+                __typename: "Author",
               },
               createdAt: Date.now().toString(),
               replies: [],
-              __typename: 'CommentCollection'
+              __typename: "CommentCollection",
             };
             commentsWithPagination.items.unshift(comment);
             commentsWithPagination.totalCount += 1;
 
-            store.writeQuery({ ...query, data: { commentsWithPagination } });
-          }
-
+            store.writeQuery({
+              ...query,
+              data: { commentsWithPagination: commentsWithPagination },
+            });
+          },
         });
         this.$toast.show('Thêm thành công!', {
           type: 'success',
@@ -359,7 +327,7 @@ export default {
         console.log(this.comments);
       }
     },
-    createReply (commentParentId) {
+    createReply(commentParentId, comment) {
       console.log(commentParentId);
       if (this.newReply != null) {
         this.$apollo.mutate({
@@ -367,15 +335,15 @@ export default {
           variables: {
             input: {
               discussionId: this.blog.id,
-              content: this.newReply,
-              commentParentId,
-              type: 'Blog',
+              content: comment,
+              commentParentId: commentParentId,
+              type: "Blog",
               author: {
-                authorId: '623f0440bf28618e8d3eb0d8',
-                authorName: 'Cーちゃん'
-              }
-            }
-          }
+                authorId: "623f0440bf28618e8d3eb0d8",
+                authorName: "Cーちゃん",
+              },
+            },
+          },
         });
         this.$toast.show('Thêm thành công!', {
           type: 'success',
@@ -384,7 +352,6 @@ export default {
           position: 'top-right'
         });
         this.replyIsShow = false;
-        this.newReply = '';
         this.$apollo.queries.commentsWithPagination.refetch({
           condition: {
             discussionId: {
@@ -396,29 +363,14 @@ export default {
           }
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.share {
-  position: fixed;
-  top: 50%;
-  left: 75%;
-  transform: translateX(100%) translateY(-50%);
-  height: 250px;
-  width: 50px;
-  background-color: #000;
-}
 html {
   position: relative;
-}
-.stick {
-  position: absolute;
-  left: 75%;
-  transform: translateX(100%) translateY(-50%);
-  top: calc(100% - 360px);
 }
 
 h1 {

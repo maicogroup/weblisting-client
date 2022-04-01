@@ -1,38 +1,72 @@
 <template>
-  <div class="m-auto h-500 p-2 w-full px-5 sm:px-[15%] md:px-[23%]">
-    <div class="mb-5">
-      <!--        {{ blog.id }} -->
-      <!-- {{ comments.length }} -->
-      <h1>{{ blog.pageInfor.title }}</h1>
-      <span class="font-bold text-sm leading-4 text-stone-900"
-        >{{ blog.author.name }}
-        <span class="font-normal text-neutral-400">{{
-          `· ${blog.createdAt.substring(0, 10)}`
-        }}</span>
-      </span>
+  <div
+    class="wrapper flex w-full flex-row justify-center px-5 sm:px-[15%] md:px-[23%]"
+  >
+    <div v-if="!content.blocks.length" class="m-auto h-500 p-2 w-full">
+      <div class="mb-5">
+        <div class="loading h-[60px] mb-4 bg-stone-500 rounded-3xl"></div>
+        <span class="font-bold text-sm leading-4 text-stone-900">
+          <div
+            class="loading w-[50px] h-[16px] bg-stone-400 inline-block rounded-3xl"
+          ></div>
+          <div
+            class="loading w-[50px] h-[16px] bg-stone-200 inline-block rounded-3xl"
+          ></div>
+          <span class="font-normal text-neutral-400"></span>
+        </span>
+      </div>
+      <div class="w-full">
+        <div
+          class="loading w-[50%] h-[40px] mb-5 bg-stone-400 rounded-3xl"
+        ></div>
+        <div
+          class="loading w-[100%] mb-5 h-[400px] bg-stone-200 rounded-3xl"
+        ></div>
+        <div
+          class="loading w-[70%] h-[40px] mb-5 bg-stone-400 rounded-3xl"
+        ></div>
+        <div class="loading w-[100%] h-[400px] bg-stone-200 rounded-3xl"></div>
+      </div>
     </div>
-    <show-editor :editorContent="content" />
-    <divider class="my-5" />
-    <div class="font-medium text-lg leading-6">
-      <p class="mt-7 mb-5">Có thể bạn quan tâm:</p>
-      <ul class="">
-        <li>Hơn 90% team Công nghệ toàn mấy thằng lầy.</li>
-        <li>Phát hiện chấn động: ăn cơm nhiều có thể khiến bạn no!</li>
-        <li>
-          Nếu lấy 50% dân số trái đất cộng 50% dân số trên trái đất sẽ ra toàn
-          bộ dân số thế giới.
-        </li>
-        <li>Nhắm mắt lại thì thấy tối thui - dấu hiệu của bệnh trầm cảm?</li>
-      </ul>
-    </div>
-    <div class="space-y-3 mt-5">
-      <p>{{ totalItem }} bình luận</p>
-      <new-comment v-model="newComment" :handleSubmit="createComment" />
-      <div class="p-5 border rounded border-stone-200">
-        <div v-for="comment in comments" :key="comment.id">
-          <comment-component :comment="comment" :createReply="createReply" />
+    <div
+      v-if="content.blocks.length > 0"
+      class="wrapper m-auto h-500 p-2 w-full"
+    >
+      <div class="mb-5">
+        <h1>{{ blog.pageInfor.title }}</h1>
+        <span class="font-bold text-sm leading-4 text-stone-900"
+          >{{ blog.author.name }}
+          <span class="font-normal text-neutral-400">{{
+            `· ${blog.createdAt.substring(0, 10)}`
+          }}</span>
+        </span>
+      </div>
+      <show-editor :editorContent="content" />
+      <divider class="my-5" />
+      <div class="font-medium text-lg leading-6">
+        <p class="mt-7 mb-5">Có thể bạn quan tâm:</p>
+        <ul class="">
+          <li>Hơn 90% team Công nghệ toàn mấy thằng lầy.</li>
+          <li>Phát hiện chấn động: ăn cơm nhiều có thể khiến bạn no!</li>
+          <li>
+            Nếu lấy 50% dân số trái đất cộng 50% dân số trên trái đất sẽ ra toàn
+            bộ dân số thế giới.
+          </li>
+          <li>Nhắm mắt lại thì thấy tối thui - dấu hiệu của bệnh trầm cảm?</li>
+        </ul>
+      </div>
+      <div class="space-y-3 mt-5">
+        <p>{{ totalItem }} bình luận</p>
+        <new-comment v-model="newComment" :handleSubmit="createComment" />
+        <div class="p-5 border rounded border-stone-200">
+          <div v-for="comment in comments" :key="comment.id">
+            <comment-component :comment="comment" :createReply="createReply" />
+          </div>
         </div>
       </div>
+    </div>
+    <div class="sticky hidden sm:inline-flex flex-col top-1/2 p-3 h-fit">
+      <p>Chia sẻ</p>
     </div>
   </div>
 </template>
@@ -107,7 +141,6 @@ const createComment = gql`
 `;
 export default {
   mounted() {
-    //console.log(this.$route.params.slug);
     this.content = JSON.parse(this.blog.content);
     if (this.blog.id != null) {
       console.log("haha");
@@ -160,7 +193,7 @@ export default {
   },
   data() {
     return {
-      content: {},
+      content: { blocks: [] },
       newComment: "",
       newReply: "",
       isStick: true,
@@ -369,5 +402,21 @@ input {
   background-color: #f8f8f8;
   font-size: 16px;
   resize: none;
+}
+
+.loading {
+  opacity: 0.5;
+  animation: fade-in 0.8s infinite ease alternate;
+}
+
+.wrapper {
+  opacity: 0;
+  animation: fade-in 0.5s 1 forwards ease-out;
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
 }
 </style>

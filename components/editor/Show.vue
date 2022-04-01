@@ -9,49 +9,49 @@
       </h2>
 
       <h2
-        v-if="block.type === 'header' && block.data.level === 2"
+        v-else-if="block.type === 'header' && block.data.level === 2"
         :key="block.id"
       >
         {{ block.data.text }}
       </h2>
 
       <h3
-        v-if="block.type === 'header' && block.data.level === 3"
+        v-else-if="block.type === 'header' && block.data.level === 3"
         :key="block.id"
       >
         {{ block.data.text }}
       </h3>
 
       <h4
-        v-if="block.type === 'header' && block.data.level === 4"
+        v-else-if="block.type === 'header' && block.data.level === 4"
         :key="block.id"
       >
         {{ block.data.text }}
       </h4>
 
       <h5
-        v-if="block.type === 'header' && block.data.level === 5"
+        v-else-if="block.type === 'header' && block.data.level === 5"
         :key="block.id"
       >
         {{ block.data.text }}
       </h5>
 
       <h6
-        v-if="block.type === 'header' && block.data.level === 6"
+        v-else-if="block.type === 'header' && block.data.level === 6"
         :key="block.id"
       >
         {{ block.data.text }}
       </h6>
 
       <p
-        v-if="block.type === 'paragraph'"
+        v-else-if="block.type === 'paragraph'"
         :key="block.id"
         v-html="block.data.text"
         class="pineditor"
       ></p>
 
       <div
-        v-if="block.type === 'list' && block.data.style === 'unordered'"
+        v-else-if="block.type === 'list' && block.data.style === 'unordered'"
         :key="index"
       >
         <ul>
@@ -60,7 +60,7 @@
       </div>
 
       <div
-        v-if="block.type === 'list' && block.data.style === 'ordered'"
+        v-else-if="block.type === 'list' && block.data.style === 'ordered'"
         :key="index"
       >
         <ol>
@@ -68,9 +68,8 @@
         </ol>
       </div>
 
-      <div :key="block.id">
+      <div :key="block.id" v-else-if="block.type === 'image'">
         <img
-          v-if="block.type === 'image'"
           :src="block.data.file.url"
           :alt="block.data.caption"
         />

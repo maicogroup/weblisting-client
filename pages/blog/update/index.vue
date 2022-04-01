@@ -2,7 +2,12 @@
   <div class="flex flex-row w-full justify-center mb-72">
     <div class="flex flex-col items-center w-[52.25rem] mr-2">
       <h1 class="text-3xl font-bold mb-10">Chỉnh sửa bài viết</h1>
-      <textbox class="mb-6" title="Tiêu đề" v-model="blog.pageInfor.title" />
+      <textbox
+        class="mb-6"
+        title="Tiêu đề"
+        v-model="blog.pageInfor.title"
+        :handleChange="() => (flag = true)"
+      />
       <h2 class="mb-2 text-zinc-800 font-medium"></h2>
       <Editor
         :existingContent="editorContent"
@@ -28,10 +33,19 @@
       "
     >
       <h2 class="mb-7 text-stone-900 font-bold text-lg">Thiết lập bài viết</h2>
-      <textbox class="mb-7" title="Slug" v-model="slug" />
       <textbox
-        title="Meta description"
+        @onchange="() => (flag = true)"
+        class="mb-7"
+        title="Slug"
+        v-model="slug"
+        :handleChange="() => (flag = true)"
+      />
+      <textbox
+        @onchange="() => (flag = true)"
+        title="Meta Description"
         v-model="blog.pageInfor.metaDescription"
+        type="textarea"
+        :handleChange="() => (flag = true)"
       />
     </div>
   </div>
@@ -93,10 +107,14 @@ export default {
   watch: {
     blog: function () {
       this.editorContent = JSON.parse(this.blog.content);
+      this.editorCount = this.editorContent.blocks.length;
+      console.log(this.editorContent);
     },
   },
   data() {
     return {
+      editorCount: 0,
+      flag: false,
       editorContent: { time: "", blocks: [], version: "2.22.2" },
       values: {
         pageInfor: {
@@ -235,6 +253,43 @@ export default {
       //   content: JSON.stringify({ ...this.editorContent, blocks: contentData }),
       // };
       // console.log(submitData);
+      if (
+        this.flag === false &&
+        this.editorContent.blocks.length === this.editorCount
+      ) {
+        this.$toast.show("Dữ liệu chưa có thay đổi", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+          position: "top-right",
+        });
+      }
+      if (this.blog.pageInfor.title === "") {
+        this.$toast.show("Tiêu đề không được để trống!", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+        });
+        return;
+      }
+      if (this.slug === "") {
+        this.$toast.show("Slug không được để trống", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+          position: "top-right",
+        });
+        return;
+      }
+      if (this.blog.pageInfor.metaDescription === "") {
+        this.$toast.show("Meta Description không được để trống", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+          position: "top-right",
+        });
+        return;
+      }
       this.$apollo
         .mutate({
           mutation: updateBlog,

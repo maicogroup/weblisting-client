@@ -3,7 +3,6 @@ import Header from "@editorjs/header";
 import ImageTool from "@editorjs/image";
 import NestedList from "@editorjs/nested-list";
 import Hyperlink from "editorjs-hyperlink";
-import AlignmentBlockTune from "editorjs-text-alignment-blocktune";
 
 
 export default (_, inject) => {
@@ -12,7 +11,7 @@ export default (_, inject) => {
     data: {},
     onChange: () => {},
   };
-  const AlignmentTuneTool = require('editorjs-text-alignment-blocktune');
+  const Paragraph = require('editorjs-paragraph-with-alignment');
   const editor = (options = defaultOptions) => {
     return new EditorJS({
       placeholder: "Let`s write an awesome story!",
@@ -25,22 +24,16 @@ export default (_, inject) => {
        * Pass Tool's class or Settings object for each Tool you want to use
        */
       tools: {
+        paragraph: {
+          class: Paragraph,
+          inlineToolbar: true,
+        },
         header: Header,
         list: {
           class: NestedList,
           inlineToolbar: true,
           config: {
             defaultStyle: "unordered",
-          },
-        },
-        alignmentSetting: {
-          class: AlignmentTuneTool,
-          config: {
-            default: "right",
-            blocks: {
-              header: "center",
-              list: "right",
-            },
           },
         },
         hyperlink: {

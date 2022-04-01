@@ -66,7 +66,7 @@ export default {
 }
 
 .cdx-block > a {
-  color: green;
+  color: green !important;
   text-decoration: underline;
 }
 

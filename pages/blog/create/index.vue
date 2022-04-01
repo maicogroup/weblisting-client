@@ -180,7 +180,43 @@ export default {
         },
         content: JSON.stringify({ ...this.editorContent, blocks: contentData }),
       };
-      console.log(submitData);
+      console.log(this.editorContent);
+      if (submitData.pageInfor.title === "") {
+        this.$toast.show("Tiêu đề không được để trống", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+          position: "top-right",
+        });
+        return;
+      }
+      if (submitData.pageInfor.slug === "") {
+        this.$toast.show("Slug không được để trống", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+          position: "top-right",
+        });
+        return;
+      }
+      if (submitData.pageInfor.metaDescription === "") {
+        this.$toast.show("Meta Description không được để trống", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+          position: "top-right",
+        });
+        return;
+      }
+      if (this.editorContent.blocks.length === 0) {
+        this.$toast.show("Nội dung không được để trống", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+          position: "top-right",
+        });
+        return;
+      }
       this.$apollo
         .mutate({
           mutation: gql`

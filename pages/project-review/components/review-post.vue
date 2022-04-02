@@ -228,7 +228,7 @@
               <review-comment :comment="comment" />
             </div>
           </div>
-          <div v-for="(comment, index) in comments" v-else :key="index">
+          <div v-for="(comment, index) in this.comments" v-else :key="index">
             <review-comment :comment="comment" />
           </div>
         </div>
@@ -282,7 +282,7 @@ export default {
   },
   computed: {
     first3Comments () {
-      const reversignComments = this.review.comments.slice(this.review.comments.length - 3);
+      const reversignComments = this.comments.slice(0, 3);
       if (this.review.comments.length < 3) {
         return null;
       }
@@ -386,9 +386,9 @@ export default {
       };
       if (this.comments.length > 3) {
         // eslint-disable-next-line vue/no-mutating-props
-        this.comments.push(tempComment);
+        this.comments.unshift(tempComment);
       } else {
-        this.comments.push(tempComment);
+        this.comments.unshift(tempComment);
         this.showAllComment = true;
       }
       this.sendAddCommentMutation();

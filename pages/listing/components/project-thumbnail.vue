@@ -1,7 +1,7 @@
 <template>
   <div v-if="project != null" class="w-[100%] mx-auto">
     <div>
-      <img class="w-full h-60 object-cover	lg:h-80" :src="project.images[0]">
+      <img class="w-full h-60 object-cover	lg:h-80" :alt="`Căn hộ chung cư ${project.projectName}`" :src="project.images[0]">
       <h4 class="uppercase mt-4 text-xl font-bold lg:mt-2">
         Căn hộ chung cư {{ project.projectName }}
       </h4>

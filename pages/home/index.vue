@@ -247,7 +247,7 @@ export default {
   layout: "no-fixed-contact",
   data() {
     return {
-      filter: {},
+      filter: { demand: "Cho Thuê" },
       filterMobileVisible: false,
     };
   },
@@ -259,6 +259,10 @@ export default {
           property: "og:image",
           content: "https://weblisting.hn.ss.bfcplatform.vn/og_image.jpg",
         },
+        {
+          name: "robots",
+          content: "noindex",
+        },
       ],
     };
   },
@@ -268,14 +272,14 @@ export default {
     },
 
     handleFilterButtonPressed() {
-      let path = "/danh-sach-can-ho";
+      let path = "";
       if (this.filter.project) {
         path = path + "/" + this.filter.project.pageInfor.slug;
       }
       const query = {};
-      if (this.filter.demand) {
-        query.demand = this.filter.demand;
-      }
+      // if (this.filter.demand) {
+      //   query.demand = this.filter.demand;
+      // }
       if (this.filter.type) {
         query.type = this.filter.type;
       }

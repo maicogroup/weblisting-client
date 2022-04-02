@@ -21,7 +21,7 @@
     <div ref="recommendedPostsContainer" class="mx-5 lg:mx-0 mt-3 no-scrollbar p-2 md:p-4 border flex space-x-3 md:space-x-6 overflow-auto">
       <nuxt-link v-for="post in formatedPosts" :key="post.id" :to="`/chi-tiet-can-ho/${post.slug}`">
         <div class="post border border-stone-200 rounded-md overflow-hidden">
-          <img :src="post.srcimage" class="post-img object-cover">
+          <img :src="post.srcimage" :alt="post.title" class="post-img object-cover">
           <div class="mx-2 my-2">
             <div class="flex justify-between">
               <h4 class="font-bold">
@@ -61,13 +61,13 @@
                 </div>
               </div>
             </div>
-            <h4 class="mt-1 text-xs">
+            <h3 class="mt-1 text-xs">
               {{ post.title }}
-            </h4>
+            </h3>
             <div class="mt-1 flex items-center justify-between text-neutral-400 text-xs">
-              <p class="truncate ...">
+              <h4 class="truncate ...">
                 {{ post.address }}
-              </p>
+              </h4>
               <p class="ml-3 shrink-0">
                 {{ post.date }}
               </p>
@@ -90,7 +90,7 @@ export default {
     formatedPosts () {
       return this.posts.map((p) => {
         return {
-          srcimage: 'https://maico-hub-record.ss-hn-1.bizflycloud.vn/' + (p.gallery.find(c => !c.includes('.mp4')) || 'apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg'),
+          srcimage: 'https://weblisting.ss-hn-1.bizflycloud.vn/' + (p.gallery.find(c => !c.includes('.mp4')) || 'apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg'),
           title: p.pageInfor.title,
           slug: p.pageInfor.slug,
           price: this.formatPrice(p.price, p.demand),

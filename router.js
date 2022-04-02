@@ -36,16 +36,17 @@ export function createRouter() {
         component: EditPost,
       },
       {
-        path: "/tong-quan-du-an/:slug",
-        component: ProjectOverview,
+        path: '/du-an/:slug',
+        component: ProjectOverview
+
       },
       {
         path: "/danh-sach-cho",
         component: PostQueuePage,
       },
       {
-        path: "/danh-sach-can-ho/:slug",
-        component: PostList,
+        path: '*',
+        component: PostList
       },
       {
         path: "/danh-sach-can-ho",

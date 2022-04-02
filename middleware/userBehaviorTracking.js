@@ -40,11 +40,7 @@ function sendTrackingData(data){
     redirect: 'follow'
     };
 
-<<<<<<< HEAD
-    fetch("http://maico.vn:3101/graphql", requestOptions)
-=======
     fetch("https://api-listing.maico.vn/graphql/", requestOptions)
->>>>>>> dev
     .then(response => response.text())
     .catch(error => console.log('error', error));
 };

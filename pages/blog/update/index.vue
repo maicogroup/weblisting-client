@@ -263,6 +263,7 @@ export default {
           duration: 3000,
           position: "top-right",
         });
+        return;
       }
       if (this.blog.pageInfor.title === "") {
         this.$toast.show("Tiêu đề không được để trống!", {
@@ -310,7 +311,7 @@ export default {
           },
         })
         .then((data) => {
-          this.$toast.show("Đăng thành công!", {
+          this.$toast.show("Cập nhật thành công!", {
             type: "success",
             theme: "bubble",
             duration: 3000,

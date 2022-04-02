@@ -134,7 +134,7 @@
         </div>
       </div>
 
-      <gallery ref="galleryref" class="hidden" :items="tempGallery" />
+      <gallery ref="galleryref" class="hidden" :items="tempGallery" :galleryIndex="index" />
       <div class="grid grid-cols-2 border-y my-3 text-sm">
         <button
           :class="[liked ? 'text-[#F33E58]' : 'text-black']"
@@ -261,7 +261,7 @@ import { gql } from 'graphql-tag';
 import reviewComment from './review-comment.vue';
 export default {
   components: { reviewComment },
-  props: ['review'],
+  props: ['review', 'index'],
   data () {
     return {
       //   review: createReview(),

@@ -11,7 +11,7 @@
             {{ review.authorName }}
           </a>
           <div class="text-sm text-neutral-400">
-            {{ formatReviewDateCreated(review.dateCreated) }}
+            {{ formatPostDate(review.dateCreated) }}
           </div>
         </div>
       </div>
@@ -136,7 +136,11 @@
 
       <gallery ref="galleryref" class="hidden" :items="tempGallery" />
       <div class="grid grid-cols-2 border-y my-3 text-sm">
-        <button :class="[liked ? 'text-[#F33E58]':'text-black']" class="py-1.5 px-3 items-center hover:bg-gray-100 border-r" @click="liked = !liked">
+        <button
+          :class="[liked ? 'text-[#F33E58]' : 'text-black']"
+          class="py-1.5 px-3 items-center hover:bg-gray-100 border-r"
+          @click="toggleLike"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="mr-1 h-5 w-5 inline"
@@ -224,7 +228,7 @@
               <review-comment :comment="comment" />
             </div>
           </div>
-          <div v-for="(comment, index) in review.comments" v-else :key="index">
+          <div v-for="(comment, index) in comments" v-else :key="index">
             <review-comment :comment="comment" />
           </div>
         </div>
@@ -253,55 +257,105 @@
 </template>
 
 <script>
-import { gql } from "graphql-tag";
-import reviewComment from "./review-comment.vue";
+import { gql } from 'graphql-tag';
+import reviewComment from './review-comment.vue';
 export default {
   components: { reviewComment },
-  props: ["review"],
-  data() {
+  props: ['review'],
+  data () {
     return {
       //   review: createReview(),
-      content: "",
+      content: '',
       showFullContent: false,
+      comments: this.review.comments.reverse(),
       tempGallery: this.review.imageSources,
+      liked: this.review.isLiked,
       showAllComment: this.isGather3Comments(),
       contentOverflowing: false,
       user: {
-        avatarSource: "https://pbgdpl.daklak.gov.vn/uploads/avatar.png",
+        avatarSource: 'https://pbgdpl.daklak.gov.vn/uploads/avatar.png'
       },
-      liked: false,
-      shortContentClass: "shortcontent",
-      gridForTwoImages: "grid-cols-2",
-      gridForThreeImages: "grid-cols-3",
+      shortContentClass: 'shortcontent',
+      gridForTwoImages: 'grid-cols-2',
+      gridForThreeImages: 'grid-cols-3'
     };
   },
   computed: {
-    first3Comments() {
-      const reversignComments = this.review.comments.reverse().slice(0, 3);
+    first3Comments () {
+      const reversignComments = this.review.comments.slice(this.review.comments.length - 3);
       if (this.review.comments.length < 3) {
         return null;
       }
       return reversignComments;
-    },
+    }
   },
-  mounted() {
+  mounted () {
     const e = this.$refs.reviewContent;
     if (e.clientHeight - e.scrollHeight < 0) {
       this.contentOverflowing = true;
     } else {
       this.contentOverflowing = false;
     }
-    window.addEventListener("resize", this.getOverflow);
+    window.addEventListener('resize', this.getOverflow);
   },
   methods: {
-    isGather3Comments() {
+    formatPostDate (time) {
+      this.today = new Date();
+      const hi = new Date(time);
+      if ((this.today.getFullYear() === hi.getFullYear()) && (this.today.getMonth() === hi.getMonth())) {
+        if (this.today.getDate() === hi.getDate() + 1) {
+          return 'Hôm qua';
+        } else if (this.today.getDate() === hi.getDate()) {
+          if (this.today.getHours() - hi.getHours() > 0) {
+            return this.today.getHours() - hi.getHours() + 'giờ trước';
+          } else if (this.today.getHours() === hi.getHours()) {
+            if (this.today.getMinutes() - hi.getMinutes() === 0) { return 'vừa xong'; }
+            return this.today.getMinutes() - hi.getMinutes() + 'phút trước';
+          }
+        } else { return this.formatReviewDateCreated(hi); }
+      } else { return this.formatReviewDateCreated(hi); }
+    },
+    toggleLike () {
+      this.liked = !this.liked;
+      const tempLiked = this.review.liked;
+
+      if (this.liked) {
+        tempLiked.push('623f0408bf28618e8d3eb0d8');
+      } else {
+        for (const x in tempLiked) {
+          if (tempLiked[x] === '623f0408bf28618e8d3eb0d8') {
+            tempLiked.splice(x, 1);
+            break;
+          }
+        }
+      }
+      console.log('Phong hihi');
+      console.log(this.review.id.toString() + 'gall - ' + this.review.galleries + 'liked -' + tempLiked);
+      this.$apollo.mutate({
+        mutation: gql`
+          mutation UpdateLikhgd($input: UpdateReviewInput!) {
+            updateReview(input: $input) {
+              __typename
+            }
+          }
+        `,
+        variables: {
+          input: {
+            reviewId: this.review.id,
+            liked: tempLiked
+          }
+        }
+      });
+      console.log(tempLiked);
+    },
+    isGather3Comments () {
       if (this.review.comments.length > 3) {
         return false;
       } else {
         return true;
       }
     },
-    sendAddCommentMutation() {
+    sendAddCommentMutation () {
       this.$apollo.mutate({
         mutation: gql`
           mutation CreateNewComment($input: CreateCommentInput!) {
@@ -313,66 +367,66 @@ export default {
         variables: {
           input: {
             author: {
-              authorName: "Phonghong",
+              authorName: 'Phonghong'
             },
             content: this.content,
             discussionId: this.review.id,
-            type: "Review",
-          },
-        },
+            type: 'Review'
+          }
+        }
       });
     },
-    addNewComment() {
+    addNewComment () {
       const tempComment = {
-        authorName: "Phong Ga",
+        authorName: 'Phong Ga',
         authorAvatarSource:
-          "https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
+          'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
         dateCreated: new Date(),
-        content: this.content,
+        content: this.content
       };
-      if (this.review.comments.length > 3) {
+      if (this.comments.length > 3) {
         // eslint-disable-next-line vue/no-mutating-props
-        this.review.comments.push(tempComment);
+        this.comments.push(tempComment);
       } else {
-        this.review.comments.push(tempComment);
+        this.comments.push(tempComment);
         this.showAllComment = true;
       }
       this.sendAddCommentMutation();
-      this.content = "";
+      this.content = '';
     },
-    getOverflow() {
+    getOverflow () {
       const e = this.$refs.reviewContent;
       this.contentOverflowing = e.clientHeight - e.scrollHeight < 0;
     },
-    setFocus() {
+    setFocus () {
       setTimeout(function () {
-        document.getElementById("discussArea").focus();
+        document.getElementById('discussArea').focus();
       }, 0);
     },
-    handleGallery(index) {
+    handleGallery (index) {
       this.tempGallery = this.review.imageSources;
       if (this.$refs.galleryref) {
         console.log(this.tempGallery);
         console.log(this.$refs.galleryref.items);
         this.tempGallery.forEach((element) => {
-          let item = "";
-          if (element.includes(".mp4")) {
+          let item = '';
+          if (element.includes('.mp4')) {
             item = {
-              poster: "/images/video-poster.jpg",
-              thumb: "/images/video-thumbnail.jpg",
-              html: `<video class="lg-video-object lg-html5" controls preload="none"><source src="${element}" type="video/mp4">Your browser does not support HTML5 video</video>`,
+              poster: '/images/video-poster.jpg',
+              thumb: '/images/video-thumbnail.jpg',
+              html: `<video class="lg-video-object lg-html5" controls preload="none"><source src="${element}" type="video/mp4">Your browser does not support HTML5 video</video>`
             };
           } else {
             item = {
               src: element,
-              thumb: element,
+              thumb: element
             };
           }
         });
         this.$refs.galleryref.openGallery(index);
       }
     },
-    formatReviewDateCreated(dateCreated) {
+    formatReviewDateCreated (dateCreated) {
       const day = dateCreated.getDate();
       // getMonth trả về tháng bắt đầu từ 0 đến 11
       const month = dateCreated.getMonth() + 1;
@@ -380,63 +434,63 @@ export default {
 
       return `${padZero(day)}/${padZero(month)}/${year}`;
 
-      function padZero(num) {
-        return num.toString().padStart(2, "0");
+      function padZero (num) {
+        return num.toString().padStart(2, '0');
       }
-    },
-  },
+    }
+  }
 };
-function createReview() {
+function createReview () {
   return {
-    authorName: "Chí Linh",
+    authorName: 'Chí Linh',
     authorAvatarSource:
-      "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg",
+      'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
     dateCreated: new Date(),
     project: {
-      name: "Chung cư Saigon Gateway",
-      slug: "ban-thue-can-ho-chung-cu-the-sun-avenue",
+      name: 'Chung cư Saigon Gateway',
+      slug: 'ban-thue-can-ho-chung-cu-the-sun-avenue'
     },
-    title: "Tên đề của bài đánh giá",
+    title: 'Tên đề của bài đánh giá',
     content:
-      "Hôm qua mình có chuyển nhà, mình thấy quá mệt mỏi nên đã quyết định lên núi ở Tây Tạng và học được Phép thuật ở đây. Giờ đây mình đã có khả năng điều khiển không thời gian, đi xuyên qua các đa vũ trụ, có khả năng nhìn thấu tương lai, vượt qua tam giới, hiểu được nhân sinh, hiểu được tiếng mèo kêu. Ngày mai mình sẽ qua thiên hà Tiên Nữ chơi, bay Milky Way ^^",
+      'Hôm qua mình có chuyển nhà, mình thấy quá mệt mỏi nên đã quyết định lên núi ở Tây Tạng và học được Phép thuật ở đây. Giờ đây mình đã có khả năng điều khiển không thời gian, đi xuyên qua các đa vũ trụ, có khả năng nhìn thấu tương lai, vượt qua tam giới, hiểu được nhân sinh, hiểu được tiếng mèo kêu. Ngày mai mình sẽ qua thiên hà Tiên Nữ chơi, bay Milky Way ^^',
     imageSources: [
-      "https://www3.nhk.or.jp/nhkworld/en/radio/cooking/update/meal_200228_l.jpg",
-      "https://pogogi.com/sites/default/files/japanesefoodimages/2015/2/134%20Furai.jpg",
-      "https://kenh14cdn.com/thumb_w/660/2019/1/25/3cbbd3ec62d085e2372585f56ccc8c69-15484114508781292670329.jpg",
-      "https://img.tinxe.vn/resize/1000x-/2020/10/08/vwnbOqjE/mazda-furai-concept-front-studio-20a5.jpg",
-      "https://i.ytimg.com/vi/K_7lPqLZrE8/maxresdefault.jpg",
+      'https://www3.nhk.or.jp/nhkworld/en/radio/cooking/update/meal_200228_l.jpg',
+      'https://pogogi.com/sites/default/files/japanesefoodimages/2015/2/134%20Furai.jpg',
+      'https://kenh14cdn.com/thumb_w/660/2019/1/25/3cbbd3ec62d085e2372585f56ccc8c69-15484114508781292670329.jpg',
+      'https://img.tinxe.vn/resize/1000x-/2020/10/08/vwnbOqjE/mazda-furai-concept-front-studio-20a5.jpg',
+      'https://i.ytimg.com/vi/K_7lPqLZrE8/maxresdefault.jpg'
     ],
     comments: [
       {
-        authorName: "Linh Chí",
+        authorName: 'Linh Chí',
         authorAvatarSource:
-          "https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
+          'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
         dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content: "Đúng vậy hết sức bất mãn với cái vụ cơm chó này, vote 1 sao",
+        content: 'Đúng vậy hết sức bất mãn với cái vụ cơm chó này, vote 1 sao'
       },
       {
-        authorName: "Linh Chí",
+        authorName: 'Linh Chí',
         authorAvatarSource:
-          "https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png",
+          'https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png',
         dateCreated: new Date(2069, 3, 19, 9, 4, 23),
         content:
-          "Gì, mình thấy quán này ok mà, hôm bữa dẫn người iu đi ăn ở đây thấy vui và ngon mà, 5 sao nha",
+          'Gì, mình thấy quán này ok mà, hôm bữa dẫn người iu đi ăn ở đây thấy vui và ngon mà, 5 sao nha'
       },
       {
-        authorName: "Dr Strange",
+        authorName: 'Dr Strange',
         authorAvatarSource:
-          "https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png",
+          'https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png',
         dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content: "Chào đồng môn!",
+        content: 'Chào đồng môn!'
       },
       {
-        authorName: "Linh Chí",
+        authorName: 'Linh Chí',
         authorAvatarSource:
-          "https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png",
+          'https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png',
         dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content: "Quán dở ẹc",
-      },
-    ],
+        content: 'Quán dở ẹc'
+      }
+    ]
   };
 }
 </script>

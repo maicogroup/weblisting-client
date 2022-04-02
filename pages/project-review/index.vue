@@ -301,8 +301,10 @@ export default {
                 content
                 createdAt
                 projectId
+                liked
                 galleries {
                   path
+                  contentType
                 }
                 author {
                   name
@@ -618,6 +620,7 @@ function createMockReview (item, project) {
       tempComments.push(tempComment);
     });
   }
+  const isLiked = item.liked.includes("623f0408bf28618e8d3eb0d8");
   return {
     id: item.id,
     authorName: item.author.name,
@@ -630,7 +633,10 @@ function createMockReview (item, project) {
     },
     content: item.content,
     imageSources: tempImageSources,
-    comments: tempComments
+    comments: tempComments,
+    isLiked: isLiked,
+    galleries: item.galleries,
+    liked: item.liked
   };
 }
 </script>

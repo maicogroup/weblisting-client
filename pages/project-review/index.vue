@@ -182,7 +182,7 @@
     </div>
     <div v-if="reviews.length > 0">
       <div v-for="(review, index) in reviews" :key="index">
-        <review-post :review="review" />
+        <review-post :review="review" :index="index" />
       </div>
     </div>
 

@@ -38,13 +38,18 @@ import newComment from "./new-comment.vue";
 import replyComment from "./reply-comment.vue";
 
 export default {
-  components: { newComment, replyComment, Divider },
+  components: {
+    newComment,
+    replyComment,
+    Divider,
+  },
   methods: {
     toggleReply() {
       this.showReply = !this.showReply;
     },
     handleSubmit: function () {
       this.createReply(this.comment.id, this.newCmt);
+      this.newCmt = "";
     },
   },
   data() {

@@ -38,6 +38,7 @@ export default {
     '~/plugins/lightGallery.client.js',
     '~/plugins/vue-js-modal.js',
     '~/plugins/editor.client.js',
+    '~/plugins/editorjs.client.js',
     '~/plugins/jsonld',
     '~/plugins/gtag'
   ],

@@ -65,6 +65,11 @@ export default {
   height: 100px;
 }
 
+.cdx-block > a {
+  color: green !important;
+  text-decoration: underline;
+}
+
 .editorWrapper h1.ce-header:first-of-type {
   font-size: 50px !important;
 }

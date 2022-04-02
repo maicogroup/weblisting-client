@@ -64,9 +64,10 @@ export default {
         { name: user.name, phoneNumber: user.phoneNumber, id: user.id },
         {
           maxAge: 60 * 60 * 24 * 365,
+          path: "/",
         }
       );
-
+      this.$nuxt.$emit("userLogin");
       this.alreadyHasAccount = !this.signUp;
       this.$emit("close");
       this.$emit("success");

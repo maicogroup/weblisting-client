@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-full items-start justify-between space-x-2">
     <textarea
-      v-model="localValue"
+      v-model="value"
       type="text"
       @input="$emit('input', $event.target.value)"
       class="
@@ -15,10 +15,7 @@
       "
       :rows="rowText < 2 ? 2 : rowText"
       placeholder="Mời bạn để lại bình luận"
-      @keyup.enter.exact="
-        handleSubmit();
-        localValue = '';
-      "
+      @keyup.enter.exact="handleSubmit()"
       @keyup.ctrl.enter="newLine"
       ref="focusMe"
     />
@@ -27,7 +24,6 @@
       :handleClick="
         () => {
           handleSubmit();
-          localValue = '';
         }
       "
       class="bg-green-600 px-5 py-2 whitespace-nowrap text-white rounded-md"

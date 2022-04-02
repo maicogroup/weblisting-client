@@ -69,10 +69,7 @@
       </div>
 
       <div :key="block.id" v-else-if="block.type === 'image'">
-        <img
-          :src="block.data.file.url"
-          :alt="block.data.caption"
-        />
+        <img :src="block.data.file.url" :alt="block.data.caption" />
       </div>
     </template>
   </div>
@@ -165,11 +162,14 @@ ol {
   list-style-type: decimal;
   list-style-position: inside;
 }
-</style>
 
-<style>
 p.pineditor > a {
   color: blue;
   text-decoration: underline;
+}
+h1 {
+  font-weight: 700;
+  font-size: 41px;
+  line-height: 51px;
 }
 </style>

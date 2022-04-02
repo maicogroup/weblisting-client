@@ -21,23 +21,23 @@
     <div ref="recommendedPostsContainer" class="mx-0 sm:mx-5 lg:mx-0 mt-2 sm:mt-3 no-scrollbar p-2.5 md:px-4 md:py-6 border flex space-x-3 md:space-x-6 overflow-auto">
       <nuxt-link v-for="project in formatedProjects" :key="project.id" :to="`/danh-sach-can-ho/${project.slug}`">
         <div class="post border border-stone-200 rounded-md overflow-hidden">
-          <img :src="project.srcimage" class="post-img object-cover">
+          <img :src="project.srcimage" :alt="`Dự án ${project.projectName}`" class="post-img object-cover">
           <div class="mx-2 my-2">
-            <h4 class="font-bold truncate ...">
+            <h3 class="font-bold truncate ...">
               {{ project.projectName }}
-            </h4>
+            </h3>
             <div class="mt-1 flex items-center justify-start text-neutral-400 text-xs">
               <p>
-                36 triệu/m²
+                 {{ project.price }} triệu/m²
               </p>
               <p>
-                · 1.6 ha
+                · {{ project.acreage }}  ha
               </p>
             </div>
             <div class="mt-1 flex items-center justify-between color-A3A3A3 text-xs ">
-              <p>
+              <h4>
                 {{ project.address }}
-              </p>
+              </h4>
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@
         <div class="w-full max-w-screen-xl my-5">
             <div class="md:w-1/2 w-full float-left text-center md:text-left">
                 <div class="flex justify-center md:block">
-                    <img class="h-40 object-contain" src="/images/logo.png"/>
+                    <img class="h-40 object-contain" alt="Maicogroup" src="/images/logo.png"/>
                 </div>
                 
                 <div class="text-center md:text-left">

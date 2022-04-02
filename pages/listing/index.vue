@@ -32,7 +32,7 @@
       <div class="flex justify-between grow">
         <type-filter-dropdown :selected-option="inputFilter.type" @optionchanged="handleTypeFilterChanged" />
         <location-ftiler-dropdown :selected-option="inputFilter.location" @optionchanged="handleLocationFilterChanged" />
-        <project-filter-dropdown :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged" />
+        <project-filter-dropdown :selected-option="inputFilter.project" :demand="inputFilter.demand" @optionchanged="handleProjectFilterChanged" />
         <price-filter-dropdown :selected-option="inputFilter.priceRange" :demand="inputFilter.demand" @optionchanged="handlePriceFilterChanged" />
         <acreage-filter-dropdown :selected-option="inputFilter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
         <direction-filter-dropdown :selected-option="inputFilter.directions" @optionchanged="handleDirectionFilterChanged" />
@@ -187,10 +187,10 @@
     </div>
     <Divider v-if="showIfPostsOfOneProject" class="border-stone-400 mt-7 mb-8 sm:mb-12" />
     <ProjectHeader v-if="showIfPostsOfOneProject" class="mb-5" :project="project" />
-    <div v-if="project && showIfPostsOfOneProject && project.sEOContent" class="rounded-lg border mr-auto w-4/5 ml-auto mt-9 mb-5 px-6 h-fit delay-3000">
+    <div v-if="project && showIfPostsOfOneProject && project.seoContent" class="rounded-lg border mr-auto md:w-4/5 ml-auto mt-9 mb-5 md:px-6 h-fit delay-3000">
       <div
         :class="`overflow-hidden text-ellipsis mt-5 mx-2   ${sEOContentClasses}` "
-        v-html="project.sEOContent"
+        v-html="project.seoContent"
       />
       <p class="text-center font-bold read-more my-4" @click="setSEOContentActiveState()">
         {{ readMoreContent }}
@@ -253,7 +253,7 @@
 
         <acreage-filter-option :selected-option="inputFilter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
 
-        <project-filter-option :selected-option="inputFilter.project" @optionchanged="handleProjectFilterChanged" />
+        <project-filter-option :selected-option="inputFilter.project" :demand="inputFilter.demand" @optionchanged="handleProjectFilterChanged" />
 
         <direction-filter-options :selected-option="inputFilter.directions" @optionchanged="handleDirectionFilterChanged" />
 
@@ -339,14 +339,14 @@ export default {
       isShowAcreage: false,
       isShowProject: false,
       isShowDirection: false,
-      isShowRoomOption: false
+      isShowRoomOption: false,
     };
   },
-
+  
   head () {
     let title;
-    if (this.$route.params.slug) {
-      title = this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).title;
+    if (this.$route.params.pathMatch.replace('/','')) {
+      title = this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.pathMatch.replace('/',''))).title;
     } else {
       const type = this.filter.type ?? 'căn hộ';
       const demand = this.filter.demand;
@@ -385,7 +385,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.slug)).metaDescription
+          content: this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.pathMatch.replace('/',''))).metaDescription
         },
         {
           property: 'og:image',
@@ -397,7 +397,7 @@ export default {
 
   computed: {
     waitTillProjectIsDetermined () {
-      if (this.$route.params.slug) {
+      if (this.$route.params.pathMatch.replace('/','')) {
         return this.filter?.project?.id !== null;
       }
 
@@ -408,7 +408,7 @@ export default {
       return marked(this.tempSEOContent);
     },
     showIfPostsOfOneProject () {
-      return this.$route.params.slug !== undefined;
+      return this.$route.params.pathMatch.replace('/','') !== undefined;
     },
 
     sellButtonClasses () {
@@ -420,6 +420,7 @@ export default {
     },
 
     sEOContentClasses () {
+      
       return this.readMoreButtonIsActive ? 'h-fit opacity-100 ql-editor' : 'h-60 opacity-60';
     }
   },
@@ -434,16 +435,18 @@ export default {
       this.filter = { ...this.createFilterFromUrl(), ...this.filter };
       this.inputFilter = { ...this.filter };
     }
-
+    if(this.$route.params.pathMatch.replace('/','')){
+      this.filter.demand = this.$route.params.pathMatch.replace('/','').includes("ban") ? "Bán" : "Cho Thuê";
+    }
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
-        if (param.slug !== prevParam.slug && param.slug !== null) {
-          this.$apollo.queries.project.refetch({ slug: param.slug });
+        if (param.pathMatch !== prevParam.pathMatch && param.pathMatch !== null) {
+          this.$apollo.queries.project.refetch({ slug: param.pathMatch.replace('/','') });
         }
 
         const newFilter = this.createFilterFromUrl();
-        if (param.slug === prevParam.slug && param.slug !== null) {
+        if (param.pathMatch === prevParam.pathMatch && param.pathMatch !== null) {
           // do thông tin project sẽ không bị load lại nên lấy thông tin project cũ
           newFilter.project = this.filter.project;
         }
@@ -469,8 +472,7 @@ export default {
                     googleMapLocation
                   }
                   images
-                  forSellSEOContent
-                  forRentSEOContent
+                  ${this.$route.params.pathMatch.replace('/','').includes("ban") ?  "forSellSEOContent" : "forRentSEOContent"}
                   pageInfors{
                     title
                     slug
@@ -486,22 +488,23 @@ export default {
           return;
         }
 
-        const project = data.projects[0];
+         const project = data.projects[0];
+        project.seoContent = project.forSellSEOContent ? project.forSellSEOContent : project.forRentSEOContent
 
-        this.filter = { ...this.filter, project: { pageInfor: { slug: this.$route.params.slug }, id: project.id, projectName: project.projectName } };
+        this.filter = { ...this.filter, project: { pageInfor: { slug: this.$route.params.pathMatch.replace('/','') }, id: project.id, projectName: project.projectName } };
         this.inputFilter = { ...this.filter };
 
         return project;
       },
 
       skip () {
-        // return this.filter === null || this.$route.params.slug === null;
-        return this.$route.params.slug === undefined;
+        // return this.filter === null || this.$route.params.pathMatch.replace('/','') === null;
+        return this.$route.params.pathMatch.replace('/','') === undefined;
       },
 
       variables () {
         return {
-          slug: this.$route.params.slug
+          slug: this.$route.params.pathMatch.replace('/','')
         };
       }
     }
@@ -598,14 +601,14 @@ export default {
       this.searchButtonPressed = true;
       this.filter = { ...this.inputFilter };
       this.filterResponsive = false;
-      let path = '/danh-sach-can-ho';
+      let path = '';
       if (this.filter.project) {
         path = path + '/' + this.filter.project.pageInfor.slug;
       }
       const query = {};
-      if (this.filter.demand) {
-        query.demand = this.filter.demand;
-      }
+      // if (this.filter.demand) {
+      //   query.demand = this.filter.demand;
+      // }
       if (this.filter.type) {
         query.type = this.filter.type;
       }

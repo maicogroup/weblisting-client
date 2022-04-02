@@ -66,6 +66,7 @@ export default {
               id
               pageInfors {
                 slug
+                title
               }
             }
           }
@@ -73,7 +74,8 @@ export default {
   },
 
   props: {
-    selectedOption: { type: Object, default: null }
+    selectedOption: { type: Object, default: null },
+    demand:{ type: String}
   },
 
   data () {
@@ -89,6 +91,12 @@ export default {
     filteredProjects () {
       const query = this.searchInput.trim().toLowerCase();
       return this.projects.filter(p => p.projectName.toLowerCase().includes(query));
+    },
+    project(){
+      if(this.selectedOption)
+        return this.projects.filter(p => p.projectName.toLowerCase().includes(this.selectedOption.projectName.toLowerCase()))[0];
+      else
+        return null;
     }
   },
 
@@ -102,6 +110,10 @@ export default {
         }
       },
       immediate: true
+    },
+     demand: function(val){
+      if(this.project)
+        this.handleSelectProject(this.project);
     }
   },
 
@@ -110,15 +122,14 @@ export default {
       return project?.id === this.selectedOption?.id;
     },
 
-    handleSelectProject (project) {
+     handleSelectProject (project) {
       this.open = false;
       this.$emit('optionchanged', {
         projectName: project.projectName,
         id: project.id,
-        pageInfor: project.pageInfors[0]
+        pageInfor: project.pageInfors.filter(c => c.title.toLowerCase().includes(this.demand.toLowerCase()))[0]
       });
     },
-
     handleSelectAllProjectOption () {
       this.open = false;
       this.$emit('optionchanged', null);

@@ -60,7 +60,7 @@
 
       <acreage-filter-option :selected-option="filter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
 
-      <project-filter-option :selected-option="filter.project" @optionchanged="handleProjectFilterChanged" />
+      <project-filter-option :selected-option="filter.project"  :demand="filter.demand" @optionchanged="handleProjectFilterChanged" />
 
       <direction-filter-options :selected-option="filter.directions" @optionchanged="handleDirectionFilterChanged" />
 
@@ -101,7 +101,7 @@ export default {
 
   props: {
     visible: { type: Boolean, default: false },
-    filter: { type: Object, default () { return {}; } }
+    filter: { type: Object, default () { return { demand: "Cho Thuê"}; } }
   },
 
   data () {

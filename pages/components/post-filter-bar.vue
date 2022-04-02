@@ -31,7 +31,7 @@
     <div class="flex justify-between grow">
       <type-filter-dropdown :selected-option="filter.type" @optionchanged="handleTypeFilterChanged" />
       <location-ftiler-dropdown :selected-option="filter.location" @optionchanged="handleLocationFilterChanged" />
-      <project-filter-dropdown :selected-option="filter.project" @optionchanged="handleProjectFilterChanged" />
+      <project-filter-dropdown :selected-option="filter.project"  :demand="filter.demand" @optionchanged="handleProjectFilterChanged" />
       <price-filter-dropdown :selected-option="filter.priceRange" :demand="filter.demand" @optionchanged="handlePriceFilterChanged" />
       <acreage-filter-dropdown :selected-option="filter.acreageRange" @optionchanged="handleAcreageFilterChanged" />
       <direction-filter-dropdown :selected-option="filter.directions" @optionchanged="handleDirectionFilterChanged" />
@@ -79,7 +79,7 @@ export default {
   },
 
   props: {
-    filter: { type: Object, default () { return {}; } }
+    filter: { type: Object, default () { return {demand: "Cho Thuê"}; } }
   },
 
   data () {

@@ -1,62 +1,82 @@
 <template>
-  <div v-if="open" class="fixed inset-0 h-full w-full z-30 bg-black bg-opacity-60" @click.self="cancelModal">
-    <guest-user-login v-if="alreadyHasAccount" @signup="moveToSignUpForm" @success="setCookiesAndCloseModal" @cancel="cancelModal" />
-    <guest-user-signup v-else @login="moveToLoginForm" @success="setCookiesAndCloseModal" @cancel="cancelModal" />
+  <div
+    v-if="open"
+    class="fixed inset-0 h-full w-full z-30 bg-black bg-opacity-60"
+    @click.self="cancelModal"
+  >
+    <guest-user-login
+      v-if="alreadyHasAccount"
+      @signup="moveToSignUpForm"
+      @success="setCookiesAndCloseModal"
+      @cancel="cancelModal"
+    />
+    <guest-user-signup
+      v-else
+      @login="moveToLoginForm"
+      @success="setCookiesAndCloseModal"
+      @cancel="cancelModal"
+    />
   </div>
 </template>
 
 <script>
-import guestUserLogin from './guest-user-authentication/guest-user-login.vue';
-import GuestUserSignup from './guest-user-authentication/guest-user.signup.vue';
+import guestUserLogin from "./guest-user-authentication/guest-user-login.vue";
+import GuestUserSignup from "./guest-user-authentication/guest-user.signup.vue";
 export default {
   components: { guestUserLogin, GuestUserSignup },
 
   props: {
     open: {
-      type: Boolean, required: true, default: false
+      type: Boolean,
+      required: true,
+      default: false,
     },
     signUp: {
-      type: Boolean, default: false
-    }
+      type: Boolean,
+      default: false,
+    },
   },
 
-  data () {
+  data() {
     return {
-      alreadyHasAccount: !this.signUp
+      alreadyHasAccount: !this.signUp,
     };
   },
 
   watch: {
-    signUp (newVal) {
+    signUp(newVal) {
       this.alreadyHasAccount = !newVal;
-    }
+    },
   },
 
   methods: {
-    moveToSignUpForm () {
+    moveToSignUpForm() {
       this.alreadyHasAccount = false;
     },
 
-    moveToLoginForm () {
+    moveToLoginForm() {
       this.alreadyHasAccount = true;
     },
 
-    setCookiesAndCloseModal (user) {
-      this.$cookies.set('GuestUser', { name: user.name, phoneNumber: user.phoneNumber },
+    setCookiesAndCloseModal(user) {
+      this.$cookies.set(
+        "GuestUser",
+        { name: user.name, phoneNumber: user.phoneNumber, id: user.id },
         {
-          maxAge: 60 * 60 * 24 * 365
-        });
+          maxAge: 60 * 60 * 24 * 365,
+        }
+      );
 
       this.alreadyHasAccount = !this.signUp;
-      this.$emit('close');
-      this.$emit('success');
+      this.$emit("close");
+      this.$emit("success");
     },
 
-    cancelModal () {
+    cancelModal() {
       this.alreadyHasAccount = !this.signUp;
-      this.$emit('close');
-      this.$emit('cancel');
-    }
-  }
+      this.$emit("close");
+      this.$emit("cancel");
+    },
+  },
 };
 </script>

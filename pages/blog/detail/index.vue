@@ -185,45 +185,6 @@ export default {
     };
   },
   components: { ShowEditor, NewComment, ShareBlogSection },
-  data() {
-    return {
-      content: {},
-      newComment: "",
-      newReply: "",
-      isStick: true,
-      hasId: false,
-      replyIsShow: false,
-    };
-  },
-  computed: {
-    totalItem() {
-      if (this.commentsWithPagination == null) {
-        return 0;
-      }
-      return this.commentsWithPagination.totalCount;
-    },
-    comments() {
-      console.log("a");
-      if (this.commentsWithPagination == null) {
-        return [];
-      } else {
-        console.log(this.commentsWithPagination.items);
-        return this.commentsWithPagination.items.map((item) => {
-          return {
-            id: item.id,
-            commentParentId: item.commentParentId,
-            dicussionId: item.discussionId,
-            content: item.content,
-            createdAt: item.createdAt,
-            author: {
-              authorName: item.author.authorName,
-            },
-            replies: item.replies,
-          };
-        });
-      }
-    },
-  },
   mounted() {
     // console.log(this.$route.params.slug);
     this.content = JSON.parse(this.blog.content);
@@ -283,6 +244,7 @@ export default {
   },
   data() {
     return {
+      guestUser: null,
       content: { blocks: [] },
       newComment: "",
       newReply: "",
@@ -290,6 +252,9 @@ export default {
       hasId: false,
       replyIsShow: false,
     };
+  },
+  created() {
+    this.guestUser = this.$cookies.get("GuestUser") ?? null;
   },
   computed: {
     totalItem() {
@@ -333,8 +298,8 @@ export default {
               content: this.newComment,
               type: "Blog",
               author: {
-                authorId: "623f0408bf28618e8d3eb0d7",
-                authorName: "Đỗ Minh Nhật",
+                authorId: this.guestUser.id,
+                authorName: this.guestUser.name,
               },
             },
           },
@@ -365,8 +330,8 @@ export default {
               type: "Blog",
               commentParentId: "",
               author: {
-                authorId: "623f0408bf28618e8d3eb0d7",
-                authorName: "Đỗ Minh Nhật",
+                authorId: this.guestUser.id,
+                authorName: this.guestUser.name,
                 __typename: "Author",
               },
               createdAt: date,
@@ -416,8 +381,8 @@ export default {
               commentParentId: commentParentId,
               type: "Blog",
               author: {
-                authorId: "623f0440bf28618e8d3eb0d8",
-                authorName: "Cーちゃん",
+                authorId: this.guestUser.id,
+                authorName: this.guestUser.name,
               },
             },
           },

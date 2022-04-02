@@ -247,6 +247,7 @@ export default {
   layout: "no-fixed-contact",
   data() {
     return {
+      guestUser: null,
       filter: { demand: "Cho Thuê" },
       filterMobileVisible: false,
     };

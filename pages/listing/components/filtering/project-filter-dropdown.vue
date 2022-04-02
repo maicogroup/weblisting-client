@@ -92,6 +92,7 @@ export default {
             id
             pageInfors {
               slug
+              title
             }
           }
         }
@@ -99,7 +100,8 @@ export default {
   },
 
   props: {
-    selectedOption: { type: Object, default: null }
+    selectedOption: { type: Object, default: null },
+    demand: {type: String, default: null}
   },
 
   data () {
@@ -150,10 +152,11 @@ export default {
 
     handleSelectProject (project) {
       this.open = false;
+      console.log(project.pageInfors.filter(c => c.title.includes(this.demand))[0])
       this.$emit('optionchanged', {
         projectName: project.projectName,
         id: project.id,
-        pageInfor: project.pageInfors[0]
+        pageInfor: project.pageInfors.filter(c => c.title.includes(this.demand))[0]
       });
     },
 

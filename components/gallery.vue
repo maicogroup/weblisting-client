@@ -13,7 +13,7 @@
                         >
                             <div :style="`background-image: url(${item.includes('.mp4') ? imgUrl : item}); filter: blur(100px); -webkit-filter: blur(100px);height: 400px;`"></div>
                             <video v-if="item.includes('mp4')" :src="item" controls/>
-                            <img v-else :src="item" />
+                            <img v-else :src="item" :alt="alt" />
                         </li>
                     </ul>
                 </div>
@@ -38,9 +38,13 @@ import Glide from '@glidejs/glide';
 import glide from '@glidejs/glide';
 export default {
     name: 'Gallery',
+<<<<<<< HEAD
     props:["items", "galleryIndex"],
+=======
+    props:["items", "alt"],
+>>>>>>> dev
     data: () => ({
-        imgUrl: "https://maico-hub-record.ss-hn-1.bizflycloud.vn/apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg",
+        imgUrl: "https://weblisting.ss-hn-1.bizflycloud.vn/apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg",
         index: null,
         el: "",
         gallery: []

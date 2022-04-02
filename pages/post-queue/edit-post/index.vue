@@ -391,7 +391,7 @@ export default {
       modalIsShowing: false,
       dragData2: {},
       dragData3: {},
-      imgUrl: "https://maico-hub-record.ss-hn-1.bizflycloud.vn/",
+      imgUrl: "https://weblisting.ss-hn-1.bizflycloud.vn/",
       listData: [1,2,3,4,5],
       slugToCheck: "",
       imageIsChanged: false,

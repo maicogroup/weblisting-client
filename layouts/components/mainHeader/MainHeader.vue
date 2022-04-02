@@ -151,7 +151,7 @@
     />
 
     <Sidebar
-      v-show="showSidebar != null"
+      v-show="showSidebar != false"
       :projects="projects"
       :guest-user="guestUser"
       :class="`z-20 ${(showSidebar)? 'show-side-bar' : 'hide-side-bar'}`"

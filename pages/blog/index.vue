@@ -23,11 +23,11 @@
               :key="blog.id"
               class="flex flex-col md:flex-row mb-[15px] bg-white rounded-md border border-stone-200 overflow-hidden"
             >
-              <nuxt-link class="shrink-0" :to="blog.slug">
-                <img src="~/static/images/home/home-page-bg.jpg" class="h-[220px] w-[370px] md:w-[180px] md:h-[160px] blog-card-image">
+              <nuxt-link class="shrink-0" :to="'/blog/'+blog.slug">
+                <img :src="blog.thumbnail" class="h-[220px] w-[370px] md:w-[180px] md:h-[160px] blog-card-image">
               </nuxt-link>
               <div class="py-2 pr-2 pl-3">
-                <nuxt-link :to="blog.slug" class="font-source-serif-pro font-bold text-xl leading-[30px]">
+                <nuxt-link :to="'/blog/'+blog.slug" class="font-source-serif-pro font-bold text-xl leading-[30px]">
                   {{ blog.title }}
                 </nuxt-link>
                 <div class="text-sm text-neutral-400 flex justify-start">
@@ -78,6 +78,7 @@ export default {
           totalCount
           items {
             id
+            thumbnail
             author {
               name
             },
@@ -106,6 +107,7 @@ export default {
             items {
               content
               id
+              thumbnail
               author {
                 name
               },
@@ -138,7 +140,7 @@ export default {
 
   head () {
     return {
-      title: 'MaicoGroup - Căn hộ xác thực',
+      title: 'MaicoGroup - Tổng quan blog',
       meta: [{
         property: 'og:image',
         content: 'https://weblisting.hn.ss.bfcplatform.vn/og_image.jpg'

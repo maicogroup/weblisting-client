@@ -19,23 +19,10 @@
         src="~/static/images/home/home-page-bg.jpg"
       />
       <div
-        class="
-          relative
-          w-full
-          h-full
-          flex flex-col
-          items-center
-          pt-40
-          md:pt-0 md:justify-center
-        "
+        class="relative w-full h-full flex flex-col items-center pt-40 md:pt-0 md:justify-center"
       >
         <h1
-          class="
-            text-[28px]
-            md:text-5xl
-            font-bold font-source-serif-pro
-            text-slate-50
-          "
+          class="text-[28px] md:text-5xl font-bold font-source-serif-pro text-slate-50"
         >
           Lựa chọn tổ ấm ưng ý của bạn
         </h1>
@@ -44,17 +31,7 @@
         </p>
 
         <div
-          class="
-            search-bar
-            md:hidden
-            font-size-0
-            mt-7
-            flex
-            mx-4
-            box-border
-            rounded-md
-            overflow-hidden
-          "
+          class="search-bar md:hidden font-size-0 mt-7 flex mx-4 box-border rounded-md overflow-hidden"
         >
           <input
             class="h-10 grow pl-3 text-sm outline-none"
@@ -63,15 +40,7 @@
             @click="filterMobileVisible = true"
           />
           <button
-            class="
-              font-bold
-              text-sm
-              py-2
-              px-3
-              bg-green-600
-              hover:bg-green-700
-              text-slate-50
-            "
+            class="font-bold text-sm py-2 px-3 bg-green-600 hover:bg-green-700 text-slate-50"
             @click="handleFilterButtonPressed"
           >
             Tìm kiếm
@@ -79,15 +48,11 @@
         </div>
       </div>
     </div>
+       <button>
+         <NuxtLink to="blog/chu-ky-lan-nay-co-gi">KAKAKAKA</NuxtLink>
+       </button>
     <div
-      class="
-        mt-10
-        md:mt-16
-        grid grid-cols-2
-        md:grid-cols-4
-        max-w-[1000px]
-        mx-auto
-      "
+      class="mt-10 md:mt-16 grid grid-cols-2 md:grid-cols-4 max-w-[1000px] mx-auto"
     >
       <div class>
         <img
@@ -138,14 +103,7 @@
           src="~/static/images/home/wip.jpg"
         />
         <div
-          class="
-            relative
-            h-full
-            flex flex-col
-            justify-center
-            items-center
-            text-slate-50
-          "
+          class="relative h-full flex flex-col justify-center items-center text-slate-50"
         >
           <svg
             class="md:hidden"
@@ -218,16 +176,7 @@
             </p>
           </div>
           <p
-            class="
-              w-[210px]
-              md:w-full
-              mt-2
-              md:mt-4
-              text-2xl
-              md:text-5xl
-              font-bold
-              text-center
-            "
+            class="w-[210px] md:w-full mt-2 md:mt-4 text-2xl md:text-5xl font-bold text-center"
           >
             Chúc quý khách có một ngày tốt lành
           </p>

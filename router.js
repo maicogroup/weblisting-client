@@ -68,7 +68,7 @@ export function createRouter () {
         component: SpecificProjectReview
       },
       {
-        path: '/review-du-an',
+        path: '/review-du-an/:slug',
         component: ProjectReview
       },
     ]

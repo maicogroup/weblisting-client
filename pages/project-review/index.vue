@@ -1,5 +1,7 @@
 <template>
   <div class="w-full max-w-4xl md:px-4">
+    {{ guestUser }}
+    {{ $route.params.slug }}
     <div
       v-if="isFormShown"
       class="fixed top-0 left-0 h-full w-full z-30 bg-black bg-opacity-60"
@@ -58,7 +60,7 @@
               "
             >
             <div class="ml-2 text-sm">
-              <a href="#" class="font-bold"> Phong QUocc </a>
+              <a href="#" class="font-bold"> {{ guestUser.name }} </a>
               <div class="font-bold text-[#0F9AFF]">
                 {{ project.projectName }}
               </div>
@@ -268,10 +270,6 @@ export default {
           }
         `;
       },
-      // skip () {
-      //   // return this.filter === null || this.$route.params.slug === null;
-      //   return this.$route.params.slug === undefined;
-      // },
       update (data) {
         if (data.projects.length === 0) {
           return;
@@ -282,7 +280,7 @@ export default {
       },
       variables () {
         return {
-          slug: 'cho-thue-can-ho-chung-cu-lavita-charm-thu-duc'
+          slug: this.$route.params.slug
         };
       }
     },
@@ -332,6 +330,7 @@ export default {
       }
     }
   },
+
   data () {
     return {
       currentPage: 1,
@@ -345,6 +344,7 @@ export default {
       tempReviews: [],
       take: 5,
       skip: 0,
+      guestUser: null,
       content: '',
       editorOption: {
         theme: 'snow', // 可換
@@ -386,17 +386,19 @@ export default {
     reviews () {
       if (this.reviewsWithPagination !== null && this.project !== null) {
         const tempReviewArray = [];
-        this.reviewsWithPagination.items.forEach((x) => {
-          const tempReview = createMockReview(x, this.project);
-          if (this.tempReviews.length < this.take) {
-            setTimeout(function () {
-              console.log('hello anh em');
-            }, 10000);
-            this.tempReviews.push(tempReview);
-          } else {
-            tempReviewArray.push(tempReview);
-          }
-        });
+        if (this.reviewsWithPagination !== undefined) {
+          this.reviewsWithPagination.items.forEach((x) => {
+            const tempReview = createMockReview(x, this.project);
+            if (this.tempReviews.length < this.take) {
+              setTimeout(function () {
+                console.log('hello anh em');
+              }, 10000);
+              this.tempReviews.push(tempReview);
+            } else {
+              tempReviewArray.push(tempReview);
+            }
+          });
+        }
         if (tempReviewArray.length === 0) {
           return this.tempReviews;
         } else {
@@ -406,6 +408,10 @@ export default {
       }
       return [];
     }
+  },
+
+  created () {
+    this.guestUser = this.$cookies.get('GuestUser') ?? null;
   },
 
   mounted () {
@@ -620,7 +626,7 @@ function createMockReview (item, project) {
       tempComments.push(tempComment);
     });
   }
-  const isLiked = item.liked.includes("623f0408bf28618e8d3eb0d8");
+  const isLiked = item.liked.includes('623f0408bf28618e8d3eb0d8');
   return {
     id: item.id,
     authorName: item.author.name,
@@ -628,13 +634,13 @@ function createMockReview (item, project) {
       'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
     dateCreated: new Date(item.createdAt),
     project: {
-      name: project.projectName,
+      name: 'qua tori mit moi',
       slug: 'cho-thue-can-ho-chung-cu-lavita-charm-thu-duc'
     },
     content: item.content,
     imageSources: tempImageSources,
     comments: tempComments,
-    isLiked: isLiked,
+    isLiked,
     galleries: item.galleries,
     liked: item.liked
   };

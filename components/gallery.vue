@@ -13,7 +13,7 @@
                         >
                             <div :style="`background-image: url(${item.includes('.mp4') ? imgUrl : item}); filter: blur(100px); -webkit-filter: blur(100px);height: 400px;`"></div>
                             <video v-if="item.includes('mp4')" :src="item" controls/>
-                            <img v-else :src="item" :alt="alt" />
+                            <img v-else :src="item" />
                         </li>
                     </ul>
                 </div>

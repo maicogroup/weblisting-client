@@ -226,7 +226,13 @@ export default {
 
     logout () {
       this.$cookies.remove('GuestUser');
+      this.$cookies.set('GuestUser', null,
+        {
+          maxAge: 60 * 60 * 24 * 365
+        });
       this.guestUser = null;
+      location.reload();
+      console.log(this.$cookies.get('GuestUser'));
     },
 
     openAuthenModal (signUp) {

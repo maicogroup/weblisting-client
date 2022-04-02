@@ -1,16 +1,39 @@
 <template>
   <div
-    class="wrapper flex w-full flex-row justify-center px-5 sm:px-[15%] md:px-[23%]"
+    class="
+      wrapper
+      flex
+      w-full
+      flex-row
+      justify-center
+      px-5
+      sm:px-[15%]
+      md:px-[23%]
+    "
   >
     <div v-if="!content.blocks.length" class="m-auto h-500 p-2 w-full">
       <div class="mb-5">
         <div class="loading h-[60px] mb-4 bg-stone-500 rounded-3xl"></div>
         <span class="font-bold text-sm leading-4 text-stone-900">
           <div
-            class="loading w-[50px] h-[16px] bg-stone-400 inline-block rounded-3xl"
+            class="
+              loading
+              w-[50px]
+              h-[16px]
+              bg-stone-400
+              inline-block
+              rounded-3xl
+            "
           ></div>
           <div
-            class="loading w-[50px] h-[16px] bg-stone-200 inline-block rounded-3xl"
+            class="
+              loading
+              w-[50px]
+              h-[16px]
+              bg-stone-200
+              inline-block
+              rounded-3xl
+            "
           ></div>
           <span class="font-normal text-neutral-400"></span>
         </span>
@@ -43,7 +66,7 @@
       </div>
       <show-editor :editorContent="content" />
       <divider class="my-5" />
-      <div class="font-medium text-lg leading-6">
+      <!-- <div class="font-medium text-lg leading-6">
         <p class="mt-7 mb-5">Có thể bạn quan tâm:</p>
         <ul class="">
           <li>Hơn 90% team Công nghệ toàn mấy thằng lầy.</li>
@@ -54,7 +77,7 @@
           </li>
           <li>Nhắm mắt lại thì thấy tối thui - dấu hiệu của bệnh trầm cảm?</li>
         </ul>
-      </div>
+      </div> -->
       <div class="space-y-3 mt-5">
         <p>{{ totalItem }} bình luận</p>
         <new-comment v-model="newComment" :handleSubmit="createComment" />
@@ -244,6 +267,7 @@ export default {
   methods: {
     createComment: function () {
       if (this.newComment != "") {
+        var date = new Date().toLocaleDateString("en-CA");
         const cmt = this.newComment;
         this.$apollo.mutate({
           mutation: createComment,
@@ -289,7 +313,7 @@ export default {
                 authorName: this.guestUser.name,
                 __typename: "Author",
               },
-              createdAt: Date.now().toString(),
+              createdAt: date,
               replies: [],
               __typename: "CommentCollection",
             };

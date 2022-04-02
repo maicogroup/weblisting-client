@@ -134,7 +134,7 @@
         </div>
       </div>
 
-      <gallery ref="galleryref" class="hidden" :items="tempGallery" :galleryIndex="index" />
+      <gallery ref="galleryref" class="hidden" :items="tempGallery" :gallery-index="index" />
       <div class="grid grid-cols-2 border-y my-3 text-sm">
         <button
           :class="[liked ? 'text-[#F33E58]' : 'text-black']"
@@ -228,7 +228,7 @@
               <review-comment :comment="comment" />
             </div>
           </div>
-          <div v-for="(comment, index) in this.comments" v-else :key="index">
+          <div v-for="(comment, index) in comments" v-else :key="index">
             <review-comment :comment="comment" />
           </div>
         </div>
@@ -261,10 +261,9 @@ import { gql } from 'graphql-tag';
 import reviewComment from './review-comment.vue';
 export default {
   components: { reviewComment },
-  props: ['review', 'index'],
+  props: ['review', 'index', 'author'],
   data () {
     return {
-      //   review: createReview(),
       content: '',
       showFullContent: false,
       comments: this.review.comments.reverse(),
@@ -355,7 +354,7 @@ export default {
         return true;
       }
     },
-    sendAddCommentMutation () {
+    sendAddCommentMutation (author) {
       this.$apollo.mutate({
         mutation: gql`
           mutation CreateNewComment($input: CreateCommentInput!) {
@@ -367,7 +366,8 @@ export default {
         variables: {
           input: {
             author: {
-              authorName: 'Phonghong'
+              authorName: author.name,
+              authorId: author.id
             },
             content: this.content,
             discussionId: this.review.id,
@@ -377,22 +377,27 @@ export default {
       });
     },
     addNewComment () {
-      const tempComment = {
-        authorName: 'Phong Ga',
-        authorAvatarSource:
+      if (this.author !== undefined) {
+        const tempComment = {
+          authorName: this.author.name,
+          authorAvatarSource:
           'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
-        dateCreated: new Date(),
-        content: this.content
-      };
-      if (this.comments.length > 3) {
+          dateCreated: new Date(),
+          content: this.content
+        };
+        if (this.comments.length > 3) {
         // eslint-disable-next-line vue/no-mutating-props
-        this.comments.unshift(tempComment);
-      } else {
-        this.comments.unshift(tempComment);
-        this.showAllComment = true;
+          console.log('456');
+          this.comments.unshift(tempComment);
+        } else {
+          console.log('123');
+          this.comments.unshift(tempComment);
+          console.log(this.comments);
+          this.showAllComment = true;
+        }
+        this.sendAddCommentMutation(this.author);
+        this.content = '';
       }
-      this.sendAddCommentMutation();
-      this.content = '';
     },
     getOverflow () {
       const e = this.$refs.reviewContent;
@@ -406,8 +411,6 @@ export default {
     handleGallery (index) {
       this.tempGallery = this.review.imageSources;
       if (this.$refs.galleryref) {
-        console.log(this.tempGallery);
-        console.log(this.$refs.galleryref.items);
         this.tempGallery.forEach((element) => {
           let item = '';
           if (element.includes('.mp4')) {
@@ -440,59 +443,6 @@ export default {
     }
   }
 };
-function createReview () {
-  return {
-    authorName: 'Chí Linh',
-    authorAvatarSource:
-      'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
-    dateCreated: new Date(),
-    project: {
-      name: 'Chung cư Saigon Gateway',
-      slug: 'ban-thue-can-ho-chung-cu-the-sun-avenue'
-    },
-    title: 'Tên đề của bài đánh giá',
-    content:
-      'Hôm qua mình có chuyển nhà, mình thấy quá mệt mỏi nên đã quyết định lên núi ở Tây Tạng và học được Phép thuật ở đây. Giờ đây mình đã có khả năng điều khiển không thời gian, đi xuyên qua các đa vũ trụ, có khả năng nhìn thấu tương lai, vượt qua tam giới, hiểu được nhân sinh, hiểu được tiếng mèo kêu. Ngày mai mình sẽ qua thiên hà Tiên Nữ chơi, bay Milky Way ^^',
-    imageSources: [
-      'https://www3.nhk.or.jp/nhkworld/en/radio/cooking/update/meal_200228_l.jpg',
-      'https://pogogi.com/sites/default/files/japanesefoodimages/2015/2/134%20Furai.jpg',
-      'https://kenh14cdn.com/thumb_w/660/2019/1/25/3cbbd3ec62d085e2372585f56ccc8c69-15484114508781292670329.jpg',
-      'https://img.tinxe.vn/resize/1000x-/2020/10/08/vwnbOqjE/mazda-furai-concept-front-studio-20a5.jpg',
-      'https://i.ytimg.com/vi/K_7lPqLZrE8/maxresdefault.jpg'
-    ],
-    comments: [
-      {
-        authorName: 'Linh Chí',
-        authorAvatarSource:
-          'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
-        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content: 'Đúng vậy hết sức bất mãn với cái vụ cơm chó này, vote 1 sao'
-      },
-      {
-        authorName: 'Linh Chí',
-        authorAvatarSource:
-          'https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png',
-        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content:
-          'Gì, mình thấy quán này ok mà, hôm bữa dẫn người iu đi ăn ở đây thấy vui và ngon mà, 5 sao nha'
-      },
-      {
-        authorName: 'Dr Strange',
-        authorAvatarSource:
-          'https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png',
-        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content: 'Chào đồng môn!'
-      },
-      {
-        authorName: 'Linh Chí',
-        authorAvatarSource:
-          'https://styles.redditmedia.com/t5_50b2l8/styles/profileIcon_snoo53df77a4-ae3a-449f-af3a-01fddcb3a0f7-headshot.png',
-        dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-        content: 'Quán dở ẹc'
-      }
-    ]
-  };
-}
 </script>
 
 <style>

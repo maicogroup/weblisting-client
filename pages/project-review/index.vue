@@ -184,7 +184,7 @@
     </div>
     <div v-if="reviews.length > 0">
       <div v-for="(review, index) in reviews" :key="index">
-        <review-post :review="review" :index="index" />
+        <review-post :review="review" :index="index" :author="author" />
       </div>
     </div>
 
@@ -384,14 +384,37 @@ export default {
 
   computed: {
     reviews () {
+      return this.reviewGenerate();
+    },
+
+    author () {
+      const tempUser = {};
+      if (this.guestUser !== null) {
+        tempUser.name = this.guestUser.name;
+        tempUser.id = this.guestUser.id;
+        return tempUser;
+      }
+      return null;
+    }
+  },
+
+  created () {
+    this.guestUser = this.$cookies.get('GuestUser') ?? null;
+  },
+
+  mounted () {
+    window.addEventListener('scroll', this.HandleScroll);
+  },
+
+  methods: {
+    reviewGenerate () {
       if (this.reviewsWithPagination !== null && this.project !== null) {
         const tempReviewArray = [];
-        if (this.reviewsWithPagination !== undefined) {
+        if (this.reviewsWithPagination !== undefined && this.guestUser !== null) {
           this.reviewsWithPagination.items.forEach((x) => {
-            const tempReview = createMockReview(x, this.project);
+            const tempReview = createMockReview(x, this.project, this.guestUser);
             if (this.tempReviews.length < this.take) {
               setTimeout(function () {
-                console.log('hello anh em');
               }, 10000);
               this.tempReviews.push(tempReview);
             } else {
@@ -407,18 +430,7 @@ export default {
         }
       }
       return [];
-    }
-  },
-
-  created () {
-    this.guestUser = this.$cookies.get('GuestUser') ?? null;
-  },
-
-  mounted () {
-    window.addEventListener('scroll', this.HandleScroll);
-  },
-
-  methods: {
+    },
     HandleScroll () {
       console.log(window.pageYOffset / document.body.offsetHeight);
       if (this.$refs.skeleton.getBoundingClientRect().y <= 513 && this.$refs.skeleton.getBoundingClientRect().y <= 513) {
@@ -511,6 +523,12 @@ export default {
           }
         }
       });
+
+      this.$apollo.queries.reviewsWithPagination.refetch({
+        skip: 0,
+        take: 5
+      });
+      this.reviews = this.reviewGenerate();
     },
 
     sendWarningNotification (notification) {
@@ -527,7 +545,7 @@ export default {
       if (this.content !== '' || this.tempSrc.length !== 0) {
         const createReviewInput = {
           id: id.toString(),
-          authorId: '623f0440bf28618e8d3eb0d8',
+          authorId: this.guestUser.id,
           content: this.content,
           projectId: this.project.id,
           galleries: [],
@@ -547,6 +565,8 @@ export default {
         });
 
         this.sendMutationCreateReview(createReviewInput);
+        const element = document.body;
+        element.classList.remove('overflow-hidden');
         this.isFormShown = !this.isFormShown;
         this.content = '';
         this.tempFile = [];
@@ -626,17 +646,13 @@ function createMockReview (item, project) {
       tempComments.push(tempComment);
     });
   }
-  const isLiked = item.liked.includes('623f0408bf28618e8d3eb0d8');
+  const isLiked = item.liked.includes('ádfasdfasdf');
   return {
     id: item.id,
     authorName: item.author.name,
     authorAvatarSource:
       'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
     dateCreated: new Date(item.createdAt),
-    project: {
-      name: 'qua tori mit moi',
-      slug: 'cho-thue-can-ho-chung-cu-lavita-charm-thu-duc'
-    },
     content: item.content,
     imageSources: tempImageSources,
     comments: tempComments,

@@ -1,7 +1,8 @@
 <template>
   <div class="w-full max-w-4xl md:px-4">
-    {{ guestUser }}
+    {{ author }}
     {{ $route.params.slug }}
+    <guest-user-authentication-modal :open="isShowingLogIn" @close="isShowingLogIn = false" />
     <div
       v-if="isFormShown"
       class="fixed top-0 left-0 h-full w-full z-30 bg-black bg-opacity-60"
@@ -60,7 +61,7 @@
               "
             >
             <div class="ml-2 text-sm">
-              <a href="#" class="font-bold"> {{ guestUser.name }} </a>
+              <a href="#" class="font-bold"> {{ author.name }} </a>
               <div class="font-bold text-[#0F9AFF]">
                 {{ project.projectName }}
               </div>
@@ -183,7 +184,7 @@
       </div>
     </div>
     <div v-if="reviews.length > 0">
-      <div v-for="(review, index) in reviews" :key="index">
+      <div v-for="(review, index) in reviews" :key="review.id">
         <review-post :review="review" :index="index" :author="author" />
       </div>
     </div>
@@ -222,6 +223,8 @@ import gql from 'graphql-tag';
 import ReviewPost from './components/review-post.vue';
 import Divider from '~/components/Divider.vue';
 
+import GuestUserAuthenticationModal from '~/pages/components/guest-user-authentication-modal.vue';
+
 const getReviewsQuery = gql`
   query GetListReview($take: Int, $skip: Int) {
     reviewsWithPagination(take: $take, skip: $skip) {
@@ -253,10 +256,9 @@ const getReviewsQuery = gql`
     }
   }
 `;
-
 export default {
   name: 'ProjectReview',
-  components: { Divider, ReviewPost },
+  components: { Divider, ReviewPost, GuestUserAuthenticationModal },
 
   apollo: {
     project: {
@@ -309,6 +311,7 @@ export default {
                   id
                 }
                 comments {
+                  id
                   author {
                     authorName
                   }
@@ -342,9 +345,9 @@ export default {
       tempFile: [],
       isLoading: false,
       tempReviews: [],
+      isShowingLogIn: false,
       take: 5,
       skip: 0,
-      guestUser: null,
       content: '',
       editorOption: {
         theme: 'snow', // 可換
@@ -389,17 +392,14 @@ export default {
 
     author () {
       const tempUser = {};
-      if (this.guestUser !== null) {
-        tempUser.name = this.guestUser.name;
-        tempUser.id = this.guestUser.id;
+      const guestUser = this.$cookies.get('GuestUser') ?? null;
+      if (guestUser !== null) {
+        tempUser.name = guestUser.name;
+        tempUser.id = guestUser.id;
         return tempUser;
       }
       return null;
     }
-  },
-
-  created () {
-    this.guestUser = this.$cookies.get('GuestUser') ?? null;
   },
 
   mounted () {
@@ -410,9 +410,9 @@ export default {
     reviewGenerate () {
       if (this.reviewsWithPagination !== null && this.project !== null) {
         const tempReviewArray = [];
-        if (this.reviewsWithPagination !== undefined && this.guestUser !== null) {
+        if (this.reviewsWithPagination !== undefined) {
           this.reviewsWithPagination.items.forEach((x) => {
-            const tempReview = createMockReview(x, this.project, this.guestUser);
+            const tempReview = this.createMockReview(x, this.project);
             if (this.tempReviews.length < this.take) {
               setTimeout(function () {
               }, 10000);
@@ -457,6 +457,10 @@ export default {
       });
     },
     toggleCreatePost () {
+      if (this.author === null) {
+        this.isShowingLogIn = true;
+        return;
+      }
       const element = document.body;
       element.classList.toggle('overflow-hidden');
       this.isFormShown = !this.isFormShown;
@@ -528,7 +532,6 @@ export default {
         skip: 0,
         take: 5
       });
-      this.reviews = this.reviewGenerate();
     },
 
     sendWarningNotification (notification) {
@@ -545,7 +548,7 @@ export default {
       if (this.content !== '' || this.tempSrc.length !== 0) {
         const createReviewInput = {
           id: id.toString(),
-          authorId: this.guestUser.id,
+          authorId: this.author.id,
           content: this.content,
           projectId: this.project.id,
           galleries: [],
@@ -626,41 +629,43 @@ export default {
       if (this.take === this.reviewsWithPagination.totalCount - this.skip) {
         this.skip = this.reviewsWithPagination.totalCount;
       }
+    },
+
+    createMockReview (item, project) {
+      const tempImageSources = [];
+      item.galleries.forEach(x => tempImageSources.push(x.path));
+      const tempComments = [];
+      if (item.comments.length > 0) {
+        item.comments.forEach((x) => {
+          const tempComment = {
+            commentId: x.id,
+            authorName: x.author.authorName,
+            authorAvatarSource:
+          'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
+            dateCreated: new Date(x.createdAt),
+            content: x.content
+          };
+          tempComments.push(tempComment);
+        });
+      }
+      const isLiked = this.author === null ? false : item.liked.includes(this.author.id);
+      return {
+        id: item.id,
+        authorName: item.author.name,
+        authorAvatarSource:
+      'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
+        dateCreated: new Date(item.createdAt),
+        content: item.content,
+        imageSources: tempImageSources,
+        comments: tempComments,
+        isLiked,
+        galleries: item.galleries,
+        liked: item.liked
+      };
     }
   }
 };
 
-function createMockReview (item, project) {
-  const tempImageSources = [];
-  item.galleries.forEach(x => tempImageSources.push(x.path));
-  const tempComments = [];
-  if (item.comments.length > 0) {
-    item.comments.forEach((x) => {
-      const tempComment = {
-        authorName: x.author.authorName,
-        authorAvatarSource:
-          'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
-        dateCreated: new Date(x.createdAt),
-        content: x.content
-      };
-      tempComments.push(tempComment);
-    });
-  }
-  const isLiked = item.liked.includes('ádfasdfasdf');
-  return {
-    id: item.id,
-    authorName: item.author.name,
-    authorAvatarSource:
-      'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
-    dateCreated: new Date(item.createdAt),
-    content: item.content,
-    imageSources: tempImageSources,
-    comments: tempComments,
-    isLiked,
-    galleries: item.galleries,
-    liked: item.liked
-  };
-}
 </script>
 
 <style>

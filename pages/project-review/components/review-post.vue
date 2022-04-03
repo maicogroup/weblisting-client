@@ -1,5 +1,6 @@
 <template>
   <div class="">
+    <guest-user-authentication-modal :open="isShowingLogIn" @close="isShowingLogIn = false" />
     <div class="border rounded-md px-3 lg:px-8 py-3 lg:py-5 my-2">
       <div class="flex items-center">
         <img
@@ -224,11 +225,11 @@
 
         <div v-if="review.comments.length > 0">
           <div v-if="showAllComment == false">
-            <div v-for="(comment, index) in first3Comments" :key="index">
+            <div v-for="(comment) in first3Comments" :key="comment.id">
               <review-comment :comment="comment" />
             </div>
           </div>
-          <div v-for="(comment, index) in comments" v-else :key="index">
+          <div v-for="(comment) in comments" v-else :key="comment.id">
             <review-comment :comment="comment" />
           </div>
         </div>
@@ -259,8 +260,9 @@
 <script>
 import { gql } from 'graphql-tag';
 import reviewComment from './review-comment.vue';
+import GuestUserAuthenticationModal from '~/pages/components/guest-user-authentication-modal.vue';
 export default {
-  components: { reviewComment },
+  components: { reviewComment, GuestUserAuthenticationModal },
   props: ['review', 'index', 'author'],
   data () {
     return {
@@ -268,6 +270,7 @@ export default {
       showFullContent: false,
       comments: this.review.comments.reverse(),
       tempGallery: this.review.imageSources,
+      isShowingLogIn: false,
       liked: this.review.isLiked,
       showAllComment: this.isGather3Comments(),
       contentOverflowing: false,
@@ -315,21 +318,23 @@ export default {
       } else { return this.formatReviewDateCreated(hi); }
     },
     toggleLike () {
+      if (this.author === null) {
+        this.isShowingLogIn = true;
+        return;
+      }
       this.liked = !this.liked;
       const tempLiked = this.review.liked;
-
+      console.log(this.author);
       if (this.liked) {
-        tempLiked.push('623f0408bf28618e8d3eb0d8');
+        tempLiked.push(this.author.id);
       } else {
         for (const x in tempLiked) {
-          if (tempLiked[x] === '623f0408bf28618e8d3eb0d8') {
+          if (tempLiked[x] === this.author.id) {
             tempLiked.splice(x, 1);
             break;
           }
         }
       }
-      console.log('Phong hihi');
-      console.log(this.review.id.toString() + 'gall - ' + this.review.galleries + 'liked -' + tempLiked);
       this.$apollo.mutate({
         mutation: gql`
           mutation UpdateLikhgd($input: UpdateReviewInput!) {
@@ -345,7 +350,6 @@ export default {
           }
         }
       });
-      console.log(tempLiked);
     },
     isGather3Comments () {
       if (this.review.comments.length > 3) {
@@ -377,7 +381,11 @@ export default {
       });
     },
     addNewComment () {
-      if (this.author !== undefined) {
+      if (this.author === null) {
+        this.isShowingLogIn = true;
+        return;
+      }
+      {
         const tempComment = {
           authorName: this.author.name,
           authorAvatarSource:
@@ -397,6 +405,7 @@ export default {
         }
         this.sendAddCommentMutation(this.author);
         this.content = '';
+        console.log('danh sach comment' + this.comments[0].content + 'o bai review' + this.review.content);
       }
     },
     getOverflow () {

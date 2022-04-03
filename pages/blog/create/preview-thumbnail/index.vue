@@ -1,16 +1,26 @@
 <template>
   <div class="flex flex-col align-center w-full">
     <label
-      class="cursor-pointer px-4 mb-2 text-center text-zinc-800 font-medium w-full rounded-md border border-neutral-300 py-2"
+      class="
+        cursor-pointer
+        px-4
+        mb-2
+        text-center text-zinc-800
+        font-medium
+        w-full
+        rounded-md
+        border border-neutral-300
+        py-2
+      "
       for="thumbnail"
     >
-      Tải lên ảnh thumnail
+      {{ title }}
     </label>
     <input
       id="thumbnail"
       type="file"
       class="hidden"
-      accept=".png,.gif,.jpeg, jpg"
+      accept=".png,.gif,.jpeg, .jpg"
       @change="handlePreview"
     />
     <img v-if="readyPreview" :src="image.preview" alt="" />
@@ -26,6 +36,7 @@ export default {
     };
   },
   props: {
+    title: { type: String, default: "" },
     setThumbnail: { type: Function, default: () => {} },
   },
   unmounted() {

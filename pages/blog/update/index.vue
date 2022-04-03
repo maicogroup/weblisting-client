@@ -40,7 +40,7 @@
         @onchange="() => (flag = true)"
         class="mb-7"
         title="Slug"
-        v-model="slug"
+        v-model="blog.pageInfor.slug"
         :handleChange="() => (flag = true)"
       />
       <textbox
@@ -49,6 +49,20 @@
         v-model="blog.pageInfor.metaDescription"
         type="textarea"
         :handleChange="() => (flag = true)"
+        class="mb-7"
+      />
+      <div
+        v-if="
+          typeof blog.thumbnail != 'object' &&
+          blog.thumbnail.includes('weblisting')
+        "
+      >
+        <p class="mb-2 text-zinc-800 font-medium">Thumbnail</p>
+        <img class="mb-7" :src="blog.thumbnail" />
+      </div>
+      <preview-thumbnail
+        title="Chỉnh sửa ảnh Thumbnail"
+        :setThumbnail="setThumbnail"
       />
     </div>
   </div>
@@ -59,6 +73,7 @@ import Editor from "~/components/editor/Editor.vue";
 import Textbox from "~/components/textbox/index.vue";
 import ButtonBasic from "~/components/button-basic/index.vue";
 import gql from "graphql-tag";
+import PreviewThumbnail from "../create/preview-thumbnail";
 
 const getBlog = gql`
   query GetBlog($condition: BlogCollectionFilterInput) {
@@ -75,6 +90,7 @@ const getBlog = gql`
         id
         name
       }
+      thumbnail
     }
   }
 `;
@@ -88,7 +104,7 @@ const updateBlog = gql`
 `;
 
 export default {
-  components: { Editor, Textbox, ButtonBasic },
+  components: { Editor, Textbox, ButtonBasic, PreviewThumbnail },
   apollo: {
     blog: {
       query() {
@@ -113,6 +129,15 @@ export default {
       this.editorCount = this.editorContent.blocks.length;
       console.log(this.editorContent);
     },
+    "blog.pageInfor.title"() {
+      this.blog.pageInfor.slug = `${this.blog.pageInfor.title
+        .toLowerCase()
+        .normalize("NFD")
+        .replaceAll("đ", "d")
+        .replace(/[\u0300-\u036f]|[^\w\s]/g, "")
+        .split(" ")
+        .join("-")}`;
+    },
   },
 
   data() {
@@ -133,6 +158,7 @@ export default {
   },
   head() {
     return {
+      title: "Chỉnh sửa blog",
       script: [
         {
           once: true,
@@ -143,30 +169,97 @@ export default {
       ],
     };
   },
-  computed: {
-    slug: function () {
-      return `${this.blog.pageInfor.title
-        .toLowerCase()
-        .normalize("NFD")
-        .replaceAll("đ", "d")
-        .replace(/[\u0300-\u036f]|[^\w\s]/g, "")
-        .split(" ")
-        .join("-")}`;
-    },
-  },
   methods: {
     onChange(data) {
       this.editorContent = data;
     },
+    setThumbnail(file) {
+      this.blog.thumbnail = file;
+      this.flag = true;
+    },
+    UploadThumbnail(file) {
+      AWS.config.update({
+        accessKeyId: "8EL21GNHMRNZYW8488OV",
+        secretAccessKey: "xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD",
+        region: "hn",
+        endpoint: "https://hn.ss.bfcplatform.vn",
+        apiVersions: {
+          s3: "2006-03-01",
+        },
+      });
+
+      const uploadImageToS3 = (file) => {
+        const s3 = new AWS.S3();
+
+        var uploadParams = {
+          Bucket: "weblisting",
+          Key: `blog/${this.blog.id}/${file.name}`,
+          Body: file,
+          ACL: "public-read",
+          ContentType: file.type,
+        };
+
+        var uploadOptions = {
+          partSize: 10 * 1024 * 1024,
+          queueSize: 1,
+        };
+
+        var upload = s3.upload(uploadParams, uploadOptions);
+
+        upload.send((err, data) => {
+          if (err) {
+            console.error("Upload lỗi:", err);
+          } else if (data) {
+            console.log("Upload thành công:", data);
+          }
+        });
+
+        this.blog.thumbnail.s3Url = `https://weblisting.hn.ss.bfcplatform.vn/blog/${this.blog.id}/${file.name}`;
+      };
+      uploadImageToS3(file);
+    },
     handleSubmit() {
-      // const ObjectId = ((
-      //   m = Math,
-      //   d = Date,
-      //   h = 16,
-      //   s = (s) => m.floor(s).toString(h)
-      // ) =>
-      //   s(d.now() / 1000) +
-      //   " ".repeat(h).replace(/./g, () => s(m.random() * h)))();
+      if (
+        this.flag === false &&
+        this.editorContent.blocks.length === this.editorCount
+      ) {
+        this.$toast.show("Dữ liệu chưa có thay đổi", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+          position: "top-right",
+        });
+        return;
+      }
+      if (this.blog.pageInfor.title === "") {
+        this.$toast.show("Tiêu đề không được để trống!", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+        });
+        return;
+      }
+      if (this.blog.pageInfor.slug === "") {
+        this.$toast.show("Slug không được để trống", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+          position: "top-right",
+        });
+        return;
+      }
+      if (this.blog.pageInfor.metaDescription === "") {
+        this.$toast.show("Meta Description không được để trống", {
+          type: "error",
+          theme: "bubble",
+          duration: 3000,
+          position: "top-right",
+        });
+        return;
+      }
+      if (typeof this.blog.thumbnail === "object") {
+        this.UploadThumbnail(this.blog.thumbnail);
+      }
       const urlModified = [];
 
       const imageUrlArray = this.editorContent.blocks
@@ -256,49 +349,13 @@ export default {
       //   content: JSON.stringify({ ...this.editorContent, blocks: contentData }),
       // };
       // console.log(submitData);
-      if (
-        this.flag === false &&
-        this.editorContent.blocks.length === this.editorCount
-      ) {
-        this.$toast.show("Dữ liệu chưa có thay đổi", {
-          type: "error",
-          theme: "bubble",
-          duration: 3000,
-          position: "top-right",
-        });
-        return;
-      }
-      if (this.blog.pageInfor.title === "") {
-        this.$toast.show("Tiêu đề không được để trống!", {
-          type: "error",
-          theme: "bubble",
-          duration: 3000,
-        });
-        return;
-      }
-      if (this.slug === "") {
-        this.$toast.show("Slug không được để trống", {
-          type: "error",
-          theme: "bubble",
-          duration: 3000,
-          position: "top-right",
-        });
-        return;
-      }
-      if (this.blog.pageInfor.metaDescription === "") {
-        this.$toast.show("Meta Description không được để trống", {
-          type: "error",
-          theme: "bubble",
-          duration: 3000,
-          position: "top-right",
-        });
-        return;
-      }
+
       this.$apollo
         .mutate({
           mutation: updateBlog,
           variables: {
             input: {
+              thumbnail: this.blog.thumbnail.s3Url,
               blogId: this.blog.id,
               content: JSON.stringify({
                 ...this.editorContent,
@@ -306,7 +363,7 @@ export default {
               }),
               pageInfor: {
                 title: this.blog.pageInfor.title,
-                slug: this.slug,
+                slug: this.blog.pageInfor.slug,
                 metaDescription: this.blog.pageInfor.metaDescription,
               },
             },

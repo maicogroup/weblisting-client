@@ -57,7 +57,6 @@
     >
       <div class="mb-5">
         <h1>{{ blog.pageInfor.title }}</h1>
-        {{ guestUser }}
         <span class="font-bold text-sm leading-4 text-stone-900"
           >{{ blog.author.name }}
           <span class="font-normal text-neutral-400">{{
@@ -180,6 +179,22 @@ export default {
     NewComment,
     ShareBlogSection,
     GuestUserAuthenticationModal,
+  },
+  head() {
+    return {
+      title: this.blog?.pageInfor.title,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: this.blog?.pageInfor.metaDescription,
+        },
+        {
+          property: "og:image",
+          content: this.blog?.thumbnail,
+        },
+      ],
+    };
   },
   created() {
     this.guestUser = this.$cookies.get("GuestUser") ?? null;

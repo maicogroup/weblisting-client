@@ -5,7 +5,10 @@
     :class="{
       'py-2': size === 'md',
       'uy-4': size === 'lg',
+      'cursor-wait': isDisable,
+      'opacity-80': isDisable,
     }"
+    :disabled="isDisable"
   >
     <slot />
   </button>
@@ -16,12 +19,16 @@ export default {
   props: {
     size: { type: String, default: "lg" },
     text: { type: String, default: "Button" },
+    isDisable: { type: Boolean, default: false },
     handleClick: {
       type: Function,
-      default: (e) => {
+      default: () => {
         console.log(`Handle event of btn`);
       },
     },
+  },
+  data() {
+    return {};
   },
 };
 </script>

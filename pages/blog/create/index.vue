@@ -15,20 +15,18 @@
         :handleClick="handleSubmit"
         style="height: 50px"
         class="self-end"
-        >Đăng bài</button-basic
+        :isDisable="buttonState === 'pending'"
+        >{{
+          buttonState === "init"
+            ? "Đăng bài"
+            : buttonState === "pending"
+            ? "Đang tải"
+            : "Xem bài đăng"
+        }}</button-basic
       >
     </div>
     <div
-      class="
-        flex flex-col
-        w-[22rem]
-        mt-[214px]
-        items-center
-        rounded-md
-        border border-neutral-300
-        h-fit
-        p-5
-      "
+      class="flex flex-col w-[22rem] mt-[214px] items-center rounded-md border border-neutral-300 h-fit p-5"
     >
       <h2 class="mb-7 text-stone-900 font-bold text-lg">Thiết lập bài viết</h2>
       <textbox class="mb-7" title="Slug" v-model="slug" />
@@ -36,7 +34,9 @@
         title="Meta Description"
         v-model="values.pageInfor.metaDescription"
         type="textarea"
+        class="mb-7"
       />
+      <preview-thumbnail :setThumbnail="setThumbnail" />
     </div>
   </div>
 </template>
@@ -45,12 +45,14 @@
 import Editor from "~/components/editor/Editor.vue";
 import Textbox from "~/components/textbox/index.vue";
 import ButtonBasic from "~/components/button-basic/index.vue";
+import PreviewThumbnail from "./preview-thumbnail";
 import gql from "graphql-tag";
 
 export default {
-  components: { Editor, Textbox, ButtonBasic },
+  components: { Editor, Textbox, ButtonBasic, PreviewThumbnail },
   data() {
     return {
+      buttonState: "init",
       editorContent: { time: "", blocks: [], version: "2.22.2" },
       values: {
         pageInfor: {
@@ -63,6 +65,15 @@ export default {
         blogId: "",
       },
       guestUser: null,
+      thumbnail: null,
+      ObjectId: ((
+        m = Math,
+        d = Date,
+        h = 16,
+        s = (s) => m.floor(s).toString(h)
+      ) =>
+        s(d.now() / 1000) +
+        " ".repeat(h).replace(/./g, () => s(m.random() * h)))(),
     };
   },
   created() {
@@ -83,28 +94,65 @@ export default {
   computed: {
     slug: function () {
       return `${this.values.pageInfor.title
+        .trim()
         .toLowerCase()
         .normalize("NFD")
         .replaceAll("đ", "d")
-        .replace(/[\u0300-\u036f]|[^\w\s]/g, "")
+        .replace(/[\u0300-\u036f]|[^\w\s\-]/g, "")
         .split(" ")
         .join("-")}`;
     },
   },
   methods: {
+    setThumbnail(file) {
+      this.thumbnail = file;
+    },
     onChange(data) {
       this.editorContent = data;
       console.log(this.editorContent);
     },
+    UploadThumbnail(file) {
+      AWS.config.update({
+        accessKeyId: "8EL21GNHMRNZYW8488OV",
+        secretAccessKey: "xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD",
+        region: "hn",
+        endpoint: "https://hn.ss.bfcplatform.vn",
+        apiVersions: {
+          s3: "2006-03-01",
+        },
+      });
+
+      const uploadImageToS3 = (file) => {
+        const s3 = new AWS.S3();
+
+        var uploadParams = {
+          Bucket: "weblisting",
+          Key: `blog/${this.ObjectId}/${file.name}`,
+          Body: file,
+          ACL: "public-read",
+          ContentType: file.type,
+        };
+
+        var uploadOptions = {
+          partSize: 10 * 1024 * 1024,
+          queueSize: 1,
+        };
+
+        var upload = s3.upload(uploadParams, uploadOptions);
+
+        upload.send((err, data) => {
+          if (err) {
+            console.error("Upload lỗi:", err);
+          } else if (data) {
+            console.log("Upload thành công:", data);
+          }
+        });
+
+        this.thumbnail.S3url = `https://weblisting.hn.ss.bfcplatform.vn/blog/${this.ObjectId}/${file.name}`;
+      };
+      uploadImageToS3(file);
+    },
     handleSubmit() {
-      const ObjectId = ((
-        m = Math,
-        d = Date,
-        h = 16,
-        s = (s) => m.floor(s).toString(h)
-      ) =>
-        s(d.now() / 1000) +
-        " ".repeat(h).replace(/./g, () => s(m.random() * h)))();
       const urlModified = [];
 
       const imageUrlArray = this.editorContent.blocks
@@ -130,7 +178,7 @@ export default {
 
         var uploadParams = {
           Bucket: "weblisting",
-          Key: `blog/${ObjectId}/${file.name}`,
+          Key: `blog/${this.ObjectId}/${file.name}`,
           Body: file,
           ACL: "public-read",
           ContentType: file.type,
@@ -153,12 +201,8 @@ export default {
 
         urlModified.push({
           id,
-          url: `https://weblisting.hn.ss.bfcplatform.vn/blog/${ObjectId}/${file.name}`,
+          url: `https://weblisting.hn.ss.bfcplatform.vn/blog/${this.ObjectId}/${file.name}`,
         });
-        // upload.on("httpUploadProgress", function (evt) {
-        //   var progress = parseInt((evt.loaded * 100) / evt.total);
-        //   console.log(progress + "%");
-        // });
       };
 
       imageUrlArray.map((img) => uploadImageToS3(img.file, img.id));
@@ -183,15 +227,21 @@ export default {
       // FIXME: Data ở đây nha <3
       const submitData = {
         ...this.values,
-        authorId: this.guestUser.id,
-        blogId: ObjectId,
+        authorId: this.guestUser?.id,
+        blogId: this.ObjectId,
         pageInfor: {
           ...this.values.pageInfor,
           slug: this.slug,
         },
         content: JSON.stringify({ ...this.editorContent, blocks: contentData }),
       };
-      console.log(this.editorContent);
+
+      this.UploadThumbnail(this.thumbnail);
+
+      //FIXME this.thumbnail.S3url là url thumbnail nha
+
+      console.log(this.thumbnail.S3url);
+
       if (submitData.pageInfor.title === "") {
         this.$toast.show("Tiêu đề không được để trống", {
           type: "error",

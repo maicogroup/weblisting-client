@@ -235,16 +235,16 @@ export default {
     },
     commentsWithPagination: {
       query: getComment,
-      variales() {
+      variables() {
         return {
           condition: {
             discussionId: {
               eq: this.blog.id,
             },
           },
-          order: {
+          order: [{
             createdAt: "DESC",
-          },
+          }],
           take: 10,
           skip: 0,
         };

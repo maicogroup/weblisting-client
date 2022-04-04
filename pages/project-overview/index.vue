@@ -1,77 +1,64 @@
 <template>
   <div v-if="project" class="w-full sm:px-36 px-5 color-stone-900">
-    <div class="sm:block hidden">
-      <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
-        <a href="#">Dự án</a>
-        /
-        <a href="">TP HCM</a>
-        /
-        <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
+   <div class="flex flex-col-reverse md:flex-col">
+      <div>
+        <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
+          <a href="#">Dự án</a>
+          /
+          <a href="">TP HCM</a>
+          /
+          <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
+        </div>
+        <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
+          {{ project.projectName }}
+        </h1>
+        <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
+          Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
+        </p>
       </div>
-      <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
-        {{ project.projectName }}
-      </h1>
-      <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
-        Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
-      </p>
-    </div>
-    <div>
-      <gallery class="inline h-72 w-full" :items="gallery" />
-    </div>
-    <div class="sm:hidden block">
-      <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
-        <a href="#">Dự án</a>
-        /
-        <a href="">TP HCM</a>
-        /
-        <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
+      <div>
+        <gallery class="inline h-72 w-full" :items="gallery" :alt="`Dự án ${project.projectName}`" />
       </div>
-      <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
-        {{ project.projectName }}
-      </h1>
-      <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
-        Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
-      </p>
-    </div>
+   </div>
     <div class="mt-1 sm:mt-5 sm:mx-44">
       <div class="flex justify-between sm:justify-start sticky-table-of-content z-10 sm:pt-0 pt-3 color-stone-900">
         <button :class="isTargetingTableOfContents.isTargetingOverview ? activeTableContent : tableContentStyles" @click="ScrollToOverview()">
-          <h2 class="font-size-table-of-contents font-bold">
+          <p class="font-size-table-of-contents font-bold">
             Tổng quan
-          </h2>
+          </p>
           <p class="text-sm font-medium sm:block hidden">
             Tổng quan dự án
           </p>
         </button>
         <button :class="isTargetingTableOfContents.isTargetingGround ? activeTableContent : tableContentStyles" @click="ScrollToGround()">
-          <h2 class="font-size-table-of-contents font-bold ">
+          <p class="font-size-table-of-contents font-bold ">
             Mặt bằng
-          </h2>
+          </p>
           <p class="text-sm font-medium sm:block hidden">
             Tổng thể về dự án
           </p>
         </button>
         <button :class="isTargetingTableOfContents.isTargetingLocation ? activeTableContent : tableContentStyles" @click="ScrollToLocation()">
-          <h2 class="font-size-table-of-contents font-bold">
+          <p class="font-size-table-of-contents font-bold">
             Vị trí
-          </h2>
+          </p>
           <p class="text-sm font-medium sm:block hidden">
             Bản đồ dự án
           </p>
         </button>
         <button :class="isTargetingTableOfContents.isTargetingRentAndSell ? activeTableContent : tableContentStyles" @click="ScrollToSellAndRent()">
-          <h2 class="font-size-table-of-contents font-bold">
+          <p class="font-size-table-of-contents font-bold">
             Bán và cho thuê
-          </h2>
+          </p>
           <p class="text-sm font-medium sm:block hidden">
             Giá bán và cho thuê
           </p>
         </button>
       </div>
       <div ref="Overview" class="color-stone-900" style="scroll-margin-top: 135px" v-on:="ScrollToOverviewHandle()">
-        <h1 class="font-medium font-size-overview sm:my-6 my-2.5">
+        <h2 class="font-medium font-size-overview sm:my-6 my-2.5">
           Tổng quan
-        </h1>
+        </h2>
         <div class="grid sm:grid-cols-2 grid-cols-1 sm:gap-6 h-auto">
           <div class="block">
             <p class="re-properties-frame">
@@ -140,7 +127,7 @@
         <div class="flex sm:flex-row flex-col">
           <div class="flex justify-start">
             <div class="sm:w-full w-2/5">
-              <img class="sm:w-40 sm:h-40 w-24 h-24" :src="project.investor.image" alt="hinh anh chu dau tu">
+              <img class="sm:w-40 sm:h-40 w-24 h-24" :src="project.investor.image" :alt="`Chủ đầu tư ${project.investor.investorName}`">
             </div>
             <h3 class="text-lg font-bold sm:hidden block max-w-60">
               {{ project.investor.investorName }}
@@ -164,7 +151,7 @@
                   Thành lập
                 </p>
                 <P class="max-w-60">
-                  {{ project.investor.foundedTime }}
+                  {{ formatDate(new Date(project.investor.foundedTime)) }}
                 </P>
               </div>
               <div class="text-lg flex justify-start mt-3">
@@ -179,13 +166,13 @@
           </div>
         </div>
       </expand-panel>
-      <h1 ref="Ground" class="font-size-project-ground mt-12 sm:mt-6 mb-1.5 sm:mb-4" style="scroll-margin-top: 135px">
+      <h2 ref="Ground" class="font-size-project-ground mt-12 sm:mt-6 mb-1.5 sm:mb-4" style="scroll-margin-top: 135px">
         Mặt bằng dự án
-      </h1>
-      <img class="h-48 sm:h-96 w-full" :src="project.masterPlan" alt="cay xoai">
-      <h1 ref="Location" style="scroll-margin-top: 135px" class="font-medium text-2xl sm:text-3xl mt-6 mb-1.5 sm:mb-4">
-        Vị trí dự án The Sun Avenue
-      </h1>
+      </h2>
+      <img class="h-48 sm:h-96 w-full" :src="project.masterPlan" :alt="`Mặt bằng dự án ${project.projectName}`">
+      <h2 ref="Location" style="scroll-margin-top: 135px" class="font-medium text-2xl sm:text-3xl mt-6 mb-1.5 sm:mb-4">
+        Vị trí dự án  {{ project.projectName }}
+      </h2>
       <iframe
         :src="project.address.googleMapLocation"
         style="border:0;"
@@ -194,13 +181,15 @@
         loading="lazy"
       />
     </div>
-    <div ref="SellAndRent" style="scroll-margin-top: 10px" class="divide-y w-full border-b-2 mt-8 mb-12 hidden sm:block" />
-    <recommended-posts
-      v-if="recommendedPosts !== undefined && recommendedPosts.length > 0 && !$apollo.loading"
-      title="Bán và Thuê"
-      class="mb-4"
-      :posts="recommendedPosts"
-    />
+    <div class="divide-y w-full border-b-2 mt-8 mb-12 hidden sm:block" />
+    <div ref="SellAndRent" style="scroll-margin-top: 54px">
+      <recommended-posts
+        v-if="recommendedPosts !== undefined && recommendedPosts.length > 0 && !$apollo.loading"
+        title="Bán và Thuê"
+        class="mb-4 recommend-posts"
+        :posts="recommendedPosts"
+      />
+    </div>
     <near-area-recommended v-if="areaProjects !== undefined && areaProjects.length > 0 && !$apollo.loading" class="mb-4" :projects="areaProjects" />
   </div>
 </template>
@@ -402,6 +391,17 @@ export default {
     window.addEventListener('scroll', this.HandleScroll);
   },
   methods: {
+    formatDate (time) {
+      const day = time.getDate();
+      // getMonth trả về tháng bắt đầu từ 0 đến 11
+      const month = time.getMonth() + 1;
+      const year = time.getFullYear();
+      return `${padZero(day)}/${padZero(month)}/${year}`;
+
+      function padZero (num) {
+        return num.toString().padStart(2, '0');
+      }
+    },
     HandleScroll () {
       if (this.$refs.Overview.getBoundingClientRect().y >= 120 && this.$refs.Overview.getBoundingClientRect().y <= 500) {
         this.setFalseTableOfContents();
@@ -473,6 +473,10 @@ export default {
 </script>
 
 <style>
+.recommend-posts div{
+  margin-left: 0px;
+  margin-right: 0px;
+}
 .re-properties-frame {
     display: flex;
     justify-content: flex-start;

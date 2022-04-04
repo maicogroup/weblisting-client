@@ -81,7 +81,7 @@
               hover:bg-blue-500 hover:text-white
               cursor-pointer
             "
-            :to="`/danh-sach-can-ho/${project.pageInfors[0].slug}`"
+            :to="`/du-an/${project.pageInfors[0].slug}`"
           >
             {{ project.projectName }}
           </nuxt-link>
@@ -146,7 +146,9 @@
 
     <div
       v-show="showSidebar != null"
-      :class="`fixed inset-0 h-full w-full z-10 bg-black opacity-20 ${(showSidebar)? 'visible' : 'hide-side-bar-parent'}`"
+      :class="`fixed inset-0 h-full w-full z-10 bg-black opacity-20 ${
+        showSidebar ? 'visible' : 'hide-side-bar-parent'
+      }`"
       @click="showSidebar = false"
     />
 
@@ -175,29 +177,46 @@ export default {
   components: { Sidebar, DropdownItem, GuestUserAuthenticationModal, GuestUserAvatar },
 
   apollo: {
-    projects: gql`
-      query GetProjects {
-        projects {
-          projectName
-          pageInfors {
-            slug
+    projects: {
+      query() {
+        return gql`
+          query GetProjects {
+            projects {
+              projectName
+              pageInfors {
+                slug
+              }
+            }
           }
-        }
-      }
-    `
+        `;
+      },
+      update(data) {
+        data.projects.forEach((element) => {
+          element.pageInfors = element.pageInfors.filter(
+            (c) => !c.slug.includes("ban") && !c.slug.includes("cho-thue")
+          );
+        });
+        return data.projects;
+      },
+    },
   },
-  data () {
+  data() {
     return {
       showSidebar: false,
       showAuthenModal: false,
       signUp: false,
-      guestUser: null
+      guestUser: null,
     };
   },
 
-  created () {
-    this.guestUser = this.$cookies.get('GuestUser') ?? null;
+  created() {
+    this.guestUser = this.$cookies.get("GuestUser") ?? null;
+    this.$nuxt.$on("userLogin", () => {
+      this.guestUser = this.$cookies.get("GuestUser") ?? null;
+      console.log(this.guestUser);
+    });
   },
+
 
   mounted () {
     // eslint-disable-next-line nuxt/no-env-in-hooks
@@ -253,35 +272,35 @@ export default {
 </script>
 
 <style scoped>
-.show-side-bar{
+.show-side-bar {
   animation: slide-in 0.25s ease;
 }
 
-.hide-side-bar-parent{
+.hide-side-bar-parent {
   visibility: hidden;
 }
 
-.hide-side-bar{
+.hide-side-bar {
   animation: slide-out 0.25s ease;
   width: 0;
 }
 
 @keyframes slide-in {
-  from{
+  from {
     width: 0;
   }
-  to{
+  to {
     /*width: 0.25 * 64 ~~ w-64 in tailwind */
     width: calc(0.25rem * 64);
   }
 }
 
 @keyframes slide-out {
-  from{
+  from {
     /*width: 0.25 * 64 ~~ w-64 in tailwind */
     width: calc(0.25rem * 64);
   }
-  to{
+  to {
     width: 0;
   }
 }

@@ -12,6 +12,10 @@
     "lintfix": "npm run lint:js -- --fix"
   },
   "dependencies": {
+    "@editorjs/editorjs": "^2.23.2",
+    "@editorjs/header": "^2.6.2",
+    "@editorjs/list": "^1.7.0",
+    "@editorjs/nested-list": "^1.0.2",
     "@glidejs/glide": "^3.5.2",
     "@nuxt/components": "^2.2.1",
     "@nuxtjs/apollo": "^4.0.1-rc.5",
@@ -22,6 +26,7 @@
     "clipboard": "^2.0.10",
     "cookie-universal-nuxt": "^2.1.5",
     "core-js": "^3.19.3",
+    "editorjs-paragraph-with-alignment": "^3.0.0",
     "graphql-tag": "^2.12.6",
     "jw-vue-pagination": "^1.0.3",
     "lg-thumbnail.js": "^1.2.0",
@@ -42,10 +47,12 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
+    "@editorjs/image": "^2.6.2",
     "@nuxtjs/eslint-config": "^8.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/tailwindcss": "^4.2.1",
+    "editorjs-hyperlink": "^1.0.6",
     "eslint": "^8.11.0",
     "eslint-plugin-editorconfig": "^3.2.0",
     "eslint-plugin-nuxt": "^3.1.0",

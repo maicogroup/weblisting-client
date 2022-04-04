@@ -10,10 +10,10 @@ module.exports = {
   },
   extends: [
     '@nuxtjs',
-    'plugin:nuxt/recommended'
+    'plugin:nuxt/recommended',
+    'plugin:editorconfig/all'
   ],
-  plugins: [
-  ],
+  plugins: ['editorconfig'],
   // add your custom rules here
   rules: {
     semi: [2, 'always']

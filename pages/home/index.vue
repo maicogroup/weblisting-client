@@ -276,6 +276,8 @@ export default {
       let path = "";
       if (this.filter.project) {
         path = path + "/" + this.filter.project.pageInfor.slug;
+      } else {
+        path = '/danh-sach-san-pham';
       }
       const query = {};
       // if (this.filter.demand) {

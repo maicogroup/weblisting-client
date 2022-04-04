@@ -1,18 +1,19 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import EditPost from "~/pages/post-queue/edit-post/index";
-import PostQueuePage from "~/pages/post-queue/index";
-import PostList from "~/pages/listing/index";
-import EditProject from "~/pages/edit-project/index";
-import DetailPost from "~/pages/listing/detail/index";
-import ProductReview from "~/pages/product-preview/index";
-import ProjectOverview from "~/pages/project-overview/index";
-import SpecificProjectReview from "~/pages/product-preview/specific-project/index";
-import HomePage from "~/pages/home/index";
-import DetailBlog from "~/pages/blog/detail/index";
-import CreateBlog from "~/pages/blog/create/index";
-import UpdateBlog from "~/pages/blog/update/index";
+import EditPost from '~/pages/post-queue/edit-post/index';
+import PostQueuePage from '~/pages/post-queue/index';
+import PostList from '~/pages/listing/index';
+import EditProject from '~/pages/edit-project/index';
+import DetailPost from '~/pages/listing/detail/index';
+import ProductReview from '~/pages/product-preview/index';
+import ProjectOverview from '~/pages/project-overview/index';
+import SpecificProjectReview from '~/pages/product-preview/specific-project/index';
+import HomePage from '~/pages/home/index';
+import BlogPage from '~/Pages/blog/index';
+import DetailBlog from '~/pages/blog/detail/index';
+import CreateBlog from '~/pages/blog/create/index';
+import UpdateBlog from '~/pages/blog/update/index';
 
 Vue.use(Router);
 
@@ -46,14 +47,6 @@ export function createRouter() {
         component: PostQueuePage,
       },
       {
-        path: '*',
-        component: PostList
-      },
-      {
-        path: "/danh-sach-can-ho",
-        component: PostList,
-      },
-      {
         path: "/chi-tiet-can-ho/:slug",
         component: DetailPost,
       },
@@ -74,12 +67,24 @@ export function createRouter() {
         component: DetailBlog,
       },
       {
+        path: '/blog',
+        component: BlogPage
+      },
+      {
         path: "/blog/khoi-tao/bai-viet",
         component: CreateBlog,
       },
       {
         path: "/blog/khoi-tao/:slug",
         component: UpdateBlog
+      },
+      {
+        path: '/danh-sach-san-pham',
+        component: PostList
+      },
+      {
+        path: '*',
+        component: PostList
       },
     ],
   });

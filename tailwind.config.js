@@ -10,9 +10,13 @@ module.exports = {
         green: colors.emerald,
         yellow: colors.amber,
         purple: colors.violet,
-        gray: colors.neutral,
-      },
-    },
+        gray: colors.neutral
+      }
+    }
   },
-  // ...
+
+  plugins: [
+    require('@tailwindcss/line-clamp')
+    // ...
+  ]
 };

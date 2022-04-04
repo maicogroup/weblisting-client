@@ -342,10 +342,13 @@ export default {
       isShowRoomOption: false,
     };
   },
+
+
   
   head () {
     let title;
-    if (this.$route.params.pathMatch.replace('/','')) {
+    console.error(this.$route.params.pathMatch);
+    if (this.$route.params.pathMatch != undefined) {
       title = this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.pathMatch.replace('/',''))).title;
     } else {
       const type = this.filter.type ?? 'căn hộ';
@@ -397,7 +400,7 @@ export default {
 
   computed: {
     waitTillProjectIsDetermined () {
-      if (this.$route.params.pathMatch.replace('/','')) {
+      if (this.$route.params.pathMatch) {
         return this.filter?.project?.id !== null;
       }
 
@@ -408,7 +411,7 @@ export default {
       return marked(this.tempSEOContent);
     },
     showIfPostsOfOneProject () {
-      return this.$route.params.pathMatch.replace('/','') !== undefined;
+      return this.$route.params.pathMatch !== undefined;
     },
 
     sellButtonClasses () {
@@ -435,9 +438,11 @@ export default {
       this.filter = { ...this.createFilterFromUrl(), ...this.filter };
       this.inputFilter = { ...this.filter };
     }
-    if(this.$route.params.pathMatch.replace('/','')){
+    if(this.$route.params.pathMatch)
       this.filter.demand = this.$route.params.pathMatch.replace('/','').includes("ban") ? "Bán" : "Cho Thuê";
-    }
+    else 
+      this.filter.demand = 'Cho Thuê'
+    
     this.$watch(
       () => this.$route.params,
       (param, prevParam) => {
@@ -499,7 +504,7 @@ export default {
 
       skip () {
         // return this.filter === null || this.$route.params.pathMatch.replace('/','') === null;
-        return this.$route.params.pathMatch.replace('/','') === undefined;
+        return this.$route.params.pathMatch === undefined;
       },
 
       variables () {
@@ -538,6 +543,7 @@ export default {
       const query = this.$route.query;
       filter.demand = query.demand ?? 'Cho Thuê';
       filter.type = query.type;
+
       if (query.city || query.district) {
         filter.location = {
           city: query.city,
@@ -604,7 +610,10 @@ export default {
       let path = '';
       if (this.filter.project) {
         path = path + '/' + this.filter.project.pageInfor.slug;
+      } else {
+        path = '/danh-sach-san-pham';
       }
+      
       const query = {};
       // if (this.filter.demand) {
       //   query.demand = this.filter.demand;

@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import guestUserLogin from "./guest-user-authentication/guest-user-login.vue";
-import GuestUserSignup from "./guest-user-authentication/guest-user.signup.vue";
+import guestUserLogin from './guest-user-authentication/guest-user-login.vue';
+import GuestUserSignup from './guest-user-authentication/guest-user.signup.vue';
 export default {
   components: { guestUserLogin, GuestUserSignup },
 

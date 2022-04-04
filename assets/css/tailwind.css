@@ -4,12 +4,12 @@
 
 @layer base {
   html {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
   }
 }
 
 @layer utilities {
   .font-source-serif-pro {
-    font-family: 'Source Serif Pro', serif;
+    font-family: "Source Serif Pro", serif;
   }
 }

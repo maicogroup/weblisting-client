@@ -1,7 +1,7 @@
-const colors = require('tailwindcss/colors')
+const colors = require("tailwindcss/colors");
 // ...
-module.export ={
-    darkMode: false,
+module.export = {
+  darkMode: false,
 };
 module.exports = {
   theme: {
@@ -12,7 +12,11 @@ module.exports = {
         purple: colors.violet,
         gray: colors.neutral
       }
-    },
+    }
   },
-  // ...
-}
+
+  plugins: [
+    require('@tailwindcss/line-clamp')
+    // ...
+  ]
+};

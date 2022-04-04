@@ -977,7 +977,7 @@ export default {
     deleteUtility (index) {
       this.project.utilities.listOfUtilities.splice(index, 1);
       this.$apollo.mutate({
-        mutation: gql`mutation AddNewUtility($input: UpdateProjectInput!)
+        mutation: gql`mutation AddNewUtility($input: UpdateProjectInput!)\
         {
           updateProject(input: $input)
           {

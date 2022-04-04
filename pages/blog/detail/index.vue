@@ -55,7 +55,6 @@
       v-if="content.blocks.length > 0"
       class="wrapper m-auto h-500 p-2 w-full"
     >
-      {{ guestUser }}
       <div class="mb-5">
         <h1>{{ blog.pageInfor.title }}</h1>
         <span class="font-bold text-sm leading-4 text-stone-900"
@@ -96,6 +95,11 @@
         </div>
       </client-only>
     </div>
+    <guest-user-authentication-modal
+      :open="showAuthenModal"
+      :sign-up="signUp"
+      @close="showAuthenModal = false"
+    />
   </div>
 </template>
 
@@ -104,6 +108,7 @@ import gql from "graphql-tag";
 import ShareBlogSection from "./components/share-blog-section.vue";
 import ShowEditor from "~/components/editor/Show.vue";
 import NewComment from "~/components/comment/new-comment.vue";
+import GuestUserAuthenticationModal from "~/pages/components/guest-user-authentication-modal.vue";
 const getBlog = gql`
   query GetBlog($condition: BlogCollectionFilterInput) {
     blog(where: $condition) {
@@ -169,6 +174,12 @@ const createComment = gql`
   }
 `;
 export default {
+  components: {
+    ShowEditor,
+    NewComment,
+    ShareBlogSection,
+    GuestUserAuthenticationModal,
+  },
   head() {
     return {
       title: this.blog?.pageInfor.title,
@@ -180,31 +191,18 @@ export default {
         },
         {
           property: "og:image",
-          content: "http://hub.maicogroup.net/assets/images/logo.png",
+          content: this.blog?.thumbnail,
         },
       ],
-    };
-  },
-  components: { ShowEditor, NewComment, ShareBlogSection },
-  data() {
-    return {
-      guestUser: null,
-      content: {},
-      newComment: "",
-      newReply: "",
-      isStick: true,
-      hasId: false,
-      replyIsShow: false,
     };
   },
   created() {
     this.guestUser = this.$cookies.get("GuestUser") ?? null;
   },
-  mounted() {
+  /* mounted() {
     // console.log(this.$route.params.slug);
-    this.content = JSON.parse(this.blog.content);
-    if (this.blog.id != null) {
-      console.log("haha");
+    if (this.blog && this.blog.id != null) {
+      this.content = JSON.parse(this.blog.content);
       this.$apollo.queries.commentsWithPagination.refetch({
         condition: {
           discussionId: {
@@ -219,7 +217,7 @@ export default {
       });
       this.hasId = true;
     }
-  },
+  }, */
   apollo: {
     blog: {
       query: getBlog,
@@ -252,7 +250,7 @@ export default {
         };
       },
       skip() {
-        return !this.hasId;
+        return this.blog === undefined;
       },
       update: (data) => data.commentsWithPagination,
     },
@@ -265,7 +263,15 @@ export default {
       isStick: true,
       hasId: false,
       replyIsShow: false,
+      signUp: true,
+      showAuthenModal: false,
+      guestUser: {},
     };
+  },
+  watch:{
+    blog(newQuestion, oldQuestion){
+      this.content = JSON.parse(this.blog.content);
+    }
   },
   computed: {
     totalItem() {
@@ -296,169 +302,142 @@ export default {
     },
   },
   methods: {
+    openAuthenModal(signUp) {
+      this.showAuthenModal = true;
+      this.signUp = signUp;
+    },
     createComment: function () {
-      if (this.newComment != "") {
-        var date = new Date().toLocaleDateString("en-CA");
+      this.guestUser = this.$cookies.get("GuestUser") ?? null;
+      if (this.guestUser == null) {
+        this.openAuthenModal(false);
+        this.guestUser = this.$cookies.get("GuestUser") ?? null;
 
-        const cmt = this.newComment;
-        this.$apollo.mutate({
-          mutation: createComment,
-          variables: {
-            input: {
-              discussionId: this.blog.id,
-              content: this.newComment,
-              type: "Blog",
-              author: {
-                authorId: "623f0408bf28618e8d3eb0d7",
-                authorName: "Đỗ Minh Nhật",
+        return;
+      } else {
+        if (this.newComment != "") {
+          var date = new Date().toLocaleDateString("en-CA");
+          const cmt = this.newComment;
+          this.$apollo.mutate({
+            mutation: createComment,
+            variables: {
+              input: {
+                discussionId: this.blog.id,
+                content: this.newComment,
+                type: "Blog",
+                author: {
+                  authorId: this.guestUser.id,
+                  authorName: this.guestUser.name,
+                },
               },
             },
-          },
 
-          update: (store, { data: { createComment } }) => {
-            const query = {
-              query: getComment,
-              variables: {
-                condition: {
-                  discussionId: {
-                    eq: this.blog.id,
+            update: (store, { data: { createComment } }) => {
+              const query = {
+                query: getComment,
+                variables: {
+                  condition: {
+                    discussionId: {
+                      eq: this.blog.id,
+                    },
                   },
+                  order: {
+                    createdAt: "DESC",
+                  },
+                  take: 10,
+                  skip: 0,
                 },
-                order: {
-                  createdAt: "DESC",
+              };
+
+              const { commentsWithPagination } = store.readQuery(query);
+
+              var comment = {
+                id: createComment.string,
+                discussionId: this.blog.id,
+                content: cmt,
+                type: "Blog",
+                commentParentId: "",
+                author: {
+                  authorId: this.guestUser.id,
+                  authorName: this.guestUser.name,
+                  __typename: "Author",
                 },
-                take: 10,
-                skip: 0,
-              },
-            };
+                createdAt: date,
+                replies: [],
+                __typename: "CommentCollection",
+              };
+              commentsWithPagination.items.unshift(comment);
+              commentsWithPagination.totalCount += 1;
 
-            const { commentsWithPagination } = store.readQuery(query);
-
-            var comment = {
-              id: createComment.string,
-              discussionId: this.blog.id,
-              content: cmt,
-              type: "Blog",
-              commentParentId: "",
-              author: {
-                authorId: "623f0408bf28618e8d3eb0d7",
-                authorName: "Đỗ Minh Nhật",
-                __typename: "Author",
-              },
-              createdAt: date,
-              replies: [],
-              __typename: "CommentCollection",
-            };
-            commentsWithPagination.items.unshift(comment);
-            commentsWithPagination.totalCount += 1;
-
-            store.writeQuery({
-              ...query,
-              data: { commentsWithPagination: commentsWithPagination },
-            });
-          },
-        });
-        this.$toast.show("Thêm thành công!", {
-          type: "success",
-          theme: "bubble",
-          duration: 3000,
-          position: "top-right",
-        });
-        // this.$apollo.queries.commentsWithPagination.refetch({
-        //   condition: {
-        //     discussionId: {
-        //       eq: this.blog.id
-        //     }
-        //   },
-        //   order: {
-        //     createdAt: "DESC"
-        //   }
-        // })
-        this.newComment = "";
-        console.log(this.totalItem);
-        console.log(this.comments);
+              store.writeQuery({
+                ...query,
+                data: { commentsWithPagination: commentsWithPagination },
+              });
+            },
+          });
+          this.$toast.show("Thêm thành công!", {
+            type: "success",
+            theme: "bubble",
+            duration: 3000,
+            position: "top-right",
+          });
+          // this.$apollo.queries.commentsWithPagination.refetch({
+          //   condition: {
+          //     discussionId: {
+          //       eq: this.blog.id
+          //     }
+          //   },
+          //   order: {
+          //     createdAt: "DESC"
+          //   }
+          // })
+          this.newComment = "";
+          console.log(this.totalItem);
+          console.log(this.comments);
+        }
       }
     },
     createReply(commentParentId, comment) {
-      console.log(commentParentId);
-      console.log(comment);
-      if (this.newReply != null) {
-        this.$apollo.mutate({
-          mutation: createComment,
-          variables: {
-            input: {
-              discussionId: this.blog.id,
-              content: comment,
-              commentParentId: commentParentId,
-              type: "Blog",
-              author: {
-                authorId: "623f0440bf28618e8d3eb0d8",
-                authorName: "Cーちゃん",
+      this.guestUser = this.$cookies.get("GuestUser") ?? null;
+      if (this.guestUser == null) {
+        this.openAuthenModal(false);
+        this.guestUser = this.$cookies.get("GuestUser") ?? null;
+
+        return;
+      } else {
+        if (this.newReply != null) {
+          this.$apollo.mutate({
+            mutation: createComment,
+            variables: {
+              input: {
+                discussionId: this.blog.id,
+                content: comment,
+                commentParentId: commentParentId,
+                type: "Blog",
+                author: {
+                  authorId: this.guestUser.id,
+                  authorName: this.guestUser.name,
+                },
               },
             },
-          },
-          // update: (store, { data: { createComment } }) => {
-          //   console.log(createComment);
-          //   const query = {
-          //     query: getComment,
-          //     variables: {
-          //       condition: {
-          //         discussionId: {
-          //           eq: this.blog.id,
-          //         },
-          //       },
-          //       order: {
-          //         createdAt: "DESC",
-          //       },
-          //       take: 10,
-          //       skip: 0,
-          //     },
-          //   };
-
-          //   const { commentsWithPagination } = store.readQuery(query);
-
-          //   var reply = {
-          //     id: createComment.string,
-          //     discussionId: this.blog.id,
-          //     content: comment,
-          //     commentParentId: commentParentId,
-          //     type: "Blog",
-          //     author: {
-          //       authorId: "623f0440bf28618e8d3eb0d8",
-          //       authorName: "Cーちゃん",
-          //       __typename: "Author",
-          //     },
-          //     createdAt: date,
-          //     __typename: "CommentCollection",
-          //     replies: [],
-          //   };
-
-          //   commentsWithPagination.items.unshift(reply);
-          //   commentsWithPagination.totalCount += 1;
-
-          //   store.writeQuery({
-          //     ...query,
-          //     data: { commentsWithPagination: commentsWithPagination },
-          //   });
-          // },
-        });
-        this.$toast.show("Thêm thành công!", {
-          type: "success",
-          theme: "bubble",
-          duration: 3000,
-          position: "top-right",
-        });
-        this.replyIsShow = false;
-        this.$apollo.queries.commentsWithPagination.refetch({
-          condition: {
-            discussionId: {
-              eq: this.blog.id,
+          });
+          this.$toast.show("Thêm thành công!", {
+            type: "success",
+            theme: "bubble",
+            duration: 3000,
+            position: "top-right",
+          });
+          this.replyIsShow = false;
+          this.$apollo.queries.commentsWithPagination.refetch({
+            condition: {
+              discussionId: {
+                eq: this.blog.id,
+              },
             },
-          },
-          order: {
-            createdAt: "DESC",
-          },
-        });
+            order: {
+              createdAt: "DESC",
+            },
+          });
+        }
       }
     },
   },

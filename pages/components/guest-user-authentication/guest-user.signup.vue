@@ -148,7 +148,7 @@ export default {
       }
 
       try {
-        let id = "";
+        const id = "";
         await this.$apollo.mutate({
           mutation: gql`
             mutation CreateGuestUser($input: CreateGuestUserInput!) {
@@ -163,11 +163,11 @@ export default {
               phoneNumber: this.phoneNumber,
             },
           },
-          update: (store, { data: { createGuestUser } }) => {
-            id = createGuestUser.string;
+          update: (store, { data: { CreateGuestUser } }) => {
+            id = CreateGuestUser.string;
           },
         });
-        console.log('id la: ' + id);
+
         this.$emit("success", {
           name: this.name,
           phoneNumber: this.phoneNumber,

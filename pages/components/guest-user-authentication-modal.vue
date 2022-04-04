@@ -29,53 +29,55 @@ export default {
     open: {
       type: Boolean,
       required: true,
-      default: false
+      default: false,
     },
     signUp: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
-  data () {
+  data() {
     return {
-      alreadyHasAccount: !this.signUp
+      alreadyHasAccount: !this.signUp,
     };
   },
 
   watch: {
-    signUp (newVal) {
+    signUp(newVal) {
       this.alreadyHasAccount = !newVal;
-    }
+    },
   },
 
   methods: {
-    moveToSignUpForm () {
+    moveToSignUpForm() {
       this.alreadyHasAccount = false;
     },
 
-    moveToLoginForm () {
+    moveToLoginForm() {
       this.alreadyHasAccount = true;
     },
 
-    setCookiesAndCloseModal (user) {
+    setCookiesAndCloseModal(user) {
       this.$cookies.set(
-        'GuestUser',
+        "GuestUser",
         { name: user.name, phoneNumber: user.phoneNumber, id: user.id },
         {
-          maxAge: 60 * 60 * 24 * 365
-        });
-      location.reload();
+          maxAge: 60 * 60 * 24 * 365,
+          path: "/",
+        }
+      );
+      this.$nuxt.$emit("userLogin");
       this.alreadyHasAccount = !this.signUp;
-      this.$emit('close');
-      this.$emit('success');
+      this.$emit("close");
+      this.$emit("success");
     },
 
-    cancelModal () {
+    cancelModal() {
       this.alreadyHasAccount = !this.signUp;
-      this.$emit('close');
-      this.$emit('cancel');
-    }
-  }
+      this.$emit("close");
+      this.$emit("cancel");
+    },
+  },
 };
 </script>

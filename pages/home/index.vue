@@ -79,7 +79,6 @@
         </div>
       </div>
     </div>
-
     <div
       class="
         mt-10
@@ -253,9 +252,6 @@ export default {
       filterMobileVisible: false,
     };
   },
-  created() {
-    this.guestUser = this.$cookies.get("GuestUser") ?? null;
-  },
   head() {
     return {
       title: "MaicoGroup - Căn hộ xác thực",
@@ -280,6 +276,8 @@ export default {
       let path = "";
       if (this.filter.project) {
         path = path + "/" + this.filter.project.pageInfor.slug;
+      } else {
+        path = '/danh-sach-san-pham';
       }
       const query = {};
       // if (this.filter.demand) {

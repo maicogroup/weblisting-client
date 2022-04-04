@@ -50,11 +50,11 @@
         >
           <div class="flex items-center mb-3 md:mb-5">
             <guest-user-avatar
-              :name="author.name"
+              :name="guestUser.name"
               class="w-10 h-10 lg:w-11 lg:h-11 rounded-full cursor-pointer"
             />
             <div class="ml-2 text-sm">
-              <a href="#" class="font-bold"> {{ author.name }} </a>
+              <a href="#" class="font-bold"> {{ guestUser.name }} </a>
               <div class="font-bold text-[#0F9AFF]">
                 {{ project.projectName }}
               </div>
@@ -152,8 +152,8 @@
       v-if="reviews.length > 0"
       class="flex items-start p-2 md:p-0 mb-3 md:mb-7"
     >
-      <template v-if="author">
-        <guest-user-avatar :name="author.name" class="w-10 h-10 rounded-full" />
+      <template v-if="guestUser">
+        <guest-user-avatar :name="guestUser.name" class="w-10 h-10 rounded-full" />
       </template>
       <template v-else>
         <img :src="user.avatarSource" class="w-10 h-10 rounded-full" />
@@ -179,7 +179,7 @@
     </div>
     <div v-if="reviews.length > 0">
       <div v-for="(review, index) in reviews" :key="review.id">
-        <review-post :review="review" :index="index" :author="author" />
+        <review-post :review="review" :index="index" :author="guestUser" />
       </div>
     </div>
 
@@ -260,7 +260,12 @@ export default {
     GuestUserAuthenticationModal,
     GuestUserAvatar,
   },
-
+  created() {
+    this.guestUser = this.$cookies.get("GuestUser") ?? null;
+    this.$nuxt.$on("userLogout", () => {
+      this.guestUser = this.$cookies.get("GuestUser") ?? null;
+    })
+  },
   apollo: {
     project: {
       query() {
@@ -347,6 +352,7 @@ export default {
           "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
       },
       isFormShown: false,
+      guestUser: {},
       tempSrc: [],
       tempFile: [],
       isLoading: false,
@@ -481,7 +487,7 @@ export default {
       });
     },
     toggleCreatePost() {
-      if (this.author === null) {
+      if (this.guestUser === null) {
         this.isShowingLogIn = true;
         return;
       }
@@ -572,7 +578,7 @@ export default {
       if (this.content !== "" || this.tempSrc.length !== 0) {
         const createReviewInput = {
           id: id.toString(),
-          authorId: this.author.id,
+          authorId: this.guestUser.id,
           content: this.content,
           projectId: this.project.id,
           galleries: [],
@@ -673,7 +679,7 @@ export default {
         });
       }
       const isLiked =
-        this.author === null ? false : item.liked.includes(this.author.id);
+        this.guestUser === null ? false : item.liked.includes(this.guestUser.id);
       return {
         id: item.id,
         authorName: item.author.name,

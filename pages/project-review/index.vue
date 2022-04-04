@@ -264,7 +264,11 @@ export default {
     this.guestUser = this.$cookies.get("GuestUser") ?? null;
     this.$nuxt.$on("userLogout", () => {
       this.guestUser = this.$cookies.get("GuestUser") ?? null;
-    })
+    });
+    this.$nuxt.$on("userLogin", () => {
+      this.guestUser = this.$cookies.get("GuestUser") ?? null;
+      console.log(this.guestUser);
+    });
   },
   apollo: {
     project: {

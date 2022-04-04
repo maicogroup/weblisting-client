@@ -90,7 +90,6 @@
         mx-auto
       "
     >
-      {{ guestUser }}
       <div class>
         <img
           src="~/static/images/home/img1.png"

@@ -1,8 +1,9 @@
 <template>
   <div class="w-full max-w-4xl md:px-4">
-    {{ author }}
-    {{ $route.params.slug }}
-    <guest-user-authentication-modal :open="isShowingLogIn" @close="isShowingLogIn = false" />
+    <guest-user-authentication-modal
+      :open="isShowingLogIn"
+      @close="isShowingLogIn = false"
+    />
     <div
       v-if="isFormShown"
       class="fixed top-0 left-0 h-full w-full z-30 bg-black bg-opacity-60"
@@ -19,9 +20,7 @@
         "
       >
         <div class="px-3 py-5 flex flex-row max-h-screen">
-          <div class="grow text-center text-xl font-bold">
-            Tạo bài đánh giá
-          </div>
+          <div class="grow text-center text-xl font-bold">Tạo bài đánh giá</div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5 basic-4 text-[#656565] cursor-pointer"
@@ -50,16 +49,10 @@
           "
         >
           <div class="flex items-center mb-3 md:mb-5">
-            <img
-              class="
-                w-10
-                h-10
-                lg:w-11 lg:h-11
-                rounded-full
-                cursor-pointer
-                bg-gray-400
-              "
-            >
+            <guest-user-avatar
+              :name="author.name"
+              class="w-10 h-10 lg:w-11 lg:h-11 rounded-full cursor-pointer"
+            />
             <div class="ml-2 text-sm">
               <a href="#" class="font-bold"> {{ author.name }} </a>
               <div class="font-bold text-[#0F9AFF]">
@@ -107,9 +100,7 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              <div class="w-14 leading-3 mt-1">
-                Thêm ảnh hoặc video
-              </div>
+              <div class="w-14 leading-3 mt-1">Thêm ảnh hoặc video</div>
             </button>
             <div v-for="(item, index) in tempSrc" :key="index" class="relative">
               <button
@@ -133,7 +124,7 @@
                 :src="item"
                 alt="they might be my crew"
                 class="h-20 w-20 object-cover"
-              >
+              />
             </div>
           </div>
           <button
@@ -161,7 +152,12 @@
       v-if="reviews.length > 0"
       class="flex items-start p-2 md:p-0 mb-3 md:mb-7"
     >
-      <img :src="user.avatarSource" class="w-10 h-10 rounded-full">
+      <template v-if="author">
+        <guest-user-avatar :name="author.name" class="w-10 h-10 rounded-full" />
+      </template>
+      <template v-else>
+        <img :src="user.avatarSource" class="w-10 h-10 rounded-full" />
+      </template>
       <div
         class="
           grow
@@ -178,9 +174,7 @@
         "
         @click="toggleCreatePost"
       >
-        <div class="self-center">
-          Viết bài review
-        </div>
+        <div class="self-center">Viết bài review</div>
       </div>
     </div>
     <div v-if="reviews.length > 0">
@@ -191,7 +185,9 @@
 
     <!-- skeleton -->
     <div
-      v-if="(reviews.length < reviewsWithPagination.totalCount) || (reviews.length <= 1)"
+      v-if="
+        reviews.length < reviewsWithPagination.totalCount || reviews.length <= 1
+      "
       ref="skeleton"
       class="border rounded-md px-3 lg:px-8 py-3 lg:py-5 my-2"
     >
@@ -219,11 +215,11 @@
 </template>
 
 <script>
-import gql from 'graphql-tag';
-import ReviewPost from './components/review-post.vue';
-import Divider from '~/components/Divider.vue';
-
-import GuestUserAuthenticationModal from '~/pages/components/guest-user-authentication-modal.vue';
+import gql from "graphql-tag";
+import ReviewPost from "./components/review-post.vue";
+import Divider from "~/components/Divider.vue";
+import GuestUserAvatar from "~/pages/components/guest-user-avatar.vue";
+import GuestUserAuthenticationModal from "~/pages/components/guest-user-authentication-modal.vue";
 
 const getReviewsQuery = gql`
   query GetListReview($take: Int, $skip: Int) {
@@ -257,22 +253,31 @@ const getReviewsQuery = gql`
   }
 `;
 export default {
-  name: 'ProjectReview',
-  components: { Divider, ReviewPost, GuestUserAuthenticationModal },
+  name: "ProjectReview",
+  components: {
+    Divider,
+    ReviewPost,
+    GuestUserAuthenticationModal,
+    GuestUserAvatar,
+  },
 
   apollo: {
     project: {
-      query () {
+      query() {
         return gql`
           query GetReviewingProject($slug: String!) {
             projects(where: { pageInfors: { some: { slug: { eq: $slug } } } }) {
               id
               projectName
+              images
+              pageInfors {
+                metaDescription
+              }
             }
           }
         `;
       },
-      update (data) {
+      update(data) {
         if (data.projects.length === 0) {
           return;
         }
@@ -280,15 +285,15 @@ export default {
         const project = data.projects[0];
         return project;
       },
-      variables () {
+      variables() {
         return {
-          slug: this.$route.params.slug
+          slug: this.$route.params.slug,
         };
-      }
+      },
     },
 
     reviewsWithPagination: {
-      query () {
+      query() {
         return gql`
           query GetListReview($take: Int, $skip: Int) {
             reviewsWithPagination(
@@ -324,21 +329,22 @@ export default {
           }
         `;
       },
-      update: data => data.reviewsWithPagination,
-      variables () {
+      update: (data) => data.reviewsWithPagination,
+      variables() {
         return {
           take: 5,
-          skip: 0
+          skip: 0,
         };
-      }
-    }
+      },
+    },
   },
 
-  data () {
+  data() {
     return {
       currentPage: 1,
       user: {
-        avatarSource: 'https://pbgdpl.daklak.gov.vn/uploads/avatar.png'
+        avatarSource:
+          "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
       },
       isFormShown: false,
       tempSrc: [],
@@ -348,74 +354,89 @@ export default {
       isShowingLogIn: false,
       take: 5,
       skip: 0,
-      content: '',
+      content: "",
       editorOption: {
-        theme: 'snow', // 可換
+        theme: "snow", // 可換
         modules: {
           toolbar: {
             // container這裡是個大坑，[]表分群
             container: [
-              ['bold', 'italic', 'underline', 'strike', 'code'],
+              ["bold", "italic", "underline", "strike", "code"],
               [{ header: [1, 2, 3, 4, 5, 6, false] }],
-              [{ list: 'ordered' }, { list: 'bullet' }],
-              [{ size: ['small', false, 'large', 'huge'] }],
+              [{ list: "ordered" }, { list: "bullet" }],
+              [{ size: ["small", false, "large", "huge"] }],
               [{ align: [] }],
-              ['link']
+              ["link"],
             ],
             // 客製化圖片上傳功能用的
             handlers: {
-              image: this.uploadImage
-            }
-          }
-        }
-      }
+              image: this.uploadImage,
+            },
+          },
+        },
+      },
     };
   },
 
-  head () {
+  head() {
     return {
+      title: "Review dự án " + this.project?.projectName,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: this.project?.pageInfors[0].metaDescription,
+        },
+        {
+          property: "og:image",
+          content: this.project?.images[0],
+        },
+        {
+          name: "robots",
+          content: "noindex",
+        },
+      ],
       script: [
         {
           once: true,
-          hid: 's3-sdk',
-          src: 'https://sdk.amazonaws.com/js/aws-sdk-2.1095.0.min.js',
-          body: true
-        }
-      ]
+          hid: "s3-sdk",
+          src: "https://sdk.amazonaws.com/js/aws-sdk-2.1095.0.min.js",
+          body: true,
+        },
+      ],
     };
   },
 
   computed: {
-    reviews () {
+    reviews() {
       return this.reviewGenerate();
     },
 
-    author () {
+    author() {
       const tempUser = {};
-      const guestUser = this.$cookies.get('GuestUser') ?? null;
+      const guestUser = this.$cookies.get("GuestUser") ?? null;
       if (guestUser !== null) {
         tempUser.name = guestUser.name;
         tempUser.id = guestUser.id;
         return tempUser;
       }
       return null;
-    }
+    },
   },
 
-  mounted () {
-    window.addEventListener('scroll', this.HandleScroll);
+  mounted() {
+    window.addEventListener("scroll", this.HandleScroll);
   },
 
   methods: {
-    reviewGenerate () {
+    reviewGenerate() {
       if (this.reviewsWithPagination !== null && this.project !== null) {
         const tempReviewArray = [];
         if (this.reviewsWithPagination !== undefined) {
           this.reviewsWithPagination.items.forEach((x) => {
             const tempReview = this.createMockReview(x, this.project);
             if (this.tempReviews.length < this.take) {
-              setTimeout(function () {
-              }, 10000);
+              setTimeout(function () {}, 10000);
               this.tempReviews.push(tempReview);
             } else {
               tempReviewArray.push(tempReview);
@@ -431,22 +452,25 @@ export default {
       }
       return [];
     },
-    HandleScroll () {
+    HandleScroll() {
       console.log(window.pageYOffset / document.body.offsetHeight);
-      if (this.$refs.skeleton.getBoundingClientRect().y <= 513 && this.$refs.skeleton.getBoundingClientRect().y <= 513) {
+      if (
+        this.$refs.skeleton.getBoundingClientRect().y <= 513 &&
+        this.$refs.skeleton.getBoundingClientRect().y <= 513
+      ) {
         this.LoadNewReviews();
       }
     },
 
-    uploadNewImage () {
-      const fileInput = document.createElement('input');
-      fileInput.setAttribute('type', 'file');
+    uploadNewImage() {
+      const fileInput = document.createElement("input");
+      fileInput.setAttribute("type", "file");
       fileInput.setAttribute(
-        'accept',
-        'image/png, image/gif, image/jpeg, image/bmp, image/x-icon'
+        "accept",
+        "image/png, image/gif, image/jpeg, image/bmp, image/x-icon"
       );
       fileInput.click();
-      fileInput.addEventListener('change', () => {
+      fileInput.addEventListener("change", () => {
         if (fileInput.files != null && fileInput.files[0] != null) {
           const [file] = fileInput.files;
           if (file) {
@@ -456,58 +480,58 @@ export default {
         }
       });
     },
-    toggleCreatePost () {
+    toggleCreatePost() {
       if (this.author === null) {
         this.isShowingLogIn = true;
         return;
       }
       const element = document.body;
-      element.classList.toggle('overflow-hidden');
+      element.classList.toggle("overflow-hidden");
       this.isFormShown = !this.isFormShown;
     },
-    removeUploadedImage (index) {
+    removeUploadedImage(index) {
       this.tempSrc.splice(index, 1);
       this.tempFile.splice(index, 1);
     },
 
-    sendImagesToSever (id) {
+    sendImagesToSever(id) {
       AWS.config.update({
-        accessKeyId: '8EL21GNHMRNZYW8488OV',
-        secretAccessKey: 'xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD',
-        region: 'hn',
-        endpoint: 'https://hn.ss.bfcplatform.vn',
+        accessKeyId: "8EL21GNHMRNZYW8488OV",
+        secretAccessKey: "xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD",
+        region: "hn",
+        endpoint: "https://hn.ss.bfcplatform.vn",
         apiVersions: {
-          s3: '2006-03-01'
-        }
+          s3: "2006-03-01",
+        },
       });
       const s3 = new AWS.S3();
 
       const uploadOptions = {
         partSize: 10 * 1024 * 1024,
-        queueSize: 1
+        queueSize: 1,
       };
 
       this.tempFile.forEach((x) => {
         const uploadParams = {
-          Bucket: 'weblisting',
-          Key: 'review/' + id.toString() + '/' + x.name,
+          Bucket: "weblisting",
+          Key: "review/" + id.toString() + "/" + x.name,
           Body: x,
-          ACL: 'public-read',
-          ContentType: x.type
+          ACL: "public-read",
+          ContentType: x.type,
         };
 
         const upload = s3.upload(uploadParams, uploadOptions);
 
         upload.send((err, data) => {
           if (err) {
-            console.error('Upload lỗi:', err);
+            console.error("Upload lỗi:", err);
           } else if (data) {
-            console.log('Upload thành công:', data);
+            console.log("Upload thành công:", data);
           }
         });
       });
     },
-    sendMutationCreateReview (createReviewInput) {
+    sendMutationCreateReview(createReviewInput) {
       this.$apollo.mutate({
         mutation: gql`
           mutation CreateReviewPost($input: CreateReviewInput!) {
@@ -523,45 +547,45 @@ export default {
             content: createReviewInput.content,
             projectId: createReviewInput.projectId,
             galleries: createReviewInput.galleries,
-            liked: []
-          }
-        }
+            liked: [],
+          },
+        },
       });
 
       this.$apollo.queries.reviewsWithPagination.refetch({
         skip: 0,
-        take: 5
+        take: 5,
       });
     },
 
-    sendWarningNotification (notification) {
+    sendWarningNotification(notification) {
       this.$toast.show(notification, {
-        type: 'error',
-        theme: 'bubble',
+        type: "error",
+        theme: "bubble",
         duration: 3000,
-        position: 'top-right'
+        position: "top-right",
       });
     },
 
-    createNewReview () {
+    createNewReview() {
       const id = generateNewId();
-      if (this.content !== '' || this.tempSrc.length !== 0) {
+      if (this.content !== "" || this.tempSrc.length !== 0) {
         const createReviewInput = {
           id: id.toString(),
           authorId: this.author.id,
           content: this.content,
           projectId: this.project.id,
           galleries: [],
-          liked: []
+          liked: [],
         };
         this.tempFile.forEach((x) => {
           this.sendImagesToSever(createReviewInput.id);
           const tempObject = {};
           tempObject.path =
-            'https://weblisting.hn.ss.bfcplatform.vn/' +
-            'review/' +
+            "https://weblisting.hn.ss.bfcplatform.vn/" +
+            "review/" +
             id +
-            '/' +
+            "/" +
             x.name;
           tempObject.contentType = x.type;
           createReviewInput.galleries.push(tempObject);
@@ -569,29 +593,29 @@ export default {
 
         this.sendMutationCreateReview(createReviewInput);
         const element = document.body;
-        element.classList.remove('overflow-hidden');
+        element.classList.remove("overflow-hidden");
         this.isFormShown = !this.isFormShown;
-        this.content = '';
+        this.content = "";
         this.tempFile = [];
         this.tempSrc = [];
       } else {
-        this.sendWarningNotification('Bài viết chưa có thông tin');
+        this.sendWarningNotification("Bài viết chưa có thông tin");
       }
 
-      function generateNewId () {
+      function generateNewId() {
         const ObjectIddd = (
           m = Math,
           d = Date,
           h = 16,
-          s = s => m.floor(s).toString(h)
+          s = (s) => m.floor(s).toString(h)
         ) =>
           s(d.now() / 1000) +
-          ' '.repeat(h).replace(/./g, () => s(m.random() * h));
+          " ".repeat(h).replace(/./g, () => s(m.random() * h));
         return ObjectIddd();
       }
     },
 
-    LoadNewReviews () {
+    LoadNewReviews() {
       if (this.isLoading === true) {
         return;
       }
@@ -606,7 +630,7 @@ export default {
         this.$apollo.queries.reviewsWithPagination.fetchMore({
           variables: {
             skip: this.skip,
-            take: this.take
+            take: this.take,
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             setTimeout(function () {
@@ -618,12 +642,12 @@ export default {
                 __typename: previousResult.reviewsWithPagination.__typename,
                 items: [
                   ...previousResult.reviewsWithPagination.items,
-                  ...fetchMoreResult.reviewsWithPagination.items
+                  ...fetchMoreResult.reviewsWithPagination.items,
                 ],
-                totalCount: fetchMoreResult.reviewsWithPagination.totalCount
-              }
+                totalCount: fetchMoreResult.reviewsWithPagination.totalCount,
+              },
             };
-          }
+          },
         });
       }
       if (this.take === this.reviewsWithPagination.totalCount - this.skip) {
@@ -631,9 +655,9 @@ export default {
       }
     },
 
-    createMockReview (item, project) {
+    createMockReview(item, project) {
       const tempImageSources = [];
-      item.galleries.forEach(x => tempImageSources.push(x.path));
+      item.galleries.forEach((x) => tempImageSources.push(x.path));
       const tempComments = [];
       if (item.comments.length > 0) {
         item.comments.forEach((x) => {
@@ -641,31 +665,31 @@ export default {
             commentId: x.id,
             authorName: x.author.authorName,
             authorAvatarSource:
-          'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
+              "https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
             dateCreated: new Date(x.createdAt),
-            content: x.content
+            content: x.content,
           };
           tempComments.push(tempComment);
         });
       }
-      const isLiked = this.author === null ? false : item.liked.includes(this.author.id);
+      const isLiked =
+        this.author === null ? false : item.liked.includes(this.author.id);
       return {
         id: item.id,
         authorName: item.author.name,
         authorAvatarSource:
-      'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
+          "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg",
         dateCreated: new Date(item.createdAt),
         content: item.content,
         imageSources: tempImageSources,
         comments: tempComments,
         isLiked,
         galleries: item.galleries,
-        liked: item.liked
+        liked: item.liked,
       };
-    }
-  }
+    },
+  },
 };
-
 </script>
 
 <style>

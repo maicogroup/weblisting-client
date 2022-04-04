@@ -47,7 +47,6 @@
         v-else-if="block.type === 'paragraph'"
         :key="block.id"
         v-html="block.data.text"
-        class="pineditor"
       ></p>
 
       <div
@@ -163,8 +162,7 @@ ol {
   list-style-position: inside;
 }
 
-p.pineditor > a {
-  color: blue;
+::v-deep a {
   text-decoration: underline;
 }
 h1 {

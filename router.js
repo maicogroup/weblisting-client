@@ -47,14 +47,6 @@ export function createRouter() {
         component: PostQueuePage,
       },
       {
-        path: '*',
-        component: PostList
-      },
-      {
-        path: "/danh-sach-can-ho",
-        component: PostList,
-      },
-      {
         path: "/chi-tiet-can-ho/:slug",
         component: DetailPost,
       },
@@ -85,6 +77,14 @@ export function createRouter() {
       {
         path: "/blog/khoi-tao/:slug",
         component: UpdateBlog
+      },
+      {
+        path: '/danh-sach-san-pham',
+        component: PostList
+      },
+      {
+        path: '*',
+        component: PostList
       },
     ],
   });

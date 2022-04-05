@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-full items-start justify-between space-x-2">
     <textarea
-      v-model="value"
+      v-model="localValue"
       type="text"
       @input="$emit('input', $event.target.value)"
       class="
@@ -15,7 +15,7 @@
       "
       :rows="rowText < 2 ? 2 : rowText"
       placeholder="Mời bạn để lại bình luận"
-      @keyup.enter.exact="handleSubmit()"
+      @keyup.enter.exact="log(); handleSubmit();"
       @keyup.ctrl.enter="newLine"
       ref="focusMe"
     />
@@ -24,6 +24,7 @@
       :handleClick="
         () => {
           handleSubmit();
+          localValue = '';
         }
       "
       class="bg-green-600 px-5 py-2 whitespace-nowrap text-white rounded-md"
@@ -61,8 +62,13 @@ export default {
   },
   methods: {
     newLine: function () {
-      this.localValue = this.value + " \n";
+      this.localValue = this.localValue + " \n";
     },
+    log: function () {
+      console.log("from local");
+      console.log(this.localValue);
+      console.log("with heart");
+    }
   },
   components: { ButtonBasic },
 };

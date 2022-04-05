@@ -312,63 +312,63 @@ export default {
         if (this.newComment !== "") {
           var date = new Date().toLocaleDateString("en-CA");
           const cmt = this.newComment;
-          // this.$apollo.mutate({
-          //   mutation: createComment,
-          //   variables: {
-          //     input: {
-          //       discussionId: this.blog.id,
-          //       content: this.newComment,
-          //       type: "Blog",
-          //       author: {
-          //         authorId: this.guestUser.id,
-          //         authorName: this.guestUser.name,
-          //       },
-          //     },
-          //   },
+          this.$apollo.mutate({
+            mutation: createComment,
+            variables: {
+              input: {
+                discussionId: this.blog.id,
+                content: this.newComment,
+                type: "Blog",
+                author: {
+                  authorId: this.guestUser.id,
+                  authorName: this.guestUser.name,
+                },
+              },
+            },
 
-          //   update: (store, { data: { createComment } }) => {
-          //     const query = {
-          //       query: getComment,
-          //       variables: {
-          //         condition: {
-          //           discussionId: {
-          //             eq: this.blog.id,
-          //           },
-          //         },
-          //         order: {
-          //           createdAt: "DESC",
-          //         },
-          //         take: 10,
-          //         skip: 0,
-          //       },
-          //     };
+            update: (store, { data: { createComment } }) => {
+              const query = {
+                query: getComment,
+                variables: {
+                  condition: {
+                    discussionId: {
+                      eq: this.blog.id,
+                    },
+                  },
+                  order: {
+                    createdAt: "DESC",
+                  },
+                  take: 10,
+                  skip: 0,
+                },
+              };
 
-          //     const { commentsWithPagination } = store.readQuery(query);
+              const { commentsWithPagination } = store.readQuery(query);
 
-          //     var comment = {
-          //       id: createComment.string,
-          //       discussionId: this.blog.id,
-          //       content: cmt,
-          //       type: "Blog",
-          //       commentParentId: "",
-          //       author: {
-          //         authorId: this.guestUser.id,
-          //         authorName: this.guestUser.name,
-          //         __typename: "Author",
-          //       },
-          //       createdAt: date,
-          //       replies: [],
-          //       __typename: "CommentCollection",
-          //     };
-          //     commentsWithPagination.items.unshift(comment);
-          //     commentsWithPagination.totalCount += 1;
+              var comment = {
+                id: createComment.string,
+                discussionId: this.blog.id,
+                content: cmt,
+                type: "Blog",
+                commentParentId: "",
+                author: {
+                  authorId: this.guestUser.id,
+                  authorName: this.guestUser.name,
+                  __typename: "Author",
+                },
+                createdAt: date,
+                replies: [],
+                __typename: "CommentCollection",
+              };
+              commentsWithPagination.items.unshift(comment);
+              commentsWithPagination.totalCount += 1;
 
-          //     store.writeQuery({
-          //       ...query,
-          //       data: { commentsWithPagination: commentsWithPagination },
-          //     });
-          //   },
-          // });
+              store.writeQuery({
+                ...query,
+                data: { commentsWithPagination: commentsWithPagination },
+              });
+            },
+          });
           this.$toast.show("Thêm thành công!", {
             type: "success",
             theme: "bubble",

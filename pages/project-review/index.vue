@@ -149,7 +149,6 @@
     </div>
 
     <div
-      v-if="reviews.length > 0"
       class="flex items-start p-2 md:p-0 mb-3 md:mb-7"
     >
       <template v-if="guestUser">
@@ -182,11 +181,11 @@
         <review-post :review="review" :index="index" :author="guestUser" />
       </div>
     </div>
-
+    <div ref="borderland"></div>
     <!-- skeleton -->
     <div
-      v-if="
-        reviews.length < reviewsWithPagination.totalCount || reviews.length <= 1
+      v-show="
+        $apolloData.loading != 0 && ( reviews.length < reviewTotalCount || reviews.length <= 1)
       "
       ref="skeleton"
       class="border rounded-md px-3 lg:px-8 py-3 lg:py-5 my-2"
@@ -304,8 +303,9 @@ export default {
     reviewsWithPagination: {
       query() {
         return gql`
-          query GetListReview($take: Int, $skip: Int) {
+          query GetListReview($condition: ReviewCollectionFilterInput, $take: Int, $skip: Int) {
             reviewsWithPagination(
+              where: $condition
               take: $take
               skip: $skip
               order: { createdAt: DESC }
@@ -338,11 +338,20 @@ export default {
           }
         `;
       },
+      skip () {
+        return this.project === undefined
+      },
       update: (data) => data.reviewsWithPagination,
       variables() {
+        console.log(this.project)
         return {
           take: 5,
           skip: 0,
+          condition: {
+              projectId: {
+                  eq: this.project.id
+              }
+          }
         };
       },
     },
@@ -419,9 +428,11 @@ export default {
 
   computed: {
     reviews() {
-      return this.reviewGenerate();
+      return  this.reviewGenerate();
     },
-
+    reviewTotalCount() {
+      return this.reviewsWithPagination?.totalCount ?? 0;
+    },
     author() {
       const tempUser = {};
       const guestUser = this.$cookies.get("GuestUser") ?? null;
@@ -437,7 +448,9 @@ export default {
   mounted() {
     window.addEventListener("scroll", this.HandleScroll);
   },
-
+  destroyed () {
+    window.removeEventListener('scroll', this.HandleScroll);
+  },
   methods: {
     reviewGenerate() {
       if (this.reviewsWithPagination !== null && this.project !== null) {
@@ -463,10 +476,9 @@ export default {
       return [];
     },
     HandleScroll() {
-      console.log(window.pageYOffset / document.body.offsetHeight);
+      console.log(this.$refs.borderland.getBoundingClientRect());
       if (
-        this.$refs.skeleton.getBoundingClientRect().y <= 513 &&
-        this.$refs.skeleton.getBoundingClientRect().y <= 513
+        this.$refs.borderland.getBoundingClientRect().y < 1400
       ) {
         this.LoadNewReviews();
       }
@@ -565,6 +577,11 @@ export default {
       this.$apollo.queries.reviewsWithPagination.refetch({
         skip: 0,
         take: 5,
+        condition: {
+              projectId: {
+                  eq: this.project.id,
+              }
+          }
       });
     },
 
@@ -631,16 +648,25 @@ export default {
       }
       this.isLoading = true;
 
+      if (this.reviews.length == this.reviewsWithPagination.totalCount) return;
+
       if (this.skip + 5 <= this.reviewsWithPagination.totalCount) {
         this.skip += 5;
       } else {
         this.take = this.reviewsWithPagination.totalCount - this.skip;
       }
+      console.log(this.skip)
+      console.log(this.take)
       if (this.skip !== this.reviewsWithPagination.totalCount) {
         this.$apollo.queries.reviewsWithPagination.fetchMore({
           variables: {
             skip: this.skip,
             take: this.take,
+            condition: {
+              projectId: {
+                  eq: this.project.id,
+              }
+            }
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             setTimeout(function () {

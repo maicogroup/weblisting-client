@@ -21,6 +21,11 @@ export default {
     props: {
             projectId: {type: String, default: ""}
         },
+    data () {
+        return{
+            totalCount: 0
+        }
+    },
     apollo: {
         reviews: {
             query: getReviewCount,
@@ -36,15 +41,25 @@ export default {
             update: data => data.reviewsWithPagination
         }
     },
-    computed: {
-        totalCount() {
+    watch:{
+        reviews () {
             if (this.reviews.totalCount === 0) {
-                return 0;
+                this.totalCount = 0;
             }
             else {
-                return this.reviews.totalCount;
+                this.totalCount = this.reviews.totalCount;
             }
         }
-    }
+    },
+    // computed: {
+    //     totalCount() {
+    //         if (this.reviews.totalCount === 0) {
+    //             return 0;
+    //         }
+    //         else {
+    //             return this.reviews.totalCount;
+    //         }
+    //     }
+    // }
 }
 </script>

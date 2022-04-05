@@ -12,7 +12,7 @@ import SpecificProjectReview from '~/pages/product-preview/specific-project/inde
 import HomePage from '~/pages/home/index';
 import ProjectReview from '~/pages/project-review/index';
 import ProjectAreaReview from '~/pages/project-area-review/index';
-import BlogPage from '~/Pages/blog/index';
+import BlogPage from '~/pages/blog/index';
 import DetailBlog from '~/pages/blog/detail/index';
 import CreateBlog from '~/pages/blog/create/index';
 import UpdateBlog from '~/pages/blog/update/index';

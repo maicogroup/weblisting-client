@@ -60,6 +60,18 @@ export default {
         return this.formatReviewDateCreated(hi);
       }
     },
+    formatReviewDateCreated(dateCreated) {
+      const day = dateCreated.getDate();
+      // getMonth trả về tháng bắt đầu từ 0 đến 11
+      const month = dateCreated.getMonth() + 1;
+      const year = dateCreated.getFullYear();
+
+      return `${padZero(day)}/${padZero(month)}/${year}`;
+
+      function padZero(num) {
+        return num.toString().padStart(2, "0");
+      }
+    },
   },
 };
 function createComment() {

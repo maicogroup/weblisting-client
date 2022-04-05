@@ -1,19 +1,19 @@
 <template>
     <div>
-        <button style="display:none" id="dynamic" v-on:click="openGallery">Open Slice</button>
+        <button style="display:none" :id="`dynamic-${galleryIndex}`" v-on:click="openGallery">Open Slice</button>
         <div id="light-gallery">
             <div class="glide">
                 <div class="glide__track" data-glide-el="track">
                     <ul class="glide__slides">
                         <li
                             v-for="(item, index) in items"
-                            :key="item"
+                            :key="index"
                             class="glide__slide media_container"
                             v-on:click="openGallery(index)"
                         >
                             <div :style="`background-image: url(${item.includes('.mp4') ? imgUrl : item}); filter: blur(100px); -webkit-filter: blur(100px);height: 400px;`"></div>
                             <video v-if="item.includes('mp4')" :src="item" controls/>
-                            <img v-else :src="item" :alt="alt" />
+                            <img v-else :src="item" />
                         </li>
                     </ul>
                 </div>
@@ -26,7 +26,7 @@
                     </button>
                 </div>
                 <div class="glide__bullets" data-glide-el="controls[nav]">
-                    <button v-for="(item, index) in items" :key="item" class="glide__bullet" :data-glide-dir="`=${index}`"></button>
+                    <button v-for="(item, index) in items" :key="index" class="glide__bullet" :data-glide-dir="`=${index}`"></button>
                 </div>
             </div>
         </div>
@@ -38,7 +38,7 @@ import Glide from '@glidejs/glide';
 import glide from '@glidejs/glide';
 export default {
     name: 'Gallery',
-    props:["items", "alt"],
+    props:["items", "galleryIndex"],
     data: () => ({
         imgUrl: "https://weblisting.ss-hn-1.bizflycloud.vn/apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg",
         index: null,
@@ -69,7 +69,8 @@ export default {
     },
     methods: {
         openGallery: function(index){
-            const element = document.getElementById('dynamic');
+            const galleryId = `dynamic-${this.galleryIndex}`;
+            const element = document.getElementById(galleryId);
             if(element.hasAttribute("lg-uid")){
                 window.lgData[element.getAttribute('lg-uid')].index = index;
                 window.lgData[element.getAttribute('lg-uid')].build(index);
@@ -79,7 +80,9 @@ export default {
                     dynamicEl: this.gallery,
                     thumbnail: true,
                     autoplayFirstVideo: false,
-                    index: index
+                    index: index,
+                    galleryId: this.galleryIndex,
+                    hash: true
                 })
                 element.addEventListener('onAfterSlide', function(event){
                     window.glide.update({
@@ -88,7 +91,7 @@ export default {
                 })
             }
         }
-    }
+    },
 };
 </script>
 <style scoped>

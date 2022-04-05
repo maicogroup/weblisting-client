@@ -199,11 +199,10 @@ export default {
   created() {
     this.guestUser = this.$cookies.get("GuestUser") ?? null;
   },
-  mounted() {
+  /* mounted() {
     // console.log(this.$route.params.slug);
-    this.content = JSON.parse(this.blog.content);
-    if (this.blog.id != null) {
-      console.log("haha");
+    if (this.blog && this.blog.id != null) {
+      this.content = JSON.parse(this.blog.content);
       this.$apollo.queries.commentsWithPagination.refetch({
         condition: {
           discussionId: {
@@ -218,7 +217,7 @@ export default {
       });
       this.hasId = true;
     }
-  },
+  }, */
   apollo: {
     blog: {
       query: getBlog,
@@ -236,17 +235,22 @@ export default {
     },
     commentsWithPagination: {
       query: getComment,
-      variales() {
+      variables() {
         return {
           condition: {
             discussionId: {
               eq: this.blog.id,
             },
           },
+          order: [{
+            createdAt: "DESC",
+          }],
+          take: 10,
+          skip: 0,
         };
       },
       skip() {
-        return !this.hasId;
+        return this.blog === undefined;
       },
       update: (data) => data.commentsWithPagination,
     },
@@ -264,6 +268,11 @@ export default {
       guestUser: {},
     };
   },
+  watch:{
+    blog(newQuestion, oldQuestion){
+      this.content = JSON.parse(this.blog.content);
+    }
+  },
   computed: {
     totalItem() {
       if (this.commentsWithPagination == null) {
@@ -272,7 +281,6 @@ export default {
       return this.commentsWithPagination.totalCount;
     },
     comments() {
-      console.log("a");
       if (this.commentsWithPagination == null) {
         return [];
       } else {
@@ -332,9 +340,9 @@ export default {
                       eq: this.blog.id,
                     },
                   },
-                  order: {
+                  order: [{
                     createdAt: "DESC",
-                  },
+                  }],
                   take: 10,
                   skip: 0,
                 },
@@ -425,9 +433,9 @@ export default {
                 eq: this.blog.id,
               },
             },
-            order: {
+            order: [{
               createdAt: "DESC",
-            },
+            }],
           });
         }
       }

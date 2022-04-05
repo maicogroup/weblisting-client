@@ -39,7 +39,7 @@
           Bài viết mới nhất
         </div>
         <div class="flex space-x-6">
-          <div class="min-w-0 md:max-w-[745px] max-w-[370px]">
+          <div class="min-w-0 md:max-w-[745px] max-w-[370px]" v-if="!$apollo.queries.blogPagination.loading">
             <div
               v-for="blog in blogs"
               :key="blog.id"

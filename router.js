@@ -10,7 +10,9 @@ import ProductReview from '~/pages/product-preview/index';
 import ProjectOverview from '~/pages/project-overview/index';
 import SpecificProjectReview from '~/pages/product-preview/specific-project/index';
 import HomePage from '~/pages/home/index';
-import BlogPage from '~/Pages/blog/index';
+import ProjectReview from '~/pages/project-review/index';
+import ProjectAreaReview from '~/pages/project-area-review/index';
+import BlogPage from '~/pages/blog/index';
 import DetailBlog from '~/pages/blog/detail/index';
 import CreateBlog from '~/pages/blog/create/index';
 import UpdateBlog from '~/pages/blog/update/index';
@@ -77,6 +79,14 @@ export function createRouter() {
       {
         path: "/blog/khoi-tao/:slug",
         component: UpdateBlog
+      },
+      {
+        path: '/review-du-an/:slug',
+        component: ProjectReview
+      },
+      {
+        path: '/review/khu-vuc',
+        component: ProjectAreaReview
       },
       {
         path: '/danh-sach-san-pham',

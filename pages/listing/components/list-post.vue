@@ -347,6 +347,7 @@ const getPostsQuery = gql`
         apartmentState
         tags
         project {
+          id
           address {
             street
             city
@@ -397,7 +398,7 @@ export default {
         return this.postsData.items.map((item) => {
           return {
             srcimage:
-              "https://maico-hub-record.ss-hn-1.bizflycloud.vn/" +
+              "https://weblisting.ss-hn-1.bizflycloud.vn/" +
               (item.gallery.find((c) => !c.includes(".mp4")) ||
                 "apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg"),
             pageInfor: item.pageInfor,
@@ -704,7 +705,7 @@ export default {
   min-width: 200px;
   transform: rotate(-45deg) translate(-33%, -50px);
   color: white;
-  text-align: center;
+  text-align: center; 
   text-transform: uppercase;
   font-size: 10px;
   top: 0px;

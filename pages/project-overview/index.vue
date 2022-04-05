@@ -1,38 +1,25 @@
 <template>
   <div v-if="project" class="w-full sm:px-36 px-5 color-stone-900">
-    <div class="sm:block hidden">
-      <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
-        <a href="#">Dự án</a>
-        /
-        <a href="">TP HCM</a>
-        /
-        <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
+   <div class="flex flex-col-reverse md:flex-col">
+      <div>
+        <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
+          <a href="#">Dự án</a>
+          /
+          <a href="">TP HCM</a>
+          /
+          <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
+        </div>
+        <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
+          {{ project.projectName }}
+        </h1>
+        <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
+          Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
+        </p>
       </div>
-      <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
-        {{ project.projectName }}
-      </h1>
-      <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
-        Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
-      </p>
-    </div>
-    <div>
-      <gallery class="inline h-72 w-full" :items="gallery" :alt="`Dự án ${project.projectName}`" />
-    </div>
-    <div class="sm:hidden block">
-      <div class="text-sm font-medium sm:font-normal color-999999 mt-2.5 sm:mt-0 mb-1.5 sm:mb-2.5">
-        <a href="#">Dự án</a>
-        /
-        <a href="">TP HCM</a>
-        /
-        <a class="font-bold color-stone-900" href="#">{{ project.projectName }}</a>
+      <div>
+        <gallery class="inline h-72 w-full" :items="gallery" :alt="`Dự án ${project.projectName}`" />
       </div>
-      <h1 class="font-bold font-size-project-name mb-1 mt-2 color-stone-900" @click="HandleScroll()">
-        {{ project.projectName }}
-      </h1>
-      <p class="mb-4 text-sm font-normal mt-1 color-stone-900">
-        Đường {{ project.address.street }}, Quận {{ project.address.district }}, TP {{ project.address.city }}
-      </p>
-    </div>
+   </div>
     <div class="mt-1 sm:mt-5 sm:mx-44">
       <div class="flex justify-between sm:justify-start sticky-table-of-content z-10 sm:pt-0 pt-3 color-stone-900">
         <button :class="isTargetingTableOfContents.isTargetingOverview ? activeTableContent : tableContentStyles" @click="ScrollToOverview()">

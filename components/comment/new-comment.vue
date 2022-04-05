@@ -15,18 +15,14 @@
       "
       :rows="rowText < 2 ? 2 : rowText"
       placeholder="Mời bạn để lại bình luận"
-      @keyup.enter.exact="log(); handleSubmit();"
+      @keyup.enter.exact="handleSubmit"
+      @keyup.alt.enter="newLine"
       @keyup.ctrl.enter="newLine"
       ref="focusMe"
     />
     <button-basic
       size="md"
-      :handleClick="
-        () => {
-          handleSubmit();
-          localValue = '';
-        }
-      "
+      :handleClick="handleSubmit"
       class="bg-green-600 px-5 py-2 whitespace-nowrap text-white rounded-md"
     >
       Bình luận
@@ -38,8 +34,7 @@
 import ButtonBasic from "~/components/button-basic/index.vue";
 export default {
   props: {
-    value: { type: String, default: "" },
-    handleSubmit: {
+    handleSubmitSuccessful: {
       type: Function,
       default: () => {
         console.log("is cmt");
@@ -64,10 +59,21 @@ export default {
     newLine: function () {
       this.localValue = this.localValue + " \n";
     },
-    log: function () {
-      console.log("from local");
-      console.log(this.localValue);
-      console.log("with heart");
+    isValueEmpty: function () {
+      if ((this.localValue.match(/^\s*$/) || []).length > 0) {
+        return true;
+      }      
+      return false;
+    },
+    handleSubmit: function () {
+      if (!this.isValueEmpty())
+      {
+        this.handleSubmitSuccessful();
+        this.localValue = "";
+      }
+      else {
+        return;
+      }
     }
   },
   components: { ButtonBasic },

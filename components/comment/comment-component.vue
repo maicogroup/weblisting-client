@@ -16,7 +16,7 @@
         <new-comment
           v-model="newCmt"
           :autoFocus="true"
-          :handleSubmit="handleSubmit"
+          :handleSubmitSuccessful="handleSubmit"
           class="mb-4"
         />
       </template>

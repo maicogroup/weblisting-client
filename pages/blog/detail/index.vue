@@ -80,7 +80,7 @@
       </div> -->
       <div class="space-y-3 mt-5">
         <p>{{ totalItem }} bình luận</p>
-        <new-comment v-model="newComment" :handleSubmit="createComment" />
+        <new-comment v-model="newComment" :handleSubmitSuccessful="createComment" />
         <div class="p-5 border rounded border-stone-200">
           <div v-for="comment in comments" :key="comment.id">
             <comment-component :comment="comment" :createReply="createReply" />
@@ -314,10 +314,7 @@ export default {
 
         return;
       } else {
-        console.log("from index");
-        console.log(this.newComment);
-        console.log("with heart");
-        if (this.newComment !== "") {
+        console.log("newComment: " + this.newComment);
           var date = new Date().toLocaleDateString("en-CA");
           const cmt = this.newComment;
           this.$apollo.mutate({
@@ -397,7 +394,6 @@ export default {
           console.log(this.totalItem);
           console.log(this.comments);
         }
-      }
     },
     createReply(commentParentId, comment) {
       this.guestUser = this.$cookies.get("GuestUser") ?? null;

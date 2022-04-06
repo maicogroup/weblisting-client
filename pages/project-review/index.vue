@@ -266,7 +266,6 @@ export default {
     });
     this.$nuxt.$on("userLogin", () => {
       this.guestUser = this.$cookies.get("GuestUser") ?? null;
-      console.log(this.guestUser);
     });
   },
   apollo: {
@@ -343,7 +342,6 @@ export default {
       },
       update: (data) => data.reviewsWithPagination,
       variables() {
-        console.log(this.project)
         return {
           take: 5,
           skip: 0,
@@ -476,7 +474,6 @@ export default {
       return [];
     },
     HandleScroll() {
-      console.log(this.$refs.borderland.getBoundingClientRect());
       if (
         this.$refs.borderland.getBoundingClientRect().y < 1400
       ) {
@@ -655,8 +652,6 @@ export default {
       } else {
         this.take = this.reviewsWithPagination.totalCount - this.skip;
       }
-      console.log(this.skip)
-      console.log(this.take)
       if (this.skip !== this.reviewsWithPagination.totalCount) {
         this.$apollo.queries.reviewsWithPagination.fetchMore({
           variables: {

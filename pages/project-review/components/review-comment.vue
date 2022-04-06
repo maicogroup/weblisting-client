@@ -14,9 +14,15 @@
         <span class="text-sm text-[#858585]">
           {{ formatPostDate(comment.dateCreated) }}
         </span>
-        <p class="text-sm font-normal leading-4 break-all">
-          {{ comment.content }}
+        <p :class="[!showFullContent ? 'shortcontent' : '']" ref="commentContent" class="text-sm font-normal leading-4 break-all whitespace-pre-line">{{comment.content}}
         </p>
+        <span
+        v-show="contentOverflowing && !showFullContent"
+        id="show-more"
+        class="text-sm cursor-pointer text-gray-500"
+        @click="showFullContent = !showFullContent"
+        >Xem thêm</span
+      >
       </div>
     </div>
   </div>
@@ -30,10 +36,25 @@ export default {
   props: ["comment"],
   data() {
     return {
+      showFullContent:false,
+      contentOverflowing: false,
       //   comment: createComment(),
     };
   },
+  mounted(){
+    const e = this.$refs.commentContent;
+    if (e.clientHeight - e.scrollHeight < 0) {
+      this.contentOverflowing = true;
+    } else {
+      this.contentOverflowing = false;
+    }
+    window.addEventListener("resize", this.getOverflow);
+  },
   methods: {
+    getOverflow() {
+      const e = this.$refs.commentContent;
+      this.contentOverflowing = e.clientHeight - e.scrollHeight < 0;
+    },
     // todo: đổi thành dạng "x phút trước/x ngày trước"
     formatPostDate(time) {
       this.today = new Date();
@@ -86,4 +107,10 @@ function createComment() {
 </script>
 
 <style>
+.shortcontent {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 </style>

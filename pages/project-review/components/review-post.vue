@@ -373,7 +373,6 @@ export default {
       }
       this.liked = !this.liked;
       const tempLiked = this.review.liked;
-      console.log(this.author);
       if (this.liked) {
         tempLiked.push(this.author.id);
       } else {
@@ -447,22 +446,13 @@ export default {
         };
         if (this.comments.length > 3) {
           // eslint-disable-next-line vue/no-mutating-props
-          console.log("456");
           this.comments.unshift(tempComment);
         } else {
-          console.log("123");
           this.comments.unshift(tempComment);
-          console.log(this.comments);
           this.showAllComment = true;
         }
         this.sendAddCommentMutation(this.author);
         this.content = "";
-        console.log(
-          "danh sach comment" +
-            this.comments[0].content +
-            "o bai review" +
-            this.review.content
-        );
       }
     },
     getOverflow() {

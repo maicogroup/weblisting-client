@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="flex mt-3 lg:mt-4">
+    <div class="grid grid-cols-[45px_auto] gap-2 mt-3 lg:mt-4">
       <guest-user-avatar
         :name="comment.authorName"
         class="mt-1 w-10 h-10 rounded-full cursor-pointer"
       ></guest-user-avatar>
       <div
-        class="ml-2 border rounded-xl py-0.5 pl-2 pr-3 bg-slate-50 leading-4"
+        class="border rounded-xl py-0.5 pl-2 pr-3 bg-slate-50 w-full leading-4"
       >
         <a href="#" class="font-bold text-sm">
           {{ comment.authorName }}
@@ -14,7 +14,7 @@
         <span class="text-sm text-[#858585]">
           {{ formatPostDate(comment.dateCreated) }}
         </span>
-        <p class="text-sm font-normal leading-4">
+        <p class="text-sm font-normal leading-4 break-all">
           {{ comment.content }}
         </p>
       </div>

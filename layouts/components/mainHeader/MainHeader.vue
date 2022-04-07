@@ -213,7 +213,6 @@ export default {
     this.guestUser = this.$cookies.get("GuestUser") ?? null;
     this.$nuxt.$on("userLogin", () => {
       this.guestUser = this.$cookies.get("GuestUser") ?? null;
-      console.log(this.guestUser);
     });
   },
 
@@ -231,14 +230,14 @@ export default {
     checkUser () {
       this.guestUser = this.$cookies.get('GuestUser') ?? null;
       this.showAuthenModal = false;
+
     },
 
     logout () {
       this.$cookies.remove('GuestUser');
       this.guestUser = null;
       this.$nuxt.$emit("userLogout");
-      //location.reload();
-      // console.log(this.$cookies.get('GuestUser'));
+      location.reload();
     },
 
     openAuthenModal (signUp) {

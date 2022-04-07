@@ -1,5 +1,6 @@
 <template>
   <div class="w-full max-w-4xl md:px-4">
+    <img :src="tempImg" alt="" />
     <guest-user-authentication-modal
       :open="isShowingLogIn"
       @close="isShowingLogIn = false"
@@ -120,7 +121,10 @@
                   />
                 </svg>
               </button>
-              <img
+              <video controls v-if="tempFile[index].type.includes('mp4')"  class="h-20 w-20 object-cover">
+                <source :src="item.substring(0, item.length-4)" type="video/mp4">
+              </video>
+              <img v-else
                 :src="item"
                 alt="they might be my crew"
                 class="h-20 w-20 object-cover"
@@ -358,11 +362,13 @@ export default {
   data() {
     return {
       currentPage: 1,
+      tempImg: '',
       user: {
         avatarSource:
           "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
       },
       isFormShown: false,
+      isFirstUpload: false,
       guestUser: {},
       tempSrc: [],
       tempFile: [],
@@ -451,6 +457,7 @@ export default {
   },
   methods: {
     reviewGenerate() {
+      console.log('bi lua roi hahah');
       if (this.reviewsWithPagination !== null && this.project !== null) {
         const tempReviewArray = [];
         if (this.reviewsWithPagination !== undefined) {
@@ -486,14 +493,20 @@ export default {
       fileInput.setAttribute("type", "file");
       fileInput.setAttribute(
         "accept",
-        "image/png, image/gif, image/jpeg, image/bmp, image/x-icon"
+        "image/png, image/gif, image/jpeg, image/bmp, image/x-icon, video/*"
       );
       fileInput.click();
       fileInput.addEventListener("change", () => {
         if (fileInput.files != null && fileInput.files[0] != null) {
           const [file] = fileInput.files;
           if (file) {
-            this.tempSrc.push(URL.createObjectURL(file));
+            if (file.type.includes('mp4'))
+            {
+              this.tempSrc.push(URL.createObjectURL(file) + '.mp4');
+            }
+            else {
+              this.tempSrc.push(URL.createObjectURL(file));
+            }
             this.tempFile.push(file);
           }
         }
@@ -513,7 +526,7 @@ export default {
       this.tempFile.splice(index, 1);
     },
 
-    sendImagesToSever(id) {
+    sendImagesToSever(id, createReviewInput) {
       AWS.config.update({
         accessKeyId: "8EL21GNHMRNZYW8488OV",
         secretAccessKey: "xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD",
@@ -530,6 +543,8 @@ export default {
         queueSize: 1,
       };
 
+      let imgCount = 0;
+
       this.tempFile.forEach((x) => {
         const uploadParams = {
           Bucket: "weblisting",
@@ -540,12 +555,20 @@ export default {
         };
 
         const upload = s3.upload(uploadParams, uploadOptions);
-
         upload.send((err, data) => {
           if (err) {
             console.error("Upload lỗi:", err);
           } else if (data) {
-            console.log("Upload thành công:", data);
+            console.log("Upload thành công:", data); 
+              imgCount++;
+              console.log(imgCount);
+              console.log('chieu dai tempFile' + this.tempFile.length);
+              if (imgCount === this.tempFile.length) {
+                this.sendMutationCreateReview(createReviewInput);
+                this.tempFile = [];
+                this.tempSrc = [];
+                return;
+              }
           }
         });
       });
@@ -580,6 +603,8 @@ export default {
               }
           }
       });
+
+
     },
 
     sendWarningNotification(notification) {
@@ -603,7 +628,6 @@ export default {
           liked: [],
         };
         this.tempFile.forEach((x) => {
-          this.sendImagesToSever(createReviewInput.id);
           const tempObject = {};
           tempObject.path =
             "https://weblisting.hn.ss.bfcplatform.vn/" +
@@ -614,14 +638,12 @@ export default {
           tempObject.contentType = x.type;
           createReviewInput.galleries.push(tempObject);
         });
-
-        this.sendMutationCreateReview(createReviewInput);
+        this.sendImagesToSever(createReviewInput.id, createReviewInput);
+        this.isFirstUpload = true;
         const element = document.body;
         element.classList.remove("overflow-hidden");
         this.isFormShown = !this.isFormShown;
         this.content = "";
-        this.tempFile = [];
-        this.tempSrc = [];
       } else {
         this.sendWarningNotification("Bài viết chưa có thông tin");
       }

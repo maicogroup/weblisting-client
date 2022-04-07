@@ -54,9 +54,22 @@
           class="hidden md:grid gap-1 mt-2"
         >
           <template v-if="review.imageSources.length <= 4">
+            <div v-for="(index) in review.imageSources.length" :key="index">
+              <video controls v-if="review.imageSources[index-1].includes('mp4')"
+              :class="[
+                review.imageSources.length == 1
+                  ? 'aspect-auto'
+                  : review.imageSources.length <= 3
+                  ? 'aspect-square'
+                  : 'h-40',
+              ]"
+              class="object-cover w-full cursor-pointer"
+              @click="handleGallery(index - 1)"
+              >
+                <source :src="review.imageSources[index-1]" type="video/mp4">
+              </video>
             <img
-              v-for="index in review.imageSources.length"
-              :key="index"
+              v-else
               :class="[
                 review.imageSources.length == 1
                   ? 'aspect-auto'
@@ -68,17 +81,32 @@
               :src="review.imageSources[index - 1]"
               @click="handleGallery(index - 1)"
             />
+            </div>
           </template>
           <template v-else>
-            <img
-              v-for="index in 3"
-              :key="index"
+            <div v-for="index in 3" :key="index">
+              <video controls v-if="review.imageSources[index-1].includes('mp4')"
+              class="object-cover w-full h-16 lg:h-40 cursor-pointer"
+              @click="handleGallery(index - 1)"
+              >
+                <source :src="review.imageSources[index-1]" type="video/mp4">
+              </video>
+              <img
+              v-else
               class="object-cover w-full h-16 lg:h-40 cursor-pointer"
               :src="review.imageSources[index - 1]"
               @click="handleGallery(index - 1)"
             />
+            </div>
+            
             <div class="relative">
+              <video controls v-if="review.imageSources[3].includes('mp4')"
+              class="object-cover w-full h-16 lg:h-40"
+              >
+                <source :src="review.imageSources[index-3]" type="video/mp4">
+              </video>
               <img
+                v-else
                 class="object-cover w-full h-16 lg:h-40"
                 :src="review.imageSources[3]"
               />

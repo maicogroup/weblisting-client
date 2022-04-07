@@ -9,7 +9,7 @@
       class="mt-1 md:mt-0 flex space-x-2.5 rounded-md overflow-hidden mb-[10px] border-[1px] pr-2"
     >
       <nuxt-link class="shrink-0" :to="'/blog/'+ blog.slug">
-        <img :src="blog.thumbnail" class="h-[75px] w-[103px] md:w[115px] md:h-[80px]">
+        <img :src="blog.thumbnail" class="h-[75px] w-[103px] md:w[115px] md:h-[80px] object-cover">
       </nuxt-link>
       <div class="flex flex-col justify-evenly py-1.5">
         <nuxt-link :to="'/blog/'+blog.slug" class="line-clamp-2 leading-5 font-bold font-source-serif-pro">

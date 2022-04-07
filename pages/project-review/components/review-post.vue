@@ -54,9 +54,8 @@
           class="hidden md:grid gap-1 mt-2"
         >
           <template v-if="review.imageSources.length <= 4">
-            <img
-              v-for="index in review.imageSources.length"
-              :key="index"
+            <div v-for="index in review.imageSources.length" :key="index">
+              <img v-if="review.mediaType[index-1]!='video/mp4'"
               :class="[
                 review.imageSources.length == 1
                   ? 'aspect-auto'
@@ -67,16 +66,19 @@
               class="object-cover w-full cursor-pointer"
               :src="review.imageSources[index - 1]"
               @click="handleGallery(index - 1)"
-            />
+              />
+              <iframe v-else :src="review.imageSources[index-1]"></iframe>
+            </div>
           </template>
           <template v-else>
-            <img
-              v-for="index in 3"
-              :key="index"
-              class="object-cover w-full h-16 lg:h-40 cursor-pointer"
+            <div v-for="index in 3" :key="index">
+              <img v-if="review.mediaType[index-1]!='video/mp4'"
+              class="object-cover w-full cursor-pointer"
               :src="review.imageSources[index - 1]"
               @click="handleGallery(index - 1)"
-            />
+              />
+              <iframe v-else :src="review.imageSources[index-1]"></iframe>
+            </div>
             <div class="relative">
               <img
                 class="object-cover w-full h-16 lg:h-40"
@@ -115,23 +117,25 @@
           class="md:hidden grid gap-1 mt-2"
         >
           <template v-if="review.imageSources.length <= 3">
-            <img
-              v-for="index in review.imageSources.length"
-              :key="index"
+            <div v-for="index in review.imageSources.length" :key="index">
+              <img v-if="review.mediaType[index-1]!='video/mp4'"
               :class="[review.imageSources.length < 3 ? 'aspect-square' : '']"
+              class="object-cover w-full cursor-pointer"
+              :src="review.imageSources[index - 1]"
+              @click="handleGallery(index - 1)"
+              />
+              <iframe v-else :src="review.imageSources[index-1]"></iframe>
+            </div>
+          </template>
+          <template v-else>
+            <div v-for="index in 2" :key="index">
+              <img v-if="review.mediaType[index-1]!='video/mp4'"
               class="object-cover w-full sm:h-40 cursor-pointer"
               :src="review.imageSources[index - 1]"
               @click="handleGallery(index - 1)"
-            />
-          </template>
-          <template v-else>
-            <img
-              v-for="index in 2"
-              :key="index"
-              class="object-cover w-full h-20 sm:h-40 cursor-pointer"
-              :src="review.imageSources[index - 1]"
-              @click="handleGallery(index - 1)"
-            />
+              />
+              <iframe v-else :src="review.imageSources[index-1]"></iframe>
+            </div>
             <div class="relative">
               <img
                 class="object-cover w-full h-20 sm:h-40"
@@ -189,7 +193,6 @@
           <span class="font-normal">Thích</span>
         </button>
         <button
-          id="discussBtn"
           class="py-1.5 px-3 items-center hover:bg-gray-100"
           @click="setFocus"
         >
@@ -225,7 +228,9 @@
           <div class="grow px-3">
             <!-- todo: style placeholder -->
             <textarea
-              id="discussArea"
+              @click="setFocus"
+              :disabled="isShowingLogIn"
+              ref="discussArea"
               v-model="content"
               style="overflow: auto"
               placeholder="Thảo luận"
@@ -264,7 +269,7 @@
         <div v-if="review.comments.length > 0">
           <div v-if="showAllComment == false">
             <div v-for="comment in first3Comments" :key="comment.id">
-              <review-comment :comment="comment" />
+              <review-comment :comment="comment"/>
             </div>
           </div>
           <div v-for="comment in comments" v-else :key="comment.id">
@@ -310,6 +315,7 @@ export default {
       comments: this.review.comments.reverse(),
       tempGallery: this.review.imageSources,
       isShowingLogIn: false,
+      
       liked: this.review.isLiked,
       showAllComment: this.isGather3Comments(),
       contentOverflowing: false,
@@ -460,8 +466,13 @@ export default {
       this.contentOverflowing = e.clientHeight - e.scrollHeight < 0;
     },
     setFocus() {
+      const e = this.$refs.discussArea;
+      if (this.author === null) {
+        this.isShowingLogIn = true;
+        return;
+      }
       setTimeout(function () {
-        document.getElementById("discussArea").focus();
+        e.focus();
       }, 0);
     },
     handleGallery(index) {

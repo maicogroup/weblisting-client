@@ -20,7 +20,7 @@
         v-show="contentOverflowing && !showFullContent"
         id="show-more"
         class="text-sm cursor-pointer text-gray-500"
-        @click="showFullContent = !showFullContent"
+        @click="showFullContent = true"
         >Xem thêm</span
       >
       </div>
@@ -34,6 +34,27 @@ import GuestUserAvatar from "~/pages/components/guest-user-avatar.vue";
 export default {
   components: { GuestUserAvatar },
   props: ["comment"],
+  watch:{
+    comment: {
+      handler() { // watch it
+
+      this.$nextTick().then(() => {
+        if(!this.comment)
+          return;
+      
+        const e = this.$refs.commentContent;
+        if (e.clientHeight - e.scrollHeight < 0) {
+          this.contentOverflowing = true;
+        } else {
+          this.contentOverflowing = false;
+        }
+        window.addEventListener("resize", this.getOverflow);
+      })
+        
+      },
+      immediate: true
+    }
+  },
   data() {
     return {
       showFullContent:false,
@@ -42,13 +63,15 @@ export default {
     };
   },
   mounted(){
-    const e = this.$refs.commentContent;
-    if (e.clientHeight - e.scrollHeight < 0) {
-      this.contentOverflowing = true;
-    } else {
-      this.contentOverflowing = false;
-    }
-    window.addEventListener("resize", this.getOverflow);
+    this.$nextTick().then(() => {
+      const e = this.$refs.commentContent;
+      if (e.clientHeight - e.scrollHeight < 0) {
+        this.contentOverflowing = true;
+      } else {
+        this.contentOverflowing = false;
+      }
+      window.addEventListener("resize", this.getOverflow);
+    })
   },
   methods: {
     getOverflow() {
@@ -107,10 +130,4 @@ function createComment() {
 </script>
 
 <style>
-.shortcontent {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
 </style>

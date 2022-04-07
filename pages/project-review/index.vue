@@ -43,7 +43,7 @@
             lg:px-8
             py-3
             grid
-            overflow-scroll
+            overflow-y-scroll
             max-h-[90%]
             md:max-h-[520px]
           "
@@ -122,7 +122,7 @@
               </button>
               <img
                 :src="item"
-                alt="they might be my crew"
+                alt="uploaded img"
                 class="h-20 w-20 object-cover"
               />
             </div>
@@ -391,6 +391,27 @@ export default {
             },
           },
         },
+        formats:  [
+          'background',
+          'bold',
+          'color',
+          'font',
+          'code',
+          'italic',
+          'link',
+          'size',
+          'strike',
+          'script',
+          'underline',
+          'blockquote',
+          'header',
+          'indent',
+          'list',
+          'align',
+          'direction',
+          'code-block',
+          'formula'
+        ]
       },
     };
   },
@@ -456,20 +477,10 @@ export default {
         if (this.reviewsWithPagination !== undefined) {
           this.reviewsWithPagination.items.forEach((x) => {
             const tempReview = this.createMockReview(x, this.project);
-            if (this.tempReviews.length < this.take) {
-              setTimeout(function () {}, 10000);
-              this.tempReviews.push(tempReview);
-            } else {
-              tempReviewArray.push(tempReview);
-            }
+            tempReviewArray.push(tempReview);
           });
         }
-        if (tempReviewArray.length === 0) {
-          return this.tempReviews;
-        } else {
-          const oldReviews = tempReviewArray;
-          return oldReviews;
-        }
+        return tempReviewArray;
       }
       return [];
     },
@@ -486,7 +497,7 @@ export default {
       fileInput.setAttribute("type", "file");
       fileInput.setAttribute(
         "accept",
-        "image/png, image/gif, image/jpeg, image/bmp, image/x-icon"
+        "image/png, image/gif, image/jpeg, image/bmp, image/x-icon, video/*"
       );
       fileInput.click();
       fileInput.addEventListener("change", () => {
@@ -652,6 +663,7 @@ export default {
       } else {
         this.take = this.reviewsWithPagination.totalCount - this.skip;
       }
+
       if (this.skip !== this.reviewsWithPagination.totalCount) {
         this.$apollo.queries.reviewsWithPagination.fetchMore({
           variables: {
@@ -688,7 +700,9 @@ export default {
 
     createMockReview(item, project) {
       const tempImageSources = [];
+      const tempMediaSources = [];
       item.galleries.forEach((x) => tempImageSources.push(x.path));
+      item.galleries.forEach((x) => tempMediaSources.push(x.contentType));
       const tempComments = [];
       if (item.comments.length > 0) {
         item.comments.forEach((x) => {
@@ -704,7 +718,7 @@ export default {
         });
       }
       const isLiked =
-        this.guestUser === null ? false : item.liked.includes(this.guestUser.id);
+        !this.guestUser ? false : item.liked.includes(this.guestUser.id);
       return {
         id: item.id,
         authorName: item.author.name,
@@ -713,6 +727,7 @@ export default {
         dateCreated: new Date(item.createdAt),
         content: item.content,
         imageSources: tempImageSources,
+        mediaType: tempMediaSources,
         comments: tempComments,
         isLiked,
         galleries: item.galleries,

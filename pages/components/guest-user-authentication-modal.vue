@@ -72,6 +72,7 @@ export default {
       this.alreadyHasAccount = !this.signUp;
       this.$emit("close");
       this.$emit("success");
+      location.reload();
     },
 
     cancelModal() {

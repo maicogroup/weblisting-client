@@ -12,9 +12,9 @@
         <img :src="blog.thumbnail" class="h-[75px] w-[103px] md:w[115px] md:h-[80px] object-cover">
       </nuxt-link>
       <div class="flex flex-col justify-evenly py-1.5">
-        <nuxt-link :to="'/blog/'+blog.slug" class="line-clamp-2 leading-5 font-bold font-source-serif-pro">
+        <NuxtLink :to="`/blog/${blog.slug}`" class="line-clamp-2 leading-5 font-bold font-source-serif-pro">
           {{ blog.title }}
-        </nuxt-link>
+        </NuxtLink>
         <div class="text-sm text-neutral-400">
           <span>
             {{ blog.authorName }}

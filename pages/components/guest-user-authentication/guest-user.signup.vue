@@ -148,7 +148,7 @@ export default {
       }
 
       try {
-        const id = "";
+        let id = "";
         await this.$apollo.mutate({
           mutation: gql`
             mutation CreateGuestUser($input: CreateGuestUserInput!) {

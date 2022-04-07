@@ -67,6 +67,7 @@ export default {
           path: "/",
         }
       );
+      
       this.$nuxt.$emit("userLogin");
       this.alreadyHasAccount = !this.signUp;
       this.$emit("close");

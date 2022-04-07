@@ -236,6 +236,9 @@ export default {
     logout () {
       this.$cookies.remove('GuestUser');
       this.guestUser = null;
+      this.$nuxt.$emit("userLogout");
+      //location.reload();
+      // console.log(this.$cookies.get('GuestUser'));
     },
 
     openAuthenModal (signUp) {

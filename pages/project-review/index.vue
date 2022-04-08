@@ -44,7 +44,7 @@
             lg:px-8
             py-3
             grid
-            overflow-scroll
+            overflow-y-scroll
             max-h-[90%]
             md:max-h-[520px]
           "
@@ -126,7 +126,7 @@
               </video>
               <img v-else
                 :src="item"
-                alt="they might be my crew"
+                alt="uploaded img"
                 class="h-20 w-20 object-cover"
               />
             </div>
@@ -397,6 +397,27 @@ export default {
             },
           },
         },
+         formats:  [
+          'background',
+          'bold',
+          'color',
+          'font',
+          'code',
+          'italic',
+          'link',
+          'size',
+          'strike',
+          'script',
+          'underline',
+          'blockquote',
+          'header',
+          'indent',
+          'list',
+          'align',
+          'direction',
+          'code-block',
+          'formula'
+        ]
       },
     };
   },
@@ -544,7 +565,11 @@ export default {
       };
 
       let imgCount = 0;
-
+      console.log(this.tempFile.length);
+      if (this.tempFile.length === 0) {
+        console.log('rong orng orng');
+        this.sendMutationCreateReview(createReviewInput);
+      } else {
       this.tempFile.forEach((x) => {
         const uploadParams = {
           Bucket: "weblisting",
@@ -556,22 +581,23 @@ export default {
 
         const upload = s3.upload(uploadParams, uploadOptions);
         upload.send((err, data) => {
+          imgCount++;
           if (err) {
             console.error("Upload lỗi:", err);
           } else if (data) {
-            console.log("Upload thành công:", data); 
-              imgCount++;
-              console.log(imgCount);
-              console.log('chieu dai tempFile' + this.tempFile.length);
-              if (imgCount === this.tempFile.length) {
+            console.log("Upload thành công:", data);
+          }
+                console.log("Upload " + imgCount + this.tempFile.length);
+                // bi loi van up hinh duoc nhung van tra ve error
+          if (imgCount === this.tempFile.length) {
                 this.sendMutationCreateReview(createReviewInput);
                 this.tempFile = [];
                 this.tempSrc = [];
                 return;
               }
-          }
         });
       });
+      }
     },
     sendMutationCreateReview(createReviewInput) {
       this.$apollo.mutate({
@@ -635,6 +661,7 @@ export default {
             id +
             "/" +
             x.name;
+          console.log('path' + tempObject.path);
           tempObject.contentType = x.type;
           createReviewInput.galleries.push(tempObject);
         });
@@ -748,6 +775,7 @@ export default {
 <style>
 .ql-editor {
   min-height: 180px;
+  word-break: break-all;
 }
 .ql-container.ql-snow {
   height: auto;

@@ -72,6 +72,8 @@ export default {
       this.alreadyHasAccount = !this.signUp;
       this.$emit("close");
       this.$emit("success");
+      const guestUser = this.$cookies.get('GuestUser') ?? null;
+      console.log('iasf asofi asdf' + guestUser);
     },
 
     cancelModal() {

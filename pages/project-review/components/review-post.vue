@@ -253,7 +253,9 @@
           <div class="grow px-3">
             <!-- todo: style placeholder -->
             <textarea
-              id="discussArea"
+               @click="setFocus"
+              :disabled="isShowingLogIn"
+              ref="discussArea"
               v-model="content"
               style="overflow: auto"
               placeholder="Thảo luận"
@@ -488,8 +490,13 @@ export default {
       this.contentOverflowing = e.clientHeight - e.scrollHeight < 0;
     },
     setFocus() {
+      const e = this.$refs.discussArea;
+      if (this.author === null) {
+        this.isShowingLogIn = true;
+        return;
+      }
       setTimeout(function () {
-        document.getElementById("discussArea").focus();
+        e.focus();
       }, 0);
     },
     handleGallery(index) {
@@ -518,9 +525,7 @@ export default {
       // getMonth trả về tháng bắt đầu từ 0 đến 11
       const month = dateCreated.getMonth() + 1;
       const year = dateCreated.getFullYear();
-
       return `${padZero(day)}/${padZero(month)}/${year}`;
-
       function padZero(num) {
         return num.toString().padStart(2, "0");
       }

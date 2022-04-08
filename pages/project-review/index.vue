@@ -618,8 +618,9 @@ export default {
             liked: [],
           },
         },
-      });
-
+      }).then((data) => {
+      // Result
+      console.log(data)
       this.$apollo.queries.reviewsWithPagination.refetch({
         skip: 0,
         take: 5,
@@ -629,6 +630,11 @@ export default {
               }
           }
       });
+    }).catch((error) => {
+      // Error
+      console.error(error)
+      // We restore the initial user input
+    });
 
 
     },

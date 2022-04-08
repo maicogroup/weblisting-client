@@ -68,19 +68,19 @@
               >
                 <source :src="review.imageSources[index-1]" type="video/mp4">
               </video>
-            <img
-              v-else
-              :class="[
-                review.imageSources.length == 1
-                  ? 'aspect-auto'
-                  : review.imageSources.length <= 3
-                  ? 'aspect-square'
-                  : 'h-40',
-              ]"
-              class="object-cover w-full cursor-pointer"
-              :src="review.imageSources[index - 1]"
-              @click="handleGallery(index - 1)"
-            />
+              <img
+                v-else
+                :class="[
+                  review.imageSources.length == 1
+                    ? 'aspect-auto'
+                    : review.imageSources.length <= 3
+                    ? 'aspect-square'
+                    : 'h-40',
+                ]"
+                class="object-cover w-full cursor-pointer"
+                :src="review.imageSources[index - 1]"
+                @click="handleGallery(index - 1)"
+              />
             </div>
           </template>
           <template v-else>
@@ -103,7 +103,7 @@
               <video controls v-if="review.imageSources[3].includes('mp4')"
               class="object-cover w-full h-16 lg:h-40"
               >
-                <source :src="review.imageSources[index-3]" type="video/mp4">
+                <source :src="review.imageSources[3]" type="video/mp4">
               </video>
               <img
                 v-else
@@ -126,7 +126,7 @@
                 "
                 @click="handleGallery(3)"
               >
-                {{ `${review.imageSources.length - 4}+` }}
+                {{ `+${review.imageSources.length - 4}` }}
               </button>
             </div>
           </template>
@@ -142,27 +142,50 @@
           ]"
           class="md:hidden grid gap-1 mt-2"
         >
+            
           <template v-if="review.imageSources.length <= 3">
-            <img
-              v-for="index in review.imageSources.length"
-              :key="index"
-              :class="[review.imageSources.length < 3 ? 'aspect-square' : '']"
+            <div v-for="(index) in review.imageSources.length" :key="index">
+              <video controls v-if="review.imageSources[index-1].includes('mp4')"
+              
+              :class="[review.imageSources.length <= 3 ? 'aspect-square' : '']"
               class="object-cover w-full sm:h-40 cursor-pointer"
-              :src="review.imageSources[index - 1]"
               @click="handleGallery(index - 1)"
-            />
+              >
+                <source :src="review.imageSources[index-1]" type="video/mp4">
+              </video>
+              <img
+                v-else
+                :class="[review.imageSources.length <= 3 ? 'aspect-square' : '']"
+                class="object-cover w-full sm:h-40 cursor-pointer"
+                :src="review.imageSources[index - 1]"
+                @click="handleGallery(index - 1)"
+              />
+            </div>
           </template>
           <template v-else>
-            <img
-              v-for="index in 2"
-              :key="index"
-              class="object-cover w-full h-20 sm:h-40 cursor-pointer"
-              :src="review.imageSources[index - 1]"
+            <div v-for="(index) in 2" :key="index">
+              <video controls v-if="review.imageSources[index-1].includes('mp4')"
+              class="object-cover w-full h-20 sm:h-40 cursor-pointer aspect-square"
               @click="handleGallery(index - 1)"
-            />
-            <div class="relative">
+              >
+                <source :src="review.imageSources[index-1]" type="video/mp4">
+              </video>
               <img
-                class="object-cover w-full h-20 sm:h-40"
+                v-else
+                class="object-cover w-full h-20 sm:h-40 cursor-pointer aspect-square"
+                :src="review.imageSources[index - 1]"
+                @click="handleGallery(index - 1)"
+              />
+            </div>
+            <div class="relative">
+              <video controls v-if="review.imageSources[2].includes('mp4')"
+                class="object-cover w-full h-20 sm:h-40 cursor-pointer aspect-square"
+                @click="handleGallery(2)"
+              >
+                <source :src="review.imageSources[2]" type="video/mp4">
+              </video>
+              <img v-else
+                class="object-cover w-full h-20 sm:h-40 aspect-square"
                 :src="review.imageSources[2]"
               />
               <div
@@ -181,7 +204,7 @@
                 "
                 @click="handleGallery(2)"
               >
-                {{ `${review.imageSources.length - 3}+` }}
+                {{ `+${review.imageSources.length - 3}` }}
               </button>
             </div>
           </template>

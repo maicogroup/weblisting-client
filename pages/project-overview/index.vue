@@ -21,7 +21,8 @@
 				</h1>
 				<p class="mb-4 text-sm font-normal mt-1 color-stone-900">
 					Đường {{ project.address.street }}, Quận
-					{{ project.address.district }}, TP {{ project.address.city }}
+					{{ project.address.district }}, TP
+					{{ project.address.city }}
 				</p>
 			</div>
 			<div>

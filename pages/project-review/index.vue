@@ -587,26 +587,24 @@ export default {
             ContentType: x.type
           };
 
-          const upload = s3.upload(uploadParams, uploadOptions);
-          upload.send((err, data) => {
-            if (err) {
-              console.error('Upload lỗi:', err);
-            } else if (data) {
-              console.log('Upload thành công:', data);
-              imgCount.count++;
-            console.log('Upload ' + imgCount.count + this.tempFile.length);
-            // bi loi van up hinh duoc nhung van tra ve error
-            if (imgCount.count === this.tempFile.length) {
-              this.sendMutationCreateReview(createReviewInput);
-              this.tempFile = [];
-              this.tempSrc = [];
-            }
-            }
-          });
-        }
-        
+            const upload = s3.upload(uploadParams, uploadOptions);
+            upload.send((err, data) => {
+              if (err) {
+                console.error('Upload lỗi:', err);
+              } else if (data) {
+                console.log('Upload thành công:', data);
+                imgCount.count++;
+                console.log('Upload ' + imgCount.count + this.tempFile.length);
+                // bi loi van up hinh duoc nhung van tra ve error
+                if (imgCount.count === this.tempFile.length) {
+                  this.sendMutationCreateReview(createReviewInput);
+                  this.tempFile = [];
+                  this.tempSrc = [];
+                }
+              }
+            });
+          }
         });
-        
       }
     },
     multipartUpload (file, id, s3, imgCount) {
@@ -734,11 +732,12 @@ export default {
             content: createReviewInput.content,
             projectId: createReviewInput.projectId,
             galleries: createReviewInput.galleries,
-            liked: []
-          }
-        }
-      });
-
+            liked: [],
+          },
+        },
+      }).then((data) => {
+      // Result
+      console.log(data)
       this.$apollo.queries.reviewsWithPagination.refetch({
         skip: 0,
         take: 5,
@@ -748,6 +747,13 @@ export default {
           }
         }
       });
+    }).catch((error) => {
+      // Error
+      console.error(error)
+      // We restore the initial user input
+    });
+
+
     },
 
     sendWarningNotification (notification) {

@@ -1,6 +1,6 @@
 <template>
   <div class="w-full max-w-4xl md:px-4">
-    <img :src="tempImg" alt="" />
+    <img :src="tempImg" alt="">
     <guest-user-authentication-modal
       :open="isShowingLogIn"
       @close="isShowingLogIn = false"
@@ -21,7 +21,9 @@
         "
       >
         <div class="px-3 py-5 flex flex-row max-h-screen">
-          <div class="grow text-center text-xl font-bold">Tạo bài đánh giá</div>
+          <div class="grow text-center text-xl font-bold">
+            Tạo bài đánh giá
+          </div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5 basic-4 text-[#656565] cursor-pointer"
@@ -101,7 +103,9 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              <div class="w-14 leading-3 mt-1">Thêm ảnh hoặc video</div>
+              <div class="w-14 leading-3 mt-1">
+                Thêm ảnh hoặc video
+              </div>
             </button>
             <div v-for="(item, index) in tempSrc" :key="index" class="relative">
               <button
@@ -121,14 +125,15 @@
                   />
                 </svg>
               </button>
-              <video controls v-if="tempFile[index].type.includes('mp4')"  class="h-20 w-20 object-cover">
+              <video v-if="tempFile[index].type.includes('mp4')" controls class="h-20 w-20 object-cover">
                 <source :src="item.substring(0, item.length-4)" type="video/mp4">
               </video>
-              <img v-else
+              <img
+                v-else
                 :src="item"
                 alt="uploaded img"
                 class="h-20 w-20 object-cover"
-              />
+              >
             </div>
           </div>
           <button
@@ -159,7 +164,7 @@
         <guest-user-avatar :name="guestUser.name" class="w-10 h-10 rounded-full" />
       </template>
       <template v-else>
-        <img :src="user.avatarSource" class="w-10 h-10 rounded-full" />
+        <img :src="user.avatarSource" class="w-10 h-10 rounded-full">
       </template>
       <div
         class="
@@ -177,7 +182,9 @@
         "
         @click="toggleCreatePost"
       >
-        <div class="self-center">Viết bài review</div>
+        <div class="self-center">
+          Viết bài review
+        </div>
       </div>
     </div>
     <div v-if="reviews.length > 0">
@@ -185,7 +192,7 @@
         <review-post :review="review" :index="index" :author="guestUser" />
       </div>
     </div>
-    <div ref="borderland"></div>
+    <div ref="borderland" />
     <!-- skeleton -->
     <div
       v-show="
@@ -218,11 +225,11 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
-import ReviewPost from "./components/review-post.vue";
-import Divider from "~/components/Divider.vue";
-import GuestUserAvatar from "~/pages/components/guest-user-avatar.vue";
-import GuestUserAuthenticationModal from "~/pages/components/guest-user-authentication-modal.vue";
+import gql from 'graphql-tag';
+import ReviewPost from './components/review-post.vue';
+import Divider from '~/components/Divider.vue';
+import GuestUserAvatar from '~/pages/components/guest-user-avatar.vue';
+import GuestUserAuthenticationModal from '~/pages/components/guest-user-authentication-modal.vue';
 
 const getReviewsQuery = gql`
   query GetListReview($take: Int, $skip: Int) {
@@ -256,25 +263,136 @@ const getReviewsQuery = gql`
   }
 `;
 export default {
-  name: "ProjectReview",
+  name: 'ProjectReview',
   components: {
     Divider,
     ReviewPost,
     GuestUserAuthenticationModal,
-    GuestUserAvatar,
+    GuestUserAvatar
   },
-  created() {
-    this.guestUser = this.$cookies.get("GuestUser") ?? null;
-    this.$nuxt.$on("userLogout", () => {
-      this.guestUser = this.$cookies.get("GuestUser") ?? null;
+
+  data () {
+    return {
+      currentPage: 1,
+      tempImg: '',
+      user: {
+        avatarSource:
+          'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
+      },
+      isFormShown: false,
+      isFirstUpload: false,
+      guestUser: {},
+      tempSrc: [],
+      tempFile: [],
+      isLoading: false,
+      tempReviews: [],
+      isShowingLogIn: false,
+      take: 5,
+      skip: 0,
+      content: '',
+      editorOption: {
+        theme: 'snow', // 可換
+        modules: {
+          toolbar: {
+            // container這裡是個大坑，[]表分群
+            container: [
+              ['bold', 'italic', 'underline', 'strike', 'code'],
+              [{ header: [1, 2, 3, 4, 5, 6, false] }],
+              [{ list: 'ordered' }, { list: 'bullet' }],
+              [{ size: ['small', false, 'large', 'huge'] }],
+              [{ align: [] }],
+              ['link']
+            ],
+            // 客製化圖片上傳功能用的
+            handlers: {
+              image: this.uploadImage
+            }
+          }
+        },
+        formats: [
+          'background',
+          'bold',
+          'color',
+          'font',
+          'code',
+          'italic',
+          'link',
+          'size',
+          'strike',
+          'script',
+          'underline',
+          'blockquote',
+          'header',
+          'indent',
+          'list',
+          'align',
+          'direction',
+          'code-block',
+          'formula'
+        ]
+      }
+    };
+  },
+
+  head () {
+    return {
+      title: 'Review dự án ' + this.project?.projectName,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.project?.pageInfors[0].metaDescription
+        },
+        {
+          property: 'og:image',
+          content: this.project?.images[0]
+        },
+        {
+          name: 'robots',
+          content: 'noindex'
+        }
+      ],
+      script: [
+        {
+          once: true,
+          hid: 's3-sdk',
+          src: 'https://sdk.amazonaws.com/js/aws-sdk-2.1095.0.min.js',
+          body: true
+        }
+      ]
+    };
+  },
+
+  computed: {
+    reviews () {
+      return this.reviewGenerate();
+    },
+    reviewTotalCount () {
+      return this.reviewsWithPagination?.totalCount ?? 0;
+    },
+    author () {
+      const tempUser = {};
+      const guestUser = this.$cookies.get('GuestUser') ?? null;
+      if (guestUser !== null) {
+        tempUser.name = guestUser.name;
+        tempUser.id = guestUser.id;
+        return tempUser;
+      }
+      return null;
+    }
+  },
+  created () {
+    this.guestUser = this.$cookies.get('GuestUser') ?? null;
+    this.$nuxt.$on('userLogout', () => {
+      this.guestUser = this.$cookies.get('GuestUser') ?? null;
     });
-    this.$nuxt.$on("userLogin", () => {
-      this.guestUser = this.$cookies.get("GuestUser") ?? null;
+    this.$nuxt.$on('userLogin', () => {
+      this.guestUser = this.$cookies.get('GuestUser') ?? null;
     });
   },
   apollo: {
     project: {
-      query() {
+      query () {
         return gql`
           query GetReviewingProject($slug: String!) {
             projects(where: { pageInfors: { some: { slug: { eq: $slug } } } }) {
@@ -288,7 +406,7 @@ export default {
           }
         `;
       },
-      update(data) {
+      update (data) {
         if (data.projects.length === 0) {
           return;
         }
@@ -296,15 +414,15 @@ export default {
         const project = data.projects[0];
         return project;
       },
-      variables() {
+      variables () {
         return {
-          slug: this.$route.params.slug,
+          slug: this.$route.params.slug
         };
-      },
+      }
     },
 
     reviewsWithPagination: {
-      query() {
+      query () {
         return gql`
           query GetListReview($condition: ReviewCollectionFilterInput, $take: Int, $skip: Int) {
             reviewsWithPagination(
@@ -342,142 +460,31 @@ export default {
         `;
       },
       skip () {
-        return this.project === undefined
+        return this.project === undefined;
       },
-      update: (data) => data.reviewsWithPagination,
-      variables() {
+      update: data => data.reviewsWithPagination,
+      variables () {
         return {
           take: 5,
           skip: 0,
           condition: {
-              projectId: {
-                  eq: this.project.id
-              }
+            projectId: {
+              eq: this.project.id
+            }
           }
         };
-      },
-    },
-  },
-
-  data() {
-    return {
-      currentPage: 1,
-      tempImg: '',
-      user: {
-        avatarSource:
-          "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
-      },
-      isFormShown: false,
-      isFirstUpload: false,
-      guestUser: {},
-      tempSrc: [],
-      tempFile: [],
-      isLoading: false,
-      tempReviews: [],
-      isShowingLogIn: false,
-      take: 5,
-      skip: 0,
-      content: "",
-      editorOption: {
-        theme: "snow", // 可換
-        modules: {
-          toolbar: {
-            // container這裡是個大坑，[]表分群
-            container: [
-              ["bold", "italic", "underline", "strike", "code"],
-              [{ header: [1, 2, 3, 4, 5, 6, false] }],
-              [{ list: "ordered" }, { list: "bullet" }],
-              [{ size: ["small", false, "large", "huge"] }],
-              [{ align: [] }],
-              ["link"],
-            ],
-            // 客製化圖片上傳功能用的
-            handlers: {
-              image: this.uploadImage,
-            },
-          },
-        },
-         formats:  [
-          'background',
-          'bold',
-          'color',
-          'font',
-          'code',
-          'italic',
-          'link',
-          'size',
-          'strike',
-          'script',
-          'underline',
-          'blockquote',
-          'header',
-          'indent',
-          'list',
-          'align',
-          'direction',
-          'code-block',
-          'formula'
-        ]
-      },
-    };
-  },
-
-  head() {
-    return {
-      title: "Review dự án " + this.project?.projectName,
-      meta: [
-        {
-          hid: "description",
-          name: "description",
-          content: this.project?.pageInfors[0].metaDescription,
-        },
-        {
-          property: "og:image",
-          content: this.project?.images[0],
-        },
-        {
-          name: "robots",
-          content: "noindex",
-        },
-      ],
-      script: [
-        {
-          once: true,
-          hid: "s3-sdk",
-          src: "https://sdk.amazonaws.com/js/aws-sdk-2.1095.0.min.js",
-          body: true,
-        },
-      ],
-    };
-  },
-
-  computed: {
-    reviews() {
-      return  this.reviewGenerate();
-    },
-    reviewTotalCount() {
-      return this.reviewsWithPagination?.totalCount ?? 0;
-    },
-    author() {
-      const tempUser = {};
-      const guestUser = this.$cookies.get("GuestUser") ?? null;
-      if (guestUser !== null) {
-        tempUser.name = guestUser.name;
-        tempUser.id = guestUser.id;
-        return tempUser;
       }
-      return null;
-    },
+    }
   },
 
-  mounted() {
-    window.addEventListener("scroll", this.HandleScroll);
+  mounted () {
+    window.addEventListener('scroll', this.HandleScroll);
   },
   destroyed () {
     window.removeEventListener('scroll', this.HandleScroll);
   },
   methods: {
-    reviewGenerate() {
+    reviewGenerate () {
       console.log('bi lua roi hahah');
       if (this.reviewsWithPagination !== null && this.project !== null) {
         const tempReviewArray = [];
@@ -501,7 +508,7 @@ export default {
       }
       return [];
     },
-    HandleScroll() {
+    HandleScroll () {
       if (
         this.$refs.borderland.getBoundingClientRect().y < 1400
       ) {
@@ -509,23 +516,21 @@ export default {
       }
     },
 
-    uploadNewImage() {
-      const fileInput = document.createElement("input");
-      fileInput.setAttribute("type", "file");
+    uploadNewImage () {
+      const fileInput = document.createElement('input');
+      fileInput.setAttribute('type', 'file');
       fileInput.setAttribute(
-        "accept",
-        "image/png, image/gif, image/jpeg, image/bmp, image/x-icon, video/*"
+        'accept',
+        'image/png, image/gif, image/jpeg, image/bmp, image/x-icon, video/*'
       );
       fileInput.click();
-      fileInput.addEventListener("change", () => {
+      fileInput.addEventListener('change', () => {
         if (fileInput.files != null && fileInput.files[0] != null) {
           const [file] = fileInput.files;
           if (file) {
-            if (file.type.includes('mp4'))
-            {
+            if (file.type.includes('mp4')) {
               this.tempSrc.push(URL.createObjectURL(file) + '.mp4');
-            }
-            else {
+            } else {
               this.tempSrc.push(URL.createObjectURL(file));
             }
             this.tempFile.push(file);
@@ -533,73 +538,187 @@ export default {
         }
       });
     },
-    toggleCreatePost() {
+    toggleCreatePost () {
       if (this.guestUser === null) {
         this.isShowingLogIn = true;
         return;
       }
       const element = document.body;
-      element.classList.toggle("overflow-hidden");
+      element.classList.toggle('overflow-hidden');
       this.isFormShown = !this.isFormShown;
     },
-    removeUploadedImage(index) {
+    removeUploadedImage (index) {
       this.tempSrc.splice(index, 1);
       this.tempFile.splice(index, 1);
     },
 
-    sendImagesToSever(id, createReviewInput) {
+    sendImagesToSever (id, createReviewInput) {
       AWS.config.update({
-        accessKeyId: "8EL21GNHMRNZYW8488OV",
-        secretAccessKey: "xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD",
-        region: "hn",
-        endpoint: "https://hn.ss.bfcplatform.vn",
+        accessKeyId: '8EL21GNHMRNZYW8488OV',
+        secretAccessKey: 'xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD',
+        region: 'hn',
+        endpoint: 'https://hn.ss.bfcplatform.vn',
         apiVersions: {
-          s3: "2006-03-01",
-        },
+          s3: '2006-03-01'
+        }
       });
       const s3 = new AWS.S3();
 
       const uploadOptions = {
         partSize: 10 * 1024 * 1024,
-        queueSize: 1,
+        queueSize: 1
       };
 
-      let imgCount = 0;
+      let imgCount = {count: 0};
       console.log(this.tempFile.length);
       if (this.tempFile.length === 0) {
-        console.log('rong orng orng');
         this.sendMutationCreateReview(createReviewInput);
       } else {
-      this.tempFile.forEach((x) => {
-        const uploadParams = {
-          Bucket: "weblisting",
-          Key: "review/" + id.toString() + "/" + x.name,
-          Body: x,
-          ACL: "public-read",
-          ContentType: x.type,
-        };
+        this.tempFile.forEach((x) => {
+          console.log('This file size is: ' + x.size / 1024 / 1024 + 'MiB');
+          if (x.size / 1024 / 1024 >= 10) {
+            this.multipartUpload(x, id, s3, imgCount);
+          } else {
+          const uploadParams = {
+            Bucket: 'weblisting',
+            Key: 'review/' + id.toString() + '/' + x.name,
+            Body: x,
+            ACL: 'public-read',
+            ContentType: x.type
+          };
 
-        const upload = s3.upload(uploadParams, uploadOptions);
-        upload.send((err, data) => {
-          imgCount++;
-          if (err) {
-            console.error("Upload lỗi:", err);
-          } else if (data) {
-            console.log("Upload thành công:", data);
-          }
-                console.log("Upload " + imgCount + this.tempFile.length);
-                // bi loi van up hinh duoc nhung van tra ve error
-          if (imgCount === this.tempFile.length) {
-                this.sendMutationCreateReview(createReviewInput);
-                this.tempFile = [];
-                this.tempSrc = [];
-                return;
-              }
+          const upload = s3.upload(uploadParams, uploadOptions);
+          upload.send((err, data) => {
+            if (err) {
+              console.error('Upload lỗi:', err);
+            } else if (data) {
+              console.log('Upload thành công:', data);
+              imgCount.count++;
+            console.log('Upload ' + imgCount.count + this.tempFile.length);
+            // bi loi van up hinh duoc nhung van tra ve error
+            if (imgCount.count === this.tempFile.length) {
+              this.sendMutationCreateReview(createReviewInput);
+              this.tempFile = [];
+              this.tempSrc = [];
+            }
+            }
+          });
+        }
+        
         });
-      });
+        
       }
     },
-    sendMutationCreateReview(createReviewInput) {
+    multipartUpload (file, id, s3, imgCount) {
+      const partSize = 1024 * 1024 * 5; // Minimum 5MB per chunk
+      const multipartMap = {
+        Parts: []
+      };
+      const startTime = new Date();
+      let numPartsLeft = 0;
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(file);
+      reader.onload = function (e) {
+        const buffer = new Uint8Array(e.target.result);
+        createParts(buffer, file, uploadPart);
+      };
+
+      function createParts (buffer, file, callback) {
+        let partNum = 0;
+        const multiPartParams = {
+          Bucket: 'weblisting',
+          Key: 'review/' + id.toString() + '/' + file.name,
+          ContentType: file.type,
+          ACL: 'public-read'
+        };
+        console.log({multiPartParams});
+        console.log('file ne`: ' + {file});
+        numPartsLeft = Math.ceil(buffer.length / partSize);
+        s3.createMultipartUpload(multiPartParams, function (mpErr, multipart) {
+          if (mpErr) {
+            console.log('Error!', mpErr);
+            console.dir( mpErr);
+            return;
+          }
+          console.log('Got upload ID', multipart.UploadId);
+
+          // Grab each partSize chunk and upload it as a part
+          for (let rangeStart = 0; rangeStart < buffer.length; rangeStart += partSize) {
+            partNum++;
+            const end = Math.min(rangeStart + partSize, buffer.length);
+            const partParams = {
+              Body: buffer.slice(rangeStart, end),
+              Bucket: 'weblisting',
+              Key: 'review/' + id.toString() + '/' + file.name,
+              PartNumber: String(partNum),
+              UploadId: multipart.UploadId
+            };
+
+            // Send a single part
+            console.log('Uploading part: #', partParams.PartNumber, ', Range start:', rangeStart);
+            if (callback) { callback(s3, multipart, partParams); };
+          }
+        });
+      }
+
+      function uploadPart (s3, multipart, partParams, _tryNum) {
+        const maxUploadTries = 10;
+        const tryNum = _tryNum || 1;
+        s3.uploadPart(partParams, function (multiErr, mData) {
+          if (multiErr) {
+            console.log('multiErr, upload part error:', multiErr);
+            if (tryNum < maxUploadTries) {
+              console.log('Retrying upload of part: #', partParams.PartNumber);
+              uploadPart(s3, multipart, partParams, tryNum + 1);
+            } else {
+              console.log('Failed uploading part: #', partParams.PartNumber);
+            }
+            return;
+          }
+
+          multipartMap.Parts[this.request.params.PartNumber - 1] = {
+            ETag: mData.ETag,
+            PartNumber: Number(this.request.params.PartNumber)
+          };
+          console.log('Completed part', this.request.params.PartNumber);
+          console.log('mData', mData);
+          if (--numPartsLeft > 0) { return; }; // complete only when all parts uploaded
+
+          const doneParams = {
+            Bucket: 'weblisting',
+            Key: multipart.Key,
+            MultipartUpload: multipartMap,
+            UploadId: multipart.UploadId
+          };
+
+          console.log('Completing upload...');
+          completeMultipartUpload(s3, doneParams);
+        });
+      }
+
+      function completeMultipartUpload (s3, doneParams) {
+        s3.completeMultipartUpload(doneParams, function (err, data) {
+          if (err) {
+            console.log('An error occurred while completing the multipart upload');
+            console.log(err);
+          } else {
+            const delta = (new Date() - startTime) / 1000;
+            console.log('Completed upload in', delta, 'seconds');
+            console.log('Final upload data:', data);
+            imgCount.count++;
+            console.log('Upload ' + imgCount.count + this.tempFile.length);
+            // bi loi van up hinh duoc nhung van tra ve error
+            if (imgCount.count === this.tempFile.length) {
+              this.sendMutationCreateReview(createReviewInput);
+              this.tempFile = [];
+              this.tempSrc = [];
+            }
+          }
+        });
+      }
+    },
+
+    sendMutationCreateReview (createReviewInput) {
       this.$apollo.mutate({
         mutation: gql`
           mutation CreateReviewPost($input: CreateReviewInput!) {
@@ -615,51 +734,49 @@ export default {
             content: createReviewInput.content,
             projectId: createReviewInput.projectId,
             galleries: createReviewInput.galleries,
-            liked: [],
-          },
-        },
+            liked: []
+          }
+        }
       });
 
       this.$apollo.queries.reviewsWithPagination.refetch({
         skip: 0,
         take: 5,
         condition: {
-              projectId: {
-                  eq: this.project.id,
-              }
+          projectId: {
+            eq: this.project.id
           }
+        }
       });
-
-
     },
 
-    sendWarningNotification(notification) {
+    sendWarningNotification (notification) {
       this.$toast.show(notification, {
-        type: "error",
-        theme: "bubble",
+        type: 'error',
+        theme: 'bubble',
         duration: 3000,
-        position: "top-right",
+        position: 'top-right'
       });
     },
 
-    createNewReview() {
+    createNewReview () {
       const id = generateNewId();
-      if (this.content !== "" || this.tempSrc.length !== 0) {
+      if (this.content !== '' || this.tempSrc.length !== 0) {
         const createReviewInput = {
           id: id.toString(),
           authorId: this.guestUser.id,
           content: this.content,
           projectId: this.project.id,
           galleries: [],
-          liked: [],
+          liked: []
         };
         this.tempFile.forEach((x) => {
           const tempObject = {};
           tempObject.path =
-            "https://weblisting.hn.ss.bfcplatform.vn/" +
-            "review/" +
+            'https://weblisting.hn.ss.bfcplatform.vn/' +
+            'review/' +
             id +
-            "/" +
+            '/' +
             x.name;
           console.log('path' + tempObject.path);
           tempObject.contentType = x.type;
@@ -668,33 +785,33 @@ export default {
         this.sendImagesToSever(createReviewInput.id, createReviewInput);
         this.isFirstUpload = true;
         const element = document.body;
-        element.classList.remove("overflow-hidden");
+        element.classList.remove('overflow-hidden');
         this.isFormShown = !this.isFormShown;
-        this.content = "";
+        this.content = '';
       } else {
-        this.sendWarningNotification("Bài viết chưa có thông tin");
+        this.sendWarningNotification('Bài viết chưa có thông tin');
       }
 
-      function generateNewId() {
+      function generateNewId () {
         const ObjectIddd = (
           m = Math,
           d = Date,
           h = 16,
-          s = (s) => m.floor(s).toString(h)
+          s = s => m.floor(s).toString(h)
         ) =>
           s(d.now() / 1000) +
-          " ".repeat(h).replace(/./g, () => s(m.random() * h));
+          ' '.repeat(h).replace(/./g, () => s(m.random() * h));
         return ObjectIddd();
       }
     },
 
-    LoadNewReviews() {
+    LoadNewReviews () {
       if (this.isLoading === true) {
         return;
       }
       this.isLoading = true;
 
-      if (this.reviews.length == this.reviewsWithPagination.totalCount) return;
+      if (this.reviews.length == this.reviewsWithPagination.totalCount) { return; }
 
       if (this.skip + 5 <= this.reviewsWithPagination.totalCount) {
         this.skip += 5;
@@ -708,7 +825,7 @@ export default {
             take: this.take,
             condition: {
               projectId: {
-                  eq: this.project.id,
+                eq: this.project.id
               }
             }
           },
@@ -722,12 +839,12 @@ export default {
                 __typename: previousResult.reviewsWithPagination.__typename,
                 items: [
                   ...previousResult.reviewsWithPagination.items,
-                  ...fetchMoreResult.reviewsWithPagination.items,
+                  ...fetchMoreResult.reviewsWithPagination.items
                 ],
-                totalCount: fetchMoreResult.reviewsWithPagination.totalCount,
-              },
+                totalCount: fetchMoreResult.reviewsWithPagination.totalCount
+              }
             };
-          },
+          }
         });
       }
       if (this.take === this.reviewsWithPagination.totalCount - this.skip) {
@@ -735,9 +852,9 @@ export default {
       }
     },
 
-    createMockReview(item, project) {
+    createMockReview (item, project) {
       const tempImageSources = [];
-      item.galleries.forEach((x) => tempImageSources.push(x.path));
+      item.galleries.forEach(x => tempImageSources.push(x.path));
       const tempComments = [];
       if (item.comments.length > 0) {
         item.comments.forEach((x) => {
@@ -745,9 +862,9 @@ export default {
             commentId: x.id,
             authorName: x.author.authorName,
             authorAvatarSource:
-              "https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
+              'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
             dateCreated: new Date(x.createdAt),
-            content: x.content,
+            content: x.content
           };
           tempComments.push(tempComment);
         });
@@ -758,17 +875,17 @@ export default {
         id: item.id,
         authorName: item.author.name,
         authorAvatarSource:
-          "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg",
+          'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
         dateCreated: new Date(item.createdAt),
         content: item.content,
         imageSources: tempImageSources,
         comments: tempComments,
         isLiked,
         galleries: item.galleries,
-        liked: item.liked,
+        liked: item.liked
       };
-    },
-  },
+    }
+  }
 };
 </script>
 

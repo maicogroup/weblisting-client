@@ -569,7 +569,7 @@ export default {
         queueSize: 1
       };
 
-      let imgCount = {count: 0};
+      const imgCount = { count: 0 };
       console.log(this.tempFile.length);
       if (this.tempFile.length === 0) {
         this.sendMutationCreateReview(createReviewInput);
@@ -579,13 +579,13 @@ export default {
           if (x.size / 1024 / 1024 >= 10) {
             this.multipartUpload(x, id, s3, imgCount);
           } else {
-          const uploadParams = {
-            Bucket: 'weblisting',
-            Key: 'review/' + id.toString() + '/' + x.name,
-            Body: x,
-            ACL: 'public-read',
-            ContentType: x.type
-          };
+            const uploadParams = {
+              Bucket: 'weblisting',
+              Key: 'review/' + id.toString() + '/' + x.name,
+              Body: x,
+              ACL: 'public-read',
+              ContentType: x.type
+            };
 
             const upload = s3.upload(uploadParams, uploadOptions);
             upload.send((err, data) => {
@@ -629,13 +629,13 @@ export default {
           ContentType: file.type,
           ACL: 'public-read'
         };
-        console.log({multiPartParams});
-        console.log('file ne`: ' + {file});
+        console.log({ multiPartParams });
+        console.log('file ne`: ' + { file });
         numPartsLeft = Math.ceil(buffer.length / partSize);
         s3.createMultipartUpload(multiPartParams, function (mpErr, multipart) {
           if (mpErr) {
             console.log('Error!', mpErr);
-            console.dir( mpErr);
+            console.dir(mpErr);
             return;
           }
           console.log('Got upload ID', multipart.UploadId);
@@ -732,28 +732,26 @@ export default {
             content: createReviewInput.content,
             projectId: createReviewInput.projectId,
             galleries: createReviewInput.galleries,
-            liked: [],
-          },
-        },
-      }).then((data) => {
-      // Result
-      console.log(data)
-      this.$apollo.queries.reviewsWithPagination.refetch({
-        skip: 0,
-        take: 5,
-        condition: {
-          projectId: {
-            eq: this.project.id
+            liked: []
           }
         }
-      });
-    }).catch((error) => {
+      }).then((data) => {
+      // Result
+        console.log(data);
+        this.$apollo.queries.reviewsWithPagination.refetch({
+          skip: 0,
+          take: 5,
+          condition: {
+            projectId: {
+              eq: this.project.id
+            }
+          }
+        });
+      }).catch((error) => {
       // Error
-      console.error(error)
+        console.error(error);
       // We restore the initial user input
-    });
-
-
+      });
     },
 
     sendWarningNotification (notification) {

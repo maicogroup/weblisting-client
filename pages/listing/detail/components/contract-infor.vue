@@ -1,6 +1,7 @@
 <template>
   <div class="border-stone-200 border w-72 rounded-md px-6 py-4 flex flex-col items-center">
     <img
+      alt="avatar"
       class="inline-block object-cover h-14 w-14 rounded-full border border-stone-200"
       src="~/static/images/maico-contact-infor.png"
     >

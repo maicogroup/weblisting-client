@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import Vue from "vue";
+import Router from "vue-router";
 
 import EditPost from '~/pages/post-queue/edit-post/index';
 import PostQueuePage from '~/pages/post-queue/index';
@@ -10,13 +10,19 @@ import ProductReview from '~/pages/product-preview/index';
 import ProjectOverview from '~/pages/project-overview/index';
 import SpecificProjectReview from '~/pages/product-preview/specific-project/index';
 import HomePage from '~/pages/home/index';
+import ProjectReview from '~/pages/project-review/index';
+import ProjectAreaReview from '~/pages/project-area-review/index';
+import BlogPage from '~/pages/blog/index';
+import DetailBlog from '~/pages/blog/detail/index';
+import CreateBlog from '~/pages/blog/create/index';
+import UpdateBlog from '~/pages/blog/update/index';
 
 Vue.use(Router);
 
-export function createRouter () {
+export function createRouter() {
   return new Router({
-    mode: 'history',
-    scrollBehavior (to, from, savedPosition) {
+    mode: "history",
+    scrollBehavior(to, from, savedPosition) {
       // always scroll to top
       if (savedPosition) {
         return savedPosition;
@@ -26,47 +32,70 @@ export function createRouter () {
     },
     routes: [
       {
-        path: '/',
-        component: HomePage
+        path: "/",
+        component: HomePage,
       },
       {
-        path: '/chinh-sua-tin-dang/:slug',
-        component: EditPost
-
+        path: "/chinh-sua-tin-dang/:slug",
+        component: EditPost,
       },
       {
-        path: '/tong-quan-du-an/:slug',
+        path: '/du-an/:slug',
         component: ProjectOverview
 
       },
       {
-        path: '/danh-sach-cho',
-        component: PostQueuePage
+        path: "/danh-sach-cho",
+        component: PostQueuePage,
       },
       {
-        path: '/danh-sach-can-ho/:slug',
+        path: "/chi-tiet-can-ho/:slug",
+        component: DetailPost,
+      },
+      {
+        path: "/chinh-sua-du-an",
+        component: EditProject,
+      },
+      {
+        path: "/review-san-pham",
+        component: ProductReview,
+      },
+      {
+        path: "/review-san-pham/:slug",
+        component: SpecificProjectReview,
+      },
+      {
+        path: "/blog/:slug",
+        component: DetailBlog,
+      },
+      {
+        path: '/blog',
+        component: BlogPage
+      },
+      {
+        path: "/blog/khoi-tao/bai-viet",
+        component: CreateBlog,
+      },
+      {
+        path: "/blog/khoi-tao/:slug",
+        component: UpdateBlog
+      },
+      {
+        path: '/review-du-an/:slug',
+        component: ProjectReview
+      },
+      {
+        path: '/review/khu-vuc',
+        component: ProjectAreaReview
+      },
+      {
+        path: '/danh-sach-san-pham',
         component: PostList
       },
       {
-        path: '/danh-sach-can-ho',
+        path: '*',
         component: PostList
       },
-      {
-        path: '/chi-tiet-can-ho/:slug',
-        component: DetailPost
-      },
-      {
-        path: '/chinh-sua-du-an',
-        component: EditProject
-      },
-      {
-        path: '/review-san-pham',
-        component: ProductReview
-      },
-      {
-        path: '/review-san-pham/:slug',
-        component: SpecificProjectReview
-      }
-    ]
+    ],
   });
 }

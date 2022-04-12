@@ -1,7 +1,7 @@
 <template>
   <div id="post-subinfor" class="max-w-full grow">
     <div class="mt-2 mb-2">
-      <h1 class="h-[36px] text-[21px] md:text-[24px] text-stone-900 font-bold">
+      <h1 class="min-h-[36px] text-[21px] md:text-[24px] text-stone-900 font-bold">
         {{ (this.heading)? this.heading : "Bán thuê căn hộ chung cư" }} 
       </h1>
       <div class="flex justify-between md:block">
@@ -166,7 +166,7 @@
             <img
               class="w-full h-[200px] object-cover rounded-t-[4px] md:rounded-l-lg md:rounded-tr-none "
               :src="post.srcimage"
-              alt="Bonnie image"
+              :alt="post.pageInfor.title"
             />
              <!--DÙNG ĐỂ TEST LÚC KO CÓ POST.TAGS -->
              <!-- <div class="diagonal badge bg-green-600" v-if="post.tags && post.tags.length || true">{{"Giá tốt" || post.tags[0]}}</div>  -->
@@ -183,12 +183,12 @@
                 :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
                 class="hidden md:block mt-3 color-black font-bold"
               >
-                {{ post.pageInfor.title }}
+                <h3>{{ post.pageInfor.title }}</h3>
               </NuxtLink>
 
-              <span class="text-neutral-400 mb-2 md:mb-0 md:mt-3 text-sm absolute md:relative bottom-0 max-w-[70%] md:max-w-[100vw] truncate">{{
+              <div class="text-neutral-400 mb-2 md:mb-0 md:mt-3 text-sm absolute md:relative bottom-0 max-w-[70%] md:max-w-[100vw] truncate">{{
                 post.address
-              }}</span>
+              }}</div>
 
               <NuxtLink
                 :to="`/chi-tiet-can-ho/${post.pageInfor.slug}`"
@@ -200,7 +200,7 @@
                   text-stone-900
                 "
               >
-                {{ post.pageInfor.title }}
+                <h3> {{ post.pageInfor.title }} </h3>
               </NuxtLink>
               <div class="flex my-1 md:my-3 text-[14px] absolute top-0 right-1 md:relative">
                   <div class="flex" v-if="post.type === 'Căn hộ'">
@@ -347,6 +347,7 @@ const getPostsQuery = gql`
         apartmentState
         tags
         project {
+          id
           address {
             street
             city
@@ -397,7 +398,7 @@ export default {
         return this.postsData.items.map((item) => {
           return {
             srcimage:
-              "https://maico-hub-record.ss-hn-1.bizflycloud.vn/" +
+              "https://weblisting.ss-hn-1.bizflycloud.vn/" +
               (item.gallery.find((c) => !c.includes(".mp4")) ||
                 "apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg"),
             pageInfor: item.pageInfor,
@@ -704,7 +705,7 @@ export default {
   min-width: 200px;
   transform: rotate(-45deg) translate(-33%, -50px);
   color: white;
-  text-align: center;
+  text-align: center; 
   text-transform: uppercase;
   font-size: 10px;
   top: 0px;

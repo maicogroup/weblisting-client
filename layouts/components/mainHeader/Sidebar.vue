@@ -3,6 +3,17 @@
 <template>
   <div class="no-scrollbar absolute right-0 top-0 overflow-auto bg-white">
     <nav class="w-64 h-screen">
+      <div
+        v-if="guestUser"
+        class="w-full flex items-center py-3 px-6 text-gray-600 space-x-2"
+        @click="$emit('open-authen', true)"
+      >
+        <guest-user-avatar :name="guestUser.name" />
+        <p class="text-sm">
+          {{ guestUser.name }}
+        </p>
+      </div>
+
       <Menu title="Thuê">
         <MenuItem @click="handleSelectAllTypes('Cho Thuê')">
           Tất cả nhà đất
@@ -67,15 +78,27 @@
       </Menu>
 
       <button
+        v-if="!guestUser"
         class="w-full flex justify-between items-center py-3 px-6 text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-gray-700 focus:outline-none"
+        @click="$emit('open-authen', true)"
       >
         <span class="mx-4 font-medium"> Đăng ký</span>
       </button>
 
       <button
+        v-if="!guestUser"
         class="w-full flex justify-between items-center py-3 px-6 text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-gray-700 focus:outline-none"
+        @click="$emit('open-authen', false)"
       >
         <span class="mx-4 font-medium"> Đăng nhập</span>
+      </button>
+
+      <button
+        v-if="guestUser"
+        class="w-full flex justify-between items-center py-3 px-6 text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-gray-700 focus:outline-none"
+        @click="$emit('log-out')"
+      >
+        <span class="mx-4 font-medium"> Đăng xuất</span>
       </button>
 
       <button
@@ -88,10 +111,13 @@
 </template>
 
 <script>
+import guestUserAvatar from '~/pages/components/guest-user-avatar.vue';
 export default {
   name: 'MainHeaderSidebar',
+  components: { guestUserAvatar },
   props: {
-    projects: { type: Array, optional: false, default: null }
+    projects: { type: Array, optional: false, default: null },
+    guestUser: { type: Object, optional: false, default: null }
   },
 
   methods: {

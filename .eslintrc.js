@@ -2,20 +2,20 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    node: true
+    node: true,
   },
   parserOptions: {
-    parser: '@babel/eslint-parser',
-    requireConfigFile: false
+    parser: "@babel/eslint-parser",
+    requireConfigFile: false,
   },
   extends: [
     '@nuxtjs',
-    'plugin:nuxt/recommended'
+    'plugin:nuxt/recommended',
+    'plugin:editorconfig/all'
   ],
-  plugins: [
-  ],
+  plugins: ['editorconfig'],
   // add your custom rules here
   rules: {
-    semi: [2, 'always']
-  }
+    semi: [2, "always"],
+  },
 };

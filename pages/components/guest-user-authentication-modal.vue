@@ -58,25 +58,6 @@ export default {
 			this.alreadyHasAccount = true;
 		},
 
-<<<<<<< HEAD
-    setCookiesAndCloseModal(user) {
-      this.$cookies.set(
-        "GuestUser",
-        { name: user.name, phoneNumber: user.phoneNumber, id: user.id },
-        {
-          maxAge: 60 * 60 * 24 * 365,
-          path: "/",
-        }
-      );
-      
-      this.$nuxt.$emit("userLogin");
-      this.alreadyHasAccount = !this.signUp;
-      this.$emit("close");
-      this.$emit("success");
-      const guestUser = this.$cookies.get('GuestUser') ?? null;
-      console.log('iasf asofi asdf' + guestUser);
-    },
-=======
 		setCookiesAndCloseModal(user) {
 			this.$cookies.set(
 				"GuestUser",
@@ -86,7 +67,6 @@ export default {
 					path: "/",
 				},
 			);
->>>>>>> dev
 
 			this.$nuxt.$emit("userLogin");
 			this.alreadyHasAccount = !this.signUp;

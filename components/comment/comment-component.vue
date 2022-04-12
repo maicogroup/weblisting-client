@@ -1,37 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div class="mb-4" v-if="!comment.commentParentId">
-    <p class="text-base font-bold leading-4">
-      {{ comment.author.authorName }}
-    </p>
-    <p v-html="comment.content"></p>
-    <div class="flex items-start justify-start space-x-2">
-      <span class="text-sky-500 cursor-pointer" @click="toggleReply"
-        >Trả lời</span
-      >
-      <p>·</p>
-      <span>{{ comment.createdAt.substring(0, 10) }}</span>
-    </div>
-    <div class="ml-10 mt-4">
-      <template v-if="showReply">
-        <new-comment
-          v-model="newCmt"
-          :autoFocus="true"
-          :handleSubmitSuccessful="handleSubmit"
-          class="mb-4"
-        />
-      </template>
-      <template v-if="comment.replies.length > 0">
-        <reply-comment
-          :replies="comment.replies"
-          :isShow="showReply"
-          :createReply="createReply"
-        />
-      </template>
-    </div>
-    <divider class="mt-5" />
-  </div>
-=======
 	<div class="mb-4" v-if="!comment.commentParentId">
 		<p class="text-base font-bold leading-4">
 			{{ comment.author.authorName }}
@@ -49,7 +16,7 @@
 				<new-comment
 					v-model="newCmt"
 					:autoFocus="true"
-					:handleSubmit="handleSubmit"
+					:handleSubmitSuccessful="handleSubmit"
 					class="mb-4"
 				/>
 			</template>
@@ -63,7 +30,6 @@
 		</div>
 		<divider class="mt-5" />
 	</div>
->>>>>>> dev
 </template>
 
 <script>

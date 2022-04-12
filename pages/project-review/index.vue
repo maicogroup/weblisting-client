@@ -1,217 +1,6 @@
 <template>
-<<<<<<< HEAD
-  <div class="w-full max-w-4xl md:px-4">
-    <img :src="tempImg" alt="">
-    <guest-user-authentication-modal
-      :open="isShowingLogIn"
-      @close="isShowingLogIn = false"
-    />
-    <div
-      v-if="isFormShown"
-      class="fixed top-0 left-0 h-full w-full z-30 bg-black bg-opacity-60"
-    >
-      <div
-        class="
-          relative
-          left-0
-          lg:left-[30%] lg:w-2/5
-          w-full
-          h-full
-          md:h-auto md:w-2/3 md:top-[10%] md:left-[16%] md:rounded-md md:border
-          bg-white
-        "
-      >
-        <div class="px-3 py-5 flex flex-row max-h-screen">
-          <div class="grow text-center text-xl font-bold">
-            Tạo bài đánh giá
-          </div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 basic-4 text-[#656565] cursor-pointer"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            @click="toggleCreatePost"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </div>
-        <divider class="border-[#858585]" />
-
-        <div
-          class="
-            px-3
-            lg:px-8
-            py-3
-            grid
-            overflow-y-scroll
-            max-h-[90%]
-            md:max-h-[520px]
-          "
-        >
-          <div class="flex items-center mb-3 md:mb-5">
-            <guest-user-avatar
-              :name="guestUser.name"
-              class="w-10 h-10 lg:w-11 lg:h-11 rounded-full cursor-pointer"
-            />
-            <div class="ml-2 text-sm">
-              <a href="#" class="font-bold"> {{ guestUser.name }} </a>
-              <div class="font-bold text-[#0F9AFF]">
-                {{ project.projectName }}
-              </div>
-            </div>
-          </div>
-          <quill-editor
-            v-model="content"
-            :options="editorOption"
-            class="rounded"
-          />
-          <div
-            class="
-              border-x border-b border-[#C4C4C4]
-              p-3
-              rounded-b-[5px]
-              grid-wrap-image
-            "
-          >
-            <button
-              class="
-                h-20
-                w-20
-                inline
-                hover:bg-gray-100
-                border border-[#C4C4C4] border-dashed
-                bg-white
-                grid
-                justify-center
-                content-center
-                text-[10px] text-neutral-400
-              "
-              @click="uploadNewImage"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-2.5 w-2.5 justify-self-center"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <div class="w-14 leading-3 mt-1">
-                Thêm ảnh hoặc video
-              </div>
-            </button>
-            <div v-for="(item, index) in tempSrc" :key="index" class="relative">
-              <button
-                class="absolute top-1 right-1 bg-black bg-opacity-50"
-                @click="removeUploadedImage(index)"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4 text-white"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </button>
-              <video v-if="tempFile[index].type.includes('mp4')" controls class="h-20 w-20 object-cover">
-                <source :src="item.substring(0, item.length-4)" type="video/mp4">
-              </video>
-              <img
-                v-else
-                :src="item"
-                alt="uploaded img"
-                class="h-20 w-20 object-cover"
-              >
-            </div>
-          </div>
-          <button
-            class="
-              bg-green-600
-              text-sm text-slate-50
-              h-8
-              md:h-12
-              w-full
-              md:w-1/3
-              rounded-md
-              font-bold
-              justify-self-end
-              mt-3
-            "
-            @click="createNewReview"
-          >
-            Đăng bài
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="flex items-start p-2 md:p-0 mb-3 md:mb-7"
-    >
-      <template v-if="guestUser">
-        <guest-user-avatar :name="guestUser.name" class="w-10 h-10 rounded-full" />
-      </template>
-      <template v-else>
-        <img :src="user.avatarSource" class="w-10 h-10 rounded-full">
-      </template>
-      <div
-        class="
-          grow
-          ml-3
-          text-sm text-[#C4C4C4]
-          border
-          rounded-[5px]
-          h-11
-          cursor-pointer
-          hover:bg-gray-100
-          px-4
-          py-1
-          flex
-        "
-        @click="toggleCreatePost"
-      >
-        <div class="self-center">
-          Viết bài review
-        </div>
-      </div>
-    </div>
-    <div v-if="reviews.length > 0">
-      <div v-for="(review, index) in reviews" :key="review.id">
-        <review-post :review="review" :index="index" :author="guestUser" />
-      </div>
-    </div>
-    <div ref="borderland" />
-    <!-- skeleton -->
-    <div
-      v-show="
-        $apolloData.loading != 0 && ( reviews.length < reviewTotalCount || reviews.length <= 1)
-      "
-      ref="skeleton"
-      class="border rounded-md px-3 lg:px-8 py-3 lg:py-5 my-2"
-    >
-      <div class="animate-pulse">
-        <div class="flex items-center">
-          <div class="w-10 h-10 rounded-full cursor-pointer bg-gray-300" />
-          <div class="ml-2">
-            <div class="h-2 bg-gray-300 w-20" />
-            <div class="h-2 bg-gray-300 w-16 mt-2" />
-          </div>
-        </div>
-=======
 	<div class="w-full max-w-4xl md:px-4">
+		<img :src="tempImg" alt="" />
 		<guest-user-authentication-modal
 			:open="isShowingLogIn"
 			@close="isShowingLogIn = false"
@@ -221,7 +10,15 @@
 			class="fixed top-0 left-0 h-full w-full z-30 bg-black bg-opacity-60"
 		>
 			<div
-				class="relative left-0 lg:left-[30%] lg:w-2/5 w-full h-full md:h-auto md:w-2/3 md:top-[10%] md:left-[16%] md:rounded-md md:border bg-white"
+				class="
+					relative
+					left-0
+					lg:left-[30%] lg:w-2/5
+					w-full
+					h-full
+					md:h-auto md:w-2/3 md:top-[10%] md:left-[16%] md:rounded-md md:border
+					bg-white
+				"
 			>
 				<div class="px-3 py-5 flex flex-row max-h-screen">
 					<div class="grow text-center text-xl font-bold">Tạo bài đánh giá</div>
@@ -242,7 +39,15 @@
 				<divider class="border-[#858585]" />
 
 				<div
-					class="px-3 lg:px-8 py-3 grid overflow-scroll max-h-[90%] md:max-h-[520px]"
+					class="
+						px-3
+						lg:px-8
+						py-3
+						grid
+						overflow-y-scroll
+						max-h-[90%]
+						md:max-h-[520px]
+					"
 				>
 					<div class="flex items-center mb-3 md:mb-5">
 						<guest-user-avatar
@@ -262,10 +67,26 @@
 						class="rounded"
 					/>
 					<div
-						class="border-x border-b border-[#C4C4C4] p-3 rounded-b-[5px] grid-wrap-image"
+						class="
+							border-x border-b border-[#C4C4C4]
+							p-3
+							rounded-b-[5px]
+							grid-wrap-image
+						"
 					>
 						<button
-							class="h-20 w-20 inline hover:bg-gray-100 border border-[#C4C4C4] border-dashed bg-white grid justify-center content-center text-[10px] text-neutral-400"
+							class="
+								h-20
+								w-20
+								inline
+								hover:bg-gray-100
+								border border-[#C4C4C4] border-dashed
+								bg-white
+								grid
+								justify-center
+								content-center
+								text-[10px] text-neutral-400
+							"
 							@click="uploadNewImage"
 						>
 							<svg
@@ -300,15 +121,37 @@
 									/>
 								</svg>
 							</button>
+							<video
+								v-if="tempFile[index].type.includes('mp4')"
+								controls
+								class="h-20 w-20 object-cover"
+							>
+								<source
+									:src="item.substring(0, item.length - 4)"
+									type="video/mp4"
+								/>
+							</video>
 							<img
+								v-else
 								:src="item"
-								alt="they might be my crew"
+								alt="uploaded img"
 								class="h-20 w-20 object-cover"
 							/>
 						</div>
 					</div>
 					<button
-						class="bg-green-600 text-sm text-slate-50 h-8 md:h-12 w-full md:w-1/3 rounded-md font-bold justify-self-end mt-3"
+						class="
+							bg-green-600
+							text-sm text-slate-50
+							h-8
+							md:h-12
+							w-full
+							md:w-1/3
+							rounded-md
+							font-bold
+							justify-self-end
+							mt-3
+						"
 						@click="createNewReview"
 					>
 						Đăng bài
@@ -328,7 +171,19 @@
 				<img :src="user.avatarSource" class="w-10 h-10 rounded-full" />
 			</template>
 			<div
-				class="grow ml-3 text-sm text-[#C4C4C4] border rounded-[5px] h-11 cursor-pointer hover:bg-gray-100 px-4 py-1 flex"
+				class="
+					grow
+					ml-3
+					text-sm text-[#C4C4C4]
+					border
+					rounded-[5px]
+					h-11
+					cursor-pointer
+					hover:bg-gray-100
+					px-4
+					py-1
+					flex
+				"
 				@click="toggleCreatePost"
 			>
 				<div class="self-center">Viết bài review</div>
@@ -339,7 +194,7 @@
 				<review-post :review="review" :index="index" :author="guestUser" />
 			</div>
 		</div>
-		<div ref="borderland"></div>
+		<div ref="borderland" />
 		<!-- skeleton -->
 		<div
 			v-show="
@@ -357,7 +212,6 @@
 						<div class="h-2 bg-gray-300 w-16 mt-2" />
 					</div>
 				</div>
->>>>>>> dev
 
 				<div class="h-3 bg-gray-300 w-5/6 mt-3" />
 				<div class="h-3 bg-gray-300 w-full mt-1" />
@@ -374,11 +228,11 @@
 </template>
 
 <script>
-import gql from 'graphql-tag';
-import ReviewPost from './components/review-post.vue';
-import Divider from '~/components/Divider.vue';
-import GuestUserAvatar from '~/pages/components/guest-user-avatar.vue';
-import GuestUserAuthenticationModal from '~/pages/components/guest-user-authentication-modal.vue';
+import gql from "graphql-tag";
+import ReviewPost from "./components/review-post.vue";
+import Divider from "~/components/Divider.vue";
+import GuestUserAvatar from "~/pages/components/guest-user-avatar.vue";
+import GuestUserAuthenticationModal from "~/pages/components/guest-user-authentication-modal.vue";
 
 const getReviewsQuery = gql`
 	query GetListReview($take: Int, $skip: Int) {
@@ -412,641 +266,123 @@ const getReviewsQuery = gql`
 	}
 `;
 export default {
-<<<<<<< HEAD
-  name: 'ProjectReview',
-  components: {
-    Divider,
-    ReviewPost,
-    GuestUserAuthenticationModal,
-    GuestUserAvatar
-  },
-
-  data () {
-    return {
-      currentPage: 1,
-      tempImg: '',
-      user: {
-        avatarSource:
-          'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
-      },
-      isFormShown: false,
-      isFirstUpload: false,
-      guestUser: {},
-      tempSrc: [],
-      tempFile: [],
-      isLoading: false,
-      tempReviews: [],
-      isShowingLogIn: false,
-      take: 5,
-      skip: 0,
-      content: '',
-      editorOption: {
-        theme: 'snow', // 可換
-        modules: {
-          toolbar: {
-            // container這裡是個大坑，[]表分群
-            container: [
-              ['bold', 'italic', 'underline', 'strike', 'code'],
-              [{ header: [1, 2, 3, 4, 5, 6, false] }],
-              [{ list: 'ordered' }, { list: 'bullet' }],
-              [{ size: ['small', false, 'large', 'huge'] }],
-              [{ align: [] }],
-              ['link']
-            ],
-            // 客製化圖片上傳功能用的
-            handlers: {
-              image: this.uploadImage
-            }
-          }
-        },
-        formats: [
-          'background',
-          'bold',
-          'color',
-          'font',
-          'code',
-          'italic',
-          'link',
-          'size',
-          'strike',
-          'script',
-          'underline',
-          'blockquote',
-          'header',
-          'indent',
-          'list',
-          'align',
-          'direction',
-          'code-block',
-          'formula'
-        ]
-      }
-    };
-  },
-
-  head () {
-    return {
-      title: 'Review dự án ' + this.project?.projectName,
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: this.project?.pageInfors[0].metaDescription
-        },
-        {
-          property: 'og:image',
-          content: this.project?.images[0]
-        },
-        {
-          name: 'robots',
-          content: 'noindex'
-        }
-      ],
-      script: [
-        {
-          once: true,
-          hid: 's3-sdk',
-          src: 'https://sdk.amazonaws.com/js/aws-sdk-2.1095.0.min.js',
-          body: true
-        }
-      ]
-    };
-  },
-
-  computed: {
-    reviews () {
-      return this.reviewGenerate();
-    },
-    reviewTotalCount () {
-      return this.reviewsWithPagination?.totalCount ?? 0;
-    },
-    author () {
-      const tempUser = {};
-      const guestUser = this.$cookies.get('GuestUser') ?? null;
-      if (guestUser !== null) {
-        tempUser.name = guestUser.name;
-        tempUser.id = guestUser.id;
-        return tempUser;
-      }
-      return null;
-    }
-  },
-  created () {
-    this.guestUser = this.$cookies.get('GuestUser') ?? null;
-    this.$nuxt.$on('userLogout', () => {
-      this.guestUser = this.$cookies.get('GuestUser') ?? null;
-    });
-    this.$nuxt.$on('userLogin', () => {
-      this.guestUser = this.$cookies.get('GuestUser') ?? null;
-    });
-  },
-  apollo: {
-    project: {
-      query () {
-        return gql`
-          query GetReviewingProject($slug: String!) {
-            projects(where: { pageInfors: { some: { slug: { eq: $slug } } } }) {
-              id
-              projectName
-              images
-              pageInfors {
-                metaDescription
-              }
-            }
-          }
-        `;
-      },
-      update (data) {
-        if (data.projects.length === 0) {
-          return;
-        }
-
-        const project = data.projects[0];
-        return project;
-      },
-      variables () {
-        return {
-          slug: this.$route.params.slug
-        };
-      }
-    },
-
-    reviewsWithPagination: {
-      query () {
-        return gql`
-          query GetListReview($condition: ReviewCollectionFilterInput, $take: Int, $skip: Int) {
-            reviewsWithPagination(
-              where: $condition
-              take: $take
-              skip: $skip
-              order: { createdAt: DESC }
-            ) {
-              items {
-                id
-                content
-                createdAt
-                projectId
-                liked
-                galleries {
-                  path
-                  contentType
-                }
-                author {
-                  name
-                  id
-                }
-                comments {
-                  id
-                  author {
-                    authorName
-                  }
-                  createdAt
-                  content
-                }
-              }
-              totalCount
-            }
-          }
-        `;
-      },
-      skip () {
-        return this.project === undefined;
-      },
-      update: data => data.reviewsWithPagination,
-      variables () {
-        return {
-          take: 5,
-          skip: 0,
-          condition: {
-            projectId: {
-              eq: this.project.id
-            }
-          }
-        };
-      }
-    }
-  },
-
-  mounted () {
-    window.addEventListener('scroll', this.HandleScroll);
-  },
-  destroyed () {
-    window.removeEventListener('scroll', this.HandleScroll);
-  },
-  methods: {
-    reviewGenerate () {
-      console.log('bi lua roi hahah');
-      if (this.reviewsWithPagination !== null && this.project !== null) {
-        const tempReviewArray = [];
-        if (this.reviewsWithPagination !== undefined) {
-          this.reviewsWithPagination.items.forEach((x) => {
-            const tempReview = this.createMockReview(x, this.project);
-            if (this.tempReviews.length < this.take) {
-              setTimeout(function () {}, 10000);
-              this.tempReviews.push(tempReview);
-            } else {
-              tempReviewArray.push(tempReview);
-            }
-          });
-        }
-        if (tempReviewArray.length === 0) {
-          return this.tempReviews;
-        } else {
-          const oldReviews = tempReviewArray;
-          return oldReviews;
-        }
-      }
-      return [];
-    },
-    HandleScroll () {
-      if (
-        this.$refs.borderland.getBoundingClientRect().y < 1400
-      ) {
-        this.LoadNewReviews();
-      }
-    },
-
-    uploadNewImage () {
-      const fileInput = document.createElement('input');
-      fileInput.setAttribute('type', 'file');
-      fileInput.setAttribute(
-        'accept',
-        'image/png, image/gif, image/jpeg, image/bmp, image/x-icon, video/*'
-      );
-      fileInput.click();
-      fileInput.addEventListener('change', () => {
-        if (fileInput.files != null && fileInput.files[0] != null) {
-          const [file] = fileInput.files;
-          if (file) {
-            if (file.type.includes('mp4')) {
-              this.tempSrc.push(URL.createObjectURL(file) + '.mp4');
-            } else {
-              this.tempSrc.push(URL.createObjectURL(file));
-            }
-            this.tempFile.push(file);
-          }
-        }
-      });
-    },
-    toggleCreatePost () {
-      if (this.guestUser === null) {
-        this.isShowingLogIn = true;
-        return;
-      }
-      const element = document.body;
-      element.classList.toggle('overflow-hidden');
-      this.isFormShown = !this.isFormShown;
-    },
-    removeUploadedImage (index) {
-      this.tempSrc.splice(index, 1);
-      this.tempFile.splice(index, 1);
-    },
-
-    sendImagesToSever (id, createReviewInput) {
-      AWS.config.update({
-        accessKeyId: '8EL21GNHMRNZYW8488OV',
-        secretAccessKey: 'xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD',
-        region: 'hn',
-        endpoint: 'https://hn.ss.bfcplatform.vn',
-        apiVersions: {
-          s3: '2006-03-01'
-        }
-      });
-      const s3 = new AWS.S3();
-
-      const uploadOptions = {
-        partSize: 10 * 1024 * 1024,
-        queueSize: 1
-      };
-
-      const imgCount = { count: 0 };
-      console.log(this.tempFile.length);
-      if (this.tempFile.length === 0) {
-        this.sendMutationCreateReview(createReviewInput);
-      } else {
-        this.tempFile.forEach((x) => {
-          console.log('This file size is: ' + x.size / 1024 / 1024 + 'MiB');
-          if (x.size / 1024 / 1024 >= 10) {
-            this.multipartUpload(x, id, s3, imgCount);
-          } else {
-            const uploadParams = {
-              Bucket: 'weblisting',
-              Key: 'review/' + id.toString() + '/' + x.name,
-              Body: x,
-              ACL: 'public-read',
-              ContentType: x.type
-            };
-
-            const upload = s3.upload(uploadParams, uploadOptions);
-            upload.send((err, data) => {
-              if (err) {
-                console.error('Upload lỗi:', err);
-              } else if (data) {
-                console.log('Upload thành công:', data);
-                imgCount.count++;
-                console.log('Upload ' + imgCount.count + this.tempFile.length);
-                // bi loi van up hinh duoc nhung van tra ve error
-                if (imgCount.count === this.tempFile.length) {
-                  this.sendMutationCreateReview(createReviewInput);
-                  this.tempFile = [];
-                  this.tempSrc = [];
-                }
-              }
-            });
-          }
-        });
-      }
-    },
-    multipartUpload (file, id, s3, imgCount) {
-      const partSize = 1024 * 1024 * 5; // Minimum 5MB per chunk
-      const multipartMap = {
-        Parts: []
-      };
-      const startTime = new Date();
-      let numPartsLeft = 0;
-      const reader = new FileReader();
-      reader.readAsArrayBuffer(file);
-      reader.onload = function (e) {
-        const buffer = new Uint8Array(e.target.result);
-        createParts(buffer, file, uploadPart);
-      };
-
-      function createParts (buffer, file, callback) {
-        let partNum = 0;
-        const multiPartParams = {
-          Bucket: 'weblisting',
-          Key: 'review/' + id.toString() + '/' + file.name,
-          ContentType: file.type,
-          ACL: 'public-read'
-        };
-        console.log({ multiPartParams });
-        console.log('file ne`: ' + { file });
-        numPartsLeft = Math.ceil(buffer.length / partSize);
-        s3.createMultipartUpload(multiPartParams, function (mpErr, multipart) {
-          if (mpErr) {
-            console.log('Error!', mpErr);
-            console.dir(mpErr);
-            return;
-          }
-          console.log('Got upload ID', multipart.UploadId);
-
-          // Grab each partSize chunk and upload it as a part
-          for (let rangeStart = 0; rangeStart < buffer.length; rangeStart += partSize) {
-            partNum++;
-            const end = Math.min(rangeStart + partSize, buffer.length);
-            const partParams = {
-              Body: buffer.slice(rangeStart, end),
-              Bucket: 'weblisting',
-              Key: 'review/' + id.toString() + '/' + file.name,
-              PartNumber: String(partNum),
-              UploadId: multipart.UploadId
-            };
-
-            // Send a single part
-            console.log('Uploading part: #', partParams.PartNumber, ', Range start:', rangeStart);
-            if (callback) { callback(s3, multipart, partParams); };
-          }
-        });
-      }
-
-      function uploadPart (s3, multipart, partParams, _tryNum) {
-        const maxUploadTries = 10;
-        const tryNum = _tryNum || 1;
-        s3.uploadPart(partParams, function (multiErr, mData) {
-          if (multiErr) {
-            console.log('multiErr, upload part error:', multiErr);
-            if (tryNum < maxUploadTries) {
-              console.log('Retrying upload of part: #', partParams.PartNumber);
-              uploadPart(s3, multipart, partParams, tryNum + 1);
-            } else {
-              console.log('Failed uploading part: #', partParams.PartNumber);
-            }
-            return;
-          }
-
-          multipartMap.Parts[this.request.params.PartNumber - 1] = {
-            ETag: mData.ETag,
-            PartNumber: Number(this.request.params.PartNumber)
-          };
-          console.log('Completed part', this.request.params.PartNumber);
-          console.log('mData', mData);
-          if (--numPartsLeft > 0) { return; }; // complete only when all parts uploaded
-
-          const doneParams = {
-            Bucket: 'weblisting',
-            Key: multipart.Key,
-            MultipartUpload: multipartMap,
-            UploadId: multipart.UploadId
-          };
-
-          console.log('Completing upload...');
-          completeMultipartUpload(s3, doneParams);
-        });
-      }
-
-      function completeMultipartUpload (s3, doneParams) {
-        s3.completeMultipartUpload(doneParams, function (err, data) {
-          if (err) {
-            console.log('An error occurred while completing the multipart upload');
-            console.log(err);
-          } else {
-            const delta = (new Date() - startTime) / 1000;
-            console.log('Completed upload in', delta, 'seconds');
-            console.log('Final upload data:', data);
-            imgCount.count++;
-            console.log('Upload ' + imgCount.count + this.tempFile.length);
-            // bi loi van up hinh duoc nhung van tra ve error
-            if (imgCount.count === this.tempFile.length) {
-              this.sendMutationCreateReview(createReviewInput);
-              this.tempFile = [];
-              this.tempSrc = [];
-            }
-          }
-        });
-      }
-    },
-
-    sendMutationCreateReview (createReviewInput) {
-      this.$apollo.mutate({
-        mutation: gql`
-          mutation CreateReviewPost($input: CreateReviewInput!) {
-            createReview(input: $input) {
-              string
-            }
-          }
-        `,
-        variables: {
-          input: {
-            reviewId: createReviewInput.id,
-            authorId: createReviewInput.authorId,
-            content: createReviewInput.content,
-            projectId: createReviewInput.projectId,
-            galleries: createReviewInput.galleries,
-            liked: []
-          }
-        }
-      }).then((data) => {
-      // Result
-        console.log(data);
-        this.$apollo.queries.reviewsWithPagination.refetch({
-          skip: 0,
-          take: 5,
-          condition: {
-            projectId: {
-              eq: this.project.id
-            }
-          }
-        });
-      }).catch((error) => {
-      // Error
-        console.error(error);
-      // We restore the initial user input
-      });
-    },
-
-    sendWarningNotification (notification) {
-      this.$toast.show(notification, {
-        type: 'error',
-        theme: 'bubble',
-        duration: 3000,
-        position: 'top-right'
-      });
-    },
-
-    createNewReview () {
-      const id = generateNewId();
-      if (this.content !== '' || this.tempSrc.length !== 0) {
-        const createReviewInput = {
-          id: id.toString(),
-          authorId: this.guestUser.id,
-          content: this.content,
-          projectId: this.project.id,
-          galleries: [],
-          liked: []
-        };
-        this.tempFile.forEach((x) => {
-          const tempObject = {};
-          tempObject.path =
-            'https://weblisting.hn.ss.bfcplatform.vn/' +
-            'review/' +
-            id +
-            '/' +
-            x.name;
-          console.log('path' + tempObject.path);
-          tempObject.contentType = x.type;
-          createReviewInput.galleries.push(tempObject);
-        });
-        this.sendImagesToSever(createReviewInput.id, createReviewInput);
-        this.isFirstUpload = true;
-        const element = document.body;
-        element.classList.remove('overflow-hidden');
-        this.isFormShown = !this.isFormShown;
-        this.content = '';
-      } else {
-        this.sendWarningNotification('Bài viết chưa có thông tin');
-      }
-
-      function generateNewId () {
-        const ObjectIddd = (
-          m = Math,
-          d = Date,
-          h = 16,
-          s = s => m.floor(s).toString(h)
-        ) =>
-          s(d.now() / 1000) +
-          ' '.repeat(h).replace(/./g, () => s(m.random() * h));
-        return ObjectIddd();
-      }
-    },
-
-    LoadNewReviews () {
-      if (this.isLoading === true) {
-        return;
-      }
-      this.isLoading = true;
-
-      if (this.reviews.length == this.reviewsWithPagination.totalCount) { return; }
-
-      if (this.skip + 5 <= this.reviewsWithPagination.totalCount) {
-        this.skip += 5;
-      } else {
-        this.take = this.reviewsWithPagination.totalCount - this.skip;
-      }
-      if (this.skip !== this.reviewsWithPagination.totalCount) {
-        this.$apollo.queries.reviewsWithPagination.fetchMore({
-          variables: {
-            skip: this.skip,
-            take: this.take,
-            condition: {
-              projectId: {
-                eq: this.project.id
-              }
-            }
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            setTimeout(function () {
-              // your code to be executed after 1 second
-            }, 10000);
-            this.isLoading = false;
-            return {
-              reviewsWithPagination: {
-                __typename: previousResult.reviewsWithPagination.__typename,
-                items: [
-                  ...previousResult.reviewsWithPagination.items,
-                  ...fetchMoreResult.reviewsWithPagination.items
-                ],
-                totalCount: fetchMoreResult.reviewsWithPagination.totalCount
-              }
-            };
-          }
-        });
-      }
-      if (this.take === this.reviewsWithPagination.totalCount - this.skip) {
-        this.skip = this.reviewsWithPagination.totalCount;
-      }
-    },
-
-    createMockReview (item, project) {
-      const tempImageSources = [];
-      item.galleries.forEach(x => tempImageSources.push(x.path));
-      const tempComments = [];
-      if (item.comments.length > 0) {
-        item.comments.forEach((x) => {
-          const tempComment = {
-            commentId: x.id,
-            authorName: x.author.authorName,
-            authorAvatarSource:
-              'https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg',
-            dateCreated: new Date(x.createdAt),
-            content: x.content
-          };
-          tempComments.push(tempComment);
-        });
-      }
-      const isLiked =
-        this.guestUser === null ? false : item.liked.includes(this.guestUser.id);
-      return {
-        id: item.id,
-        authorName: item.author.name,
-        authorAvatarSource:
-          'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg',
-        dateCreated: new Date(item.createdAt),
-        content: item.content,
-        imageSources: tempImageSources,
-        comments: tempComments,
-        isLiked,
-        galleries: item.galleries,
-        liked: item.liked
-      };
-    }
-  }
-=======
 	name: "ProjectReview",
 	components: {
 		Divider,
 		ReviewPost,
 		GuestUserAuthenticationModal,
 		GuestUserAvatar,
+	},
+
+	data() {
+		return {
+			currentPage: 1,
+			tempImg: "",
+			user: {
+				avatarSource:
+					"https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
+			},
+			isFormShown: false,
+			isFirstUpload: false,
+			guestUser: {},
+			tempSrc: [],
+			tempFile: [],
+			isLoading: false,
+			tempReviews: [],
+			isShowingLogIn: false,
+			take: 5,
+			skip: 0,
+			content: "",
+			editorOption: {
+				theme: "snow", // 可換
+				modules: {
+					toolbar: {
+						// container這裡是個大坑，[]表分群
+						container: [
+							["bold", "italic", "underline", "strike", "code"],
+							[{ header: [1, 2, 3, 4, 5, 6, false] }],
+							[{ list: "ordered" }, { list: "bullet" }],
+							[{ size: ["small", false, "large", "huge"] }],
+							[{ align: [] }],
+							["link"],
+						],
+						// 客製化圖片上傳功能用的
+						handlers: {
+							image: this.uploadImage,
+						},
+					},
+				},
+				formats: [
+					"background",
+					"bold",
+					"color",
+					"font",
+					"code",
+					"italic",
+					"link",
+					"size",
+					"strike",
+					"script",
+					"underline",
+					"blockquote",
+					"header",
+					"indent",
+					"list",
+					"align",
+					"direction",
+					"code-block",
+					"formula",
+				],
+			},
+		};
+	},
+
+	head() {
+		return {
+			title: "Review dự án " + this.project?.projectName,
+			meta: [
+				{
+					hid: "description",
+					name: "description",
+					content: this.project?.pageInfors[0].metaDescription,
+				},
+				{
+					property: "og:image",
+					content: this.project?.images[0],
+				},
+				{
+					name: "robots",
+					content: "noindex",
+				},
+			],
+			script: [
+				{
+					once: true,
+					hid: "s3-sdk",
+					src: "https://sdk.amazonaws.com/js/aws-sdk-2.1095.0.min.js",
+					body: true,
+				},
+			],
+		};
+	},
+
+	computed: {
+		reviews() {
+			return this.reviewGenerate();
+		},
+		reviewTotalCount() {
+			return this.reviewsWithPagination?.totalCount ?? 0;
+		},
+		author() {
+			const tempUser = {};
+			const guestUser = this.$cookies.get("GuestUser") ?? null;
+			if (guestUser !== null) {
+				tempUser.name = guestUser.name;
+				tempUser.id = guestUser.id;
+				return tempUser;
+			}
+			return null;
+		},
 	},
 	created() {
 		this.guestUser = this.$cookies.get("GuestUser") ?? null;
@@ -1055,7 +391,6 @@ export default {
 		});
 		this.$nuxt.$on("userLogin", () => {
 			this.guestUser = this.$cookies.get("GuestUser") ?? null;
-			console.log(this.guestUser);
 		});
 	},
 	apollo: {
@@ -1136,7 +471,6 @@ export default {
 			},
 			update: data => data.reviewsWithPagination,
 			variables() {
-				console.log(this.project);
 				return {
 					take: 5,
 					skip: 0,
@@ -1150,94 +484,6 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			currentPage: 1,
-			user: {
-				avatarSource:
-					"https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
-			},
-			isFormShown: false,
-			guestUser: {},
-			tempSrc: [],
-			tempFile: [],
-			isLoading: false,
-			tempReviews: [],
-			isShowingLogIn: false,
-			take: 5,
-			skip: 0,
-			content: "",
-			editorOption: {
-				theme: "snow", // 可換
-				modules: {
-					toolbar: {
-						// container這裡是個大坑，[]表分群
-						container: [
-							["bold", "italic", "underline", "strike", "code"],
-							[{ header: [1, 2, 3, 4, 5, 6, false] }],
-							[{ list: "ordered" }, { list: "bullet" }],
-							[{ size: ["small", false, "large", "huge"] }],
-							[{ align: [] }],
-							["link"],
-						],
-						// 客製化圖片上傳功能用的
-						handlers: {
-							image: this.uploadImage,
-						},
-					},
-				},
-			},
-		};
-	},
-
-	head() {
-		return {
-			title: "Review dự án " + this.project?.projectName,
-			meta: [
-				{
-					hid: "description",
-					name: "description",
-					content: this.project?.pageInfors[0].metaDescription,
-				},
-				{
-					property: "og:image",
-					content: this.project?.images[0],
-				},
-				{
-					name: "robots",
-					content: "noindex",
-				},
-			],
-			script: [
-				{
-					once: true,
-					hid: "s3-sdk",
-					src: "https://sdk.amazonaws.com/js/aws-sdk-2.1095.0.min.js",
-					body: true,
-				},
-			],
-		};
-	},
-
-	computed: {
-		reviews() {
-			return this.reviewGenerate();
-		},
-		reviewTotalCount() {
-			return this.reviewsWithPagination?.totalCount ?? 0;
-		},
-		author() {
-			const tempUser = {};
-			const guestUser = this.$cookies.get("GuestUser") ?? null;
-			if (guestUser !== null) {
-				tempUser.name = guestUser.name;
-				tempUser.id = guestUser.id;
-				return tempUser;
-			}
-			return null;
-		},
-	},
-
 	mounted() {
 		window.addEventListener("scroll", this.HandleScroll);
 	},
@@ -1246,6 +492,7 @@ export default {
 	},
 	methods: {
 		reviewGenerate() {
+			console.log("bi lua roi hahah");
 			if (this.reviewsWithPagination !== null && this.project !== null) {
 				const tempReviewArray = [];
 				if (this.reviewsWithPagination !== undefined) {
@@ -1269,7 +516,6 @@ export default {
 			return [];
 		},
 		HandleScroll() {
-			console.log(this.$refs.borderland.getBoundingClientRect());
 			if (this.$refs.borderland.getBoundingClientRect().y < 1400) {
 				this.LoadNewReviews();
 			}
@@ -1280,14 +526,18 @@ export default {
 			fileInput.setAttribute("type", "file");
 			fileInput.setAttribute(
 				"accept",
-				"image/png, image/gif, image/jpeg, image/bmp, image/x-icon",
+				"image/png, image/gif, image/jpeg, image/bmp, image/x-icon, video/*",
 			);
 			fileInput.click();
 			fileInput.addEventListener("change", () => {
 				if (fileInput.files != null && fileInput.files[0] != null) {
 					const [file] = fileInput.files;
 					if (file) {
-						this.tempSrc.push(URL.createObjectURL(file));
+						if (file.type.includes("mp4")) {
+							this.tempSrc.push(URL.createObjectURL(file) + ".mp4");
+						} else {
+							this.tempSrc.push(URL.createObjectURL(file));
+						}
 						this.tempFile.push(file);
 					}
 				}
@@ -1307,7 +557,7 @@ export default {
 			this.tempFile.splice(index, 1);
 		},
 
-		sendImagesToSever(id) {
+		sendImagesToSever(id, createReviewInput) {
 			AWS.config.update({
 				accessKeyId: "8EL21GNHMRNZYW8488OV",
 				secretAccessKey: "xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD",
@@ -1324,56 +574,207 @@ export default {
 				queueSize: 1,
 			};
 
-			this.tempFile.forEach(x => {
-				const uploadParams = {
-					Bucket: "weblisting",
-					Key: "review/" + id.toString() + "/" + x.name,
-					Body: x,
-					ACL: "public-read",
-					ContentType: x.type,
-				};
+			const imgCount = { count: 0 };
+			console.log(this.tempFile.length);
+			if (this.tempFile.length === 0) {
+				this.sendMutationCreateReview(createReviewInput);
+			} else {
+				this.tempFile.forEach(x => {
+					console.log("This file size is: " + x.size / 1024 / 1024 + "MiB");
+					if (x.size / 1024 / 1024 >= 10) {
+						this.multipartUpload(x, id, s3, imgCount);
+					} else {
+						const uploadParams = {
+							Bucket: "weblisting",
+							Key: "review/" + id.toString() + "/" + x.name,
+							Body: x,
+							ACL: "public-read",
+							ContentType: x.type,
+						};
 
-				const upload = s3.upload(uploadParams, uploadOptions);
-
-				upload.send((err, data) => {
-					if (err) {
-						console.error("Upload lỗi:", err);
-					} else if (data) {
-						console.log("Upload thành công:", data);
+						const upload = s3.upload(uploadParams, uploadOptions);
+						upload.send((err, data) => {
+							if (err) {
+								console.error("Upload lỗi:", err);
+							} else if (data) {
+								console.log("Upload thành công:", data);
+								imgCount.count++;
+								console.log("Upload " + imgCount.count + this.tempFile.length);
+								// bi loi van up hinh duoc nhung van tra ve error
+								if (imgCount.count === this.tempFile.length) {
+									this.sendMutationCreateReview(createReviewInput);
+									this.tempFile = [];
+									this.tempSrc = [];
+								}
+							}
+						});
 					}
 				});
-			});
+			}
 		},
-		sendMutationCreateReview(createReviewInput) {
-			this.$apollo.mutate({
-				mutation: gql`
-					mutation CreateReviewPost($input: CreateReviewInput!) {
-						createReview(input: $input) {
-							string
+		multipartUpload(file, id, s3, imgCount) {
+			const partSize = 1024 * 1024 * 5; // Minimum 5MB per chunk
+			const multipartMap = {
+				Parts: [],
+			};
+			const startTime = new Date();
+			let numPartsLeft = 0;
+			const reader = new FileReader();
+			reader.readAsArrayBuffer(file);
+			reader.onload = function (e) {
+				const buffer = new Uint8Array(e.target.result);
+				createParts(buffer, file, uploadPart);
+			};
+
+			function createParts(buffer, file, callback) {
+				let partNum = 0;
+				const multiPartParams = {
+					Bucket: "weblisting",
+					Key: "review/" + id.toString() + "/" + file.name,
+					ContentType: file.type,
+					ACL: "public-read",
+				};
+				console.log({ multiPartParams });
+				console.log("file ne`: " + { file });
+				numPartsLeft = Math.ceil(buffer.length / partSize);
+				s3.createMultipartUpload(multiPartParams, function (mpErr, multipart) {
+					if (mpErr) {
+						console.log("Error!", mpErr);
+						console.dir(mpErr);
+						return;
+					}
+					console.log("Got upload ID", multipart.UploadId);
+
+					// Grab each partSize chunk and upload it as a part
+					for (
+						let rangeStart = 0;
+						rangeStart < buffer.length;
+						rangeStart += partSize
+					) {
+						partNum++;
+						const end = Math.min(rangeStart + partSize, buffer.length);
+						const partParams = {
+							Body: buffer.slice(rangeStart, end),
+							Bucket: "weblisting",
+							Key: "review/" + id.toString() + "/" + file.name,
+							PartNumber: String(partNum),
+							UploadId: multipart.UploadId,
+						};
+
+						// Send a single part
+						console.log(
+							"Uploading part: #",
+							partParams.PartNumber,
+							", Range start:",
+							rangeStart,
+						);
+						if (callback) {
+							callback(s3, multipart, partParams);
 						}
 					}
-				`,
-				variables: {
-					input: {
-						reviewId: createReviewInput.id,
-						authorId: createReviewInput.authorId,
-						content: createReviewInput.content,
-						projectId: createReviewInput.projectId,
-						galleries: createReviewInput.galleries,
-						liked: [],
-					},
-				},
-			});
+				});
+			}
 
-			this.$apollo.queries.reviewsWithPagination.refetch({
-				skip: 0,
-				take: 5,
-				condition: {
-					projectId: {
-						eq: this.project.id,
+			function uploadPart(s3, multipart, partParams, _tryNum) {
+				const maxUploadTries = 10;
+				const tryNum = _tryNum || 1;
+				s3.uploadPart(partParams, function (multiErr, mData) {
+					if (multiErr) {
+						console.log("multiErr, upload part error:", multiErr);
+						if (tryNum < maxUploadTries) {
+							console.log("Retrying upload of part: #", partParams.PartNumber);
+							uploadPart(s3, multipart, partParams, tryNum + 1);
+						} else {
+							console.log("Failed uploading part: #", partParams.PartNumber);
+						}
+						return;
+					}
+
+					multipartMap.Parts[this.request.params.PartNumber - 1] = {
+						ETag: mData.ETag,
+						PartNumber: Number(this.request.params.PartNumber),
+					};
+					console.log("Completed part", this.request.params.PartNumber);
+					console.log("mData", mData);
+					if (--numPartsLeft > 0) {
+						return;
+					} // complete only when all parts uploaded
+
+					const doneParams = {
+						Bucket: "weblisting",
+						Key: multipart.Key,
+						MultipartUpload: multipartMap,
+						UploadId: multipart.UploadId,
+					};
+
+					console.log("Completing upload...");
+					completeMultipartUpload(s3, doneParams);
+				});
+			}
+
+			function completeMultipartUpload(s3, doneParams) {
+				s3.completeMultipartUpload(doneParams, function (err, data) {
+					if (err) {
+						console.log(
+							"An error occurred while completing the multipart upload",
+						);
+						console.log(err);
+					} else {
+						const delta = (new Date() - startTime) / 1000;
+						console.log("Completed upload in", delta, "seconds");
+						console.log("Final upload data:", data);
+						imgCount.count++;
+						console.log("Upload " + imgCount.count + this.tempFile.length);
+						// bi loi van up hinh duoc nhung van tra ve error
+						if (imgCount.count === this.tempFile.length) {
+							this.sendMutationCreateReview(createReviewInput);
+							this.tempFile = [];
+							this.tempSrc = [];
+						}
+					}
+				});
+			}
+		},
+
+		sendMutationCreateReview(createReviewInput) {
+			this.$apollo
+				.mutate({
+					mutation: gql`
+						mutation CreateReviewPost($input: CreateReviewInput!) {
+							createReview(input: $input) {
+								string
+							}
+						}
+					`,
+					variables: {
+						input: {
+							reviewId: createReviewInput.id,
+							authorId: createReviewInput.authorId,
+							content: createReviewInput.content,
+							projectId: createReviewInput.projectId,
+							galleries: createReviewInput.galleries,
+							liked: [],
+						},
 					},
-				},
-			});
+				})
+				.then(data => {
+					// Result
+					console.log(data);
+					this.$apollo.queries.reviewsWithPagination.refetch({
+						skip: 0,
+						take: 5,
+						condition: {
+							projectId: {
+								eq: this.project.id,
+							},
+						},
+					});
+				})
+				.catch(error => {
+					// Error
+					console.error(error);
+					// We restore the initial user input
+				});
 		},
 
 		sendWarningNotification(notification) {
@@ -1397,7 +798,6 @@ export default {
 					liked: [],
 				};
 				this.tempFile.forEach(x => {
-					this.sendImagesToSever(createReviewInput.id);
 					const tempObject = {};
 					tempObject.path =
 						"https://weblisting.hn.ss.bfcplatform.vn/" +
@@ -1405,17 +805,16 @@ export default {
 						id +
 						"/" +
 						x.name;
+					console.log("path" + tempObject.path);
 					tempObject.contentType = x.type;
 					createReviewInput.galleries.push(tempObject);
 				});
-
-				this.sendMutationCreateReview(createReviewInput);
+				this.sendImagesToSever(createReviewInput.id, createReviewInput);
+				this.isFirstUpload = true;
 				const element = document.body;
 				element.classList.remove("overflow-hidden");
 				this.isFormShown = !this.isFormShown;
 				this.content = "";
-				this.tempFile = [];
-				this.tempSrc = [];
 			} else {
 				this.sendWarningNotification("Bài viết chưa có thông tin");
 			}
@@ -1439,15 +838,15 @@ export default {
 			}
 			this.isLoading = true;
 
-			if (this.reviews.length == this.reviewsWithPagination.totalCount) return;
+			if (this.reviews.length == this.reviewsWithPagination.totalCount) {
+				return;
+			}
 
 			if (this.skip + 5 <= this.reviewsWithPagination.totalCount) {
 				this.skip += 5;
 			} else {
 				this.take = this.reviewsWithPagination.totalCount - this.skip;
 			}
-			console.log(this.skip);
-			console.log(this.take);
 			if (this.skip !== this.reviewsWithPagination.totalCount) {
 				this.$apollo.queries.reviewsWithPagination.fetchMore({
 					variables: {
@@ -1518,18 +917,13 @@ export default {
 			};
 		},
 	},
->>>>>>> dev
 };
 </script>
 
 <style>
 .ql-editor {
-<<<<<<< HEAD
-  min-height: 180px;
-  word-break: break-all;
-=======
 	min-height: 180px;
->>>>>>> dev
+	word-break: break-all;
 }
 .ql-container.ql-snow {
 	height: auto;

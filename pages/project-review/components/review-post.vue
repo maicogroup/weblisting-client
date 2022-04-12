@@ -20,7 +20,6 @@
 				</div>
 			</div>
 
-<<<<<<< HEAD
       <p
         id="review-content"
         ref="reviewContent"
@@ -211,129 +210,6 @@
           </template>
         </div>
       </div>
-=======
-			<p
-				id="review-content"
-				ref="reviewContent"
-				:class="[!showFullContent ? shortContentClass : '']"
-				class="text-sm text-stone-900 font-normal mt-1 leading-4 lg:leading-5"
-				v-html="review.content"
-			/>
-			<span
-				v-if="contentOverflowing && !showFullContent"
-				id="show-more"
-				class="text-sm cursor-pointer text-gray-500"
-				@click="showFullContent = !showFullContent"
-				>Xem thêm</span
-			>
-			<span
-				v-if="contentOverflowing && showFullContent"
-				class="text-sm cursor-pointer text-gray-500"
-				@click="showFullContent = !showFullContent"
-				>Rút gọn</span
-			>
-			<div>
-				<div
-					:class="[
-						review.imageSources.length == 2
-							? 'grid-cols-2'
-							: review.imageSources.length == 3
-							? 'grid-cols-3'
-							: review.imageSources.length >= 4
-							? 'grid-cols-4'
-							: '',
-					]"
-					class="hidden md:grid gap-1 mt-2"
-				>
-					<template v-if="review.imageSources.length <= 4">
-						<img
-							v-for="index in review.imageSources.length"
-							:key="index"
-							:class="[
-								review.imageSources.length == 1
-									? 'aspect-auto'
-									: review.imageSources.length <= 3
-									? 'aspect-square'
-									: 'h-40',
-							]"
-							class="object-cover w-full cursor-pointer"
-							:src="review.imageSources[index - 1]"
-							@click="handleGallery(index - 1)"
-						/>
-					</template>
-					<template v-else>
-						<img
-							v-for="index in 3"
-							:key="index"
-							class="object-cover w-full h-16 lg:h-40 cursor-pointer"
-							:src="review.imageSources[index - 1]"
-							@click="handleGallery(index - 1)"
-						/>
-						<div class="relative">
-							<img
-								class="object-cover w-full h-16 lg:h-40"
-								:src="review.imageSources[3]"
-							/>
-							<div
-								class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
-							/>
-							<button
-								class="absolute top-0 left-0 w-full h-full text-white font-semibold text-4xl"
-								@click="handleGallery(3)"
-							>
-								{{ `${review.imageSources.length - 4}+` }}
-							</button>
-						</div>
-					</template>
-				</div>
-
-				<div
-					:class="[
-						review.imageSources.length == 2
-							? gridForTwoImages
-							: review.imageSources.length >= 3
-							? gridForThreeImages
-							: '',
-					]"
-					class="md:hidden grid gap-1 mt-2"
-				>
-					<template v-if="review.imageSources.length <= 3">
-						<img
-							v-for="index in review.imageSources.length"
-							:key="index"
-							:class="[review.imageSources.length < 3 ? 'aspect-square' : '']"
-							class="object-cover w-full sm:h-40 cursor-pointer"
-							:src="review.imageSources[index - 1]"
-							@click="handleGallery(index - 1)"
-						/>
-					</template>
-					<template v-else>
-						<img
-							v-for="index in 2"
-							:key="index"
-							class="object-cover w-full h-20 sm:h-40 cursor-pointer"
-							:src="review.imageSources[index - 1]"
-							@click="handleGallery(index - 1)"
-						/>
-						<div class="relative">
-							<img
-								class="object-cover w-full h-20 sm:h-40"
-								:src="review.imageSources[2]"
-							/>
-							<div
-								class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
-							/>
-							<button
-								class="absolute top-0 left-0 w-full h-full text-white font-semibold text-4xl"
-								@click="handleGallery(2)"
-							>
-								{{ `${review.imageSources.length - 3}+` }}
-							</button>
-						</div>
-					</template>
-				</div>
-			</div>
->>>>>>> dev
 
 			<gallery
 				ref="galleryref"
@@ -386,7 +262,6 @@
 				</button>
 			</div>
 
-<<<<<<< HEAD
       <div class="mt-4">
         <div class="flex items-start">
           <template v-if="author">
@@ -438,38 +313,6 @@
             </button>
           </div>
         </div>
-=======
-			<div class="mt-4">
-				<div class="flex items-start">
-					<template v-if="author">
-						<guest-user-avatar
-							:name="author.name"
-							class="w-10 h-10 rounded-full"
-						></guest-user-avatar>
-					</template>
-					<template v-else>
-						<img :src="user.avatarSource" class="w-10 h-10 rounded-full" />
-					</template>
-					<div class="grow px-3">
-						<!-- todo: style placeholder -->
-						<textarea
-							id="discussArea"
-							v-model="content"
-							style="overflow: auto"
-							placeholder="Thảo luận"
-							class="resize-none no-scrollbar w-full px-2 py-1 text-gray-800 border rounded-md h-9"
-						/>
-					</div>
-					<div class="">
-						<button
-							class="text-sm font-semibold text-white bg-green-600 rounded-md px-4 py-1.5 h-9"
-							@click="addNewComment"
-						>
-							Đăng
-						</button>
-					</div>
-				</div>
->>>>>>> dev
 
 				<div v-if="review.comments.length > 0">
 					<div v-if="showAllComment == false">
@@ -499,7 +342,6 @@ import reviewComment from "./review-comment.vue";
 import GuestUserAvatar from "~/pages/components/guest-user-avatar.vue";
 import GuestUserAuthenticationModal from "~/pages/components/guest-user-authentication-modal.vue";
 export default {
-<<<<<<< HEAD
   components: { reviewComment, GuestUserAuthenticationModal, GuestUserAvatar },
   props: ["review", "index", "author"],
   data() {
@@ -700,219 +542,6 @@ export default {
       }
     },
   },
-=======
-	components: {
-		reviewComment,
-		GuestUserAuthenticationModal,
-		GuestUserAvatar,
-	},
-	props: ["review", "index", "author"],
-	data() {
-		return {
-			content: "",
-			showFullContent: false,
-			comments: this.review.comments.reverse(),
-			tempGallery: this.review.imageSources,
-			isShowingLogIn: false,
-			liked: this.review.isLiked,
-			showAllComment: this.isGather3Comments(),
-			contentOverflowing: false,
-			user: {
-				avatarSource:
-					"https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
-			},
-			shortContentClass: "shortcontent",
-			gridForTwoImages: "grid-cols-2",
-			gridForThreeImages: "grid-cols-3",
-		};
-	},
-	computed: {
-		first3Comments() {
-			const reversignComments = this.comments.slice(0, 3);
-			if (this.review.comments.length < 3) {
-				return null;
-			}
-			return reversignComments;
-		},
-	},
-	mounted() {
-		const e = this.$refs.reviewContent;
-		if (e.clientHeight - e.scrollHeight < 0) {
-			this.contentOverflowing = true;
-		} else {
-			this.contentOverflowing = false;
-		}
-		window.addEventListener("resize", this.getOverflow);
-	},
-	methods: {
-		formatPostDate(time) {
-			this.today = new Date();
-			const hi = new Date(time);
-			if (
-				this.today.getFullYear() === hi.getFullYear() &&
-				this.today.getMonth() === hi.getMonth()
-			) {
-				if (this.today.getDate() === hi.getDate() + 1) {
-					return "Hôm qua";
-				} else if (this.today.getDate() === hi.getDate()) {
-					if (this.today.getHours() - hi.getHours() > 0) {
-						return this.today.getHours() - hi.getHours() + "giờ trước";
-					} else if (this.today.getHours() === hi.getHours()) {
-						if (this.today.getMinutes() - hi.getMinutes() === 0) {
-							return "vừa xong";
-						}
-						return this.today.getMinutes() - hi.getMinutes() + "phút trước";
-					}
-				} else {
-					return this.formatReviewDateCreated(hi);
-				}
-			} else {
-				return this.formatReviewDateCreated(hi);
-			}
-		},
-		toggleLike() {
-			if (this.author === null) {
-				this.isShowingLogIn = true;
-				return;
-			}
-			this.liked = !this.liked;
-			const tempLiked = this.review.liked;
-			console.log(this.author);
-			if (this.liked) {
-				tempLiked.push(this.author.id);
-			} else {
-				for (const x in tempLiked) {
-					if (tempLiked[x] === this.author.id) {
-						tempLiked.splice(x, 1);
-						break;
-					}
-				}
-			}
-			this.$apollo.mutate({
-				mutation: gql`
-					mutation UpdateLikhgd($input: UpdateReviewInput!) {
-						updateReview(input: $input) {
-							__typename
-						}
-					}
-				`,
-				variables: {
-					input: {
-						reviewId: this.review.id,
-						liked: tempLiked,
-					},
-				},
-			});
-		},
-		isGather3Comments() {
-			if (this.review.comments.length > 3) {
-				return false;
-			} else {
-				return true;
-			}
-		},
-		sendAddCommentMutation(author) {
-			this.$apollo.mutate({
-				mutation: gql`
-					mutation CreateNewComment($input: CreateCommentInput!) {
-						createComment(input: $input) {
-							string
-						}
-					}
-				`,
-				variables: {
-					input: {
-						author: {
-							authorName: author.name,
-							authorId: author.id,
-						},
-						content: this.content,
-						discussionId: this.review.id,
-						type: "Review",
-					},
-				},
-			});
-		},
-		addNewComment() {
-			if (this.author === null) {
-				this.isShowingLogIn = true;
-				return;
-			}
-			if (this.content === "") {
-				return;
-			}
-			{
-				const tempComment = {
-					authorName: this.author.name,
-					authorAvatarSource:
-						"https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
-					dateCreated: new Date(),
-					content: this.content,
-				};
-				if (this.comments.length > 3) {
-					// eslint-disable-next-line vue/no-mutating-props
-					console.log("456");
-					this.comments.unshift(tempComment);
-				} else {
-					console.log("123");
-					this.comments.unshift(tempComment);
-					console.log(this.comments);
-					this.showAllComment = true;
-				}
-				this.sendAddCommentMutation(this.author);
-				this.content = "";
-				console.log(
-					"danh sach comment" +
-						this.comments[0].content +
-						"o bai review" +
-						this.review.content,
-				);
-			}
-		},
-		getOverflow() {
-			const e = this.$refs.reviewContent;
-			this.contentOverflowing = e.clientHeight - e.scrollHeight < 0;
-		},
-		setFocus() {
-			setTimeout(function () {
-				document.getElementById("discussArea").focus();
-			}, 0);
-		},
-		handleGallery(index) {
-			this.tempGallery = this.review.imageSources;
-			if (this.$refs.galleryref) {
-				this.tempGallery.forEach(element => {
-					let item = "";
-					if (element.includes(".mp4")) {
-						item = {
-							poster: "/images/video-poster.jpg",
-							thumb: "/images/video-thumbnail.jpg",
-							html: `<video class="lg-video-object lg-html5" controls preload="none"><source src="${element}" type="video/mp4">Your browser does not support HTML5 video</video>`,
-						};
-					} else {
-						item = {
-							src: element,
-							thumb: element,
-						};
-					}
-				});
-				this.$refs.galleryref.openGallery(index);
-			}
-		},
-		formatReviewDateCreated(dateCreated) {
-			const day = dateCreated.getDate();
-			// getMonth trả về tháng bắt đầu từ 0 đến 11
-			const month = dateCreated.getMonth() + 1;
-			const year = dateCreated.getFullYear();
-
-			return `${padZero(day)}/${padZero(month)}/${year}`;
-
-			function padZero(num) {
-				return num.toString().padStart(2, "0");
-			}
-		},
-	},
->>>>>>> dev
 };
 </script>
 

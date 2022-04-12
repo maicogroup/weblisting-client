@@ -582,7 +582,7 @@ export default {
 				this.tempFile.forEach(x => {
 					console.log("This file size is: " + x.size / 1024 / 1024 + "MiB");
 					if (x.size / 1024 / 1024 >= 10) {
-						this.multipartUpload(x, id, s3, imgCount);
+						this.multipartUpload(x, id, s3, imgCount, createReviewInput);
 					} else {
 						const uploadParams = {
 							Bucket: "weblisting",
@@ -612,7 +612,7 @@ export default {
 				});
 			}
 		},
-		multipartUpload(file, id, s3, imgCount) {
+		multipartUpload(file, id, s3, imgCount, createReviewInput) {
 			const partSize = 1024 * 1024 * 5; // Minimum 5MB per chunk
 			const multipartMap = {
 				Parts: [],
@@ -625,6 +625,10 @@ export default {
 				const buffer = new Uint8Array(e.target.result);
 				createParts(buffer, file, uploadPart);
 			};
+			var ref = this;
+			function callMutation() {
+				const callMutation = ref.sendMutationCreateReview(createReviewInput);
+			}
 
 			function createParts(buffer, file, callback) {
 				let partNum = 0;
@@ -708,30 +712,26 @@ export default {
 					};
 
 					console.log("Completing upload...");
-					completeMultipartUpload(s3, doneParams);
-				});
-			}
-
-			function completeMultipartUpload(s3, doneParams) {
-				s3.completeMultipartUpload(doneParams, function (err, data) {
-					if (err) {
-						console.log(
-							"An error occurred while completing the multipart upload",
-						);
-						console.log(err);
-					} else {
-						const delta = (new Date() - startTime) / 1000;
-						console.log("Completed upload in", delta, "seconds");
-						console.log("Final upload data:", data);
-						imgCount.count++;
-						console.log("Upload " + imgCount.count + this.tempFile.length);
-						// bi loi van up hinh duoc nhung van tra ve error
-						if (imgCount.count === this.tempFile.length) {
-							this.sendMutationCreateReview(createReviewInput);
-							this.tempFile = [];
-							this.tempSrc = [];
+					s3.completeMultipartUpload(doneParams, function (err, data) {
+						if (err) {
+							console.log(
+								"An error occurred while completing the multipart upload",
+							);
+							console.log(err);
+						} else {
+							const delta = (new Date() - startTime) / 1000;
+							console.log("Completed upload in", delta, "seconds");
+							console.log("Final upload data:", data);
+							imgCount.count++;
+							console.log("Upload " + imgCount.count + ref.tempFile.length);
+							// bi loi van up hinh duoc nhung van tra ve error
+							if (imgCount.count === ref.tempFile.length) {
+								callMutation();
+								ref.tempFile = [];
+								ref.tempSrc = [];
+							}
 						}
-					}
+					});
 				});
 			}
 		},

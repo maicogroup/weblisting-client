@@ -20,196 +20,244 @@
 				</div>
 			</div>
 
-      <p
-        id="review-content"
-        ref="reviewContent"
-        :class="[!showFullContent ? shortContentClass : '']"
-        class="text-sm text-stone-900 font-normal mt-1 leading-4 lg:leading-5"
-        v-html="review.content"
-      />
-      <span
-        v-if="contentOverflowing && !showFullContent"
-        id="show-more"
-        class="text-sm cursor-pointer text-gray-500"
-        @click="showFullContent = !showFullContent"
-        >Xem thêm</span
-      >
-      <span
-        v-if="contentOverflowing && showFullContent"
-        class="text-sm cursor-pointer text-gray-500"
-        @click="showFullContent = !showFullContent"
-        >Rút gọn</span
-      >
-      <div>
-        <div
-          :class="[
-            review.imageSources.length == 2
-              ? 'grid-cols-2'
-              : review.imageSources.length == 3
-              ? 'grid-cols-3'
-              : review.imageSources.length >= 4
-              ? 'grid-cols-4'
-              : '',
-          ]"
-          class="hidden md:grid gap-1 mt-2"
-        >
-          <template v-if="review.imageSources.length <= 4">
-            <div v-for="(index) in review.imageSources.length" :key="index">
-              <video controls v-if="review.imageSources[index-1].includes('mp4')"
-              :class="[
-                review.imageSources.length == 1
-                  ? 'aspect-auto'
-                  : review.imageSources.length <= 3
-                  ? 'aspect-square'
-                  : 'h-40',
-              ]"
-              class="object-cover w-full cursor-pointer"
-              @click="handleGallery(index - 1)"
-              >
-                <source :src="review.imageSources[index-1]" type="video/mp4">
-              </video>
-              <img
-                v-else
-                :class="[
-                  review.imageSources.length == 1
-                    ? 'aspect-auto'
-                    : review.imageSources.length <= 3
-                    ? 'aspect-square'
-                    : 'h-40',
-                ]"
-                class="object-cover w-full cursor-pointer"
-                :src="review.imageSources[index - 1]"
-                @click="handleGallery(index - 1)"
-              />
-            </div>
-          </template>
-          <template v-else>
-            <div v-for="index in 3" :key="index">
-              <video controls v-if="review.imageSources[index-1].includes('mp4')"
-              class="object-cover w-full h-16 lg:h-40 cursor-pointer"
-              @click="handleGallery(index - 1)"
-              >
-                <source :src="review.imageSources[index-1]" type="video/mp4">
-              </video>
-              <img
-              v-else
-              class="object-cover w-full h-16 lg:h-40 cursor-pointer"
-              :src="review.imageSources[index - 1]"
-              @click="handleGallery(index - 1)"
-            />
-            </div>
-            
-            <div class="relative">
-              <video controls v-if="review.imageSources[3].includes('mp4')"
-              class="object-cover w-full h-16 lg:h-40"
-              >
-                <source :src="review.imageSources[3]" type="video/mp4">
-              </video>
-              <img
-                v-else
-                class="object-cover w-full h-16 lg:h-40"
-                :src="review.imageSources[3]"
-              />
-              <div
-                class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
-              />
-              <button
-                class="
-                  absolute
-                  top-0
-                  left-0
-                  w-full
-                  h-full
-                  text-white
-                  font-semibold
-                  text-4xl
-                "
-                @click="handleGallery(3)"
-              >
-                {{ `+${review.imageSources.length - 4}` }}
-              </button>
-            </div>
-          </template>
-        </div>
+			<p
+				id="review-content"
+				ref="reviewContent"
+				:class="[!showFullContent ? shortContentClass : '']"
+				class="text-sm text-stone-900 font-normal mt-1 leading-4 lg:leading-5"
+				v-html="review.content"
+			/>
+			<span
+				v-if="contentOverflowing && !showFullContent"
+				id="show-more"
+				class="text-sm cursor-pointer text-gray-500"
+				@click="showFullContent = !showFullContent"
+				>Xem thêm</span
+			>
+			<span
+				v-if="contentOverflowing && showFullContent"
+				class="text-sm cursor-pointer text-gray-500"
+				@click="showFullContent = !showFullContent"
+				>Rút gọn</span
+			>
+			<div>
+				<div
+					:class="[
+						review.imageSources.length == 2
+							? 'grid-cols-2'
+							: review.imageSources.length == 3
+							? 'grid-cols-3'
+							: review.imageSources.length >= 4
+							? 'grid-cols-4'
+							: '',
+					]"
+					class="hidden md:grid gap-1 mt-2"
+				>
+					<template v-if="review.imageSources.length <= 4">
+						<div v-for="index in review.imageSources.length" :key="index">
+							<video
+								controls
+								v-if="review.imageSources[index - 1].includes('mp4')"
+								:class="[
+									review.imageSources.length == 1
+										? 'aspect-auto'
+										: review.imageSources.length <= 3
+										? 'aspect-square'
+										: 'h-40',
+								]"
+								class="object-cover w-full cursor-pointer"
+								@click="handleGallery(index - 1)"
+							>
+								<source
+									:src="review.imageSources[index - 1]"
+									type="video/mp4"
+								/>
+							</video>
+							<img
+								v-else
+								:class="[
+									review.imageSources.length == 1
+										? 'aspect-auto'
+										: review.imageSources.length <= 3
+										? 'aspect-square'
+										: 'h-40',
+								]"
+								class="object-cover w-full cursor-pointer"
+								:src="review.imageSources[index - 1]"
+								@click="handleGallery(index - 1)"
+							/>
+						</div>
+					</template>
+					<template v-else>
+						<div v-for="index in 3" :key="index">
+							<video
+								controls
+								v-if="review.imageSources[index - 1].includes('mp4')"
+								class="object-cover w-full h-16 lg:h-40 cursor-pointer"
+								@click="handleGallery(index - 1)"
+							>
+								<source
+									:src="review.imageSources[index - 1]"
+									type="video/mp4"
+								/>
+							</video>
+							<img
+								v-else
+								class="object-cover w-full h-16 lg:h-40 cursor-pointer"
+								:src="review.imageSources[index - 1]"
+								@click="handleGallery(index - 1)"
+							/>
+						</div>
 
-        <div
-          :class="[
-            review.imageSources.length == 2
-              ? gridForTwoImages
-              : review.imageSources.length >= 3
-              ? gridForThreeImages
-              : '',
-          ]"
-          class="md:hidden grid gap-1 mt-2"
-        >
-            
-          <template v-if="review.imageSources.length <= 3">
-            <div v-for="(index) in review.imageSources.length" :key="index">
-              <video controls v-if="review.imageSources[index-1].includes('mp4')"
-              
-              :class="[review.imageSources.length <= 3 ? 'aspect-square' : '']"
-              class="object-cover w-full sm:h-40 cursor-pointer"
-              @click="handleGallery(index - 1)"
-              >
-                <source :src="review.imageSources[index-1]" type="video/mp4">
-              </video>
-              <img
-                v-else
-                :class="[review.imageSources.length <= 3 ? 'aspect-square' : '']"
-                class="object-cover w-full sm:h-40 cursor-pointer"
-                :src="review.imageSources[index - 1]"
-                @click="handleGallery(index - 1)"
-              />
-            </div>
-          </template>
-          <template v-else>
-            <div v-for="(index) in 2" :key="index">
-              <video controls v-if="review.imageSources[index-1].includes('mp4')"
-              class="object-cover w-full h-20 sm:h-40 cursor-pointer aspect-square"
-              @click="handleGallery(index - 1)"
-              >
-                <source :src="review.imageSources[index-1]" type="video/mp4">
-              </video>
-              <img
-                v-else
-                class="object-cover w-full h-20 sm:h-40 cursor-pointer aspect-square"
-                :src="review.imageSources[index - 1]"
-                @click="handleGallery(index - 1)"
-              />
-            </div>
-            <div class="relative">
-              <video controls v-if="review.imageSources[2].includes('mp4')"
-                class="object-cover w-full h-20 sm:h-40 cursor-pointer aspect-square"
-                @click="handleGallery(2)"
-              >
-                <source :src="review.imageSources[2]" type="video/mp4">
-              </video>
-              <img v-else
-                class="object-cover w-full h-20 sm:h-40 aspect-square"
-                :src="review.imageSources[2]"
-              />
-              <div
-                class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
-              />
-              <button
-                class="
-                  absolute
-                  top-0
-                  left-0
-                  w-full
-                  h-full
-                  text-white
-                  font-semibold
-                  text-4xl
-                "
-                @click="handleGallery(2)"
-              >
-                {{ `+${review.imageSources.length - 3}` }}
-              </button>
-            </div>
-          </template>
-        </div>
-      </div>
+						<div class="relative">
+							<video
+								controls
+								v-if="review.imageSources[3].includes('mp4')"
+								class="object-cover w-full h-16 lg:h-40"
+							>
+								<source :src="review.imageSources[3]" type="video/mp4" />
+							</video>
+							<img
+								v-else
+								class="object-cover w-full h-16 lg:h-40"
+								:src="review.imageSources[3]"
+							/>
+							<div
+								class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
+							/>
+							<button
+								class="
+									absolute
+									top-0
+									left-0
+									w-full
+									h-full
+									text-white
+									font-semibold
+									text-4xl
+								"
+								@click="handleGallery(3)"
+							>
+								{{ `+${review.imageSources.length - 4}` }}
+							</button>
+						</div>
+					</template>
+				</div>
+
+				<div
+					:class="[
+						review.imageSources.length == 2
+							? gridForTwoImages
+							: review.imageSources.length >= 3
+							? gridForThreeImages
+							: '',
+					]"
+					class="md:hidden grid gap-1 mt-2"
+				>
+					<template v-if="review.imageSources.length <= 3">
+						<div v-for="index in review.imageSources.length" :key="index">
+							<video
+								controls
+								v-if="review.imageSources[index - 1].includes('mp4')"
+								:class="[
+									review.imageSources.length <= 3 ? 'aspect-square' : '',
+								]"
+								class="object-cover w-full sm:h-40 cursor-pointer"
+								@click="handleGallery(index - 1)"
+							>
+								<source
+									:src="review.imageSources[index - 1]"
+									type="video/mp4"
+								/>
+							</video>
+							<img
+								v-else
+								:class="[
+									review.imageSources.length <= 3 ? 'aspect-square' : '',
+								]"
+								class="object-cover w-full sm:h-40 cursor-pointer"
+								:src="review.imageSources[index - 1]"
+								@click="handleGallery(index - 1)"
+							/>
+						</div>
+					</template>
+					<template v-else>
+						<div v-for="index in 2" :key="index">
+							<video
+								controls
+								v-if="review.imageSources[index - 1].includes('mp4')"
+								class="
+									object-cover
+									w-full
+									h-20
+									sm:h-40
+									cursor-pointer
+									aspect-square
+								"
+								@click="handleGallery(index - 1)"
+							>
+								<source
+									:src="review.imageSources[index - 1]"
+									type="video/mp4"
+								/>
+							</video>
+							<img
+								v-else
+								class="
+									object-cover
+									w-full
+									h-20
+									sm:h-40
+									cursor-pointer
+									aspect-square
+								"
+								:src="review.imageSources[index - 1]"
+								@click="handleGallery(index - 1)"
+							/>
+						</div>
+						<div class="relative">
+							<video
+								controls
+								v-if="review.imageSources[2].includes('mp4')"
+								class="
+									object-cover
+									w-full
+									h-20
+									sm:h-40
+									cursor-pointer
+									aspect-square
+								"
+								@click="handleGallery(2)"
+							>
+								<source :src="review.imageSources[2]" type="video/mp4" />
+							</video>
+							<img
+								v-else
+								class="object-cover w-full h-20 sm:h-40 aspect-square"
+								:src="review.imageSources[2]"
+							/>
+							<div
+								class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
+							/>
+							<button
+								class="
+									absolute
+									top-0
+									left-0
+									w-full
+									h-full
+									text-white
+									font-semibold
+									text-4xl
+								"
+								@click="handleGallery(2)"
+							>
+								{{ `+${review.imageSources.length - 3}` }}
+							</button>
+						</div>
+					</template>
+				</div>
+			</div>
 
 			<gallery
 				ref="galleryref"
@@ -237,7 +285,8 @@
 							d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
 						/>
 					</svg>
-					<span class="font-normal">Thích</span>
+					<span class="font-normal">Thích</span
+					><span class="font-normal">{{ review.id }}</span>
 				</button>
 				<button
 					id="discussBtn"
@@ -262,57 +311,57 @@
 				</button>
 			</div>
 
-      <div class="mt-4">
-        <div class="flex items-start">
-          <template v-if="author">
-            <guest-user-avatar
-              :name="author.name"
-              class="w-10 h-10 rounded-full"
-            ></guest-user-avatar>
-          </template>
-          <template v-else>
-            <img :src="user.avatarSource" class="w-10 h-10 rounded-full" />
-          </template>
-          <div class="grow px-3">
-            <!-- todo: style placeholder -->
-            <textarea
-               @click="setFocus"
-              :disabled="isShowingLogIn"
-              ref="discussArea"
-              v-model="content"
-              style="overflow: auto"
-              placeholder="Thảo luận"
-              class="
-                resize-none
-                no-scrollbar
-                w-full
-                px-2
-                py-1
-                text-gray-800
-                border
-                rounded-md
-                h-9
-              "
-            />
-          </div>
-          <div class="">
-            <button
-              class="
-                text-sm
-                font-semibold
-                text-white
-                bg-green-600
-                rounded-md
-                px-4
-                py-1.5
-                h-9
-              "
-              @click="addNewComment"
-            >
-              Đăng
-            </button>
-          </div>
-        </div>
+			<div class="mt-4">
+				<div class="flex items-start">
+					<template v-if="author">
+						<guest-user-avatar
+							:name="author.name"
+							class="w-10 h-10 rounded-full"
+						></guest-user-avatar>
+					</template>
+					<template v-else>
+						<img :src="user.avatarSource" class="w-10 h-10 rounded-full" />
+					</template>
+					<div class="grow px-3">
+						<!-- todo: style placeholder -->
+						<textarea
+							@click="setFocus"
+							:disabled="isShowingLogIn"
+							ref="discussArea"
+							v-model="content"
+							style="overflow: auto"
+							placeholder="Thảo luận"
+							class="
+								resize-none
+								no-scrollbar
+								w-full
+								px-2
+								py-1
+								text-gray-800
+								border
+								rounded-md
+								h-9
+							"
+						/>
+					</div>
+					<div class="">
+						<button
+							class="
+								text-sm
+								font-semibold
+								text-white
+								bg-green-600
+								rounded-md
+								px-4
+								py-1.5
+								h-9
+							"
+							@click="addNewComment"
+						>
+							Đăng
+						</button>
+					</div>
+				</div>
 
 				<div v-if="review.comments.length > 0">
 					<div v-if="showAllComment == false">
@@ -327,7 +376,19 @@
 			</div>
 			<div
 				v-if="showAllComment == false"
-				class="bg-stone-200 border border-neutral-400 h-8 mt-4 rounded flex items-center justify-center cursor-pointer hover:bg-stone-300 text-sm text-stone-900"
+				class="
+					bg-stone-200
+					border border-neutral-400
+					h-8
+					mt-4
+					rounded
+					flex
+					items-center
+					justify-center
+					cursor-pointer
+					hover:bg-stone-300
+					text-sm text-stone-900
+				"
 				@click="showAllComment = true"
 			>
 				Hiển thị thêm bình luận
@@ -342,206 +403,212 @@ import reviewComment from "./review-comment.vue";
 import GuestUserAvatar from "~/pages/components/guest-user-avatar.vue";
 import GuestUserAuthenticationModal from "~/pages/components/guest-user-authentication-modal.vue";
 export default {
-  components: { reviewComment, GuestUserAuthenticationModal, GuestUserAvatar },
-  props: ["review", "index", "author"],
-  data() {
-    return {
-      content: "",
-      showFullContent: false,
-      comments: this.review.comments.reverse(),
-      tempGallery: this.review.imageSources,
-      isShowingLogIn: false,
-      liked: this.review.isLiked,
-      showAllComment: this.isGather3Comments(),
-      contentOverflowing: false,
-      user: {
-        avatarSource:
-          "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
-      },
-      shortContentClass: "shortcontent",
-      gridForTwoImages: "grid-cols-2",
-      gridForThreeImages: "grid-cols-3",
-    };
-  },
-  computed: {
-    first3Comments() {
-      const reversignComments = this.comments.slice(0, 3);
-      if (this.review.comments.length < 3) {
-        return null;
-      }
-      return reversignComments;
-    },
-  },
-  mounted() {
-    const e = this.$refs.reviewContent;
-    if (e.clientHeight - e.scrollHeight < 0) {
-      this.contentOverflowing = true;
-    } else {
-      this.contentOverflowing = false;
-    }
-    window.addEventListener("resize", this.getOverflow);
-  },
-  methods: {
-    formatPostDate(time) {
-      this.today = new Date();
-      const hi = new Date(time);
-      if (
-        this.today.getFullYear() === hi.getFullYear() &&
-        this.today.getMonth() === hi.getMonth()
-      ) {
-        if (this.today.getDate() === hi.getDate() + 1) {
-          return "Hôm qua";
-        } else if (this.today.getDate() === hi.getDate()) {
-          if (this.today.getHours() - hi.getHours() > 0) {
-            return this.today.getHours() - hi.getHours() + "giờ trước";
-          } else if (this.today.getHours() === hi.getHours()) {
-            if (this.today.getMinutes() - hi.getMinutes() === 0) {
-              return "vừa xong";
-            }
-            return this.today.getMinutes() - hi.getMinutes() + "phút trước";
-          }
-        } else {
-          return this.formatReviewDateCreated(hi);
-        }
-      } else {
-        return this.formatReviewDateCreated(hi);
-      }
-    },
-    toggleLike() {
-      if (this.author === null) {
-        this.isShowingLogIn = true;
-        return;
-      }
-      this.liked = !this.liked;
-      const tempLiked = this.review.liked;
-      if (this.liked) {
-        tempLiked.push(this.author.id);
-      } else {
-        for (const x in tempLiked) {
-          if (tempLiked[x] === this.author.id) {
-            tempLiked.splice(x, 1);
-            break;
-          }
-        }
-      }
-      this.$apollo.mutate({
-        mutation: gql`
-          mutation UpdateLikhgd($input: UpdateReviewInput!) {
-            updateReview(input: $input) {
-              __typename
-            }
-          }
-        `,
-        variables: {
-          input: {
-            reviewId: this.review.id,
-            liked: tempLiked,
-          },
-        },
-      });
-    },
-    isGather3Comments() {
-      if (this.review.comments.length > 3) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-    sendAddCommentMutation(author) {
-      this.$apollo.mutate({
-        mutation: gql`
-          mutation CreateNewComment($input: CreateCommentInput!) {
-            createComment(input: $input) {
-              string
-            }
-          }
-        `,
-        variables: {
-          input: {
-            author: {
-              authorName: author.name,
-              authorId: author.id,
-            },
-            content: this.content,
-            discussionId: this.review.id,
-            type: "Review",
-          },
-        },
-      });
-    },
-    addNewComment() {
-      if (this.author === null) {
-        this.isShowingLogIn = true;
-        return;
-      }
-      if (this.content === "") {
-        return;
-      }
-      {
-        const tempComment = {
-          authorName: this.author.name,
-          authorAvatarSource:
-            "https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
-          dateCreated: new Date(),
-          content: this.content,
-        };
-        if (this.comments.length > 3) {
-          // eslint-disable-next-line vue/no-mutating-props
-          this.comments.unshift(tempComment);
-        } else {
-          this.comments.unshift(tempComment);
-          this.showAllComment = true;
-        }
-        this.sendAddCommentMutation(this.author);
-        this.content = "";
-      }
-    },
-    getOverflow() {
-      const e = this.$refs.reviewContent;
-      this.contentOverflowing = e.clientHeight - e.scrollHeight < 0;
-    },
-    setFocus() {
-      const e = this.$refs.discussArea;
-      if (this.author === null) {
-        this.isShowingLogIn = true;
-        return;
-      }
-      setTimeout(function () {
-        e.focus();
-      }, 0);
-    },
-    handleGallery(index) {
-      this.tempGallery = this.review.imageSources;
-      if (this.$refs.galleryref) {
-        this.tempGallery.forEach((element) => {
-          let item = "";
-          if (element.includes(".mp4")) {
-            item = {
-              poster: "/images/video-poster.jpg",
-              thumb: "/images/video-thumbnail.jpg",
-              html: `<video class="lg-video-object lg-html5" controls preload="none"><source src="${element}" type="video/mp4">Your browser does not support HTML5 video</video>`,
-            };
-          } else {
-            item = {
-              src: element,
-              thumb: element,
-            };
-          }
-        });
-        this.$refs.galleryref.openGallery(index);
-      }
-    },
-    formatReviewDateCreated(dateCreated) {
-      const day = dateCreated.getDate();
-      // getMonth trả về tháng bắt đầu từ 0 đến 11
-      const month = dateCreated.getMonth() + 1;
-      const year = dateCreated.getFullYear();
-      return `${padZero(day)}/${padZero(month)}/${year}`;
-      function padZero(num) {
-        return num.toString().padStart(2, "0");
-      }
-    },
-  },
+	components: { reviewComment, GuestUserAuthenticationModal, GuestUserAvatar },
+	props: ["review", "index", "author"],
+	data() {
+		return {
+			content: "",
+			showFullContent: false,
+			comments: this.review.comments.reverse(),
+			tempGallery: this.review.imageSources,
+			isShowingLogIn: false,
+			liked: this.review.isLiked,
+			showAllComment: this.isGather3Comments(),
+			contentOverflowing: false,
+			user: {
+				avatarSource:
+					"https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
+			},
+			shortContentClass: "shortcontent",
+			gridForTwoImages: "grid-cols-2",
+			gridForThreeImages: "grid-cols-3",
+		};
+	},
+	computed: {
+		first3Comments() {
+			const reversignComments = this.comments.slice(0, 3);
+			if (this.review.comments.length < 3) {
+				return null;
+			}
+			return reversignComments;
+		},
+	},
+	mounted() {
+		const e = this.$refs.reviewContent;
+		if (e.clientHeight - e.scrollHeight < 0) {
+			this.contentOverflowing = true;
+		} else {
+			this.contentOverflowing = false;
+		}
+		window.addEventListener("resize", this.getOverflow);
+	},
+	methods: {
+		formatPostDate(time) {
+			this.today = new Date();
+			const hi = new Date(time);
+			if (
+				this.today.getFullYear() === hi.getFullYear() &&
+				this.today.getMonth() === hi.getMonth()
+			) {
+				if (this.today.getDate() === hi.getDate() + 1) {
+					return "Hôm qua";
+				} else if (this.today.getDate() === hi.getDate()) {
+					if (this.today.getHours() - hi.getHours() > 0) {
+						return this.today.getHours() - hi.getHours() + "giờ trước";
+					} else if (this.today.getHours() === hi.getHours()) {
+						if (this.today.getMinutes() - hi.getMinutes() === 0) {
+							return "vừa xong";
+						}
+						return this.today.getMinutes() - hi.getMinutes() + "phút trước";
+					}
+				} else {
+					return this.formatReviewDateCreated(hi);
+				}
+			} else {
+				return this.formatReviewDateCreated(hi);
+			}
+		},
+		toggleLike() {
+			console.log("1" + this.review.comments);
+			if (this.author === null) {
+				this.isShowingLogIn = true;
+				return;
+			}
+			console.log("2" + this.review.comments);
+			this.liked = !this.liked;
+			const tempLiked = [...this.review.liked];
+			if (this.liked) {
+				tempLiked.push(this.author.id);
+			} else {
+				for (const x in tempLiked) {
+					if (tempLiked[x] === this.author.id) {
+						tempLiked.splice(x, 1);
+						break;
+					}
+				}
+			}
+			console.log("3" + this.review.comments);
+			const tempComments = this.review.comments;
+			this.$apollo.mutate({
+				mutation: gql`
+					mutation UpdateLikhgd($input: UpdateReviewInput!) {
+						updateReview(input: $input) {
+							__typename
+						}
+					}
+				`,
+				variables: {
+					input: {
+						reviewId: this.review.id,
+						liked: tempLiked,
+					},
+				},
+			});
+
+			console.log("5" + this.review.comments);
+		},
+		isGather3Comments() {
+			if (this.review.comments.length > 3) {
+				return false;
+			} else {
+				return true;
+			}
+		},
+		sendAddCommentMutation(author) {
+			this.$apollo.mutate({
+				mutation: gql`
+					mutation CreateNewComment($input: CreateCommentInput!) {
+						createComment(input: $input) {
+							string
+						}
+					}
+				`,
+				variables: {
+					input: {
+						author: {
+							authorName: author.name,
+							authorId: author.id,
+						},
+						content: this.content,
+						discussionId: this.review.id,
+						type: "Review",
+					},
+				},
+			});
+		},
+		addNewComment() {
+			if (this.author === null) {
+				this.isShowingLogIn = true;
+				return;
+			}
+			if (this.content === "") {
+				return;
+			}
+			{
+				const tempComment = {
+					authorName: this.author.name,
+					authorAvatarSource:
+						"https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
+					dateCreated: new Date(),
+					content: this.content,
+				};
+				if (this.comments.length > 3) {
+					// eslint-disable-next-line vue/no-mutating-props
+					this.comments.unshift(tempComment);
+				} else {
+					this.comments.unshift(tempComment);
+					this.showAllComment = true;
+				}
+				this.sendAddCommentMutation(this.author);
+				this.content = "";
+			}
+		},
+		getOverflow() {
+			const e = this.$refs.reviewContent;
+			this.contentOverflowing = e.clientHeight - e.scrollHeight < 0;
+		},
+		setFocus() {
+			const e = this.$refs.discussArea;
+			if (this.author === null) {
+				this.isShowingLogIn = true;
+				return;
+			}
+			setTimeout(function () {
+				e.focus();
+			}, 0);
+		},
+		handleGallery(index) {
+			this.tempGallery = this.review.imageSources;
+			if (this.$refs.galleryref) {
+				this.tempGallery.forEach(element => {
+					let item = "";
+					if (element.includes(".mp4")) {
+						item = {
+							poster: "/images/video-poster.jpg",
+							thumb: "/images/video-thumbnail.jpg",
+							html: `<video class="lg-video-object lg-html5" controls preload="none"><source src="${element}" type="video/mp4">Your browser does not support HTML5 video</video>`,
+						};
+					} else {
+						item = {
+							src: element,
+							thumb: element,
+						};
+					}
+				});
+				this.$refs.galleryref.openGallery(index);
+			}
+		},
+		formatReviewDateCreated(dateCreated) {
+			const day = dateCreated.getDate();
+			// getMonth trả về tháng bắt đầu từ 0 đến 11
+			const month = dateCreated.getMonth() + 1;
+			const year = dateCreated.getFullYear();
+			return `${padZero(day)}/${padZero(month)}/${year}`;
+			function padZero(num) {
+				return num.toString().padStart(2, "0");
+			}
+		},
+	},
 };
 </script>
 

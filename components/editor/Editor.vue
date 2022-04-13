@@ -2,7 +2,7 @@
 	<div class="editorWrapper w-full">
 		<p class="mb-2 text-zinc-800 font-medium">{{ title }}</p>
 		<div class="rounded-md border border-neutral-300 pt-8 min-h-[500px]">
-			<div id="editorjs" class="w-full" />
+			<div id="editorjs" class="w-full" @keyup.delete="handleDelete" />
 		</div>
 	</div>
 </template>
@@ -49,6 +49,16 @@ export default {
 			} catch (error) {
 				console.log("Saving failed: ", error);
 			}
+		},
+		handleDelete() {
+			const inputs = document.getElementsByClassName("ce-paragraph");
+
+			if (
+				Array.from(inputs).reduce((prev, curr) => {
+					return prev || curr.innerHTML === "";
+				}, false)
+			)
+				this.editor.clear();
 		},
 	},
 };

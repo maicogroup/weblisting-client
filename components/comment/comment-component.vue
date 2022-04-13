@@ -1,5 +1,9 @@
 <template>
-	<div class="mb-4" v-if="!comment.commentParentId">
+	<div
+		style="word-break: break-word"
+		class="mb-4"
+		v-if="!comment.commentParentId || comment.commentParentId == ''"
+	>
 		<p class="text-base font-bold leading-4">
 			{{ comment.author.authorName }}
 		</p>

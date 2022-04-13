@@ -12,7 +12,7 @@
 			<Editor
 				:existingContent="editorContent"
 				@contentChanged="onChange"
-				v-if="editorContent.blocks.length > 0"
+				v-if="init"
 				title="Nội dung"
 				class="mb-5"
 			/>
@@ -24,7 +24,16 @@
 			>
 		</div>
 		<div
-			class="flex flex-col w-[22rem] mt-[214px] items-center rounded-md border border-neutral-300 h-fit p-5"
+			class="
+				flex flex-col
+				w-[22rem]
+				mt-[214px]
+				items-center
+				rounded-md
+				border border-neutral-300
+				h-fit
+				p-5
+			"
 		>
 			<h2 class="mb-7 text-stone-900 font-bold text-lg">Thiết lập bài viết</h2>
 			<textbox
@@ -118,7 +127,10 @@ export default {
 		blog: function () {
 			this.editorContent = JSON.parse(this.blog.content);
 			this.editorCount = this.editorContent.blocks.length;
-			console.log(this.editorContent);
+			if (!this.init) {
+				this.init = true;
+				this.isShowEditor = true;
+			}
 		},
 		"blog.pageInfor.title"() {
 			this.blog.pageInfor.slug = `${this.blog.pageInfor.title
@@ -144,6 +156,8 @@ export default {
 				},
 				content: "",
 				blogId: "",
+				isShowEditor: false,
+				init: false,
 			},
 		};
 	},
@@ -210,6 +224,15 @@ export default {
 			uploadImageToS3(file);
 		},
 		handleSubmit() {
+			if (this.editorContent.blocks.length <= 0) {
+				this.$toast.show("Dữ liệu không được để trống", {
+					type: "error",
+					theme: "bubble",
+					duration: 3000,
+					position: "top-right",
+				});
+				return;
+			}
 			if (
 				this.flag === false &&
 				this.editorContent.blocks.length === this.editorCount

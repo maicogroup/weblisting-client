@@ -163,8 +163,9 @@ export default {
 							phoneNumber: this.phoneNumber,
 						},
 					},
-					update: (store, { data: { CreateGuestUser } }) => {
-						id = CreateGuestUser.string;
+					update: (store, { data: { createGuestUser } }) => {
+						id = createGuestUser.string;
+						console.log({ id });
 					},
 				});
 

@@ -12,14 +12,6 @@
 			/>
 
 			<button-basic
-				v-if="buttonState === 'success'"
-				style="height: 50px"
-				class="self-end"
-			>
-				<NuxtLink :to="`/blog/${values.pageInfor.slug}`">Xem bài đăng</NuxtLink>
-			</button-basic>
-			<button-basic
-				v-else
 				:handleClick="handleSubmit"
 				style="height: 50px"
 				class="self-end"
@@ -34,7 +26,16 @@
 			>
 		</div>
 		<div
-			class="flex flex-col w-[22rem] mt-[214px] items-center rounded-md border border-neutral-300 h-fit p-5"
+			class="
+				flex flex-col
+				w-[22rem]
+				mt-[214px]
+				items-center
+				rounded-md
+				border border-neutral-300
+				h-fit
+				p-5
+			"
 		>
 			<h2 class="mb-7 text-stone-900 font-bold text-lg">Thiết lập bài viết</h2>
 			<textbox class="mb-7" title="Slug" v-model="values.pageInfor.slug" />
@@ -349,6 +350,10 @@ export default {
 							duration: 3000,
 							position: "top-right",
 						});
+						setTimeout(() => {
+							this.buttonState = "success";
+							this.$router.push(`/blog/${this.values.pageInfor.slug}`);
+						}, 2000);
 					})
 					.catch(error => {
 						this.$toast.show("Slug đã tồn tại", {
@@ -358,7 +363,6 @@ export default {
 							position: "top-right",
 						});
 					});
-				this.buttonState = "success";
 			}
 		},
 	},

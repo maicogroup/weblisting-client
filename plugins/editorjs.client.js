@@ -3,6 +3,7 @@ import Header from "@editorjs/header";
 import ImageTool from "@editorjs/image";
 import NestedList from "@editorjs/nested-list";
 import Hyperlink from "editorjs-hyperlink";
+import Paragraph from "editorjs-paragraph-with-alignment";
 
 
 export default (_, inject) => {
@@ -11,7 +12,6 @@ export default (_, inject) => {
     data: {},
     onChange: () => {},
   };
-  const Paragraph = require('editorjs-paragraph-with-alignment');
   const editor = (options = defaultOptions) => {
     return new EditorJS({
       placeholder: "Let`s write an awesome story!",
@@ -28,7 +28,10 @@ export default (_, inject) => {
           class: Paragraph,
           inlineToolbar: true,
         },
-        header: Header,
+        header: {
+          class: Header,
+          inlineToolbar: true,
+        },
         list: {
           class: NestedList,
           inlineToolbar: true,
@@ -92,6 +95,8 @@ export default (_, inject) => {
       },
     });
   };
+  
+  
 
   inject("editor", (options) => editor(options));
 };

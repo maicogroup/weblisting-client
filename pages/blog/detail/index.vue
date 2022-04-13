@@ -118,6 +118,7 @@ const getBlog = gql`
 			id
 			content
 			createdAt
+			thumbnail
 			pageInfor {
 				title
 				slug
@@ -150,14 +151,17 @@ const getComment = gql`
 			totalCount
 			items {
 				id
-				commentParentId
 				discussionId
+				commentParentId
 				content
 				createdAt
 				author {
 					authorName
 				}
 				replies {
+					id
+					discussionId
+					commentParentId
 					author {
 						authorName
 					}
@@ -411,6 +415,9 @@ export default {
 				return;
 			} else {
 				if (this.newReply != null) {
+					var date = new Date().toLocaleDateString("en-CA");
+					var parentId = commentParentId;
+					var cmt = comment;
 					this.$apollo.mutate({
 						mutation: createComment,
 						variables: {
@@ -425,6 +432,56 @@ export default {
 								},
 							},
 						},
+						update: (store, { data: { createComment } }) => {
+							const query = {
+								query: getComment,
+								variables: {
+									condition: {
+										discussionId: {
+											eq: this.blog.id,
+										},
+									},
+									order: [
+										{
+											createdAt: "DESC",
+										},
+									],
+									take: 10,
+									skip: 0,
+								},
+							};
+
+							const { commentsWithPagination } = store.readQuery(query);
+
+							var comment = {
+								id: createComment.string,
+								discussionId: this.blog.id,
+								content: cmt,
+								type: "Blog",
+								commentParentId: parentId,
+								author: {
+									authorId: this.guestUser.id,
+									authorName: this.guestUser.name,
+									__typename: "Author",
+								},
+								createdAt: date,
+								replies: [],
+								__typename: "CommentCollection",
+							};
+							var currentComment = commentsWithPagination.items.filter(
+								kc => kc.id == parentId,
+							);
+							console.log(currentComment);
+							commentsWithPagination.items
+								.filter(kc => kc.id == parentId)[0]
+								.replies.unshift(comment);
+							commentsWithPagination.totalCount += 1;
+							console.log(currentComment);
+							store.writeQuery({
+								...query,
+								data: { commentsWithPagination: commentsWithPagination },
+							});
+						},
 					});
 					this.$toast.show("Thêm thành công!", {
 						type: "success",
@@ -433,18 +490,6 @@ export default {
 						position: "top-right",
 					});
 					this.replyIsShow = false;
-					this.$apollo.queries.commentsWithPagination.refetch({
-						condition: {
-							discussionId: {
-								eq: this.blog.id,
-							},
-						},
-						order: [
-							{
-								createdAt: "DESC",
-							},
-						],
-					});
 				}
 			}
 		},

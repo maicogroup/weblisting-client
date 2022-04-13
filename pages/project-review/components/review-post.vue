@@ -57,7 +57,7 @@
                 md:max-h-full md:h-full
                 m-auto
               "
-              :mediaSource="review.imageSources[0]" @media-clicked="handleGallery(0)"
+              :mediaSource="review.imageSources[0]" classes="object-cover md:aspect-auto w-full md:w-auto cursor-pointer max-h-[55vh] md:max-h-full md:h-full m-auto" @media-clicked="handleGallery(0)"
             />
           </div>
         </div>
@@ -66,7 +66,7 @@
           class="grid grid-cols-2 gap-1 mt-2 h-[250px] md:h-[500px]"
         >
           <div v-for="imgId in 2" :key="imgId" class="h-[250px] md:h-[500px]">
-            <media class="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[imgId - 1]" @media-clicked="handleGallery(imgId - 1)"/>
+            <media class="object-cover w-full cursor-pointer h-full" classes="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[imgId - 1]" @media-clicked="handleGallery(imgId - 1)"/>
           </div>
         </div>
         <div
@@ -74,14 +74,14 @@
           class="grid h-[250px] md:h-[550px] grid-cols-[60%_40%] gap-1 mt-2"
         >
           <div class="h-[250px] md:h-[550px]">
-            <media class="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[0]" @media-clicked="handleGallery(0)"/>
+            <media class="object-cover w-full cursor-pointer h-full" classes="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[0]" @media-clicked="handleGallery(0)"/>
           </div>
           <div
             class="grid grid-cols-1 grid-rows-2 gap-1 h-[250px] md:h-[550px]"
           >
-            <media class="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[1]" @media-clicked="handleGallery(1)"/>
+            <media class="object-cover w-full cursor-pointer h-full" classes="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[1]" @media-clicked="handleGallery(1)"/>
             <div v-if="review.imageSources.length > 3" class="relative">
-              <media class="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[2]" @media-clicked="handleGallery(2)"/>
+              <media class="object-cover w-full cursor-pointer h-full" classes="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[2]" @media-clicked="handleGallery(2)"/>
               <div
                 class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
               />
@@ -102,7 +102,7 @@
               </button>
             </div>
             <div v-else>
-              <media class="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[2]" @media-clicked="handleGallery(2)"/>
+              <media class="object-cover w-full cursor-pointer h-full" classes="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[2]" @media-clicked="handleGallery(2)"/>
             </div>
           </div>
         </div>
@@ -318,12 +318,10 @@ export default {
 			}
 		},
 		toggleLike() {
-			console.log("1" + this.review.comments);
 			if (this.author === null) {
 				this.isShowingLogIn = true;
 				return;
 			}
-			console.log("2" + this.review.comments);
 			this.liked = !this.liked;
 			const tempLiked = [...this.review.liked];
 			if (this.liked) {
@@ -336,7 +334,6 @@ export default {
 					}
 				}
 			}
-			console.log("3" + this.review.comments);
 			const tempComments = this.review.comments;
 			this.$apollo.mutate({
 				mutation: gql`
@@ -353,8 +350,6 @@ export default {
 					},
 				},
 			});
-
-			console.log("5" + this.review.comments);
 		},
 		isGather3Comments() {
 			if (this.review.comments.length > 3) {
@@ -429,21 +424,6 @@ export default {
 		handleGallery(index) {
 			this.tempGallery = this.review.imageSources;
 			if (this.$refs.galleryref) {
-				this.tempGallery.forEach(element => {
-					let item = "";
-					if (element.includes(".mp4")) {
-						item = {
-							poster: "/images/video-poster.jpg",
-							thumb: "/images/video-thumbnail.jpg",
-							html: `<video class="lg-video-object lg-html5" controls preload="none"><source src="${element}" type="video/mp4">Your browser does not support HTML5 video</video>`,
-						};
-					} else {
-						item = {
-							src: element,
-							thumb: element,
-						};
-					}
-				});
 				this.$refs.galleryref.openGallery(index);
 			}
 		},

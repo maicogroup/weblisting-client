@@ -40,73 +40,82 @@
 				@click="showFullContent = !showFullContent"
 				>Rút gọn</span
 			>
-      <div class="mt-2">
-        <div
-          v-if="review.imageSources.length == 1"
-          class="max-h-[55vh] md:max-h-[600px] md:h-[600px] bg-black/80"
-        >
-          <div class="md:h-[600px]">
-            <media
-              class="
-                object-cover
-                md:aspect-auto
-                w-full
-                md:w-auto
-                cursor-pointer
-                max-h-[55vh]
-                md:max-h-full md:h-full
-                m-auto
-              "
-              :mediaSource="review.imageSources[0]" classes="object-cover md:aspect-auto w-full md:w-auto cursor-pointer max-h-[55vh] md:max-h-full md:h-full m-auto" @media-clicked="handleGallery(0)"
-            />
-          </div>
-        </div>
-        <div
-          v-if="review.imageSources.length == 2"
-          class="grid grid-cols-2 gap-1 mt-2 h-[250px] md:h-[500px]"
-        >
-          <div v-for="imgId in 2" :key="imgId" class="h-[250px] md:h-[500px]">
-            <media class="object-cover w-full cursor-pointer h-full" classes="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[imgId - 1]" @media-clicked="handleGallery(imgId - 1)"/>
-          </div>
-        </div>
-        <div
-          v-if="review.imageSources.length >= 3"
-          class="grid h-[250px] md:h-[550px] grid-cols-[60%_40%] gap-1 mt-2"
-        >
-          <div class="h-[250px] md:h-[550px]">
-            <media class="object-cover w-full cursor-pointer h-full" classes="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[0]" @media-clicked="handleGallery(0)"/>
-          </div>
-          <div
-            class="grid grid-cols-1 grid-rows-2 gap-1 h-[250px] md:h-[550px]"
-          >
-            <media class="object-cover w-full cursor-pointer h-full" classes="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[1]" @media-clicked="handleGallery(1)"/>
-            <div v-if="review.imageSources.length > 3" class="relative">
-              <media class="object-cover w-full cursor-pointer h-full" classes="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[2]" @media-clicked="handleGallery(2)"/>
-              <div
-                class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
-              />
-              <button
-                class="
-                  absolute
-                  top-0
-                  left-0
-                  w-full
-                  h-full
-                  text-white
-                  font-semibold
-                  text-4xl
-                "
-                @click="handleGallery(2)"
-              >
-                {{ `+${review.imageSources.length - 3}` }}
-              </button>
-            </div>
-            <div v-else>
-              <media class="object-cover w-full cursor-pointer h-full" classes="object-cover w-full cursor-pointer h-full" :mediaSource="review.imageSources[2]" @media-clicked="handleGallery(2)"/>
-            </div>
-          </div>
-        </div>
-      </div>
+			<div class="mt-2">
+				<div
+					v-if="review.imageSources.length == 1"
+					class="max-h-[55vh] md:max-h-[600px] md:min-h-[300px] bg-black/80"
+				>
+					<div class="">
+						<media
+							class="object-cover md:aspect-auto w-full md:w-auto cursor-pointer max-h-[55vh] md:min-h-[300px] md:max-h-[600px] m-auto"
+							:mediaSource="review.imageSources[0]"
+							classes="object-cover md:aspect-auto w-full md:w-auto cursor-pointer max-h-[55vh] md:min-h-[300px] md:max-h-[600px] m-auto"
+							@media-clicked="handleGallery(0)"
+						/>
+					</div>
+				</div>
+				<div
+					v-if="review.imageSources.length == 2"
+					class="grid grid-cols-2 gap-1 mt-2 h-[250px] md:h-[500px]"
+				>
+					<div v-for="imgId in 2" :key="imgId" class="h-[250px] md:h-[500px]">
+						<media
+							class="object-cover w-full cursor-pointer h-full"
+							classes="object-cover w-full cursor-pointer h-full"
+							:mediaSource="review.imageSources[imgId - 1]"
+							@media-clicked="handleGallery(imgId - 1)"
+						/>
+					</div>
+				</div>
+				<div
+					v-if="review.imageSources.length >= 3"
+					class="grid h-[250px] md:h-[550px] grid-cols-[60%_40%] gap-1 mt-2"
+				>
+					<div class="h-[250px] md:h-[550px]">
+						<media
+							class="object-cover w-full cursor-pointer h-full"
+							classes="object-cover w-full cursor-pointer h-full"
+							:mediaSource="review.imageSources[0]"
+							@media-clicked="handleGallery(0)"
+						/>
+					</div>
+					<div
+						class="grid grid-cols-1 grid-rows-2 gap-1 h-[250px] md:h-[550px]"
+					>
+						<media
+							class="object-cover w-full cursor-pointer h-full"
+							classes="object-cover w-full cursor-pointer h-full"
+							:mediaSource="review.imageSources[1]"
+							@media-clicked="handleGallery(1)"
+						/>
+						<div v-if="review.imageSources.length > 3" class="relative">
+							<media
+								class="object-cover w-full cursor-pointer h-full"
+								classes="object-cover w-full cursor-pointer h-full"
+								:mediaSource="review.imageSources[2]"
+								@media-clicked="handleGallery(2)"
+							/>
+							<div
+								class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
+							/>
+							<button
+								class="absolute top-0 left-0 w-full h-full text-white font-semibold text-4xl"
+								@click="handleGallery(2)"
+							>
+								{{ `+${review.imageSources.length - 3}` }}
+							</button>
+						</div>
+						<div v-else>
+							<media
+								class="object-cover w-full cursor-pointer h-full"
+								classes="object-cover w-full cursor-pointer h-full"
+								:mediaSource="review.imageSources[2]"
+								@media-clicked="handleGallery(2)"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
 			<gallery
 				ref="galleryref"
 				class="hidden"
@@ -179,39 +188,19 @@
 							v-model="content"
 							style="overflow: auto"
 							placeholder="Thảo luận"
-							class="
-								resize-none
-								no-scrollbar
-								w-full
-								px-2
-								py-1
-								text-gray-800
-								border
-								rounded-md
-								h-9
-							"
+							class="resize-none no-scrollbar w-full px-2 py-1 text-gray-800 border rounded-md h-9"
 						/>
 					</div>
 					<div class="">
 						<button
-							class="
-								text-sm
-								font-semibold
-								text-white
-								bg-green-600
-								rounded-md
-								px-4
-								py-1.5
-								h-9
-							"
+							class="text-sm font-semibold text-white bg-green-600 rounded-md px-4 py-1.5 h-9"
 							@click="addNewComment"
 						>
 							Đăng
 						</button>
 					</div>
 				</div>
-
-				<div v-if="review.comments.length > 0">
+				<div v-if="comments.length > 0">
 					<div v-if="showAllComment == false">
 						<div v-for="comment in first3Comments" :key="comment.id">
 							<review-comment :comment="comment" />
@@ -224,19 +213,7 @@
 			</div>
 			<div
 				v-if="showAllComment == false"
-				class="
-					bg-stone-200
-					border border-neutral-400
-					h-8
-					mt-4
-					rounded
-					flex
-					items-center
-					justify-center
-					cursor-pointer
-					hover:bg-stone-300
-					text-sm text-stone-900
-				"
+				class="bg-stone-200 border border-neutral-400 h-8 mt-4 rounded flex items-center justify-center cursor-pointer hover:bg-stone-300 text-sm text-stone-900"
 				@click="showAllComment = true"
 			>
 				Hiển thị thêm bình luận
@@ -252,7 +229,12 @@ import media from "./media.vue";
 import GuestUserAvatar from "~/pages/components/guest-user-avatar.vue";
 import GuestUserAuthenticationModal from "~/pages/components/guest-user-authentication-modal.vue";
 export default {
-	components: { reviewComment, GuestUserAuthenticationModal, GuestUserAvatar, media },
+	components: {
+		reviewComment,
+		GuestUserAuthenticationModal,
+		GuestUserAvatar,
+		media,
+	},
 	props: ["review", "index", "author"],
 	data() {
 		return {

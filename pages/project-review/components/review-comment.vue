@@ -19,8 +19,7 @@
 					style="word-break: break-word"
 					ref="commentContent"
 					class="text-sm font-normal leading-4 whitespace-pre-line"
-				>
-					{{ comment.content }}
+				>{{ comment.content }}
 				</p>
 				<span
 					v-show="contentOverflowing && !showFullContent"

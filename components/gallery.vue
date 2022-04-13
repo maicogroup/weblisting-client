@@ -22,7 +22,7 @@
 									item.includes('.mp4') ? imgUrl : item
 								}); filter: blur(100px); -webkit-filter: blur(100px);height: 400px;`"
 							></div>
-							<video v-if="item.includes('mp4')" :src="item" controls />
+							<video v-if="item.includes('mp4')" :src="item" controls/>
 							<img v-else :src="item" />
 						</li>
 					</ul>
@@ -77,9 +77,9 @@ export default {
 			var item = "";
 			if (element.includes(".mp4")) {
 				item = {
-					poster: "/images/video-poster.jpg",
+					// poster: "/images/video-poster.jpg",
 					thumb: "/images/video-thumbnail.jpg",
-					html: `<video class="lg-video-object lg-html5" controls preload="none"><source src="${element}" type="video/mp4">Your browser does not support HTML5 video</video>`,
+					html: `<video class="lg-video-object lg-html5" controls preload="none" autoplay><source src="${element}" type="video/mp4">Your browser does not support HTML5 video</video>`,
 				};
 			} else {
 				item = {

@@ -18,7 +18,7 @@
 					:class="[!showFullContent ? 'shortcontent' : '']"
 					style="word-break: break-word"
 					ref="commentContent"
-					class="text-sm font-normal leading-4"
+					class="text-sm font-normal leading-4 whitespace-pre-line"
 				>
 					{{ comment.content }}
 				</p>
@@ -134,5 +134,4 @@ function createComment() {
 }
 </script>
 
-<style>
-</style>
+<style></style>

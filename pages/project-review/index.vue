@@ -10,15 +10,7 @@
 			class="fixed top-0 left-0 h-full w-full z-30 bg-black bg-opacity-60"
 		>
 			<div
-				class="
-					relative
-					left-0
-					lg:left-[30%] lg:w-2/5
-					w-full
-					h-full
-					md:h-auto md:w-2/3 md:top-[10%] md:left-[16%] md:rounded-md md:border
-					bg-white
-				"
+				class="relative left-0 lg:left-[30%] lg:w-2/5 w-full h-full md:h-auto md:w-2/3 md:top-[10%] md:left-[16%] md:rounded-md md:border bg-white"
 			>
 				<div class="px-3 py-5 flex flex-row max-h-screen">
 					<div class="grow text-center text-xl font-bold">Tạo bài đánh giá</div>
@@ -39,15 +31,7 @@
 				<divider class="border-[#858585]" />
 
 				<div
-					class="
-						px-3
-						lg:px-8
-						py-3
-						grid
-						overflow-y-scroll
-						max-h-[90%]
-						md:max-h-[520px]
-					"
+					class="px-3 lg:px-8 py-3 grid overflow-y-scroll max-h-[90%] md:max-h-[520px]"
 				>
 					<div class="flex items-center mb-3 md:mb-5">
 						<guest-user-avatar
@@ -67,26 +51,10 @@
 						class="rounded"
 					/>
 					<div
-						class="
-							border-x border-b border-[#C4C4C4]
-							p-3
-							rounded-b-[5px]
-							grid-wrap-image
-						"
+						class="border-x border-b border-[#C4C4C4] p-3 rounded-b-[5px] grid-wrap-image"
 					>
 						<button
-							class="
-								h-20
-								w-20
-								inline
-								hover:bg-gray-100
-								border border-[#C4C4C4] border-dashed
-								bg-white
-								grid
-								justify-center
-								content-center
-								text-[10px] text-neutral-400
-							"
+							class="h-20 w-20 inline hover:bg-gray-100 border border-[#C4C4C4] border-dashed bg-white grid justify-center content-center text-[10px] text-neutral-400"
 							@click="uploadNewImage"
 						>
 							<svg
@@ -103,9 +71,13 @@
 							</svg>
 							<div class="w-14 leading-3 mt-1">Thêm ảnh hoặc video</div>
 						</button>
-						<div v-for="(item, index) in tempSrc" :key="index" class="relative">
+						<div
+							v-for="(item, index) in tempSrc"
+							:key="index"
+							class="relative z-20"
+						>
 							<button
-								class="absolute top-1 right-1 bg-black bg-opacity-50"
+								class="absolute top-1 right-1 bg-black bg-opacity-50 z-20"
 								@click="removeUploadedImage(index)"
 							>
 								<svg
@@ -140,18 +112,7 @@
 						</div>
 					</div>
 					<button
-						class="
-							bg-green-600
-							text-sm text-slate-50
-							h-8
-							md:h-12
-							w-full
-							md:w-1/3
-							rounded-md
-							font-bold
-							justify-self-end
-							mt-3
-						"
+						class="bg-green-600 text-sm text-slate-50 h-8 md:h-12 w-full md:w-1/3 rounded-md font-bold justify-self-end mt-3"
 						@click="createNewReview"
 					>
 						Đăng bài
@@ -171,19 +132,7 @@
 				<img :src="user.avatarSource" class="w-10 h-10 rounded-full" />
 			</template>
 			<div
-				class="
-					grow
-					ml-3
-					text-sm text-[#C4C4C4]
-					border
-					rounded-[5px]
-					h-11
-					cursor-pointer
-					hover:bg-gray-100
-					px-4
-					py-1
-					flex
-				"
+				class="grow ml-3 text-sm text-[#C4C4C4] border rounded-[5px] h-11 cursor-pointer hover:bg-gray-100 px-4 py-1 flex"
 				@click="toggleCreatePost"
 			>
 				<div class="self-center">Viết bài review</div>
@@ -492,7 +441,6 @@ export default {
 	},
 	methods: {
 		reviewGenerate() {
-			console.log("bi lua roi hahah");
 			if (this.reviewsWithPagination !== null && this.project !== null) {
 				const tempReviewArray = [];
 				if (this.reviewsWithPagination !== undefined) {
@@ -575,12 +523,10 @@ export default {
 			};
 
 			const imgCount = { count: 0 };
-			console.log(this.tempFile.length);
 			if (this.tempFile.length === 0) {
 				this.sendMutationCreateReview(createReviewInput);
 			} else {
 				this.tempFile.forEach(x => {
-					console.log("This file size is: " + x.size / 1024 / 1024 + "MiB");
 					if (x.size / 1024 / 1024 >= 10) {
 						this.multipartUpload(x, id, s3, imgCount, createReviewInput);
 					} else {
@@ -597,9 +543,7 @@ export default {
 							if (err) {
 								console.error("Upload lỗi:", err);
 							} else if (data) {
-								console.log("Upload thành công:", data);
 								imgCount.count++;
-								console.log("Upload " + imgCount.count + this.tempFile.length);
 								// bi loi van up hinh duoc nhung van tra ve error
 								if (imgCount.count === this.tempFile.length) {
 									this.sendMutationCreateReview(createReviewInput);
@@ -638,16 +582,12 @@ export default {
 					ContentType: file.type,
 					ACL: "public-read",
 				};
-				console.log({ multiPartParams });
-				console.log("file ne`: " + { file });
 				numPartsLeft = Math.ceil(buffer.length / partSize);
 				s3.createMultipartUpload(multiPartParams, function (mpErr, multipart) {
 					if (mpErr) {
-						console.log("Error!", mpErr);
 						console.dir(mpErr);
 						return;
 					}
-					console.log("Got upload ID", multipart.UploadId);
 
 					// Grab each partSize chunk and upload it as a part
 					for (
@@ -666,12 +606,6 @@ export default {
 						};
 
 						// Send a single part
-						console.log(
-							"Uploading part: #",
-							partParams.PartNumber,
-							", Range start:",
-							rangeStart,
-						);
 						if (callback) {
 							callback(s3, multipart, partParams);
 						}
@@ -684,12 +618,9 @@ export default {
 				const tryNum = _tryNum || 1;
 				s3.uploadPart(partParams, function (multiErr, mData) {
 					if (multiErr) {
-						console.log("multiErr, upload part error:", multiErr);
 						if (tryNum < maxUploadTries) {
-							console.log("Retrying upload of part: #", partParams.PartNumber);
 							uploadPart(s3, multipart, partParams, tryNum + 1);
 						} else {
-							console.log("Failed uploading part: #", partParams.PartNumber);
 						}
 						return;
 					}
@@ -698,8 +629,6 @@ export default {
 						ETag: mData.ETag,
 						PartNumber: Number(this.request.params.PartNumber),
 					};
-					console.log("Completed part", this.request.params.PartNumber);
-					console.log("mData", mData);
 					if (--numPartsLeft > 0) {
 						return;
 					} // complete only when all parts uploaded
@@ -711,19 +640,11 @@ export default {
 						UploadId: multipart.UploadId,
 					};
 
-					console.log("Completing upload...");
 					s3.completeMultipartUpload(doneParams, function (err, data) {
 						if (err) {
-							console.log(
-								"An error occurred while completing the multipart upload",
-							);
-							console.log(err);
 						} else {
 							const delta = (new Date() - startTime) / 1000;
-							console.log("Completed upload in", delta, "seconds");
-							console.log("Final upload data:", data);
 							imgCount.count++;
-							console.log("Upload " + imgCount.count + ref.tempFile.length);
 							// bi loi van up hinh duoc nhung van tra ve error
 							if (imgCount.count === ref.tempFile.length) {
 								callMutation();
@@ -759,7 +680,6 @@ export default {
 				})
 				.then(data => {
 					// Result
-					console.log(data);
 					this.$apollo.queries.reviewsWithPagination.refetch({
 						skip: 0,
 						take: 5,
@@ -805,7 +725,6 @@ export default {
 						id +
 						"/" +
 						x.name;
-					console.log("path" + tempObject.path);
 					tempObject.contentType = x.type;
 					createReviewInput.galleries.push(tempObject);
 				});
@@ -838,10 +757,13 @@ export default {
 			}
 			this.isLoading = true;
 
+			if (!this.reviewsWithPagination) {
+				this.isLoading = false;
+				return;
+			}
 			if (this.reviews.length == this.reviewsWithPagination.totalCount) {
 				return;
 			}
-
 			if (this.skip + 5 <= this.reviewsWithPagination.totalCount) {
 				this.skip += 5;
 			} else {

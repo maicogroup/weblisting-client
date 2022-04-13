@@ -40,225 +40,82 @@
 				@click="showFullContent = !showFullContent"
 				>Rút gọn</span
 			>
-			<div>
+			<div class="mt-2">
 				<div
-					:class="[
-						review.imageSources.length == 2
-							? 'grid-cols-2'
-							: review.imageSources.length == 3
-							? 'grid-cols-3'
-							: review.imageSources.length >= 4
-							? 'grid-cols-4'
-							: '',
-					]"
-					class="hidden md:grid gap-1 mt-2"
+					v-if="review.imageSources.length == 1"
+					class="max-h-[55vh] md:max-h-[600px] md:min-h-[300px] bg-black/80"
 				>
-					<template v-if="review.imageSources.length <= 4">
-						<div v-for="index in review.imageSources.length" :key="index">
-							<video
-								controls
-								v-if="review.imageSources[index - 1].includes('mp4')"
-								:class="[
-									review.imageSources.length == 1
-										? 'aspect-auto'
-										: review.imageSources.length <= 3
-										? 'aspect-square'
-										: 'h-40',
-								]"
-								class="object-cover w-full cursor-pointer"
-								@click="handleGallery(index - 1)"
-							>
-								<source
-									:src="review.imageSources[index - 1]"
-									type="video/mp4"
-								/>
-							</video>
-							<img
-								v-else
-								:class="[
-									review.imageSources.length == 1
-										? 'aspect-auto'
-										: review.imageSources.length <= 3
-										? 'aspect-square'
-										: 'h-40',
-								]"
-								class="object-cover w-full cursor-pointer"
-								:src="review.imageSources[index - 1]"
-								@click="handleGallery(index - 1)"
-							/>
-						</div>
-					</template>
-					<template v-else>
-						<div v-for="index in 3" :key="index">
-							<video
-								controls
-								v-if="review.imageSources[index - 1].includes('mp4')"
-								class="object-cover w-full h-16 lg:h-40 cursor-pointer"
-								@click="handleGallery(index - 1)"
-							>
-								<source
-									:src="review.imageSources[index - 1]"
-									type="video/mp4"
-								/>
-							</video>
-							<img
-								v-else
-								class="object-cover w-full h-16 lg:h-40 cursor-pointer"
-								:src="review.imageSources[index - 1]"
-								@click="handleGallery(index - 1)"
-							/>
-						</div>
-
-						<div class="relative">
-							<video
-								controls
-								v-if="review.imageSources[3].includes('mp4')"
-								class="object-cover w-full h-16 lg:h-40"
-							>
-								<source :src="review.imageSources[3]" type="video/mp4" />
-							</video>
-							<img
-								v-else
-								class="object-cover w-full h-16 lg:h-40"
-								:src="review.imageSources[3]"
-							/>
-							<div
-								class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
-							/>
-							<button
-								class="
-									absolute
-									top-0
-									left-0
-									w-full
-									h-full
-									text-white
-									font-semibold
-									text-4xl
-								"
-								@click="handleGallery(3)"
-							>
-								{{ `+${review.imageSources.length - 4}` }}
-							</button>
-						</div>
-					</template>
+					<div class="">
+						<media
+							class="object-cover md:aspect-auto w-full md:w-auto cursor-pointer max-h-[55vh] md:min-h-[300px] md:max-h-[600px] m-auto"
+							:mediaSource="review.imageSources[0]"
+							classes="object-cover md:aspect-auto w-full md:w-auto cursor-pointer max-h-[55vh] md:min-h-[300px] md:max-h-[600px] m-auto"
+							@media-clicked="handleGallery(0)"
+						/>
+					</div>
 				</div>
-
 				<div
-					:class="[
-						review.imageSources.length == 2
-							? gridForTwoImages
-							: review.imageSources.length >= 3
-							? gridForThreeImages
-							: '',
-					]"
-					class="md:hidden grid gap-1 mt-2"
+					v-if="review.imageSources.length == 2"
+					class="grid grid-cols-2 gap-1 mt-2 h-[250px] md:h-[500px]"
 				>
-					<template v-if="review.imageSources.length <= 3">
-						<div v-for="index in review.imageSources.length" :key="index">
-							<video
-								controls
-								v-if="review.imageSources[index - 1].includes('mp4')"
-								:class="[
-									review.imageSources.length <= 3 ? 'aspect-square' : '',
-								]"
-								class="object-cover w-full sm:h-40 cursor-pointer"
-								@click="handleGallery(index - 1)"
-							>
-								<source
-									:src="review.imageSources[index - 1]"
-									type="video/mp4"
-								/>
-							</video>
-							<img
-								v-else
-								:class="[
-									review.imageSources.length <= 3 ? 'aspect-square' : '',
-								]"
-								class="object-cover w-full sm:h-40 cursor-pointer"
-								:src="review.imageSources[index - 1]"
-								@click="handleGallery(index - 1)"
-							/>
-						</div>
-					</template>
-					<template v-else>
-						<div v-for="index in 2" :key="index">
-							<video
-								controls
-								v-if="review.imageSources[index - 1].includes('mp4')"
-								class="
-									object-cover
-									w-full
-									h-20
-									sm:h-40
-									cursor-pointer
-									aspect-square
-								"
-								@click="handleGallery(index - 1)"
-							>
-								<source
-									:src="review.imageSources[index - 1]"
-									type="video/mp4"
-								/>
-							</video>
-							<img
-								v-else
-								class="
-									object-cover
-									w-full
-									h-20
-									sm:h-40
-									cursor-pointer
-									aspect-square
-								"
-								:src="review.imageSources[index - 1]"
-								@click="handleGallery(index - 1)"
-							/>
-						</div>
-						<div class="relative">
-							<video
-								controls
-								v-if="review.imageSources[2].includes('mp4')"
-								class="
-									object-cover
-									w-full
-									h-20
-									sm:h-40
-									cursor-pointer
-									aspect-square
-								"
-								@click="handleGallery(2)"
-							>
-								<source :src="review.imageSources[2]" type="video/mp4" />
-							</video>
-							<img
-								v-else
-								class="object-cover w-full h-20 sm:h-40 aspect-square"
-								:src="review.imageSources[2]"
+					<div v-for="imgId in 2" :key="imgId" class="h-[250px] md:h-[500px]">
+						<media
+							class="object-cover w-full cursor-pointer h-full"
+							classes="object-cover w-full cursor-pointer h-full"
+							:mediaSource="review.imageSources[imgId - 1]"
+							@media-clicked="handleGallery(imgId - 1)"
+						/>
+					</div>
+				</div>
+				<div
+					v-if="review.imageSources.length >= 3"
+					class="grid h-[250px] md:h-[550px] grid-cols-[60%_40%] gap-1 mt-2"
+				>
+					<div class="h-[250px] md:h-[550px]">
+						<media
+							class="object-cover w-full cursor-pointer h-full"
+							classes="object-cover w-full cursor-pointer h-full"
+							:mediaSource="review.imageSources[0]"
+							@media-clicked="handleGallery(0)"
+						/>
+					</div>
+					<div
+						class="grid grid-cols-1 grid-rows-2 gap-1 h-[250px] md:h-[550px]"
+					>
+						<media
+							class="object-cover w-full cursor-pointer h-full"
+							classes="object-cover w-full cursor-pointer h-full"
+							:mediaSource="review.imageSources[1]"
+							@media-clicked="handleGallery(1)"
+						/>
+						<div v-if="review.imageSources.length > 3" class="relative">
+							<media
+								class="object-cover w-full cursor-pointer h-full"
+								classes="object-cover w-full cursor-pointer h-full"
+								:mediaSource="review.imageSources[2]"
+								@media-clicked="handleGallery(2)"
 							/>
 							<div
 								class="absolute top-0 left-0 w-full h-full bg-black opacity-40"
 							/>
 							<button
-								class="
-									absolute
-									top-0
-									left-0
-									w-full
-									h-full
-									text-white
-									font-semibold
-									text-4xl
-								"
+								class="absolute top-0 left-0 w-full h-full text-white font-semibold text-4xl"
 								@click="handleGallery(2)"
 							>
 								{{ `+${review.imageSources.length - 3}` }}
 							</button>
 						</div>
-					</template>
+						<div v-else>
+							<media
+								class="object-cover w-full cursor-pointer h-full"
+								classes="object-cover w-full cursor-pointer h-full"
+								:mediaSource="review.imageSources[2]"
+								@media-clicked="handleGallery(2)"
+							/>
+						</div>
+					</div>
 				</div>
 			</div>
-
 			<gallery
 				ref="galleryref"
 				class="hidden"
@@ -330,39 +187,19 @@
 							v-model="content"
 							style="overflow: auto"
 							placeholder="Thảo luận"
-							class="
-								resize-none
-								no-scrollbar
-								w-full
-								px-2
-								py-1
-								text-gray-800
-								border
-								rounded-md
-								h-9
-							"
+							class="resize-none no-scrollbar w-full px-2 py-1 text-gray-800 border rounded-md h-9"
 						/>
 					</div>
 					<div class="">
 						<button
-							class="
-								text-sm
-								font-semibold
-								text-white
-								bg-green-600
-								rounded-md
-								px-4
-								py-1.5
-								h-9
-							"
+							class="text-sm font-semibold text-white bg-green-600 rounded-md px-4 py-1.5 h-9"
 							@click="addNewComment"
 						>
 							Đăng
 						</button>
 					</div>
 				</div>
-
-				<div v-if="review.comments.length > 0">
+				<div v-if="comments.length > 0">
 					<div v-if="showAllComment == false">
 						<div v-for="comment in first3Comments" :key="comment.id">
 							<review-comment :comment="comment" />
@@ -375,19 +212,7 @@
 			</div>
 			<div
 				v-if="showAllComment == false"
-				class="
-					bg-stone-200
-					border border-neutral-400
-					h-8
-					mt-4
-					rounded
-					flex
-					items-center
-					justify-center
-					cursor-pointer
-					hover:bg-stone-300
-					text-sm text-stone-900
-				"
+				class="bg-stone-200 border border-neutral-400 h-8 mt-4 rounded flex items-center justify-center cursor-pointer hover:bg-stone-300 text-sm text-stone-900"
 				@click="showAllComment = true"
 			>
 				Hiển thị thêm bình luận
@@ -399,10 +224,16 @@
 <script>
 import { gql } from "graphql-tag";
 import reviewComment from "./review-comment.vue";
+import media from "./media.vue";
 import GuestUserAvatar from "~/pages/components/guest-user-avatar.vue";
 import GuestUserAuthenticationModal from "~/pages/components/guest-user-authentication-modal.vue";
 export default {
-	components: { reviewComment, GuestUserAuthenticationModal, GuestUserAvatar },
+	components: {
+		reviewComment,
+		GuestUserAuthenticationModal,
+		GuestUserAvatar,
+		media,
+	},
 	props: ["review", "index", "author"],
 	data() {
 		return {
@@ -468,12 +299,10 @@ export default {
 			}
 		},
 		toggleLike() {
-			console.log("1" + this.review.comments);
 			if (this.author === null) {
 				this.isShowingLogIn = true;
 				return;
 			}
-			console.log("2" + this.review.comments);
 			this.liked = !this.liked;
 			const tempLiked = [...this.review.liked];
 			if (this.liked) {
@@ -486,7 +315,6 @@ export default {
 					}
 				}
 			}
-			console.log("3" + this.review.comments);
 			const tempComments = this.review.comments;
 			this.$apollo.mutate({
 				mutation: gql`
@@ -503,8 +331,6 @@ export default {
 					},
 				},
 			});
-
-			console.log("5" + this.review.comments);
 		},
 		isGather3Comments() {
 			if (this.review.comments.length > 3) {
@@ -579,21 +405,6 @@ export default {
 		handleGallery(index) {
 			this.tempGallery = this.review.imageSources;
 			if (this.$refs.galleryref) {
-				this.tempGallery.forEach(element => {
-					let item = "";
-					if (element.includes(".mp4")) {
-						item = {
-							poster: "/images/video-poster.jpg",
-							thumb: "/images/video-thumbnail.jpg",
-							html: `<video class="lg-video-object lg-html5" controls preload="none"><source src="${element}" type="video/mp4">Your browser does not support HTML5 video</video>`,
-						};
-					} else {
-						item = {
-							src: element,
-							thumb: element,
-						};
-					}
-				});
 				this.$refs.galleryref.openGallery(index);
 			}
 		},

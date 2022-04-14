@@ -392,7 +392,7 @@ export default {
         },
         {
           property: 'og:image',
-          content: this.project?.images[0]
+          content: 'https://weblisting.ss-hn-1.bizflycloud.vn/' + this.project?.images[0]
         }
       ]
     };

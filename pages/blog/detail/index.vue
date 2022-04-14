@@ -472,7 +472,7 @@ export default {
 							console.log(currentComment);
 							commentsWithPagination.items
 								.filter(kc => kc.id == parentId)[0]
-								.replies.unshift(comment);
+								.replies.push(comment);
 							commentsWithPagination.totalCount += 1;
 							console.log(currentComment);
 							store.writeQuery({

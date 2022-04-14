@@ -35,6 +35,14 @@
     <button
       class="copy-link text-[#A3A3A3] hover:text-gray-600"
       :data-clipboard-text="shareUrl"
+      @click="() => {
+        $toast.show('Copy thành công!', {
+          type: 'success',
+          theme: 'bubble',
+          duration: 3000,
+          position: 'top-right'
+        })
+      }"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -1,71 +1,71 @@
 <template>
-  <div class="flex flex-row w-full justify-center mb-72">
-    <div class="flex flex-col items-center w-[52.25rem] mr-2">
-      <h1 class="text-3xl font-bold mb-10">Chỉnh sửa bài viết</h1>
-      <textbox
-        class="mb-6"
-        title="Tiêu đề"
-        v-model="blog.pageInfor.title"
-        :handleChange="() => (flag = true)"
-      />
-      <h2 class="mb-2 text-zinc-800 font-medium"></h2>
-      <Editor
-        :existingContent="editorContent"
-        @contentChanged="onChange"
-        v-if="editorContent.blocks.length > 0"
-        title="Nội dung"
-        class="mb-5"
-      />
-      <button-basic
-        :handleClick="handleSubmit"
-        style="height: 50px"
-        class="self-end"
-        >Cập nhật</button-basic
-      >
-    </div>
-    <div
-      class="
-        flex flex-col
-        w-[22rem]
-        mt-[214px]
-        items-center
-        rounded-md
-        border border-neutral-300
-        h-fit
-        p-5
-      "
-    >
-      <h2 class="mb-7 text-stone-900 font-bold text-lg">Thiết lập bài viết</h2>
-      <textbox
-        @onchange="() => (flag = true)"
-        class="mb-7"
-        title="Slug"
-        v-model="blog.pageInfor.slug"
-        :handleChange="() => (flag = true)"
-      />
-      <textbox
-        @onchange="() => (flag = true)"
-        title="Meta Description"
-        v-model="blog.pageInfor.metaDescription"
-        type="textarea"
-        :handleChange="() => (flag = true)"
-        class="mb-7"
-      />
-      <div
-        v-if="
-          typeof blog.thumbnail != 'object' &&
-          blog.thumbnail.includes('weblisting')
-        "
-      >
-        <p class="mb-2 text-zinc-800 font-medium">Thumbnail</p>
-        <img class="mb-7" :src="blog.thumbnail" />
-      </div>
-      <preview-thumbnail
-        title="Chỉnh sửa ảnh Thumbnail"
-        :setThumbnail="setThumbnail"
-      />
-    </div>
-  </div>
+	<div class="flex flex-row w-full justify-center mb-72">
+		<div class="flex flex-col items-center w-[52.25rem] mr-2">
+			<h1 class="text-3xl font-bold mb-10">Chỉnh sửa bài viết</h1>
+			<textbox
+				class="mb-6"
+				title="Tiêu đề"
+				v-model="blog.pageInfor.title"
+				:handleChange="() => (flag = true)"
+			/>
+			<h2 class="mb-2 text-zinc-800 font-medium"></h2>
+			<Editor
+				:existingContent="editorContent"
+				@contentChanged="onChange"
+				v-if="init"
+				title="Nội dung"
+				class="mb-5"
+			/>
+			<button-basic
+				:handleClick="handleSubmit"
+				style="height: 50px"
+				class="self-end"
+				>Cập nhật</button-basic
+			>
+		</div>
+		<div
+			class="
+				flex flex-col
+				w-[22rem]
+				mt-[214px]
+				items-center
+				rounded-md
+				border border-neutral-300
+				h-fit
+				p-5
+			"
+		>
+			<h2 class="mb-7 text-stone-900 font-bold text-lg">Thiết lập bài viết</h2>
+			<textbox
+				@onchange="() => (flag = true)"
+				class="mb-7"
+				title="Slug"
+				v-model="blog.pageInfor.slug"
+				:handleChange="() => (flag = true)"
+			/>
+			<textbox
+				@onchange="() => (flag = true)"
+				title="Meta Description"
+				v-model="blog.pageInfor.metaDescription"
+				type="textarea"
+				:handleChange="() => (flag = true)"
+				class="mb-7"
+			/>
+			<div
+				v-if="
+					typeof blog.thumbnail != 'object' &&
+					blog.thumbnail.includes('weblisting')
+				"
+			>
+				<p class="mb-2 text-zinc-800 font-medium">Thumbnail</p>
+				<img class="mb-7" :src="blog.thumbnail" />
+			</div>
+			<preview-thumbnail
+				title="Chỉnh sửa ảnh Thumbnail"
+				:setThumbnail="setThumbnail"
+			/>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -104,89 +104,95 @@ const updateBlog = gql`
 `;
 
 export default {
-  components: { Editor, Textbox, ButtonBasic, PreviewThumbnail },
-  apollo: {
-    blog: {
-      query() {
-        return getBlog;
-      },
-      variables() {
-        return {
-          condition: {
-            pageInfor: {
-              slug: {
-                eq: this.$route.params.slug,
-              },
-            },
-          },
-        };
-      },
-    },
-  },
-  watch: {
-    blog: function () {
-      this.editorContent = JSON.parse(this.blog.content);
-      this.editorCount = this.editorContent.blocks.length;
-      console.log(this.editorContent);
-    },
-    "blog.pageInfor.title"() {
-      this.blog.pageInfor.slug = `${this.blog.pageInfor.title
-        .toLowerCase()
-        .normalize("NFD")
-        .replaceAll("đ", "d")
-        .replace(/[\u0300-\u036f]|[^\w\s]/g, "")
-        .split(" ")
-        .join("-")}`;
-    },
-  },
+	components: { Editor, Textbox, ButtonBasic, PreviewThumbnail },
+	apollo: {
+		blog: {
+			query() {
+				return getBlog;
+			},
+			variables() {
+				return {
+					condition: {
+						pageInfor: {
+							slug: {
+								eq: this.$route.params.slug,
+							},
+						},
+					},
+				};
+			},
+		},
+	},
+	watch: {
+		blog: function () {
+			this.editorContent = JSON.parse(this.blog.content);
+			this.editorCount = this.editorContent.blocks.length;
+			if (!this.init) {
+				this.init = true;
+				this.isShowEditor = true;
+			}
+		},
+		"blog.pageInfor.title"() {
+			this.blog.pageInfor.slug = `${this.blog.pageInfor.title
+				.toLowerCase()
+				.normalize("NFD")
+				.replaceAll("đ", "d")
+				.replace(/[\u0300-\u036f]|[^\w\s]/g, "")
+				.split(" ")
+				.join("-")}`;
+		},
+	},
 
-  data() {
-    return {
-      editorCount: 0,
-      flag: false,
-      editorContent: { time: "", blocks: [], version: "2.22.2" },
-      values: {
-        pageInfor: {
-          slug: "",
-          title: "",
-          metaDescription: "",
-        },
-        content: "",
-        blogId: "",
-      },
-    };
-  },
-  head() {
-    return {
-      title: "Chỉnh sửa blog",
-      script: [
-        {
-          once: true,
-          hid: "s3-sdk",
-          src: "https://sdk.amazonaws.com/js/aws-sdk-2.1095.0.min.js",
-          body: true,
-        },
-      ],
-    };
-  },
-  methods: {
-    onChange(data) {
-      this.editorContent = data;
-    },
-    setThumbnail(file) {
-      this.blog.thumbnail = file;
+	data() {
+		return {
+			editorCount: 0,
+			flag: false,
+			editorContent: { time: "", blocks: [], version: "2.22.2" },
+			values: {
+				pageInfor: {
+					slug: "",
+					title: "",
+					metaDescription: "",
+				},
+				content: "",
+				blogId: "",
+			},
+      isShowEditor: false,
+      init: false,
+		};
+	},
+	head() {
+		return {
+			title: "Chỉnh sửa blog",
+			script: [
+				{
+					once: true,
+					hid: "s3-sdk",
+					src: "https://sdk.amazonaws.com/js/aws-sdk-2.1095.0.min.js",
+					body: true,
+				},
+			],
+		};
+	},
+	methods: {
+		onChange(data) {
+			this.editorContent = data;
       this.flag = true;
-    },
-    UploadThumbnail(file) {
-      AWS.config.update({
-        accessKeyId: "8EL21GNHMRNZYW8488OV",
-        secretAccessKey: "xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD",
-        region: "hn",
-        endpoint: "https://hn.ss.bfcplatform.vn",
-        apiVersions: {
-          s3: "2006-03-01",
-        },
-      });
+		},
+		setThumbnail(file) {
+			this.blog.thumbnail = file;
+			this.flag = true;
+		},
+		UploadThumbnail(file) {
+			AWS.config.update({
+				accessKeyId: "8EL21GNHMRNZYW8488OV",
+				secretAccessKey: "xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD",
+				region: "hn",
+				endpoint: "https://hn.ss.bfcplatform.vn",
+				apiVersions: {
+					s3: "2006-03-01",
+				},
+			});
 
       const uploadImageToS3 = (file) => {
         const s3 = new AWS.S3();
@@ -214,53 +220,62 @@ export default {
           }
         });
 
-        this.blog.thumbnail.s3Url = `https://weblisting.hn.ss.bfcplatform.vn/blog/${this.blog.id}/${file.name}`;
-      };
-      uploadImageToS3(file);
-    },
-    handleSubmit() {
-      if (
-        this.flag === false &&
-        this.editorContent.blocks.length === this.editorCount
-      ) {
-        this.$toast.show("Dữ liệu chưa có thay đổi", {
-          type: "error",
-          theme: "bubble",
-          duration: 3000,
-          position: "top-right",
-        });
-        return;
-      }
-      if (this.blog.pageInfor.title === "") {
-        this.$toast.show("Tiêu đề không được để trống!", {
-          type: "error",
-          theme: "bubble",
-          duration: 3000,
-        });
-        return;
-      }
-      if (this.blog.pageInfor.slug === "") {
-        this.$toast.show("Slug không được để trống", {
-          type: "error",
-          theme: "bubble",
-          duration: 3000,
-          position: "top-right",
-        });
-        return;
-      }
-      if (this.blog.pageInfor.metaDescription === "") {
-        this.$toast.show("Meta Description không được để trống", {
-          type: "error",
-          theme: "bubble",
-          duration: 3000,
-          position: "top-right",
-        });
-        return;
-      }
-      if (typeof this.blog.thumbnail === "object") {
-        this.UploadThumbnail(this.blog.thumbnail);
-      }
-      const urlModified = [];
+				this.blog.thumbnail.s3Url = `https://weblisting.hn.ss.bfcplatform.vn/blog/${this.blog.id}/${file.name}`;
+			};
+			uploadImageToS3(file);
+		},
+		handleSubmit() {
+			if (this.editorContent.blocks.length <= 0) {
+				this.$toast.show("Dữ liệu không được để trống", {
+					type: "error",
+					theme: "bubble",
+					duration: 3000,
+					position: "top-right",
+				});
+				return;
+			}
+			if (
+				this.flag === false &&
+				this.editorContent.blocks.length === this.editorCount
+			) {
+				this.$toast.show("Dữ liệu chưa có thay đổi", {
+					type: "error",
+					theme: "bubble",
+					duration: 3000,
+					position: "top-right",
+				});
+				return;
+			}
+			if (this.blog.pageInfor.title === "") {
+				this.$toast.show("Tiêu đề không được để trống!", {
+					type: "error",
+					theme: "bubble",
+					duration: 3000,
+				});
+				return;
+			}
+			if (this.blog.pageInfor.slug === "") {
+				this.$toast.show("Slug không được để trống", {
+					type: "error",
+					theme: "bubble",
+					duration: 3000,
+					position: "top-right",
+				});
+				return;
+			}
+			if (this.blog.pageInfor.metaDescription === "") {
+				this.$toast.show("Meta Description không được để trống", {
+					type: "error",
+					theme: "bubble",
+					duration: 3000,
+					position: "top-right",
+				});
+				return;
+			}
+			if (typeof this.blog.thumbnail === "object") {
+				this.UploadThumbnail(this.blog.thumbnail);
+			}
+			const urlModified = [];
 
       const imageUrlArray = this.editorContent.blocks
         .filter(

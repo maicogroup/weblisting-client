@@ -11,53 +11,45 @@
         class="mb-5"
       />
 
-      <button-basic
-        v-if="buttonState === 'success'"
-        style="height: 50px"
-        class="self-end"
-      >
-        <NuxtLink :to="`/blog/${values.pageInfor.slug}`">Xem bài đăng</NuxtLink>
-      </button-basic>
-      <button-basic
-        v-else
-        :handleClick="handleSubmit"
-        style="height: 50px"
-        class="self-end"
-        :isDisable="buttonState === 'pending'"
-        >{{
-          buttonState === "init"
-            ? "Đăng bài"
-            : buttonState === "pending"
-            ? "Đang tải"
-            : "Xem bài đăngg"
-        }}</button-basic
-      >
-    </div>
-    <div
-      class="
-        flex flex-col
-        w-[22rem]
-        mt-[214px]
-        items-center
-        rounded-md
-        border border-neutral-300
-        h-fit
-        p-5
-      "
-    >
-      <h2 class="mb-7 text-stone-900 font-bold text-lg">Thiết lập bài viết</h2>
-      <textbox class="mb-7" title="Slug" v-model="values.pageInfor.slug" />
-      <textbox
-        title="Meta Description"
-        v-model="values.pageInfor.metaDescription"
-        type="textarea"
-        class="mb-7"
-      />
-      <preview-thumbnail
-        title="Tải lên ảnh Thumbnail"
-        :setThumbnail="setThumbnail"
-      />
-    </div>
+			<button-basic
+				:handleClick="handleSubmit"
+				style="height: 50px"
+				class="self-end"
+				:isDisable="buttonState === 'pending'"
+				>{{
+					buttonState === "init"
+						? "Đăng bài"
+						: buttonState === "pending"
+						? "Đang tải"
+						: "Xem bài đăngg"
+				}}</button-basic
+			>
+		</div>
+		<div
+			class="
+				flex flex-col
+				w-[22rem]
+				mt-[214px]
+				items-center
+				rounded-md
+				border border-neutral-300
+				h-fit
+				p-5
+			"
+		>
+			<h2 class="mb-7 text-stone-900 font-bold text-lg">Thiết lập bài viết</h2>
+			<textbox class="mb-7" title="Slug" v-model="values.pageInfor.slug" />
+			<textbox
+				title="Meta Description"
+				v-model="values.pageInfor.metaDescription"
+				type="textarea"
+				class="mb-7"
+			/>
+			<preview-thumbnail
+				title="Tải lên ảnh Thumbnail"
+				:setThumbnail="setThumbnail"
+			/>
+		</div>
 
     <guest-user-authentication-modal
       :open="showAuthenModal"
@@ -338,39 +330,42 @@ export default {
 
         //FIXME this.thumbnail.S3url là url thumbnail nha
 
-        this.$apollo
-          .mutate({
-            mutation: gql`
-              mutation CreateBlog($input: CreateBlogInput!) {
-                createBlog(input: $input) {
-                  string
-                }
-              }
-            `,
-            variables: {
-              input: submitData,
-            },
-          })
-          .then((data) => {
-            this.$toast.show("Đăng thành công!", {
-              type: "success",
-              theme: "bubble",
-              duration: 3000,
-              position: "top-right",
-            });
-          })
-          .catch((error) => {
-            this.$toast.show("Slug đã tồn tại", {
-              type: "error",
-              theme: "bubble",
-              duration: 3000,
-              position: "top-right",
-            });
-          });
-        this.buttonState = "success";
-      }
-    },
-  },
+				this.$apollo
+					.mutate({
+						mutation: gql`
+							mutation CreateBlog($input: CreateBlogInput!) {
+								createBlog(input: $input) {
+									string
+								}
+							}
+						`,
+						variables: {
+							input: submitData,
+						},
+					})
+					.then(data => {
+						this.$toast.show("Đăng thành công!", {
+							type: "success",
+							theme: "bubble",
+							duration: 3000,
+							position: "top-right",
+						});
+						setTimeout(() => {
+							this.buttonState = "success";
+							this.$router.push(`/blog/${this.values.pageInfor.slug}`);
+						}, 2000);
+					})
+					.catch(error => {
+						this.$toast.show("Slug đã tồn tại", {
+							type: "error",
+							theme: "bubble",
+							duration: 3000,
+							position: "top-right",
+						});
+					});
+			}
+		},
+	},
 };
 </script>
 

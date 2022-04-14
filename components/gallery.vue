@@ -1,97 +1,120 @@
 <template>
-    <div>
-        <button style="display:none" :id="`dynamic-${galleryIndex}`" v-on:click="openGallery">Open Slice</button>
-        <div id="light-gallery">
-            <div class="glide">
-                <div class="glide__track" data-glide-el="track">
-                    <ul class="glide__slides">
-                        <li
-                            v-for="(item, index) in items"
-                            :key="index"
-                            class="glide__slide media_container"
-                            v-on:click="openGallery(index)"
-                        >
-                            <div :style="`background-image: url(${item.includes('.mp4') ? imgUrl : item}); filter: blur(100px); -webkit-filter: blur(100px);height: 400px;`"></div>
-                            <video v-if="item.includes('mp4')" :src="item" controls/>
-                            <img v-else :src="item" :alt="`${alt} hình ${index}}`" />
-                        </li>
-                    </ul>
-                </div>
-                <div class="glide__arrows" data-glide-el="controls">
-                    <button class="glide__arrow glide__arrow--left" style="font-size: 69px;" data-glide-dir="<">
-                    &lsaquo;
-                    </button>
-                    <button class="glide__arrow glide__arrow--right" style="font-size: 69px;" data-glide-dir=">">
-                    &rsaquo;
-                    </button>
-                </div>
-                <div class="glide__bullets" data-glide-el="controls[nav]">
-                    <button v-for="(item, index) in items" :key="index" class="glide__bullet" :data-glide-dir="`=${index}`"></button>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div>
+		<button
+			style="display: none"
+			:id="`dynamic-${galleryIndex}`"
+			v-on:click="openGallery"
+		>
+			Open Slice
+		</button>
+		<div id="light-gallery">
+			<div class="glide">
+				<div class="glide__track" data-glide-el="track">
+					<ul class="glide__slides">
+						<li
+							v-for="(item, index) in items"
+							:key="index"
+							class="glide__slide media_container"
+							v-on:click="openGallery(index)"
+						>
+							<div
+								:style="`background-image: url(${
+									item.includes('.mp4') ? imgUrl : item
+								}); filter: blur(100px); -webkit-filter: blur(100px);height: 400px;`"
+							></div>
+							<video v-if="item.includes('mp4')" :src="item" controls/>
+							<img v-else :src="item" :alt="`${alt} hình ${index}}`"/>
+						</li>
+					</ul>
+				</div>
+				<div class="glide__arrows" data-glide-el="controls">
+					<button
+						class="glide__arrow glide__arrow--left"
+						style="font-size: 69px"
+						data-glide-dir="<"
+					>
+						&lsaquo;
+					</button>
+					<button
+						class="glide__arrow glide__arrow--right"
+						style="font-size: 69px"
+						data-glide-dir=">"
+					>
+						&rsaquo;
+					</button>
+				</div>
+				<div class="glide__bullets" data-glide-el="controls[nav]">
+					<button
+						v-for="(item, index) in items"
+						:key="index"
+						class="glide__bullet"
+						:data-glide-dir="`=${index}`"
+					></button>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
 import Glide from '@glidejs/glide';
 import glide from '@glidejs/glide';
 export default {
-    name: 'Gallery',
-    props:["items", "galleryIndex", "alt"],
-    data: () => ({
-        imgUrl: "https://weblisting.ss-hn-1.bizflycloud.vn/temporary-apartment-gallery.jpg",
-        index: null,
-        el: "",
-        gallery: []
-    }),
-    mounted(){
-        // this.el = document.getElementById('light-gallery');
-        // this.gallery = window.lightGallery(this.el);
-        window.glide = new Glide('.glide').mount();
-        this.items.forEach(element => {
-            var item = '';
-            if(element.includes('.mp4')){
-                item = {
-                    poster: '/images/video-poster.jpg',
-                    thumb: '/images/video-thumbnail.jpg',
-                    html: `<video class="lg-video-object lg-html5" controls preload="none"><source src="${element}" type="video/mp4">Your browser does not support HTML5 video</video>`
-                }
-            }
-            else{
-                item = {
-                    src: element,
-                    thumb: element
-                }
-            }
-            this.gallery.push(item)
-        });
-    },
-    methods: {
-        openGallery: function(index){
-            const galleryId = `dynamic-${this.galleryIndex}`;
-            const element = document.getElementById(galleryId);
-            if(element.hasAttribute("lg-uid")){
-                window.lgData[element.getAttribute('lg-uid')].index = index;
-                window.lgData[element.getAttribute('lg-uid')].build(index);
-            }else{
-                window.lightGallery(element,{
-                    dynamic: true,
-                    dynamicEl: this.gallery,
-                    thumbnail: true,
-                    autoplayFirstVideo: false,
-                    index: index,
-                    galleryId: this.galleryIndex,
-                    hash: true
-                })
-                element.addEventListener('onAfterSlide', function(event){
-                    window.glide.update({
-                        startAt: event.detail.index
-                    })
-                })
-            }
-        }
-    },
+	name: "Gallery",
+	props: ["items", "galleryIndex", "alt"],
+	data: () => ({
+		imgUrl:
+			"https://weblisting.ss-hn-1.bizflycloud.vn/apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg",
+		index: null,
+		el: "",
+		gallery: [],
+	}),
+	mounted() {
+		// this.el = document.getElementById('light-gallery');
+		// this.gallery = window.lightGallery(this.el);
+		window.glide = new Glide(".glide").mount();
+		this.items.forEach(element => {
+			var item = "";
+			if (element.includes(".mp4")) {
+				item = {
+					// poster: "/images/video-poster.jpg",
+					thumb: "/images/video-thumbnail.jpg",
+					html: `<video class="lg-video-object lg-html5" controls preload="none" autoplay><source src="${element}" type="video/mp4">Your browser does not support HTML5 video</video>`,
+				};
+			} else {
+				item = {
+					src: element,
+					thumb: element,
+				};
+			}
+			this.gallery.push(item);
+		});
+	},
+	methods: {
+		openGallery: function (index) {
+			const galleryId = `dynamic-${this.galleryIndex}`;
+			const element = document.getElementById(galleryId);
+			if (element.hasAttribute("lg-uid")) {
+				window.lgData[element.getAttribute("lg-uid")].index = index;
+				window.lgData[element.getAttribute("lg-uid")].build(index);
+			} else {
+				window.lightGallery(element, {
+					dynamic: true,
+					dynamicEl: this.gallery,
+					thumbnail: true,
+					autoplayFirstVideo: false,
+					index: index,
+					galleryId: this.galleryIndex,
+					hash: true,
+				});
+				element.addEventListener("onAfterSlide", function (event) {
+					window.glide.update({
+						startAt: event.detail.index,
+					});
+				});
+			}
+		},
+	},
 };
 </script>
 <style scoped>

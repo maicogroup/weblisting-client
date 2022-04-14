@@ -1,23 +1,23 @@
 <template>
-  <div
-    class="
-      fixed
-      z-20
-      top-0
-      left-0
-      right-0
-      bg-white
-      flex
-      justify-between
-      items-center
-      px-5
-      py-3
-      border-b
-    "
-  >
-    <NuxtLink to="/">
-      <img id="logo" onclick="void(0)" class="h-12" src="~/assets/maico.png">
-    </NuxtLink>
+	<div
+		class="
+			fixed
+			z-20
+			top-0
+			left-0
+			right-0
+			bg-white
+			flex
+			justify-between
+			items-center
+			px-5
+			py-3
+			border-b
+		"
+	>
+		<NuxtLink to="/">
+			<img id="logo" onclick="void(0)" class="h-12" src="~/assets/maico.png" />
+		</NuxtLink>
 
     <div class="hidden md:flex justify-between items-center space-x-10">
       <a class="font-bold hidden xl:block" href="tel:0938140024">
@@ -66,27 +66,27 @@
         </DropdownItem>
       </Dropdown>
 
-      <Dropdown class="hidden lg:inline" item-width="220px" title="Dự án">
-        <div class="max-h-96 overflow-y-auto overflow-x-hidden">
-          <DropdownItem> Tất cả dự án </DropdownItem>
-          <nuxt-link
-            v-for="project in projects"
-            :key="project.id"
-            class="
-              block
-              px-4
-              py-2
-              capitalize
-              text-gray-700
-              hover:bg-blue-500 hover:text-white
-              cursor-pointer
-            "
-            :to="`/du-an/${project.pageInfors[0].slug}`"
-          >
-            {{ project.projectName }}
-          </nuxt-link>
-        </div>
-      </Dropdown>
+			<Dropdown class="hidden lg:inline" item-width="220px" title="Dự án">
+				<div class="max-h-96 overflow-y-auto overflow-x-hidden">
+					<DropdownItem> Tất cả dự án </DropdownItem>
+					<nuxt-link
+						v-for="project in projects"
+						:key="project.id"
+						class="
+							block
+							px-4
+							py-2
+							capitalize
+							text-gray-700
+							hover:bg-blue-500 hover:text-white
+							cursor-pointer
+						"
+						:to="`/du-an/${project.pageInfors[0].slug}`"
+					>
+						{{ project.projectName }}
+					</nuxt-link>
+				</div>
+			</Dropdown>
 
       <Dropdown
         class="hidden xl:inline"
@@ -123,26 +123,35 @@
         </button>
       </div>
 
-      <button class="ml-10 border rounded-md py-2 px-8 hover:text-white hover:bg-gray-700">
-        Ký gửi
-      </button>
-    </div>
-    <button class="md:hidden" @click="showSidebar = true">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        />
-      </svg>
-    </button>
+			<button
+				class="
+					ml-10
+					border
+					rounded-md
+					py-2
+					px-8
+					hover:text-white hover:bg-gray-700
+				"
+			>
+				Ký gửi
+			</button>
+		</div>
+		<button class="md:hidden" @click="showSidebar = true">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-6 w-6"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M4 6h16M4 12h16M4 18h16"
+				/>
+			</svg>
+		</button>
 
     <div
       v-show="showSidebar != null"

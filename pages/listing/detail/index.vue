@@ -157,10 +157,10 @@ export default {
           content: 'https://weblisting.ss-hn-1.bizflycloud.vn/' +   (this.post?.gallery.find((c) => !c.includes(".mp4") && !c.includes("fail")) ||
                 "temporary-apartment-gallery.jpg")
         },
-        {
-          name: 'robots',
-          content: 'noindex'
-        }
+        // {
+        //   name: 'robots',
+        //   content: 'noindex'
+        // }
       ]
     };
   }

@@ -278,6 +278,7 @@ export default {
   watch:{
     blog(newQuestion, oldQuestion){
       this.content = JSON.parse(this.blog.content);
+      console.log(this.content);
     }
   },
   computed: {

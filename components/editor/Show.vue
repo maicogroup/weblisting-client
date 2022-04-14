@@ -45,6 +45,7 @@
 
       <p
         v-else-if="block.type === 'paragraph'"
+        :style="{textAlign: block.data.alignment ? block.data.alignment : 'left'}"
         :key="block.id"
         v-html="block.data.text"
       ></p>

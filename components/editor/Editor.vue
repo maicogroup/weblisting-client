@@ -51,14 +51,14 @@ export default {
 			}
 		},
 		handleDelete() {
-			const inputs = document.getElementsByClassName("ce-paragraph");
+			// const inputs = document.getElementsByClassName("ce-paragraph");
 
-			if (
-				Array.from(inputs).reduce((prev, curr) => {
-					return prev || curr.innerHTML === "";
-				}, false)
-			)
-				this.editor.clear();
+			// if (
+			// 	Array.from(inputs).reduce((prev, curr) => {
+			// 		return prev && curr.innerHTML === "";
+			// 	}, false)
+			// )
+			// 	this.editor.clear();
 		},
 	},
 };

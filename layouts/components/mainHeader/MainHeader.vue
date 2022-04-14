@@ -123,7 +123,7 @@
         </button>
       </div>
 
-      <button class="ml-10 border rounded-md py-2 px-8 hover:text-white hover:bg-gray-700">
+      <button class="ml-10 border rounded-md py-2 px-8 hover:text-white hover:bg-green-600">
         Ký gửi
       </button>
     </div>

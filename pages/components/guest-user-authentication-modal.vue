@@ -1,7 +1,6 @@
 <template>
   <div
-    v-if="open"
-    class="fixed inset-0 h-full w-full z-30 bg-black bg-opacity-60"
+    :class="`fixed inset-0 h-full w-full z-30 bg-black bg-opacity-60 ${open? 'open' : 'my-hidden'}`"
     @click.self="cancelModal"
   >
     <guest-user-login
@@ -75,10 +74,31 @@ export default {
     },
 
     cancelModal() {
-      this.alreadyHasAccount = !this.signUp;
+      // this.alreadyHasAccount = !this.signUp;
       this.$emit("close");
       this.$emit("cancel");
     },
   },
 };
 </script>
+
+<style scoped>
+.open{
+  /* opacity : 0.4; */
+  animation: fade-in 0.33s ease;
+}
+
+.my-hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.33s, opacity 0.33s ease;
+}
+
+@keyframes fade-in {
+  from{
+    opacity: 0;
+  } to{
+    opacity: 1;
+  }
+}
+</style>

@@ -1,12 +1,13 @@
 <template>
   <div
     class="
-      w-72
+      w-96
       absolute
       top-1/2
       left-1/2
       -translate-x-1/2 -translate-y-1/2
-      p-8
+      pb-16
+      px-10
       bg-white
       rounded-md
       shadow-xl
@@ -31,6 +32,8 @@
         />
       </svg>
     </button>
+
+    <div class="w-full text-center mt-12 mb-4 text-[20px] font-semibold text-green-800">ĐĂNG KÝ</div>
 
     <label class="block">
       <p class="font-semibold">Số điện thoại:</p>
@@ -73,12 +76,11 @@
       Đăng ký
     </button>
 
-    <button
-      class="block mt-2 mx-auto text-sm text-blue-500 hover:text-blue-600"
-      @click="$emit('login')"
+    <div
+      class="block mt-4 mx-auto text-sm text-blue-500 hover:text-blue-600 w-full text-center"
     >
-      Đã có tài khoản? Đăng nhập
-    </button>
+      Đã có tài khoản? <a class="hover:underline hover:cursor-pointer" @click="$emit('login')">Đăng nhập</a>
+    </div>
   </div>
 </template>
 

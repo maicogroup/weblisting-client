@@ -1,12 +1,13 @@
 <template>
   <div
     class="
-      w-72
+      w-96
       absolute
       top-1/2
       left-1/2
       -translate-x-1/2 -translate-y-1/2
-      p-8
+      pb-16
+      px-10
       bg-white
       rounded-md
       shadow-xl
@@ -31,6 +32,8 @@
         />
       </svg>
     </button>
+
+    <div class="w-full text-center mt-12 mb-4 text-[20px] font-semibold text-green-800">ĐĂNG NHẬP</div>
 
     <label class="block">
       <p class="font-semibold">Số điện thoại:</p>
@@ -72,12 +75,11 @@
       Đăng nhập
     </button>
 
-    <button
-      class="block mt-2 mx-auto text-sm text-blue-500 hover:text-blue-600"
-      @click="$emit('signup')"
+    <div
+      class="block mt-4 text-center w-full text-sm text-blue-500 hover:text-blue-600"
     >
-      Chưa có tài khoản? Đăng ký
-    </button>
+      Chưa có tài khoản? <a class="hover:underline hover:cursor-pointer" @click="$emit('signup')">Đăng ký</a>
+    </div>
   </div>
 </template>
 
@@ -127,7 +129,7 @@ export default {
     loginButtonClasses() {
       return this.user
         ? "bg-green-500 hover:bg-green-600"
-        : "bg-gray-500 cursor-not-allowed";
+        : "bg-gray-400 cursor-not-allowed";
     },
 
     errorMsg() {
@@ -139,6 +141,10 @@ export default {
 
   methods: {
     findNameOfPhoneNumber() {
+      if (this.phoneNumber == '') {
+        this.showError = false;
+        return;
+      }
       this.$apollo.queries.user.setVariables({
         phoneNumber: this.phoneNumber,
       });

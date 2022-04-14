@@ -162,18 +162,18 @@
 					</div>
 				</div>
 
-				<div class="h-3 bg-gray-300 w-5/6 mt-3" />
-				<div class="h-3 bg-gray-300 w-full mt-1" />
-				<div class="h-3 bg-gray-300 w-full mt-1" />
-				<div class="h-3 bg-gray-300 w-2/3 mt-1" />
-				<div class="grid grid-cols-3 mt-3 gap-3">
-					<div class="bg-gray-300 h-28" />
-					<div class="bg-gray-300 h-28" />
-					<div class="bg-gray-300 h-28" />
-				</div>
-			</div>
-		</div>
-	</div>
+        <div class="h-3 bg-gray-300 w-5/6 mt-3" />
+        <div class="h-3 bg-gray-300 w-full mt-1" />
+        <div class="h-3 bg-gray-300 w-full mt-1" />
+        <div class="h-3 bg-gray-300 w-2/3 mt-1" />
+        <div class="grid grid-cols-3 mt-3 gap-3">
+          <div class="bg-gray-300 h-28" />
+          <div class="bg-gray-300 h-28" />
+          <div class="bg-gray-300 h-28" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -184,35 +184,35 @@ import GuestUserAvatar from "~/pages/components/guest-user-avatar.vue";
 import GuestUserAuthenticationModal from "~/pages/components/guest-user-authentication-modal.vue";
 
 const getReviewsQuery = gql`
-	query GetListReview($take: Int, $skip: Int) {
-		reviewsWithPagination(take: $take, skip: $skip) {
-			items {
-				id
-				content
-				createdAt
-				projectId
-				galleries {
-					path
-				}
-				author {
-					name
-					id
-				}
-				comments {
-					author {
-						authorName
-					}
-					createdAt
-					content
-				}
-			}
-			totalCount
-			pageInfo {
-				hasNextPage
-				hasPreviousPage
-			}
-		}
-	}
+  query GetListReview($take: Int, $skip: Int) {
+    reviewsWithPagination(take: $take, skip: $skip) {
+      items {
+        id
+        content
+        createdAt
+        projectId
+        galleries {
+          path
+        }
+        author {
+          name
+          id
+        }
+        comments {
+          author {
+            authorName
+          }
+          createdAt
+          content
+        }
+      }
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
 `;
 export default {
 	name: "ProjectReview",
@@ -363,15 +363,15 @@ export default {
 					return;
 				}
 
-				const project = data.projects[0];
-				return project;
-			},
-			variables() {
-				return {
-					slug: this.$route.params.slug,
-				};
-			},
-		},
+        const project = data.projects[0];
+        return project;
+      },
+      variables() {
+        return {
+          slug: this.$route.params.slug,
+        };
+      },
+    },
 
 		reviewsWithPagination: {
 			query() {
@@ -517,10 +517,10 @@ export default {
 			});
 			const s3 = new AWS.S3();
 
-			const uploadOptions = {
-				partSize: 10 * 1024 * 1024,
-				queueSize: 1,
-			};
+      const uploadOptions = {
+        partSize: 10 * 1024 * 1024,
+        queueSize: 1,
+      };
 
 			const imgCount = { count: 0 };
 			if (this.tempFile.length === 0) {
@@ -697,14 +697,14 @@ export default {
 				});
 		},
 
-		sendWarningNotification(notification) {
-			this.$toast.show(notification, {
-				type: "error",
-				theme: "bubble",
-				duration: 3000,
-				position: "top-right",
-			});
-		},
+    sendWarningNotification(notification) {
+      this.$toast.show(notification, {
+        type: "error",
+        theme: "bubble",
+        duration: 3000,
+        position: "top-right",
+      });
+    },
 
 		createNewReview() {
 			const id = generateNewId();
@@ -738,24 +738,24 @@ export default {
 				this.sendWarningNotification("Bài viết chưa có thông tin");
 			}
 
-			function generateNewId() {
-				const ObjectIddd = (
-					m = Math,
-					d = Date,
-					h = 16,
-					s = s => m.floor(s).toString(h),
-				) =>
-					s(d.now() / 1000) +
-					" ".repeat(h).replace(/./g, () => s(m.random() * h));
-				return ObjectIddd();
-			}
-		},
+      function generateNewId() {
+        const ObjectIddd = (
+          m = Math,
+          d = Date,
+          h = 16,
+          s = (s) => m.floor(s).toString(h)
+        ) =>
+          s(d.now() / 1000) +
+          " ".repeat(h).replace(/./g, () => s(m.random() * h));
+        return ObjectIddd();
+      }
+    },
 
-		LoadNewReviews() {
-			if (this.isLoading === true) {
-				return;
-			}
-			this.isLoading = true;
+    LoadNewReviews() {
+      if (this.isLoading === true) {
+        return;
+      }
+      this.isLoading = true;
 
 			if (!this.reviewsWithPagination) {
 				this.isLoading = false;
@@ -803,42 +803,40 @@ export default {
 			}
 		},
 
-		createMockReview(item, project) {
-			const tempImageSources = [];
-			item.galleries.forEach(x => tempImageSources.push(x.path));
-			const tempComments = [];
-			if (item.comments.length > 0) {
-				item.comments.forEach(x => {
-					const tempComment = {
-						commentId: x.id,
-						authorName: x.author.authorName,
-						authorAvatarSource:
-							"https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
-						dateCreated: new Date(x.createdAt),
-						content: x.content,
-					};
-					tempComments.push(tempComment);
-				});
-			}
-			const isLiked =
-				this.guestUser === null
-					? false
-					: item.liked.includes(this.guestUser.id);
-			return {
-				id: item.id,
-				authorName: item.author.name,
-				authorAvatarSource:
-					"https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg",
-				dateCreated: new Date(item.createdAt),
-				content: item.content,
-				imageSources: tempImageSources,
-				comments: tempComments,
-				isLiked,
-				galleries: item.galleries,
-				liked: item.liked,
-			};
-		},
-	},
+    createMockReview(item, project) {
+      const tempImageSources = [];
+      item.galleries.forEach((x) => tempImageSources.push(x.path));
+      const tempComments = [];
+      if (item.comments.length > 0) {
+        item.comments.forEach((x) => {
+          const tempComment = {
+            commentId: x.id,
+            authorName: x.author.authorName,
+            authorAvatarSource:
+              "https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
+            dateCreated: new Date(x.createdAt),
+            content: x.content,
+          };
+          tempComments.push(tempComment);
+        });
+      }
+      const isLiked =
+        this.guestUser === null ? false : item.liked.includes(this.guestUser.id);
+      return {
+        id: item.id,
+        authorName: item.author.name,
+        authorAvatarSource:
+          "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1408930/8a30ed34e8e412873de69d48f8bcb5fd991b8ab5.jpg",
+        dateCreated: new Date(item.createdAt),
+        content: item.content,
+        imageSources: tempImageSources,
+        comments: tempComments,
+        isLiked,
+        galleries: item.galleries,
+        liked: item.liked,
+      };
+    },
+  },
 };
 </script>
 
@@ -848,14 +846,14 @@ export default {
 	word-break: break-all;
 }
 .ql-container.ql-snow {
-	height: auto;
+  height: auto;
 }
 .ql-toolbar {
-	border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
 }
 .grid-wrap-image {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, 80px);
-	gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 80px);
+  gap: 16px;
 }
 </style>

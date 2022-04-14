@@ -115,23 +115,24 @@ export default {
 			const month = dateCreated.getMonth() + 1;
 			const year = dateCreated.getFullYear();
 
-			return `${padZero(day)}/${padZero(month)}/${year}`;
+      return `${padZero(day)}/${padZero(month)}/${year}`;
 
-			function padZero(num) {
-				return num.toString().padStart(2, "0");
-			}
-		},
-	},
+      function padZero(num) {
+        return num.toString().padStart(2, "0");
+      }
+    },
+  },
 };
 function createComment() {
-	return {
-		authorName: "Linh Chí",
-		authorAvatarSource:
-			"https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
-		dateCreated: new Date(2069, 3, 19, 9, 4, 23),
-		content: "Đúng vậy hết sức bất mãn với cái vụ cơm chó này, vote 1 sao",
-	};
+  return {
+    authorName: "Linh Chí",
+    authorAvatarSource:
+      "https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg",
+    dateCreated: new Date(2069, 3, 19, 9, 4, 23),
+    content: "Đúng vậy hết sức bất mãn với cái vụ cơm chó này, vote 1 sao",
+  };
 }
 </script>
 
-<style></style>
+<style>
+</style>

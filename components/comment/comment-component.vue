@@ -42,45 +42,47 @@ import newComment from "./new-comment.vue";
 import replyComment from "./reply-comment.vue";
 
 export default {
-	components: {
-		newComment,
-		replyComment,
-		Divider,
-	},
-	methods: {
-		toggleReply() {
-			this.showReply = !this.showReply;
-		},
-		handleSubmit: function () {
-			this.createReply(this.comment.id, this.newCmt);
-			this.newCmt = "";
-		},
-	},
-	data() {
-		return {
-			showReply: false,
-			newCmt: "",
-		};
-	},
-	props: {
-		isChild: { type: Boolean, default: false },
-		comment: {
-			type: Object,
-			default: {
-				CommentParentId: null,
-				DiscussionId: "",
-				Author: {
-					AuthorId: "",
-					AuthorName: "",
-				},
-				CommentType: "",
-				Content: "",
-			},
-		},
-		createReply: {
-			type: Function,
-			default: () => console.log("create reply comment"),
-		},
-	},
+  components: {
+    newComment,
+    replyComment,
+    Divider,
+  },
+  methods: {
+    toggleReply() {
+      this.showReply = !this.showReply;
+    },
+    handleSubmit: function () {
+      this.createReply(this.comment.id, this.newCmt);
+      this.newCmt = "";
+    },
+  },
+  data() {
+    return {
+      showReply: false,
+      newCmt: "",
+    };
+  },
+  props: {
+    isChild: { type: Boolean, default: false },
+    comment: {
+      type: Object,
+      default: {
+        CommentParentId: null,
+        DiscussionId: "",
+        Author: {
+          AuthorId: "",
+          AuthorName: "",
+        },
+        CommentType: "",
+        Content: "",
+      },
+    },
+    createReply: {
+      type: Function,
+      default: () => {
+        console.log("create reply comment");
+      },
+    },
+  },
 };
 </script>

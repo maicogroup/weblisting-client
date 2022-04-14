@@ -316,399 +316,399 @@ import { gql } from "graphql-tag";
 // import DropdownItem from '~/pages/components/Dropdown/DropdownItem.vue';
 
 const getPostsQuery = gql`
-	query GetPostWithPagination(
-		$condition: PostCollectionFilterInput
-		$skipItems: Int
-		$take: Int
-		$order: [PostCollectionSortInput!]
-	) {
-		postsWithPagination(
-			take: $take
-			skip: $skipItems
-			where: $condition
-			order: $order
-		) {
-			items {
-				id
-				pageInfor {
-					title
-					slug
-					metaDescription
-				}
-				gallery
-				price
-				description
-				demand
-				status
-				acreage
-				type
-				totalBedRoom
-				totalWC
-				apartmentState
-				tags
-				project {
-					id
-					address {
-						street
-						city
-						district
-						googleMapLocation
-					}
-				}
-				lastUpdatedAt
-			}
-			totalCount
-		}
-	}
+  query GetPostWithPagination(
+    $condition: PostCollectionFilterInput
+    $skipItems: Int
+    $take: Int
+    $order: [PostCollectionSortInput!]
+  ) {
+    postsWithPagination(
+      take: $take
+      skip: $skipItems
+      where: $condition
+      order: $order
+    ) {
+      items {
+        id
+        pageInfor {
+          title
+          slug
+          metaDescription
+        }
+        gallery
+        price
+        description
+        demand
+        status
+        acreage
+        type
+        totalBedRoom
+        totalWC
+        apartmentState
+        tags
+        project {
+          id
+          address {
+            street
+            city
+            district
+            googleMapLocation
+          }
+        }
+        lastUpdatedAt
+      }
+      totalCount
+    }
+  }
 `;
 
 export default {
-	name: "ListPost",
-	props: ["filter", "heading"],
-	data() {
-		return {
-			pageIndex: 1,
-			pageOfItems: [],
-			arrangeOption: "Mặc định",
-			currentOrder: 3,
-		};
-	},
-	apollo: {
-		postsData: {
-			query() {
-				return getPostsQuery;
-			},
-			update: data => data.postsWithPagination,
-			variables() {
-				const condition = this.createConditionParamter(this.filter);
-				const noFilter = Object.keys(condition).length === 0;
+  name: "ListPost",
+  props: ["filter", "heading"],
+  data() {
+    return {
+      pageIndex: 1,
+      pageOfItems: [],
+      arrangeOption: "Mặc định",
+      currentOrder: 3,
+    };
+  },
+  apollo: {
+    postsData: {
+      query() {
+        return getPostsQuery;
+      },
+      update: (data) => data.postsWithPagination,
+      variables() {
+        const condition = this.createConditionParamter(this.filter);
+        const noFilter = Object.keys(condition).length === 0;
 
-				return {
-					condition: noFilter ? undefined : condition,
-					take: 10,
-				};
-			},
-		},
-	},
-	computed: {
-		posts() {
-			if (this.postsData == null) {
-				return [];
-			} else {
-				return this.postsData.items.map(item => {
-					return {
-						srcimage:
-							"https://weblisting.ss-hn-1.bizflycloud.vn/" +
-							(item.gallery.find(c => !c.includes(".mp4")) ||
-								"apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg"),
-						pageInfor: item.pageInfor,
-						price: this.formatPrice(item.price),
-						totalBedRoom: item.totalBedRoom,
-						totalWC: item.totalWC,
-						acreage: item.acreage + "m²",
-						roomStructure:
-							item.type !== "Căn hộ"
-								? item.type
-								: item.totalBedRoom + "PN" + item.totalWC + "WC",
-						address:
-							item.project?.address.street +
-							", " +
-							item.project?.address.district +
-							", " +
-							item.project?.address.city,
-						description: this.formatDescription(item.description),
-						date: this.formatDate(item.lastUpdatedAt),
-						tags: item.tags,
-						id: item.id,
-						type: item.type,
-					};
-				});
-			}
-		},
-		totalItem() {
-			if (this.postsData == null) {
-				return 0;
-			} else {
-				return this.postsData.totalCount;
-			}
-		},
-	},
-	watch: {
-		filter(filter) {
-			const condition = this.createConditionParamter(filter);
-			const noFilter = Object.keys(condition).length === 0;
+        return {
+          condition: noFilter ? undefined : condition,
+          take: 10,
+        };
+      },
+    },
+  },
+  computed: {
+    posts() {
+      if (this.postsData == null) {
+        return [];
+      } else {
+        return this.postsData.items.map((item) => {
+          return {
+            srcimage:
+              "https://weblisting.ss-hn-1.bizflycloud.vn/" +
+              (item.gallery.find((c) => !c.includes(".mp4")) ||
+                "apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg"),
+            pageInfor: item.pageInfor,
+            price: this.formatPrice(item.price),
+            totalBedRoom: item.totalBedRoom,
+            totalWC: item.totalWC,
+            acreage: item.acreage + "m²",
+            roomStructure:
+              item.type !== "Căn hộ"
+                ? item.type
+                : item.totalBedRoom + "PN" + item.totalWC + "WC",
+            address:
+              item.project?.address.street +
+              ", " +
+              item.project?.address.district +
+              ", " +
+              item.project?.address.city,
+            description: this.formatDescription(item.description),
+            date: this.formatDate(item.lastUpdatedAt),
+            tags: item.tags,
+            id: item.id,
+            type: item.type,
+          };
+        });
+      }
+    },
+    totalItem() {
+      if (this.postsData == null) {
+        return 0;
+      } else {
+        return this.postsData.totalCount;
+      }
+    },
+  },
+  watch: {
+    filter(filter) {
+      const condition = this.createConditionParamter(filter);
+      const noFilter = Object.keys(condition).length === 0;
 
-			this.$apollo.queries.postsData.refetch({
-				condition: noFilter ? undefined : condition,
-				skipItems: 0,
-			});
-			this.pageIndex = 1;
-		},
-	},
-	methods: {
-		goToHomePage() {
-			this.$router.push({ path: "/" }).catch(() => {});
-		},
-		formatDate(dateStr) {
-			const date = new Date(dateStr);
-			const diffInDays = Math.floor((Date.now() - date.getTime()) / 86400000);
+      this.$apollo.queries.postsData.refetch({
+        condition: noFilter ? undefined : condition,
+        skipItems: 0,
+      });
+      this.pageIndex = 1;
+    },
+  },
+  methods: {
+    goToHomePage() {
+      this.$router.push({ path: "/" }).catch(() => {});
+    },
+    formatDate(dateStr) {
+      const date = new Date(dateStr);
+      const diffInDays = Math.floor((Date.now() - date.getTime()) / 86400000);
 
-			if (diffInDays === 0) {
-				return "Hôm nay";
-			}
+      if (diffInDays === 0) {
+        return "Hôm nay";
+      }
 
-			if (diffInDays === 1) {
-				return "Hôm qua";
-			}
+      if (diffInDays === 1) {
+        return "Hôm qua";
+      }
 
-			if (diffInDays < 7) {
-				return `${diffInDays} ngày trước`;
-			}
+      if (diffInDays < 7) {
+        return `${diffInDays} ngày trước`;
+      }
 
-			if (diffInDays < 30) {
-				const diffInWeeks = Math.floor(diffInDays / 7);
-				return `${diffInWeeks} tuần trước`;
-			}
+      if (diffInDays < 30) {
+        const diffInWeeks = Math.floor(diffInDays / 7);
+        return `${diffInWeeks} tuần trước`;
+      }
 
-			if (diffInDays < 365) {
-				const diffInMonths = Math.min(11, Math.floor(diffInDays / 30));
-				return `${diffInMonths} tháng trước`;
-			}
+      if (diffInDays < 365) {
+        const diffInMonths = Math.min(11, Math.floor(diffInDays / 30));
+        return `${diffInMonths} tháng trước`;
+      }
 
-			const diffInYears = Math.floor(diffInDays / 365);
-			return `${diffInYears} năm trước`;
-		},
+      const diffInYears = Math.floor(diffInDays / 365);
+      return `${diffInYears} năm trước`;
+    },
 
-		formatDescription(description) {
-			// document không tồn tại ở bên server
-			let content;
-			if (process.server) {
-				content = description;
-			} else {
-				const span = document.createElement("span");
-				span.innerHTML = description;
-				content = span.textContent;
-			}
-			return content;
-		},
+    formatDescription(description) {
+      // document không tồn tại ở bên server
+      let content;
+      if (process.server) {
+        content = description;
+      } else {
+        const span = document.createElement("span");
+        span.innerHTML = description;
+        content = span.textContent;
+      }
+      return content;
+    },
 
-		formatPrice(price) {
-			if (price < 100000000) {
-				return `${price / 1e6} triệu/tháng`;
-			} else {
-				return `${parseFloat((price / 1e9).toFixed(2))} tỷ`;
-			}
-		},
+    formatPrice(price) {
+      if (price < 100000000) {
+        return `${price / 1e6} triệu/tháng`;
+      } else {
+        return `${parseFloat((price / 1e9).toFixed(2))} tỷ`;
+      }
+    },
 
-		createConditionParamter(filter) {
-			const conditions = {};
-			// if(!filter.isPreview){
-			//   conditions.status = { eq: "Publish"}
-			// }
-			conditions.apartmentState = { eq: "Đang Rao" };
-			if (filter.demand) {
-				conditions.demand = { eq: filter.demand };
-			}
+    createConditionParamter(filter) {
+      const conditions = {};
+      // if(!filter.isPreview){
+      //   conditions.status = { eq: "Publish"}
+      // }
+      conditions.apartmentState = {eq: "Đang Rao"}
+      if (filter.demand) {
+        conditions.demand = { eq: filter.demand };
+      }
 
-			if (filter.location) {
-				conditions.project = { address: { and: [] } };
-				const andQuery = conditions.project.address.and;
-				if (filter.location.city) {
-					andQuery.push({ city: { eq: filter.location.city } });
-				}
+      if (filter.location) {
+        conditions.project = { address: { and: [] } };
+        const andQuery = conditions.project.address.and;
+        if (filter.location.city) {
+          andQuery.push({ city: { eq: filter.location.city } });
+        }
 
-				if (filter.location.district) {
-					andQuery.push({ district: { eq: filter.location.district } });
-				}
-			}
+        if (filter.location.district) {
+          andQuery.push({ district: { eq: filter.location.district } });
+        }
+      }
 
-			if (filter.project?.id) {
-				conditions.projectId = { eq: filter.project.id };
-			}
+      if (filter.project?.id) {
+        conditions.projectId = { eq: filter.project.id };
+      }
 
-			if (filter.priceRange) {
-				const priceRange = filter.priceRange;
-				conditions.price = {};
+      if (filter.priceRange) {
+        const priceRange = filter.priceRange;
+        conditions.price = {};
 
-				const scale = filter.demand === "Bán" ? 1e9 : 1e6;
+        const scale = filter.demand === "Bán" ? 1e9 : 1e6;
 
-				if (priceRange.from) {
-					conditions.price.gte = priceRange.from * scale;
-				}
+        if (priceRange.from) {
+          conditions.price.gte = priceRange.from * scale;
+        }
 
-				if (filter.priceRange.to) {
-					conditions.price.lte = priceRange.to * scale;
-				}
-			}
+        if (filter.priceRange.to) {
+          conditions.price.lte = priceRange.to * scale;
+        }
+      }
 
-			if (filter.acreageRange) {
-				const acreageRange = filter.acreageRange;
-				conditions.acreage = {};
+      if (filter.acreageRange) {
+        const acreageRange = filter.acreageRange;
+        conditions.acreage = {};
 
-				if (acreageRange.from) {
-					conditions.acreage.gte = acreageRange.from;
-				}
+        if (acreageRange.from) {
+          conditions.acreage.gte = acreageRange.from;
+        }
 
-				if (filter.acreageRange.to) {
-					conditions.acreage.lte = acreageRange.to;
-				}
-			}
+        if (filter.acreageRange.to) {
+          conditions.acreage.lte = acreageRange.to;
+        }
+      }
 
-			if (filter.directions && filter.directions.length > 0) {
-				conditions.direction = {
-					in: filter.directions,
-				};
-			}
+      if (filter.directions && filter.directions.length > 0) {
+        conditions.direction = {
+          in: filter.directions,
+        };
+      }
 
-			if (filter.type) {
-				conditions.type = {};
+      if (filter.type) {
+        conditions.type = {};
 
-				if (filter.type === "Căn hộ chung cư") {
-					conditions.type.eq = "Căn hộ";
-				} else {
-					conditions.type.eq = filter.type;
-				}
-			}
+        if (filter.type === "Căn hộ chung cư") {
+          conditions.type.eq = "Căn hộ";
+        } else {
+          conditions.type.eq = filter.type;
+        }
+      }
 
-			if (filter.bedroomOptions && filter.bedroomOptions.length > 0) {
-				conditions.or = [];
-				if (filter.bedroomOptions.includes("5+")) {
-					conditions.or.push({ totalBedRoom: { gte: 5 } });
-				}
+      if (filter.bedroomOptions && filter.bedroomOptions.length > 0) {
+        conditions.or = [];
+        if (filter.bedroomOptions.includes("5+")) {
+          conditions.or.push({ totalBedRoom: { gte: 5 } });
+        }
 
-				const fixedBedroomOptions = filter.bedroomOptions
-					.filter(o => o !== "5+")
-					.map(o => parseInt(o));
-				if (fixedBedroomOptions.length !== 0) {
-					conditions.or.push({ totalBedRoom: { in: fixedBedroomOptions } });
-				}
-			}
+        const fixedBedroomOptions = filter.bedroomOptions
+          .filter((o) => o !== "5+")
+          .map((o) => parseInt(o));
+        if (fixedBedroomOptions.length !== 0) {
+          conditions.or.push({ totalBedRoom: { in: fixedBedroomOptions } });
+        }
+      }
 
-			return conditions;
-		},
+      return conditions;
+    },
 
-		pageNavigationTo(index) {
-			this.$apollo.queries.postsData.refetch({
-				skipItems: 10 * (index - 1),
-			});
-			this.pageIndex = index;
-			// const yOffset = -10;
-			// const element = document.getElementById('post-subinfor');
-			// const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    pageNavigationTo(index) {
+      this.$apollo.queries.postsData.refetch({
+        skipItems: 10 * (index - 1),
+      });
+      this.pageIndex = index;
+      // const yOffset = -10;
+      // const element = document.getElementById('post-subinfor');
+      // const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
-			// window.scrollTo({top: y, behavior: 'smooth'});
-			document.getElementById("post-subinfor").scrollIntoView(true);
-		},
-		order(orderConditionIndex) {
-			if (this.currentOrder == orderConditionIndex) return;
-			this.currentOrder = orderConditionIndex;
-			let orderCondition = {};
-			if (orderConditionIndex === 0) {
-				orderCondition.price = "DESC";
-				this.arrangeOption = "Giá Cao Nhất";
-			} else if (orderConditionIndex === 1) {
-				orderCondition.price = "ASC";
-				this.arrangeOption = "Giá Thấp Nhất";
-			} else if (orderConditionIndex === 2) {
-				orderCondition.lastUpdatedAt = "DESC";
-				this.arrangeOption = "Mới Nhất";
-			} else {
-				orderCondition = undefined;
-			}
-			this.$apollo.queries.postsData.refetch({
-				order: orderCondition,
-				skipItems: 0,
-			});
-			this.pageIndex = 1;
-			document.body.scrollTop = 0; // For Safari
-			document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-		},
-	},
+      // window.scrollTo({top: y, behavior: 'smooth'});
+      document.getElementById("post-subinfor").scrollIntoView(true);
+    },
+    order(orderConditionIndex) {
+      if (this.currentOrder == orderConditionIndex) return;
+      this.currentOrder = orderConditionIndex;
+      let orderCondition = {};
+      if (orderConditionIndex === 0) {
+        orderCondition.price = "DESC";
+        this.arrangeOption = "Giá Cao Nhất";
+      } else if (orderConditionIndex === 1) {
+        orderCondition.price = "ASC";
+        this.arrangeOption = "Giá Thấp Nhất";
+      } else if (orderConditionIndex === 2) {
+        orderCondition.lastUpdatedAt = "DESC";
+        this.arrangeOption = "Mới Nhất";
+      } else {
+        orderCondition = undefined;
+      }
+      this.$apollo.queries.postsData.refetch({
+        order: orderCondition,
+        skipItems: 0,
+      });
+      this.pageIndex = 1;
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    },
+  },
 };
 </script>
 
 <style scoped>
 .title-desktop {
-	display: none;
+  display: none;
 }
 
 .description {
-	display: none;
+  display: none;
 }
 
 .color-orange {
-	color: #db4f21;
+  color: #db4f21;
 }
 
 .title-mobile {
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2;
-	overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 @media (min-width: 768px) {
-	.title-desktop {
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
+  .title-desktop {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 
-	.description {
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 2;
-		overflow: hidden;
-		color: #505050;
-	}
+  .description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    color: #505050;
+  }
 
-	.title-mobile {
-		display: none;
-	}
+  .title-mobile {
+    display: none;
+  }
 }
 
 .line-clamp-2 {
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2;
-	overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 .w-h-100 {
-	width: 100px;
-	height: 100px;
+  width: 100px;
+  height: 100px;
 }
 
 .item-flex-start {
-	align-items: flex-start;
+  align-items: flex-start;
 }
 
 .ov-flow-hidden {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 .color-a7a7a7 {
-	color: #a7a7a7;
+  color: #a7a7a7;
 }
 
 .border-none {
-	border: none;
+  border: none;
 }
 
 .project {
-	position: relative;
+  position: relative;
 }
 .project .badge.diagonal {
-	white-space: nowrap;
-	position: absolute;
-	padding: 5px 100px;
-	min-width: 200px;
-	transform: rotate(-45deg) translate(-33%, -50px);
-	color: white;
-	text-align: center;
-	text-transform: uppercase;
-	font-size: 10px;
-	top: 0px;
-	box-sizing: border-box;
+  white-space: nowrap;
+  position: absolute;
+  padding: 5px 100px;
+  min-width: 200px;
+  transform: rotate(-45deg) translate(-33%, -50px);
+  color: white;
+  text-align: center; 
+  text-transform: uppercase;
+  font-size: 10px;
+  top: 0px;
+  box-sizing: border-box;
 }
 </style>

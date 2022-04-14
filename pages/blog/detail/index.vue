@@ -174,39 +174,39 @@ const getComment = gql`
 `;
 
 const createComment = gql`
-	mutation CreateComment($input: CreateCommentInput!) {
-		createComment(input: $input) {
-			string
-		}
-	}
+  mutation CreateComment($input: CreateCommentInput!) {
+    createComment(input: $input) {
+      string
+    }
+  }
 `;
 export default {
-	components: {
-		ShowEditor,
-		NewComment,
-		ShareBlogSection,
-		GuestUserAuthenticationModal,
-	},
-	head() {
-		return {
-			title: this.blog?.pageInfor.title,
-			meta: [
-				{
-					hid: "description",
-					name: "description",
-					content: this.blog?.pageInfor.metaDescription,
-				},
-				{
-					property: "og:image",
-					content: this.blog?.thumbnail,
-				},
-			],
-		};
-	},
-	created() {
-		this.guestUser = this.$cookies.get("GuestUser") ?? null;
-	},
-	/* mounted() {
+  components: {
+    ShowEditor,
+    NewComment,
+    ShareBlogSection,
+    GuestUserAuthenticationModal,
+  },
+  head() {
+    return {
+      title: this.blog?.pageInfor.title,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: this.blog?.pageInfor.metaDescription,
+        },
+        {
+          property: "og:image",
+          content: this.blog?.thumbnail,
+        },
+      ],
+    };
+  },
+  created() {
+    this.guestUser = this.$cookies.get("GuestUser") ?? null;
+  },
+  /* mounted() {
     // console.log(this.$route.params.slug);
     if (this.blog && this.blog.id != null) {
       this.content = JSON.parse(this.blog.content);
@@ -225,101 +225,99 @@ export default {
       this.hasId = true;
     }
   }, */
-	apollo: {
-		blog: {
-			query: getBlog,
-			variables() {
-				return {
-					condition: {
-						pageInfor: {
-							slug: {
-								eq: this.$route.params.slug,
-							},
-						},
-					},
-				};
-			},
-		},
-		commentsWithPagination: {
-			query: getComment,
-			variables() {
-				return {
-					condition: {
-						discussionId: {
-							eq: this.blog.id,
-						},
-					},
-					order: [
-						{
-							createdAt: "DESC",
-						},
-					],
-					take: 10,
-					skip: 0,
-				};
-			},
-			skip() {
-				return this.blog === undefined;
-			},
-			update: data => data.commentsWithPagination,
-		},
-	},
-	data() {
-		return {
-			content: { blocks: [] },
-			newComment: "",
-			newReply: "",
-			isStick: true,
-			hasId: false,
-			replyIsShow: false,
-			signUp: true,
-			showAuthenModal: false,
-			guestUser: {},
-		};
-	},
-	watch: {
-		blog(newQuestion, oldQuestion) {
-			this.content = JSON.parse(this.blog.content);
-		},
-	},
-	computed: {
-		totalItem() {
-			if (this.commentsWithPagination == null) {
-				return 0;
-			}
-			return this.commentsWithPagination.totalCount;
-		},
-		comments() {
-			if (this.commentsWithPagination == null) {
-				return [];
-			} else {
-				console.log(this.commentsWithPagination.items);
-				return this.commentsWithPagination.items.map(item => {
-					return {
-						id: item.id,
-						commentParentId: item.commentParentId,
-						dicussionId: item.discussionId,
-						content: item.content,
-						createdAt: item.createdAt,
-						author: {
-							authorName: item.author.authorName,
-						},
-						replies: item.replies,
-					};
-				});
-			}
-		},
-	},
-	methods: {
-		openAuthenModal(signUp) {
-			this.showAuthenModal = true;
-			this.signUp = signUp;
-		},
-		createComment: function () {
-			this.guestUser = this.$cookies.get("GuestUser") ?? null;
-			if (this.guestUser == null) {
-				this.openAuthenModal(false);
-				this.guestUser = this.$cookies.get("GuestUser") ?? null;
+  apollo: {
+    blog: {
+      query: getBlog,
+      variables() {
+        return {
+          condition: {
+            pageInfor: {
+              slug: {
+                eq: this.$route.params.slug,
+              },
+            },
+          },
+        };
+      },
+    },
+    commentsWithPagination: {
+      query: getComment,
+      variables() {
+        return {
+          condition: {
+            discussionId: {
+              eq: this.blog.id,
+            },
+          },
+          order: [{
+            createdAt: "DESC",
+          }],
+          take: 10,
+          skip: 0,
+        };
+      },
+      skip() {
+        return this.blog === undefined;
+      },
+      update: (data) => data.commentsWithPagination,
+    },
+  },
+  data() {
+    return {
+      content: { blocks: [] },
+      newComment: "",
+      newReply: "",
+      isStick: true,
+      hasId: false,
+      replyIsShow: false,
+      signUp: true,
+      showAuthenModal: false,
+      guestUser: {},
+    };
+  },
+  watch:{
+    blog(newQuestion, oldQuestion){
+      this.content = JSON.parse(this.blog.content);
+    }
+  },
+  computed: {
+    totalItem() {
+      if (this.commentsWithPagination == null) {
+        return 0;
+      }
+      return this.commentsWithPagination.totalCount;
+    },
+    comments() {
+      if (this.commentsWithPagination == null) {
+        return [];
+      } else {
+        console.log(this.commentsWithPagination.items);
+        return this.commentsWithPagination.items.map((item) => {
+          return {
+            id: item.id,
+            commentParentId: item.commentParentId,
+            dicussionId: item.discussionId,
+            content: item.content,
+            createdAt: item.createdAt,
+            author: {
+              authorName: item.author.authorName,
+            },
+            replies: item.replies,
+          };
+        });
+      }
+    },
+  },
+  methods: {
+    openAuthenModal(signUp) {
+      this.showAuthenModal = true;
+      this.signUp = signUp;
+    },
+    createComment: function () {
+      this.guestUser = this.$cookies.get("GuestUser") ?? null;
+      if (this.guestUser == null) {
+        this.openAuthenModal(false);
+        this.guestUser = this.$cookies.get("GuestUser") ?? null;
 
 				return;
 			} else {
@@ -451,7 +449,7 @@ export default {
 								},
 							};
 
-							const { commentsWithPagination } = store.readQuery(query);
+              const { commentsWithPagination } = store.readQuery(query);
 
 							var comment = {
 								id: createComment.string,
@@ -499,67 +497,67 @@ export default {
 
 <style lang="scss" scoped>
 html {
-	position: relative;
+  position: relative;
 }
 
 h1 {
-	font-family: "Source Serif Pro";
-	font-style: normal;
-	font-weight: 700;
-	font-size: 41px;
-	line-height: 51px;
-	text-align: center;
+  font-family: "Source Serif Pro";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 41px;
+  line-height: 51px;
+  text-align: center;
 
-	/* stone-900 */
+  /* stone-900 */
 
-	color: #1c1917;
+  color: #1c1917;
 }
 
 ul {
-	list-style-type: disc;
-	list-style-position: inside;
+  list-style-type: disc;
+  list-style-position: inside;
 }
 
 ul li {
-	color: cornflowerblue;
+  color: cornflowerblue;
 }
 
 textarea {
-	width: 83%;
-	height: 60px;
-	padding: 12px 10px;
-	box-sizing: border-box;
-	border: 1px solid #e7e5e4;
-	border-radius: 5px;
-	background-color: #ffffff;
-	font-size: 16px;
-	resize: none;
+  width: 83%;
+  height: 60px;
+  padding: 12px 10px;
+  box-sizing: border-box;
+  border: 1px solid #e7e5e4;
+  border-radius: 5px;
+  background-color: #ffffff;
+  font-size: 16px;
+  resize: none;
 }
 input {
-	width: 83%;
-	height: 60px;
-	padding-inline: 10px;
-	box-sizing: border-box;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	background-color: #f8f8f8;
-	font-size: 16px;
-	resize: none;
+  width: 83%;
+  height: 60px;
+  padding-inline: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
 }
 
 .loading {
-	opacity: 0.5;
-	animation: fade-in 0.8s infinite ease alternate;
+  opacity: 0.5;
+  animation: fade-in 0.8s infinite ease alternate;
 }
 
 .wrapper {
-	opacity: 0;
-	animation: fade-in 0.5s 1 forwards ease-out;
+  opacity: 0;
+  animation: fade-in 0.5s 1 forwards ease-out;
 }
 
 @keyframes fade-in {
-	to {
-		opacity: 1;
-	}
+  to {
+    opacity: 1;
+  }
 }
 </style>

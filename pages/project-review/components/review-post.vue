@@ -1,24 +1,24 @@
 <template>
-	<div class="">
-		<guest-user-authentication-modal
-			:open="isShowingLogIn"
-			@close="isShowingLogIn = false"
-		/>
-		<div class="border rounded-md px-3 lg:px-8 py-3 lg:py-5 my-2">
-			<div class="flex items-center">
-				<guest-user-avatar
-					:name="review.authorName"
-					class="w-10 h-10 rounded-full cursor-pointer"
-				></guest-user-avatar>
-				<div class="ml-2">
-					<a href="#" class="text-base font-bold">
-						{{ review.authorName }}
-					</a>
-					<div class="text-sm text-neutral-400">
-						{{ formatPostDate(review.dateCreated) }}
-					</div>
-				</div>
-			</div>
+  <div class="">
+    <guest-user-authentication-modal
+      :open="isShowingLogIn"
+      @close="isShowingLogIn = false"
+    />
+    <div class="border rounded-md px-3 lg:px-8 py-3 lg:py-5 my-2">
+      <div class="flex items-center">
+        <guest-user-avatar
+          :name="review.authorName"
+          class="w-10 h-10 rounded-full cursor-pointer"
+        ></guest-user-avatar>
+        <div class="ml-2">
+          <a href="#" class="text-base font-bold">
+            {{ review.authorName }}
+          </a>
+          <div class="text-sm text-neutral-400">
+            {{ formatPostDate(review.dateCreated) }}
+          </div>
+        </div>
+      </div>
 
 			<p
 				id="review-content"
@@ -424,14 +424,14 @@ export default {
 
 <style>
 .shortcontent {
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 @media only screen and (max-width: 769px) {
-	.shortcontent {
-		-webkit-line-clamp: 6;
-	}
+  .shortcontent {
+    -webkit-line-clamp: 6;
+  }
 }
 </style>

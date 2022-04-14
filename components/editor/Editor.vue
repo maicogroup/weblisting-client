@@ -66,21 +66,22 @@ export default {
 
 <style lang="scss" scoped>
 .ce-block {
-	background-color: black !important;
+  background-color: black !important;
 }
 .ce-block__content > p {
-	color: red;
+  color: red;
 }
 .image-tool__image > img {
-	height: 100px;
+  height: 100px;
 }
 
 .cdx-block > a {
-	color: green !important;
-	text-decoration: underline;
+  color: green !important;
+  text-decoration: underline;
 }
 
 .editorWrapper h1.ce-header:first-of-type {
-	font-size: 50px !important;
+  font-size: 50px !important;
 }
+
 </style>

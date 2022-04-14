@@ -76,31 +76,31 @@ import gql from "graphql-tag";
 import PreviewThumbnail from "../create/preview-thumbnail";
 
 const getBlog = gql`
-	query GetBlog($condition: BlogCollectionFilterInput) {
-		blog(where: $condition) {
-			id
-			content
-			pageInfor {
-				title
-				slug
-				metaDescription
-			}
-			authorId
-			author {
-				id
-				name
-			}
-			thumbnail
-		}
-	}
+  query GetBlog($condition: BlogCollectionFilterInput) {
+    blog(where: $condition) {
+      id
+      content
+      pageInfor {
+        title
+        slug
+        metaDescription
+      }
+      authorId
+      author {
+        id
+        name
+      }
+      thumbnail
+    }
+  }
 `;
 
 const updateBlog = gql`
-	mutation UpdateBlog($input: UpdateBlogInput!) {
-		updateBlog(input: $input) {
-			string
-		}
-	}
+  mutation UpdateBlog($input: UpdateBlogInput!) {
+    updateBlog(input: $input) {
+      string
+    }
+  }
 `;
 
 export default {
@@ -193,31 +193,31 @@ export default {
 				},
 			});
 
-			const uploadImageToS3 = file => {
-				const s3 = new AWS.S3();
+      const uploadImageToS3 = (file) => {
+        const s3 = new AWS.S3();
 
-				var uploadParams = {
-					Bucket: "weblisting",
-					Key: `blog/${this.blog.id}/${file.name}`,
-					Body: file,
-					ACL: "public-read",
-					ContentType: file.type,
-				};
+        var uploadParams = {
+          Bucket: "weblisting",
+          Key: `blog/${this.blog.id}/${file.name}`,
+          Body: file,
+          ACL: "public-read",
+          ContentType: file.type,
+        };
 
-				var uploadOptions = {
-					partSize: 10 * 1024 * 1024,
-					queueSize: 1,
-				};
+        var uploadOptions = {
+          partSize: 10 * 1024 * 1024,
+          queueSize: 1,
+        };
 
-				var upload = s3.upload(uploadParams, uploadOptions);
+        var upload = s3.upload(uploadParams, uploadOptions);
 
-				upload.send((err, data) => {
-					if (err) {
-						console.error("Upload lỗi:", err);
-					} else if (data) {
-						console.log("Upload thành công:", data);
-					}
-				});
+        upload.send((err, data) => {
+          if (err) {
+            console.error("Upload lỗi:", err);
+          } else if (data) {
+            console.log("Upload thành công:", data);
+          }
+        });
 
 				this.blog.thumbnail.s3Url = `https://weblisting.hn.ss.bfcplatform.vn/blog/${this.blog.id}/${file.name}`;
 			};
@@ -276,198 +276,198 @@ export default {
 			}
 			const urlModified = [];
 
-			const imageUrlArray = this.editorContent.blocks
-				.filter(
-					block =>
-						block.type === "image" && block.data.file.url.includes("blob"),
-				)
-				.map(block => ({
-					id: block.id,
-					url: block.data.file.url,
-					file: block.data.file.file,
-				}));
+      const imageUrlArray = this.editorContent.blocks
+        .filter(
+          (block) =>
+            block.type === "image" && block.data.file.url.includes("blob")
+        )
+        .map((block) => ({
+          id: block.id,
+          url: block.data.file.url,
+          file: block.data.file.file,
+        }));
 
-			AWS.config.update({
-				accessKeyId: "8EL21GNHMRNZYW8488OV",
-				secretAccessKey: "xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD",
-				region: "hn",
-				endpoint: "https://hn.ss.bfcplatform.vn",
-				apiVersions: {
-					s3: "2006-03-01",
-				},
-			});
+      AWS.config.update({
+        accessKeyId: "8EL21GNHMRNZYW8488OV",
+        secretAccessKey: "xBjwyBdSYz91ADgV9TH8oeTnAuZapmAJ8ycmrCiD",
+        region: "hn",
+        endpoint: "https://hn.ss.bfcplatform.vn",
+        apiVersions: {
+          s3: "2006-03-01",
+        },
+      });
 
-			const uploadImageToS3 = (file, id) => {
-				const s3 = new AWS.S3();
+      const uploadImageToS3 = (file, id) => {
+        const s3 = new AWS.S3();
 
-				var uploadParams = {
-					Bucket: "weblisting",
-					Key: `blog/${this.blog.id}/${file.name}`,
-					Body: file,
-					ACL: "public-read",
-					ContentType: file.type,
-				};
+        var uploadParams = {
+          Bucket: "weblisting",
+          Key: `blog/${this.blog.id}/${file.name}`,
+          Body: file,
+          ACL: "public-read",
+          ContentType: file.type,
+        };
 
-				var uploadOptions = {
-					partSize: 10 * 1024 * 1024,
-					queueSize: 1,
-				};
+        var uploadOptions = {
+          partSize: 10 * 1024 * 1024,
+          queueSize: 1,
+        };
 
-				var upload = s3.upload(uploadParams, uploadOptions);
+        var upload = s3.upload(uploadParams, uploadOptions);
 
-				upload.send((err, data) => {
-					if (err) {
-						console.error("Upload lỗi:", err);
-					} else if (data) {
-						console.log("Upload thành công:", data);
-					}
-				});
+        upload.send((err, data) => {
+          if (err) {
+            console.error("Upload lỗi:", err);
+          } else if (data) {
+            console.log("Upload thành công:", data);
+          }
+        });
 
-				urlModified.push({
-					id,
-					url: `https://weblisting.hn.ss.bfcplatform.vn/blog/${this.blog.id}/${file.name}`,
-				});
-				// upload.on("httpUploadProgress", function (evt) {
-				//   var progress = parseInt((evt.loaded * 100) / evt.total);
-				//   console.log(progress + "%");
-				// });
-			};
+        urlModified.push({
+          id,
+          url: `https://weblisting.hn.ss.bfcplatform.vn/blog/${this.blog.id}/${file.name}`,
+        });
+        // upload.on("httpUploadProgress", function (evt) {
+        //   var progress = parseInt((evt.loaded * 100) / evt.total);
+        //   console.log(progress + "%");
+        // });
+      };
 
-			imageUrlArray.map(img => uploadImageToS3(img.file, img.id));
+      imageUrlArray.map((img) => uploadImageToS3(img.file, img.id));
 
-			const contentData = this.editorContent.blocks.map(block => {
-				urlModified.map(img => {
-					if (img.id === block.id) {
-						block = {
-							...block,
-							data: {
-								...block.data,
-								file: {
-									url: img.url,
-								},
-							},
-						};
-					}
-				});
-				return block;
-			});
+      const contentData = this.editorContent.blocks.map((block) => {
+        urlModified.map((img) => {
+          if (img.id === block.id) {
+            block = {
+              ...block,
+              data: {
+                ...block.data,
+                file: {
+                  url: img.url,
+                },
+              },
+            };
+          }
+        });
+        return block;
+      });
 
-			//FIXME: Data ở đây nha <3
-			// const submitData = {
-			//   ...this.values,
-			//   blogId: ObjectId,
-			//   pageInfor: {
-			//     ...this.values.pageInfor,
-			//     slug: this.slug,
-			//   },
-			//   content: JSON.stringify({ ...this.editorContent, blocks: contentData }),
-			// };
-			// console.log(submitData);
+      //FIXME: Data ở đây nha <3
+      // const submitData = {
+      //   ...this.values,
+      //   blogId: ObjectId,
+      //   pageInfor: {
+      //     ...this.values.pageInfor,
+      //     slug: this.slug,
+      //   },
+      //   content: JSON.stringify({ ...this.editorContent, blocks: contentData }),
+      // };
+      // console.log(submitData);
 
-			this.$apollo
-				.mutate({
-					mutation: updateBlog,
-					variables: {
-						input: {
-							thumbnail: this.blog.thumbnail.s3Url,
-							blogId: this.blog.id,
-							content: JSON.stringify({
-								...this.editorContent,
-								blocks: contentData,
-							}),
-							pageInfor: {
-								title: this.blog.pageInfor.title,
-								slug: this.blog.pageInfor.slug,
-								metaDescription: this.blog.pageInfor.metaDescription,
-							},
-						},
-					},
-				})
-				.then(data => {
-					this.$toast.show("Cập nhật thành công!", {
-						type: "success",
-						theme: "bubble",
-						duration: 3000,
-						position: "top-right",
-					});
-				})
-				.catch(error => {
-					this.$toast.show("Slug đã tồn tại", {
-						type: "error",
-						theme: "bubble",
-						duration: 3000,
-						position: "top-right",
-					});
-				});
-		},
-	},
+      this.$apollo
+        .mutate({
+          mutation: updateBlog,
+          variables: {
+            input: {
+              thumbnail: this.blog.thumbnail.s3Url,
+              blogId: this.blog.id,
+              content: JSON.stringify({
+                ...this.editorContent,
+                blocks: contentData,
+              }),
+              pageInfor: {
+                title: this.blog.pageInfor.title,
+                slug: this.blog.pageInfor.slug,
+                metaDescription: this.blog.pageInfor.metaDescription,
+              },
+            },
+          },
+        })
+        .then((data) => {
+          this.$toast.show("Cập nhật thành công!", {
+            type: "success",
+            theme: "bubble",
+            duration: 3000,
+            position: "top-right",
+          });
+        })
+        .catch((error) => {
+          this.$toast.show("Slug đã tồn tại", {
+            type: "error",
+            theme: "bubble",
+            duration: 3000,
+            position: "top-right",
+          });
+        });
+    },
+  },
 };
 </script>
 
 <style lang="scss">
 .ce-block {
-	h1 {
-		display: block;
-		font-size: 2em;
-		margin-top: 0.67em;
-		margin-bottom: 0.67em;
-		margin-left: 0;
-		margin-right: 0;
-		font-weight: bold;
-	}
+  h1 {
+    display: block;
+    font-size: 2em;
+    margin-top: 0.67em;
+    margin-bottom: 0.67em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+  }
 
-	h2 {
-		display: block;
-		font-size: 1.5em;
-		margin-top: 0.83em;
-		margin-bottom: 0.83em;
-		margin-left: 0;
-		margin-right: 0;
-		font-weight: bold;
-	}
+  h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+  }
 
-	h3 {
-		display: block;
-		font-size: 1.17em;
-		margin-top: 1em;
-		margin-bottom: 1em;
-		margin-left: 0;
-		margin-right: 0;
-		font-weight: bold;
-	}
+  h3 {
+    display: block;
+    font-size: 1.17em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+  }
 
-	h4 {
-		display: block;
-		font-size: 1em;
-		margin-top: 1.33em;
-		margin-bottom: 1.33em;
-		margin-left: 0;
-		margin-right: 0;
-		font-weight: bold;
-	}
+  h4 {
+    display: block;
+    font-size: 1em;
+    margin-top: 1.33em;
+    margin-bottom: 1.33em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+  }
 
-	h5 {
-		display: block;
-		font-size: 0.83em;
-		margin-top: 1.67em;
-		margin-bottom: 1.67em;
-		margin-left: 0;
-		margin-right: 0;
-		font-weight: bold;
-	}
+  h5 {
+    display: block;
+    font-size: 0.83em;
+    margin-top: 1.67em;
+    margin-bottom: 1.67em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+  }
 
-	h6 {
-		display: block;
-		font-size: 0.67em;
-		margin-top: 2.33em;
-		margin-bottom: 2.33em;
-		margin-left: 0;
-		margin-right: 0;
-		font-weight: bold;
-	}
+  h6 {
+    display: block;
+    font-size: 0.67em;
+    margin-top: 2.33em;
+    margin-bottom: 2.33em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+  }
 
-	& img {
-		margin: auto;
-	}
+  & img {
+    margin: auto;
+  }
 }
 </style>

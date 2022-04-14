@@ -61,6 +61,7 @@
                     w-[370px]
                     md:w-[180px] md:h-[160px]
                     blog-card-image
+                    object-cover
                   "
                 />
               </nuxt-link>

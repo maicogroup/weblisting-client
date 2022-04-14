@@ -55,7 +55,7 @@
         :key="index"
       >
         <ul>
-          <li v-for="item in block.data.items" :key="item">{{ item }}</li>
+          <li v-for="item in block.data.items" :key="item"><span v-html="item.content"></span></li>
         </ul>
       </div>
 
@@ -64,7 +64,7 @@
         :key="index"
       >
         <ol>
-          <li v-for="item in block.data.items" :key="item">{{ item }}</li>
+          <li v-for="item in block.data.items" :key="item"><span v-html="item.content"></span></li>
         </ol>
       </div>
 

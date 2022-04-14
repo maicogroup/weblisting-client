@@ -444,22 +444,12 @@ export default {
 			if (this.reviewsWithPagination !== null && this.project !== null) {
 				const tempReviewArray = [];
 				if (this.reviewsWithPagination !== undefined) {
-					this.reviewsWithPagination.items.forEach(x => {
-						const tempReview = this.createMockReview(x, this.project);
-						if (this.tempReviews.length < this.take) {
-							setTimeout(function () {}, 10000);
-							this.tempReviews.push(tempReview);
-						} else {
-							tempReviewArray.push(tempReview);
-						}
-					});
-				}
-				if (tempReviewArray.length === 0) {
-					return this.tempReviews;
-				} else {
-					const oldReviews = tempReviewArray;
-					return oldReviews;
-				}
+          this.reviewsWithPagination.items.forEach((x) => {
+            const tempReview = this.createMockReview(x, this.project);
+            tempReviewArray.push(tempReview);
+          });
+        }
+        return tempReviewArray;
 			}
 			return [];
 		},
@@ -821,7 +811,7 @@ export default {
         });
       }
       const isLiked =
-        this.guestUser === null ? false : item.liked.includes(this.guestUser.id);
+        !this.guestUser ? false : item.liked.includes(this.guestUser.id);
       return {
         id: item.id,
         authorName: item.author.name,

@@ -156,9 +156,9 @@ export default {
 				},
 				content: "",
 				blogId: "",
-				isShowEditor: false,
-				init: false,
 			},
+      isShowEditor: false,
+      init: false,
 		};
 	},
 	head() {

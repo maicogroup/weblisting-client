@@ -410,12 +410,15 @@ export default {
 
   computed: {
     gallery() {
-      const items = this.post.gallery.map(
-        (i) => "https://weblisting.ss-hn-1.bizflycloud.vn/" + i
-      );
-      return items.sort(function (x, y) {
-        return x.includes("mp4") ? 1 : y.includes("mp4") ? -1 : 0;
-      });
+      if(this.post.gallery && this.post.gallery.length > 0){
+        const items = this.post.gallery.map(
+          (i) => "https://weblisting.ss-hn-1.bizflycloud.vn/" + i
+        );
+        return items.sort(function (x, y) {
+          return x.includes("mp4") ? 1 : y.includes("mp4") ? -1 : 0;
+        });
+      }
+       return ["https://hn.ss.bfcplatform.vn/weblisting/temporary-apartment-gallery.jpg"]
     },
     shareUrl() {
       return process.client ? window.location.href : null;

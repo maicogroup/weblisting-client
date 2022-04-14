@@ -347,7 +347,6 @@ export default {
   
   head () {
     let title;
-    console.error(this.$route.params.pathMatch);
     if (this.$route.params.pathMatch != undefined) {
       title = this.project?.pageInfors.find(c => c.slug.includes(this.$route.params.pathMatch.replace('/',''))).title;
     } else {
@@ -392,7 +391,7 @@ export default {
         },
         {
           property: 'og:image',
-          content: this.project?.images[0]
+          content: 'https://weblisting.ss-hn-1.bizflycloud.vn/' + this.project?.images[0]
         }
       ]
     };

@@ -90,7 +90,7 @@ export default {
     formatedPosts () {
       return this.posts.map((p) => {
         return {
-          srcimage: 'https://weblisting.ss-hn-1.bizflycloud.vn/' + (p.gallery.find(c => !c.includes('.mp4')) || 'apartment-resource/00800a5f-eb0c-4c6f-93ad-1c28e03b70dc/17-01-2022_0953/image/z3116547105303_32a851d4f5d44bca12e64ac1a09e6a6d.jpg'),
+          srcimage: 'https://weblisting.ss-hn-1.bizflycloud.vn/' + (p.gallery.find(c => !c.includes('.mp4') && !c.includes("fail")) || 'temporary-apartment-gallery.jpg'),
           title: p.pageInfor.title,
           slug: p.pageInfor.slug,
           price: this.formatPrice(p.price, p.demand),

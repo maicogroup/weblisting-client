@@ -177,6 +177,7 @@ export default {
 	methods: {
 		onChange(data) {
 			this.editorContent = data;
+      this.flag = true;
 		},
 		setThumbnail(file) {
 			this.blog.thumbnail = file;
